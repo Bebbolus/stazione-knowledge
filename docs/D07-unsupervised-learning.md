@@ -11,6 +11,7 @@ cluster, pattern nascosti, rappresentazioni compatte, anomalie.
 - D03 — Data foundations (NumPy, Pandas, formati dati, data quality)
 - D04 — Matematica e statistica just-in-time (algebra lineare, PCA, probabilità di base)
 - D05 — Fondamenti di Machine Learning (concetti supervised, pipeline ML, metriche)
+- D06 — Machine Learning classico (alberi, ensemble e valutazione su dati tabellari)
 
 **Durata indicativa**
 
@@ -52,7 +53,9 @@ Mi serve per:
   - visualizzare dati ad alta dimensione (embedding, feature, log)  
   - costruire feature più compatte per modelli successivi
 
-È anche la base concettuale di molte tecniche di **pretraining** (es. pretraining di LLM su grandi corpora non etichettati).
+È collegato al pretraining moderno perché molti modelli vengono addestrati su grandi
+quantità di dati privi di etichette manuali, anche se il pretraining dei foundation model
+può usare obiettivi self-supervised specifici e non coincide semplicemente con il clustering.
 
 ---
 
@@ -102,13 +105,18 @@ In supervised learning conosco i target; in unsupervised, no:
   1. assegnare i punti al centroide più vicino
   2. ricalcolare i centroidi come media dei punti assegnati
 
-Scikit‑learn implementa k‑means come `KMeans` e `MiniBatchKMeans`.[cite:172][cite:173][cite:180][cite:158]
+Scikit‑learn implementa k‑means come `KMeans` e `MiniBatchKMeans`.
 
 Punti chiave:
 
 - serve scegliere \(K\)
 - funziona bene se i cluster sono “compatti” e relativamente sferici
 - sensibile a outlier e scaling delle feature
+
+Riferimenti:
+
+- [Clustering in scikit-learn](https://scikit-learn.org/stable/modules/clustering.html)
+- [KMeans API](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html)
 
 ### 2.2 Clustering gerarchico (Agglomerative)
 
@@ -123,13 +131,17 @@ Risultato:
 - **dendrogramma** che mostra gerarchia di cluster
 - posso “tagliare” il dendrogramma a diversi livelli per ottenere più o meno cluster
 
-Scikit‑learn: `AgglomerativeClustering`.[cite:182][cite:158]
+Scikit‑learn: `AgglomerativeClustering`.
+
+Riferimenti:
+
+- [AgglomerativeClustering API](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.AgglomerativeClustering.html)
 
 ### 2.3 DBSCAN e clustering basato su densità
 
 **DBSCAN** (Density-Based Spatial Clustering of Applications with Noise):
 
-- trova cluster come zone ad alta densità separati da regioni a bassa densità
+- trova cluster come zone ad alta densità separate da regioni a bassa densità
 - parametri principali:
   - `eps`: raggio di vicinanza
   - `min_samples`: numero minimo di punti per definire un “core point”
@@ -145,7 +157,11 @@ Svantaggi:
 - sensibile alla scelta di `eps` e `min_samples`
 - meno adatto a dati molto ad alta dimensione senza una buona metrica
 
-Scikit‑learn: `DBSCAN`.[cite:172][cite:173]
+Scikit‑learn: `DBSCAN`.
+
+Riferimenti:
+
+- [DBSCAN API](https://scikit-learn.org/stable/modules/generated/sklearn.cluster.DBSCAN.html)
 
 ### 2.4 Altri algoritmi (cenno)
 
@@ -154,7 +170,7 @@ Altri metodi di clustering:
 - Mean Shift
 - Spectral Clustering
 - HDBSCAN, OPTICS
-- Gaussian Mixture Models (GMM) con EM (approfondibili via CS229/ESL)[cite:158][cite:175][cite:184]
+- Gaussian Mixture Models (GMM) con EM (approfondibili via CS229/ESL)
 
 D07 non entra nei dettagli di tutti: l’obiettivo è conoscere **i principali trade‑off**.
 
@@ -180,7 +196,11 @@ Uso:
 - decorrelazione delle feature
 - visualizzazione 2D/3D
 
-In scikit‑learn: `sklearn.decomposition.PCA`.[cite:158]
+In scikit‑learn: `sklearn.decomposition.PCA`.
+
+Riferimenti:
+
+- [PCA in scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html)
 
 ### 3.2 t‑SNE e UMAP
 
@@ -193,12 +213,18 @@ In scikit‑learn: `sklearn.decomposition.PCA`.[cite:158]
 **UMAP** (Uniform Manifold Approximation and Projection):
 
 - simile a t‑SNE, spesso più veloce e meglio scalabile
-- preserva sia struttura locale che globale meglio di t‑SNE in molti casi
+- costruisce una rappresentazione basata sulla struttura locale del vicinato e può
+  mantenere anche alcune relazioni globali; il risultato dipende dai parametri e non va
+  interpretato automaticamente come una mappa fedele dello spazio originale
 
 Entrambe sono spesso usate per:
 
 - visualizzare embedding di parole, frasi, documenti
 - esplorare cluster, outlier, pattern in dati high‑dimensionali
+
+Riferimenti:
+
+- [t‑SNE e UMAP cheat sheet](https://omkamal.github.io/dimensionalityreduction.html)
 
 ---
 
@@ -213,7 +239,11 @@ Usano solo la struttura dei dati (nessuna ground truth):
   - vicino a 1 → cluster ben separati e compatti
 - **Inertia / SSE**: somma delle distanze quadratiche dai centroidi (per k‑means)
 
-Scikit‑learn: `silhouette_score`, `silhouette_samples`, inertia come attributo dei modelli.[cite:183]
+Scikit‑learn: `silhouette_score`, `silhouette_samples`, inertia come attributo dei modelli.
+
+Riferimenti:
+
+- [Silhouette score API](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
 
 ### 4.2 Metriche esterne
 
@@ -222,13 +252,17 @@ Richiedono etichette “vere” per confronto:
 - **Adjusted Rand Index (ARI)**: confronto tra assegnazioni del clustering e etichette reali
 - **Mutual information**, **Fowlkes-Mallows index**, ecc.
 
-Utile per esperimenti controllati (es. dataset come Iris con etichette note).[cite:183][cite:158]
+Utile per esperimenti controllati (es. dataset come Iris con etichette note).
+
+Riferimenti:
+
+- [Adjusted Rand Score API](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.adjusted_rand_score.html)
 
 ---
 
 ## 5. Collegamento con CS229 e teoria
 
-CS229 dedica un intero blocco all’apprendimento non supervisionato:[cite:175][cite:178][cite:185][cite:179][cite:184]
+CS229 dedica un intero blocco all’apprendimento non supervisionato:
 
 - note su k‑means (`cs229-notes7a.pdf`)
 - Mixture of Gaussians (`cs229-notes7b.pdf`)
@@ -241,6 +275,11 @@ D07 non entra nei dettagli analitici di EM, factor analysis, ICA, ma:
 
 - usa k‑means, DBSCAN, clustering gerarchico e PCA come strumenti pratici
 - punta a essere un ponte verso queste note quando (e se) servirà più teoria
+
+Riferimenti:
+
+- [CS229 Lecture Notes](https://cs229.stanford.edu/main_notes.pdf)
+- [CS229 Unsupervised Learning](https://see.stanford.edu/Course/CS229/43)
 
 ---
 
@@ -399,7 +438,7 @@ Obiettivo: mantenere un **legame visivo-intuitivo** con clustering e riduzione d
 ### 9.2 CS229 — Unsupervised learning
 
 - **CS229 Lecture Notes** (versione completa)  
-  Include sezione su clustering, Mixture of Gaussians, EM, PCA, ICA, factor analysis.[cite:175][cite:178][cite:184]  
+  Include sezione su clustering, Mixture of Gaussians, EM, PCA, ICA, factor analysis.  
   https://cs229.stanford.edu/main_notes.pdf  
 
 - **CS229 Unsupervised Learning (indice dettagliato)**  

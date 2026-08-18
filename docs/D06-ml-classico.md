@@ -46,11 +46,12 @@ Dopo D05 (ML base) serve un passo in più: capire i **modelli più usati in prat
 
 - alberi decisionali: modelli interpretabili, base per ensemble
 - Random Forest: bagging di alberi, robusto, buona baseline
-- Gradient Boosting / XGBoost / LightGBM / CatBoost: modelli ad alte prestazioni, spesso migliori di reti neurali su dati strutturati
+- Gradient Boosting / XGBoost / LightGBM / CatBoost: modelli ad alte prestazioni, spesso molto competitivi sui dati tabellari strutturati; la scelta dipende da dataset, preprocessing, metrica, vincoli operativi e confronto sperimentale con altri modelli
 
 Questo modulo è il ponte verso:
 
-- D07 (Deep Learning) → quando i dati non sono tabellari (immagini, testo, sequenze)
+- D07 (apprendimento non supervisionato) → per clustering, riduzione dimensionale e analisi esplorativa
+- D08 (Deep Learning e PyTorch) → quando i dati non sono tabellari (immagini, testo, sequenze)
 - D09/D10 (LLM, RAG) → quando la rappresentazione è testuale e semantica
 
 ---
@@ -116,7 +117,11 @@ Idea:
 Effetto:
 
 - riduce la **varianza** senza aumentare troppo il bias
-- Random Forest è l’esempio più famoso di bagging applicato ad alberi.[141][143][146]
+- Random Forest è l’esempio più famoso di bagging applicato ad alberi.
+
+Riferimenti:
+
+- [scikit-learn Ensemble Methods](https://scikit-learn.org/stable/modules/ensemble.html)
 
 ### 3.2 Boosting
 
@@ -127,8 +132,15 @@ Idea:
 
 Effetto:
 
-- riduce sia bias che varianza, ma può overfittare se spinto troppo
-- Gradient Boosting e XGBoost sono esempi di boosting basato su alberi.[135][141][143]
+- può ridurre il bias rispetto a modelli molto semplici, ma la sua varianza e il rischio
+  di overfitting dipendono da profondità, numero di alberi, learning rate, regolarizzazione
+  e qualità dei dati
+- Gradient Boosting e XGBoost sono esempi di boosting basato su alberi.
+
+Riferimenti:
+
+- [scikit-learn Gradient Boosting](https://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
+- [XGBoost documentation](https://xgboost.readthedocs.io/en/stable/)
 
 ---
 
@@ -151,7 +163,11 @@ Risultato:
 In scikit-learn:
 
 - `RandomForestClassifier`, `RandomForestRegressor`
-- parametri chiave: `n_estimators`, `max_depth`, `max_features`, `min_samples_leaf`[141][143]
+- parametri chiave: `n_estimators`, `max_depth`, `max_features`, `min_samples_leaf`
+
+Riferimenti:
+
+- [Random Forest in scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#forest)
 
 ### 4.2 Quando usarlo
 
@@ -173,7 +189,11 @@ Idea:
 In scikit-learn:
 
 - `GradientBoostingClassifier`, `GradientBoostingRegressor`
-- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`[141][143][149]
+- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`
+
+Riferimenti:
+
+- [Gradient Boosting in scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
 
 ### 5.2 XGBoost (e cenni a LightGBM/CatBoost)
 
@@ -193,7 +213,13 @@ Librerie correlate:
 In Python:
 
 - uso tipico con API simile a scikit-learn (`XGBClassifier`, `XGBRegressor`)
-- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`, `colsample_bytree`[135][136][144][147][148]
+- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`, `colsample_bytree`
+
+Riferimenti:
+
+- [XGBoost documentation](https://xgboost.readthedocs.io/en/stable/)
+- [LightGBM documentation](https://lightgbm.readthedocs.io/en/stable/)
+- [CatBoost documentation](https://catboost.ai/en/docs/)
 
 ---
 
@@ -215,6 +241,10 @@ Buona pratica:
 
 - usare permutation importance come controllo aggiuntivo
 - non fidarsi ciecamente della ranking di importance per decisioni critiche
+
+Riferimenti:
+
+- [Permutation importance in scikit-learn](https://scikit-learn.org/stable/modules/permutation_importance.html)
 
 ---
 
