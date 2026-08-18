@@ -1,94 +1,82 @@
 ---
-aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale]
+aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale, Architettura Workspace Local-First]
 ---
 # Architettura Workspace Local-First (Git, Obsidian, LLM)
 
-Un workspace local-first per knowledge base AI è un'infrastruttura di gestione dell'informazione in cui i dati risiedono fisicamente sulla memoria di massa dell'utente sotto forma di file di testo piano (Markdown), e vengono sincronizzati asincronamente tramite sistemi di controllo di versione (Git). Questa architettura trova applicazione nello sviluppo di ecosistemi di knowledge management, OSINT (Open Source Intelligence) e pipeline RAG (Retrieval-Augmented Generation). L'adozione di questo modello garantisce la persistenza del dato disaccoppiandolo da formati proprietari, permette il versionamento incrementale della conoscenza e abilita l'interazione diretta a livello di file system con Large Language Model (LLM) locali o remoti, aggirando le restrizioni di accesso tipiche dei servizi cloud chiusi.
+Un'**architettura workspace local-first** per l'intelligenza artificiale è un modello di gestione della conoscenza in cui tutti i documenti, gli appunti di ricerca e le basi di codice risiedono fisicamente sul disco locale in formato aperto Markdown, sincronizzati tramite [Git](https://git-scm.com/) (il sistema di controllo versione distribuito open-source). Questa infrastruttura si impiega per costruire archivi di memoria a lungo termine (Second Brain) e per alimentare in sicurezza sistemi di Retrieval-Augmented Generation (RAG) senza vincoli di connettività. L'architettura nasce per eliminare la dipendenza da formati proprietari e database cloud commerciali, garantendo pieno controllo sui dati privati e consentendo l'integrazione immediata con script [Python](https://www.python.org/) (il linguaggio di programmazione di riferimento per l'AI) e modelli linguistici locali eseguiti su hardware proprietario.
 
-## Il Problema del Lock-in e della Frammentazione
+## Il Problema del Lock-in e della Frammentazione nel Cloud
 
-Storicamente, la gestione della conoscenza si è appoggiata a piattaforme cloud proprietarie che centralizzano la memorizzazione e l'indicizzazione dei documenti all'interno di database relazionali o NoSQL non direttamente accessibili. Questi sistemi offrono interfacce utente pronte all'uso e risolvono nativamente il problema della sincronizzazione multisede.
+La gestione convenzionale delle informazioni personali e aziendali si è a lungo affidata ad applicazioni SaaS proprietarie come [Notion](https://www.notion.so/) (l'applicazione cloud per la gestione documentale e database collaborativi) o [Evernote](https://evernote.com/) (la storica piattaforma di note-taking commerciale). Sebbene questi servizi offrano sincronizzazione automatica multi-dispositivo, la loro architettura centralizzata presenta barriere insormontabili quando si integrano flussi di lavoro basati su intelligenza artificiale.
 
-L'avvento dell'intelligenza artificiale generativa ha evidenziato i limiti strutturali di queste piattaforme. Il testo intrappolato in backend chiusi risulta inaccessibile agli script di automazione locale o agli agenti LLM senza passare per API di rete. Tali API introducono colli di bottiglia legati a limitazioni di traffico, costi per chiamata e instabilità dovuta ai continui mutamenti dei termini di servizio. Inoltre, l'invio sistematico di documenti non processati a server cloud esterni espone l'architettura a vulnerabilità critiche in termini di privacy e sovranità del dato.
+L'accesso programmatico ai documenti salvati su piattaforme cloud richiede il passaggio attraverso API remote soggette a limitazioni di frequenza (*rate limits*), latenze di rete imprevedibili e modifiche unilaterali delle condizioni d'uso. Sul piano della sicurezza e della conformità, l'invio di testi confidenziali, credenziali o dati operativi verso endpoint di terze parti come [OpenAI](https://openai.com/) (la società creatrice di ChatGPT e GPT-4) espone l'analista a violazioni della riservatezza e perdita di sovranità informativa.
 
-Nasce quindi l'esigenza di strutturare un deposito di conoscenza che mantenga l'interconnessione ipertestuale dei moderni strumenti di personal knowledge management, ma che esponga la totalità dell'informazione in un formato nativamente digeribile da script e modelli linguistici, senza l'interposizione di intermediari proprietari.
+La risposta ingegneristica a questo attrito consiste nel riposizionare il file system locale come unica sorgente di verità (*single source of truth*). Adottando file di testo standard con estensione `.md`, versionati mediante [Git](https://git-scm.com/) per preservare lo storico immutabile delle modifiche, e impiegando [Obsidian](https://obsidian.md/) (l'ambiente di produttività personale basato su grafi bidirezionali) come interfaccia visiva, si ottiene un ecosistema robusto, trasparente e immediatamente indicizzabile da agenti software.
 
-La soluzione ingegneristica consiste nell'implementare un'architettura **local-first** debolmente accoppiata. Il sistema combina il file system locale per la persistenza del dato, Git per il tracciamento distribuito delle modifiche, Obsidian come motore per la risoluzione e visualizzazione del grafo dei collegamenti, e agenti AI che operano in lettura e scrittura sui file stessi agendo da elaboratori del linguaggio naturale.
+## Architettura del File System e Separazione dei Domini
 
-## Architettura dei Componenti Modulari
+Per garantire una netta separazione tra documentazione pubblica destinata alla pubblicazione e appunti privati o chiavi crittografiche, la directory principale di lavoro `Stazione/` adotta una rigida tassonomia a compartimenti stagni.
 
-Il sistema si fonda su tre livelli funzionali indipendenti. Ognuno di essi comunica esclusivamente leggendo e scrivendo i medesimi file Markdown sulla memoria di massa, eliminando la necessità di database middleware o protocolli di rete interni.
+```text
+Stazione/
+├── stazione-knowledge/        # Repository Git pubblico (Clone locale)
+│   ├── README.md
+│   ├── index.md               # Indice generale del corso/progetto
+│   └── docs/                  # Monografie stabili e pubbliche (es. D01, D02)
+├── private/                   # Dominio locale (non tracciato o repo separato)
+│   ├── notes/                 # Note di lavoro, appunti temporanei
+│   ├── code/                  # Script Python usa-e-getta
+│   └── infra/                 # Configurazione locale, manifesti (AGENTS.md)
+└── inbox/                     # Parcheggio temporaneo per PDF, pagine web
+```
 
-### Il Livello di Memorizzazione (File System e Git)
-Il fondamento dell'infrastruttura è costituito da una singola directory (frequentemente denominata "Stazione"), organizzata ad albero. I nodi informativi sono file testuali puri. Il controllo di versione è interamente delegato a **Git**, che tratta il database di conoscenza al pari di una base di codice sorgente. Questo approccio espone i documenti a operazioni di branching esplorativo, commit incrementali e risoluzione formale dei conflitti, garantendo il backup e la distribuzione tramite repository remoti senza alterare il formato dei file.
+La configurazione richiede di clonare il repository pubblico `stazione-knowledge` all'interno della cartella radice `Stazione/`, creando parallelamente e allo stesso livello le cartelle `private/` e `inbox/`. Poiché questi ultimi due rami risiedono fisicamente all'esterno del repository tracciato, le normali operazioni di commit e push verso [GitHub](https://github.com/) (la piattaforma cloud di hosting per repository Git) non comportano alcun rischio di divulgazione accidentale di appunti riservati, log di esecuzione o credenziali d'accesso.
 
-### Il Livello di Visualizzazione (Obsidian)
-L'indicizzazione umana è demandata a **Obsidian**, un applicativo client-side che scansiona la directory e costruisce in tempo reale una cache locale dei collegamenti bidirezionali (backlink). Obsidian non maschera i file, né applica codifiche proprietarie o database occulti. Qualsiasi modifica applicata ai file Markdown da processi esterni in background causa un aggiornamento istantaneo del grafo visibile nell'interfaccia.
+### Obsidian come Motore di Navigazione e Visualizzazione a Grafo
 
-### Il Livello di Elaborazione (Agenti AI)
-Le operazioni di sintesi, estrazione e formattazione avvengono tramite **Agenti LLM**, intesi come script o demoni locali. Poiché il formato testuale è l'input nativo per il calcolo dei tensori nei modelli linguistici, gli agenti processano direttamente i file leggendo i path locali, producono il risultato in memoria e lo sovrascrivono su disco. La base di conoscenza agisce simultaneamente da contesto esteso (prompt) e da memoria a lungo termine per l'intelligenza artificiale.
+L'apertura del vault di **Obsidian** deve puntare alla directory radice `Stazione/` e non alla sola sottocartella del repository. Questa scelta consente all'applicazione di indicizzare simultaneamente i documenti definitivi in `stazione-knowledge/docs/` e le note provvisorie in `private/notes/`, rendendo possibile la navigazione ipertestuale e la creazione di collegamenti bidirezionali tramite collegamenti wiki interni senza alterare la struttura dei file sottostanti.
 
-## Pipeline Unidirezionale di Ingestione (ICM)
+### Il Flusso di Elaborazione delle Informazioni
 
-Per evitare l'entropia derivante dall'accumulo caotico di testo, il ciclo di vita dell'informazione (Information Capture and Management) segue un rigido schema di propagazione diviso in quattro domini logici.
+La trasformazione di materiale grezzo in conoscenza strutturata segue un ciclo di vita lineare articolato in quattro fasi sequenziali e rigorosamente compartimentate. Nella prima fase di acquisizione, i documenti esterni, gli articoli tecnici in formato PDF e i file grezzi vengono depositati direttamente all'interno della cartella `inbox/` per preservare l'integrità del dato originario senza alterazioni.
 
-### 1. Livello Raw (Inbox)
-I dati di input (come PDF, dump HTML o log testuali) vengono immagazzinati in uno spazio di **staging** iniziale. I documenti in questo perimetro sono considerati immutabili. Fungono esclusivamente da fonte di verità grezza e non vengono formattati o alterati, garantendo una rigorosa tracciabilità verso le fonti esterne primarie in fase di auditing.
+Successivamente, nella fase di decomposizione e sintesi, l'analista esamina il materiale attraverso l'interfaccia di Obsidian, estraendo annotazioni concettuali, collegamenti atomici e prime bozze analitiche nello spazio di lavoro privato in `private/notes/`. Quando l'evidenza empirica e teorica risulta consolidata, si procede alla formalizzazione monografica, redigendo il contenuto strutturato come monografia tecnica definitiva all'interno di `stazione-knowledge/docs/`.
 
-### 2. Livello Distillato (Note Private)
-I concetti estratti dal livello grezzo vengono trasferiti in un dominio privato dedicato alla sintesi. La struttura testuale di questo livello è frammentata e ottimizzata per l'elaborazione ad alto volume. Si tratta di annotazioni, sintesi e associazioni logiche ancora in fase di maturazione, che l'operatore o gli script AI generano per condensare il rumore informativo della fonte primaria.
+Infine, la fase di pubblicazione e versionamento conclude il ciclo: operando da terminale nella directory `stazione-knowledge/`, l'analista esegue le istruzioni di aggiunta, commit e sincronizzazione remota per consolidare la versione ufficiale sul repository [GitHub](https://github.com/) (la piattaforma cloud di hosting per repository Git).
 
-### 3. Livello Wiki (Conoscenza Consolidata)
-I nodi concettuali stabilizzati migrano in un repository esposto, assumendo la forma di monografie strutturate autoconclusive. Questo dominio rappresenta la **knowledge base** consolidata: è privo di appunti incompleti, rigorosamente tassonomizzato ed è il target finale per l'esportazione verso generatori di siti web statici e l'interrogazione RAG da parte di agenti in produzione.
+## Sandboxing e Politiche di Accesso per Agenti AI
 
-### 4. Livello Artefatti
-L'ultima fase del ciclo di vita sfrutta i contenuti consolidati del Wiki per generare output operativi. Script eseguibili, report distribuiti in formato PDF o modelli formali di prompt vengono esportati a partire dalla base di conoscenza, finalizzando l'impiego dei dati.
+L'esecuzione di script [Python](https://www.python.org/) e agenti autonomi sul file system locale introduce il rischio di corruzione involontaria dei dati o cancellazione accidentale di file critici. La mitigazione di tale rischio impone la definizione di un perimetro operativo esplicito (*sandboxing* logico).
 
-## Accesso e Sicurezza per Operatori Autonomi
+All'interno della cartella `private/infra/` viene predisposto il file di policy `AGENTS.md`. Questo documento definisce i permessi operativi per gli interpreti automatici, concedendo accesso in sola lettura sull'intero albero di directory per consentire ricerche ed estrazioni di contesto, ma vietando rigorosamente la scrittura diretta nella directory `stazione-knowledge/docs/` senza una revisione umana esplicita. Gli script possono generare output esclusivamente in directory temporanee dedicate, registrando ogni modifica all'interno di file di log strutturati in formato JSONL per assicurare tracciabilità e verificabilità forense.
 
-L'integrazione di agenti con capacità di scrittura sul file system espone il sistema al rischio di sovrascritture distruttive o "allucinazioni" persistenti. La mitigazione si implementa definendo un **Manifesto Operativo** testuale (tipicamente `AGENTS.md`) che funge da vincolo direttivo per l'intelligenza artificiale.
+## Compromessi Operativi e Scelte Architetturali
 
-### Asimmetria dei Permessi (Read/Write)
-Il manifesto stabilisce rigorose regole di accesso a livello di directory. Agli agenti viene garantito un accesso in sola lettura globale per consentire operazioni di ricerca documentale e l'analisi del grafo semantico. L'autorizzazione di scrittura viene invece confinata a domini temporanei o di elaborazione (es. cartelle isolate del livello Distillato). Nessun agente automatizzato è autorizzato ad alterare autonomamente le monografie stabilizzate nel livello Wiki senza l'approvazione formale umana (human-in-the-loop).
+L'adozione di un'architettura local-first comporta precise rinunce operative rispetto alle piattaforme commerciali distribuite.
 
-### Tracciamento e Audit dei Log
-Qualsiasi interazione condotta da agenti locali deve lasciare un rintracciamento ispezionabile. Le alterazioni sui file vengono precedute da un salvataggio in un registro in formato JSONL. In scenari più complessi, le modifiche possono essere confermate su Git tramite commit espliciti assegnati all'identità crittografica del bot, garantendo la possibilità di un ripristino atomico dei file qualora la risposta generata dal modello linguistico si rivelasse errata o distruttiva.
+### Assenza di Collaborazione Sincrona in Tempo Reale
 
-## Trade-offs Operativi
+A differenza degli editor basati su Operational Transformation o CRDT nel cloud, i file Markdown versionati con Git non supportano la modifica simultanea dello stesso documento da parte di più utenti in tempo reale. Le modifiche concorrenti richiedono la risoluzione manuale dei conflitti di merge attraverso il terminale o l'editor di codice. Il sistema è ottimizzato per il lavoro individuale focalizzato o per flussi di contribuzione asincroni basati su rami (*branches*) e pull request.
 
-L'adozione di un ecosistema local-first introduce attriti architetturali specifici che impattano negativamente determinati scenari di utilizzo rispetto all'adozione di un servizio gestito in cloud.
+### Scalabilità della Ricerca Semantica e Overhead di Memoria
 
-### Risoluzione dei Conflitti e Latenza di Rete
-La natura asincrona di Git e l'uso di file di testo piano implicano che le modifiche simultanee provenienti da nodi differenti generino divergenze strutturali. I database cloud integrano meccanismi CRDT (Conflict-free Replicated Data Type) o Operational Transformation per l'editing concorrente in tempo reale, unendo le modifiche in background. Nel sistema local-first, la risoluzione dei conflitti Git su file Markdown richiede un intervento manuale che interrompe il flusso operativo, introducendo frizione tecnica durante le sessioni di lavoro asincrone.
-
-### Limiti di Scala e Ricerche Vettoriali
-La semplicità lineare del file system diventa un collo di bottiglia elaborativo su dataset di grande entità. Interrogare semanticamente migliaia di file in puro Markdown risulta impraticabile in assenza di indici inversi strutturati. Per implementare ricerche ad alta precisione a bassa latenza, è necessario affiancare all'architettura un database vettoriale locale (come ChromaDB o Qdrant). Questo vincolo reintroduce parzialmente la complessità dell'infrastruttura client-server, costringendo il sistema a mantenere processi in background dedicati esclusivamente al ricalcolo degli *embeddings* in risposta a ogni variazione dei file di testo.
+La ricerca lessicale esatta su file di testo è istantanea per raccolte di medie dimensioni tramite strumenti da riga di comando. Tuttavia, l'interrogazione semantica basata sul significato richiede l'indicizzazione vettoriale mediante modelli di embedding e l'impiego di database vettoriali locali come [ChromaDB](https://www.trychroma.com/) (il database vettoriale open-source AI-native). Questo componente richiede processi persistenti in background e allocazione continua di memoria RAM per il calcolo e il recupero dei vettori densi.
 
 ## Riferimenti Bibliografici e Risorse Tecniche
 
-La letteratura tecnica relativa alle implementazioni *local-first* e *docs-as-code* fornisce modelli architetturali validati per l'espansione del workspace.
+### Standardizzazione e Filosofia Docs-as-Code
 
-### Knowledge Base e Gestione Local-First
-Il saggio di Adam Bray, [A Personal Git Repo as a Knowledge Base Wiki](https://dev.to/adam_b/a-personal-git-repo-as-a-knowledge-base-wiki-j51), documenta l'approccio base all'utilizzo di repository Git come infrastruttura primaria per l'indicizzazione dei file testuali. Modelli operativi simili, incentrati sull'ingegneria *docs-as-code*, sono analizzati da [ingegneri di Alibaba](https://lifetips.alibaba.com/tech-efficiency/personal-knowledge-base-with-markdown-git) e su [Medium](https://marklowg.medium.com/creating-a-personal-knowledgebase-on-github-d1d8bb9222a4), validando la robustezza del formato Markdown. Esempi pratici di repository strutturati sono ispezionabili nei vault pubblici su GitHub, come la [Public Knowledgebase di Exasol](https://github.com/exasol/public-knowledgebase), l'[Obsidian Knowledge Base](https://github.com/sketchbuch/obsidian-knowledge-base) o la [NPKB di Nagi](https://github.com/brklntmhwk/npkb).
+L'articolo pionieristico [A Personal Git Repo as a Knowledge Base Wiki](https://dev.to/adam_b/a-personal-git-repo-as-a-knowledge-base-wiki-j51) di Adam Bray (ingegnere software e divulgatore tecnico) descrive la fondazione concettuale dell'uso di Git per la gestione della conoscenza personale. L'estensione del paradigma *Docs-as-code* a livello industriale è documentata dall'analisi tecnica di [Alibaba](https://www.alibaba.com/) (il gruppo tecnologico multinazionale leader nei servizi cloud e nell'e-commerce) nella guida [Personal Knowledge Base with Markdown and Git](https://lifetips.alibaba.com/tech-efficiency/personal-knowledge-base-with-markdown-git) e approfondita sulla piattaforma [Medium](https://medium.com/) (la nota rete editoriale di saggistica tecnologica) nel saggio [Creating a Personal Knowledgebase on GitHub](https://marklowg.medium.com/creating-a-personal-knowledgebase-on-github-d1d8bb9222a4). Esempi architetturali completi di repository di appunti pubblici sono consultabili nei progetti open-source [Obsidian Knowledge Base](https://github.com/sketchbuch/obsidian-knowledge-base) e [NPKB](https://github.com/brklntmhwk/npkb).
 
-### Integrazione LLM e Architetture Wiki
-L'estensione dell'architettura verso il mantenimento autonomo dei contenuti è esplorata in repository specializzati come il [Karpathy-style LLM wiki per Obsidian](https://github.com/shannhk/llm-wikid), che offre template e workflow per wiki persistenti gestite da LLM. Similmente, il documento [LLM-KB — LLM Knowledge Base con Obsidian](https://ocholuo.github.io/posts/LLM-KnowledgeBase-Obsidian/) espone le differenze architetturali tra la mera implementazione RAG e la persistenza proattiva del dato su file system locale operata da agenti AI.
+### Integrazione di Modelli Linguistici e Knowledge Base Locali
 
-### Fondamenti Accademici (Machine Learning e NLP)
-Per la comprensione dei meccanismi di base dei modelli linguistici che operano sul formato testuale, i corsi della Stanford University rappresentano i vertici accademici. Il corso [CS229 - Machine Learning](https://cs229.stanford.edu/) (disponibile anche [online](https://online.stanford.edu/courses/cs229-machine-learning)) fornisce le basi matematiche, mentre il corso [CS224N - Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/) (archivio [lezioni online](https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning)) disseziona l'architettura dei transformer e i meccanismi di estrazione semantica applicabili al contenuto testuale del vault.
+Per interfacciare modelli linguistici locali e vault di documenti Markdown, il progetto open-source [LLM-Wikid](https://github.com/shannhk/llm-wikid) (un motore di sincronizzazione e indicizzazione di vault Markdown per modelli generativi) e la guida [LLM-KB — Knowledge Base per Modelli Linguistici](https://ocholuo.github.io/posts/LLM-KnowledgeBase-Obsidian/) descrivono l'architettura tecnica per combinare consultazione umana e arricchimento semantico automatico.
 
-## Appendice Operativa: Laboratori di Implementazione
+I fondamenti matematici e computazionali per l'elaborazione del linguaggio naturale e l'addestramento dei modelli sono liberamente accessibili attraverso i programmi della [Stanford University](https://www.stanford.edu/) (il prestigioso ateneo di ricerca californiano), in particolare il corso [CS229: Machine Learning](https://cs229.stanford.edu/) (disponibile con [videolezioni aperte](https://online.stanford.edu/courses/cs229-machine-learning)) e il corso [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/).
 
-La validazione dell'architettura si ottiene tramite l'esecuzione sequenziale di quattro laboratori di configurazione. L'obiettivo è istanziare i componenti del sistema e definire le barriere di accesso.
+## Appendice Operativa: Laboratori Pratici
 
-### Laboratorio 1: Inizializzazione della Stazione Base
-Il primo step richiede l'allocazione della directory di lavoro (la *Stazione*) nel file system locale e l'inizializzazione del repository Git principale. L'operatore struttura l'albero delle directory creando i domini logici separati, istanziando la cartella di *staging* (Inbox) e lo spazio privato, per poi verificare l'integrità dei percorsi aprendo il file di configurazione (index) dal proprio editor.
-
-### Laboratorio 2: Risoluzione del Grafo tramite Obsidian
-L'indicizzazione client-side viene verificata avviando Obsidian e puntando il vault direttamente alla root della Stazione. L'operatore si assicura che il software riconosca correttamente l'albero delle directory senza alterare il formato dei file, e testa l'inserimento di metadati YAML o annotazioni per validare la fluidità dell'interfaccia nel riflettere i cambiamenti su disco.
-
-### Laboratorio 3: Validazione della Pipeline ICM
-Il flusso unidirezionale dei dati viene testato importando un documento grezzo reale (es. un articolo OSINT) all'interno del dominio Inbox. Successivamente, l'operatore genera una nota distillata nel dominio privato estraendone i concetti critici, e conclude il test inserendo un backlink verificato verso una monografia pubblica, validando così la progressione dell'informazione attraverso i tre livelli architetturali.
-
-### Laboratorio 4: Stesura del Manifesto Operativo
-La sicurezza del vault viene implementata redigendo il file strutturale `AGENTS.md`. L'operatore definisce all'interno del file l'anagrafica degli agenti autorizzati (es. *curator*, *auditor*), codificandone i limiti operativi. Vengono esplicitate le regole per prevenire la mutazione diretta del livello Wiki e viene istituito l'obbligo di tracciamento di ogni alterazione generata artificialmente.
+1. Configurazione della struttura di directory: Creare la cartella radice `Stazione/`, clonare il repository `stazione-knowledge` all'interno di essa, e predisporre manualmente le cartelle adiacenti `inbox/`, `private/notes/` e `private/infra/`.
+2. Inizializzazione del vault Obsidian: Avviare Obsidian, selezionare l'opzione per aprire una cartella esistente e indicare la cartella principale `Stazione/`. Verificare nel pannello laterale la corretta visualizzazione sia dei moduli pubblici sia dell'albero privato, testando la creazione di un collegamento interno bidirezionale con sintassi `[[D01-workspace-llm-wiki]]`.
+3. Esecuzione del flusso di acquisizione e formalizzazione: Depositare un documento di test in formato PDF nella directory `inbox/`, redigere una nota di sintesi in `private/notes/` estraendo i punti salienti, e creare un riferimento ipertestuale all'interno di una monografia pubblica in `stazione-knowledge/docs/`.
+4. Configurazione della policy di sicurezza per agenti: All'interno di `private/infra/`, creare il file `AGENTS.md` inserendo le istruzioni vincolanti che limitano i permessi di scrittura dei processi automatici alle sole directory di staging, vietando la modifica non supervisionata dei file in `stazione-knowledge/docs/`.

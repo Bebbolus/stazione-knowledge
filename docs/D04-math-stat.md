@@ -1,535 +1,240 @@
-# D04 — Matematica e statistica just-in-time per ML / LLM
-
-## Meta-modulo D04
-
-**Target**  
-Me stesso oggi, e chiunque voglia avere la **matematica minima ma sufficiente**
-per capire e usare ML, deep learning e LLM, senza fare un corso universitario completo.
-
-**Prerequisiti consigliati**
-
-- D02 (Python refresher) e D03 (data foundations) completati o quasi
-- confidenza base con:
-  - vettori e matrici “a livello intuitivo”
-  - uso di NumPy/Pandas e dataset tabellari
-- nessuna necessità di dimostrazioni formali, ma disponibilità a vedere formule e grafici
-
-**Durata indicativa**
-
-- **Modalità minima (~3–4 ore)**  
-  - algebra lineare essenziale (vettori, matrici, prodotto, autovettori)  
-  - concetti base di derivate/gradiente e chain rule  
-  - probabilità elementare (eventi, media, varianza)  
-  - overfitting e bias/varianza a livello concettuale
-
-- **Modalità standard (~8–10 ore)**  
-  - visione intuitiva di algebra lineare (3Blue1Brown)  
-  - sezioni selezionate di MIT 18.06 per consolidare  
-  - probabilità e statistica con esempi strutturati (Khan Academy)  
-  - esercizi Feynman su concetti chiave
-
-- **Modalità deep dive (più giornate)**  
-  - seguire un percorso completo (es. Essence of Linear Algebra + blocchi di Khan + parti di CS229)  
-  - fare esercizi manuali su backpropagation, likelihood, Bayes, modelli semplici
-
-**Quando considerare il modulo “completato”**
-
-- so leggere formule e diagrammi base di ML/LLM senza panico
-- capisco intuitivamente vettori, matrici, prodotto scalare, norma, autovettori/autovalori
-- so cosa sono derivata, gradiente e chain rule in relazione al training di reti neurali
-- ho una comprensione operativa di probabilità di base, media, varianza e concetti di overfitting
-- ho almeno una lista di “punti deboli” personali da rafforzare con risorse esterne
-
 ---
-
-## Perché questo documento
-
-Questo documento raccoglie **la matematica essenziale** che userò in ML/LLM,
-organizzata per blocchi e pensata come **riferimento just-in-time**:
-
-- non sostituisce corsi completi (CS229, 18.06, ecc.)
-- mi permette di tornare rapidamente a concetti chiave quando in altri moduli
-  (D07/D09/D10/D13) incontro formule o idee non chiare
-- è progettato per sessioni brevi (15–30 minuti), compatibili con tempo spezzato/ADHD
-
+aliases: [D04, Matematica ML, Algebra Lineare, Statistica AI, Calcolo Differenziale]
 ---
+# Matematica e Statistica Just-in-Time per Machine Learning
 
-## Obiettivi di apprendimento
+I **fondamenti matematici e statistici per il machine learning** costituiscono l'impalcatura formale necessaria per modellare spazi vettoriali multidimensionali, ottimizzare parametri numerici continui e quantificare l'incertezza probabilistica nei sistemi di intelligenza artificiale. Questa strumentazione teorica si applica direttamente nella progettazione di architetture neurali, nell'analisi degli spazi latenti di embedding per compiti OSINT e nella convergenza numerica degli algoritmi di ottimizzazione. La formulazione analitica esiste per demistificare il funzionamento interno degli algoritmi di apprendimento, consentendo all'ingegnere di diagnosticare instabilità di convergenza, calibrare iperparametri critici ed evitare il collasso generalizzativo causato da overfitting o underfitting.
 
-Dopo questo modulo dovrei essere in grado di:
+## La Necessità del Modello Geometrico e Differenziale
 
-- visualizzare vettori e matrici e capire cosa fa una trasformazione lineare
-- interpretare il gradiente come direzione di massima crescita della loss
-- capire la chain rule come base concettuale della backpropagation
-- gestire concetti base di probabilità (eventi, variabili aleatorie, media, varianza)
-- ragionare su overfitting/underfitting e bias/varianza in parole semplici
+Nell'ingegneria del software classica, la logica computazionale viene espressa mediante istruzioni deterministiche, condizioni booleane e ramificazioni discrete. Al contrario, i sistemi di apprendimento automatico non eseguono regole cablate, ma trasformano tensori numerici ad alta dimensionalità attraverso successioni di proiezioni geometriche, minimizzando funzioni di perdita differenziabili lungo superfici di costo continue.
 
----
+La gestione di un modello come una scatola nera impenetrabile preclude qualsiasi possibilità di debugging rigoroso in produzione. Quando la metrica di perdita (*Loss*) diverge bruscamente, quando i gradienti collassano a zero (*vanishing gradient*) o quando le predizioni su dati reali mostrano degradazione sistematica, la diagnosi richiede la comprensione delle proprietà spettrali delle matrici di trasformazione, della dinamica di discesa lungo il gradiente e della decomposizione tra bias e varianza statistica.
 
-## 1. Mappa dei concetti chiave
+L'approccio *just-in-time* formalizza i concetti matematici indispensabili senza astrazioni superflue: l'algebra lineare per la trasformazione e compressione dello spazio delle feature, il calcolo differenziale multivariato per la retropropagazione dell'errore, e la teoria della probabilità per la stima bayesiana dell'incertezza.
 
-### 1.1 Blocchi principali
+## Algebra Lineare e Spazi Latenti
 
-Userò quattro blocchi di matematica:
+La quasi totalità delle operazioni computazionali all'interno di Large Language Model e reti neurali profonde con [PyTorch](https://pytorch.org/) (il framework di deep learning open-source sviluppato da [Meta AI](https://ai.meta.com/) e dalla Linux Foundation) si riconduce a manipolazioni di algebra lineare vettorializzate tramite [NumPy](https://numpy.org/) (la libreria cardine in [Python](https://www.python.org/) per l'elaborazione numerica vettoriale e matriciale).
 
-1. **Algebra lineare essenziale**  
-   vettori, matrici, prodotto matrice-vettore, combinazioni lineari, norma, prodotto scalare, autovettori.
+### Vettori, Trasformazioni Affini e Similarità Geometrica
 
-2. **Calcolo differenziale essenziale**  
-   derivate di base, gradiente, chain rule per la backpropagation.
+I dati grezzi (testi, tracce di rete, serie temporali) vengono mappati in vettori densi $\mathbf{x} \in \mathbb{R}^d$ all'interno di uno spazio vettoriale a $d$ dimensioni. La separazione di classi o l'estrazione di pattern informativi richiede la distorsione geometrica controllata di tale spazio tramite proiezioni lineari e traslazioni.
 
-3. **Probabilità di base**  
-   eventi, variabili aleatorie, distribuzioni, media, varianza, regole di somma/prodotto.
+L'operazione cardine di un generico layer denso neurale è la **trasformazione affine**:
 
-4. **Statistica di base e overfitting**  
-   campioni, popolazioni, stima, bias/varianza, over/underfitting.
+$$\mathbf{y} = \mathbf{W}\mathbf{x} + \mathbf{b}$$
 
-Ogni blocco è pensato per essere **richiamato al bisogno** nei moduli successivi.
+dove $\mathbf{x} \in \mathbb{R}^d$ rappresenta il vettore di feature in input, $\mathbf{W} \in \mathbb{R}^{m \times d}$ è la matrice dei pesi sinaptici che esegue rotazioni e riscalamenti nello spazio, $\mathbf{b} \in \mathbb{R}^m$ è il vettore di bias che trasla l'origine della frontiera decisionale, e $\mathbf{y} \in \mathbb{R}^m$ è il vettore risultante proiettato nello spazio di output.
 
----
+Negli spazi latenti di embedding impiegati per il Retrieval-Augmented Generation e l'analisi semantica OSINT, la vicinanza concettuale tra due vettori $\mathbf{u}, \mathbf{v} \in \mathbb{R}^d$ viene quantificata mediante il prodotto interno e la **similarità coseno**:
 
-## 2. Algebra lineare essenziale
+$$\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^d u_i v_i = \|\mathbf{u}\|_2 \|\mathbf{v}\|_2 \cos \theta \implies \text{CosineSimilarity}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u}^T \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$$
 
-### 2.1 Vettori e matrici (intuizione geometrica)
+La normalizzazione per la norma euclidea $\|\mathbf{u}\|_2 = \sqrt{\sum u_i^2}$ rende la misura invariante rispetto alla magnitudo del vettore, isolando unicamente l'allineamento direzionale nello spazio multidimensionale.
 
-Immagine mentale:
+### Autovettori, Decomposizione Spettrale e SVD
 
-- Un **vettore** è un punto o una freccia in uno spazio di dimensione \(n\).  
-  Esempio: un embedding di parola è un vettore in uno spazio a 512 o 1536 dimensioni.
+Ogni matrice quadrata $\mathbf{A} \in \mathbb{R}^{d \times d}$ possiede direzioni invarianti dette **autovettori** $\mathbf{v}$, lungo le quali l'azione della trasformazione si riduce a una pura moltiplicazione scalare per l'**autovalore** associato $\lambda$:
 
-- Una **matrice** è una funzione lineare che trasforma vettori in altri vettori.  
-  Esempio: un layer lineare \(y = Wx + b\) è una matrice \(W\) che “ruota, scala, schiaccia”
-  lo spazio degli input.
+$$\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$$
 
-Punti chiave:
+Questa proprietà geometrica costituisce il fondamento della riduzione dimensionale lineare (Principal Component Analysis) e della decomposizione ai valori singolari (**Singular Value Decomposition**, SVD):
 
-- somma di vettori = combinare caratteristiche
-- prodotto scalare = “quanto due vettori puntano nella stessa direzione”
-- norma = “lunghezza” del vettore
+$$\mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$
 
-La serie *Essence of Linear Algebra* di 3Blue1Brown visualizza proprio queste intuizioni.
+dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici ortogonali i cui vettori colonna rappresentano le basi degli spazi di partenza e arrivo, mentre $\mathbf{\Sigma}$ è una matrice diagonale contenente i valori singolari decrescenti. La SVD consente di comprimere matrici di dati ad alta dimensionalità conservando la massima quota di informazione e varianza con il minimo ingombro in memoria RAM.
 
-### 2.2 Combinazioni lineari, span e base
+## Calcolo Differenziale Multivariato e Propagazione dell'Errore
 
-Concetti fondamentali:
+L'apprendimento automatico formula l'addestramento come un problema di ottimizzazione continua, consistente nell'individuare la configurazione dei parametri $\theta$ che minimizza una funzione scalare di costo o perdita $L(\theta)$.
 
-- **Combinazione lineare**: \(a_1 v_1 + \dots + a_k v_k\).  
-  Un vettore può essere espresso come combinazione di altri vettori base.
+### Il Gradiente e l'Ottimizzazione con Discesa del Gradiente
 
-- **Span**: insieme di tutti i vettori ottenibili come combinazione di un insieme di vettori.
+Per funzioni a più variabili, la direzione di massima crescita istantanea è descritta dal vettore **gradiente** $\nabla_\theta L(\theta)$, contenente le derivate parziali del primo ordine rispetto a ciascun parametro:
 
-- **Base**: insieme minimo di vettori linearmente indipendenti che genera tutto lo spazio.
+$$\nabla_\theta L(\theta) = \begin{bmatrix} \frac{\partial L}{\partial \theta_1}, & \frac{\partial L}{\partial \theta_2}, & \dots, & \frac{\partial L}{\partial \theta_p} \end{bmatrix}^T$$
 
-Questi concetti sono importanti per:
+L'algoritmo di **Discesa del Gradiente** (*Gradient Descent*) aggiorna iterativamente i pesi del modello muovendosi in direzione opposta al gradiente, applicando un fattore di scala detto **learning rate** ($\eta \in \mathbb{R}^+$):
 
-- capire cosa significa che un layer “riduce la dimensione”
-- interpretare rank di una matrice e capacità di rappresentare l’informazione
-- ragionare su spazi latenti ed embedding
+$$\theta^{(t+1)} = \theta^{(t)} - \eta \nabla_\theta L(\theta^{(t)})$$
 
-### 2.3 Prodotto matrice-vettore e layer lineari
+La scelta del tasso di apprendimento $\eta$ governa la stabilità della convergenza: valori eccessivamente elevati causano oscillazioni e divergenza numerica, mentre valori eccessivamente ridotti comportano tempi di calcolo proibitivi o intrappolamento in punti di sella sub-ottimali.
 
-Per un layer lineare:
+### La Regola della Catena e la Retropropagazione (Backpropagation)
 
-\[
-y = Wx + b
-\]
+Nelle architetture neurali multistrato, l'output finale è il risultato di funzioni composte annidate: $\hat{\mathbf{y}} = f_L(f_{L-1}(\dots f_1(\mathbf{x})))$. Il calcolo del gradiente della perdita rispetto ai parametri dei primi strati impiega la **Regola della Catena multivariata** (*Multivariate Chain Rule*), formalizzata mediante il prodotto con la matrice Jacobiana:
 
-- \(x\) è il vettore input (es. embedding di token)
-- \(W\) è la matrice dei pesi
-- \(b\) è il bias (vettore di traslazione)
-- \(y\) è il vettore output (nuova rappresentazione)
+$$\frac{\partial L}{\partial \mathbf{x}} = \mathbf{J}_{\mathbf{y}}(\mathbf{x})^T \frac{\partial L}{\partial \mathbf{y}}, \quad \text{con } \mathbf{J}_{\mathbf{y}}(\mathbf{x})_{ij} = \frac{\partial y_i}{\partial x_j}$$
 
-Intuizione:
+L'algoritmo di retropropagazione (*Backpropagation*) automatizza questa regola applicando la differenziazione all'indietro (*reverse-mode automatic differentiation*), calcolando i gradienti di tutti i pesi della rete con complessità temporale proporzionale a un singolo passaggio in avanti (*forward pass*).
 
-- le righe/colonne di \(W\) determinano quali direzioni dello spazio input vengono
-  preservate, amplificate o attenuate
-- cambiare \(W\) significa cambiare come il modello “vede” i dati
+## Teoria della Probabilità e Inferenza Bayesiana
 
----
+Nei domini operativi reali, i dati e le predizioni dei modelli incorporano intrinsecamente quote di incertezza stocastica dovute a rumore di misura o incompletezza informativa.
 
-## 3. Autovettori, autovalori e decomposizioni
+### Variabili Aleatorie, Momenti Statistici e Regole Operative
 
-### 3.1 Autovettori/autovalori (a grandi linee)
+Una variabile aleatoria modella formalmente i possibili esiti numerici di un fenomeno non deterministico. Le proprietà centrali della sua distribuzione sono descritte dal **valore atteso** $\mathbb{E}[X] = \int x p(x) dx$ (la tendenza centrale) e dalla **varianza** $\text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2]$ (la dispersione attorno al valore centrale).
 
-Definizione operativa:
+Le regole fondamentali del calcolo probabilistico impongono che per eventi disgiunti le probabilità si sommino ($P(A \cup B) = P(A) + P(B)$), mentre per eventi indipendenti si moltiplichino ($P(A \cap B) = P(A)P(B)$).
 
-- Un **autovettore** \(v\) di una matrice \(A\) è un vettore che viene solo scalato da \(A\), non “girato”:
-  \[
-  Av = \lambda v
-  \]
-- \(\lambda\) è l’**autovalore** corrispondente.
+### Aggiornamento della Conoscenza con il Teorema di Bayes
 
-Intuizione:
+Nei sistemi di filtraggio, classificazione del testo e diagnostica delle minacce, l'incorporazione di nuove evidenze osservate $B$ modifica la distribuzione di probabilità a priori dell'ipotesi $A$ secondo il **Teorema di Bayes**:
 
-- autovettori = direzioni speciali che una trasformazione lineare non ruota, ma solo allunga/accorcia
-- autovalori = fattori di scala su quelle direzioni
+$$P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)} = \frac{P(B \mid A) P(A)}{\sum_{j} P(B \mid A_j) P(A_j)}$$
 
-In ML:
+Il termine $P(A)$ rappresenta la convinzione iniziale (*Prior*), $P(B \mid A)$ descrive la verosimiglianza dell'evidenza dato il modello (*Likelihood*), $P(B)$ è la costante di normalizzazione marginale, e $P(A \mid B)$ quantifica la probabilità aggiornata alla luce delle evidenze (*Posterior*).
 
-- appaiono dietro le quinte in PCA, SVD, analisi di stabilità, analisi di layer e embedding.
+## Trade-off e Limiti nella Statistica Inferenziale: Il Compromesso Bias/Varianza
 
-### 3.2 PCA e SVD (senza formule pesanti)
+L'obiettivo dell'apprendimento automatico consiste nell'addestrare un modello $\hat{f}(x)$ su un campione finito di osservazioni $\mathcal{D}$ garantendo che le predizioni generalizzino accuratamente sull'intera popolazione sottostante non osservata.
 
-Concetti utili:
+L'errore quadratico atteso di generalizzazione su un'istanza $x$ si decompone analiticamente in tre componenti indipendenti:
 
-- **PCA** (Principal Component Analysis) trova le direzioni principali di varianza nei dati  
-  → riduzione dimensionale, compressione, visualizzazione.
+$$\mathbb{E}_{\mathcal{D}} \left[ \left( y - \hat{f}(x; \mathcal{D}) \right)^2 \right] = \underbrace{\left( f(x) - \mathbb{E}[\hat{f}(x)] \right)^2}_{\text{Bias}^2} + \underbrace{\mathbb{E}\left[ \left( \hat{f}(x) - \mathbb{E}[\hat{f}(x)] \right)^2 \right]}_{\text{Varianza}} + \underbrace{\sigma_\epsilon^2}_{\text{Rumore Irriducibile}}$$
 
-- **SVD** (Singular Value Decomposition) scompone una matrice in tre matrici speciali
-  che rendono evidente la sua struttura interna.
+Il termine **Bias** misura l'errore sistematico derivante da ipotesi algoritmiche eccessivamente rigide o semplificate che non catturano la vera complessità dei dati (*Underfitting*). Il termine **Varianza** quantifica la sensibilità del modello alle fluttuazioni casuali dello specifico campione di training, portando il sistema a memorizzare il rumore statistico anziché la funzione generatrice sottostante (*Overfitting*). Il **Rumore Irriducibile** $\sigma_\epsilon^2$ rappresenta la varianza intrinseca del sistema di misura, non eliminabile da alcun modello.
 
-Non serve implementarle a mano, ma è utile:
+L'ingegneria del machine learning con [Scikit-learn](https://scikit-learn.org/) (la libreria open-source standard per il machine learning classico in Python) consiste nell'individuare la complessità architetturale ottimale che minimizza simultaneamente bias e varianza.
 
-- sapere che esistono
-- intuire che molti metodi di compressione e analisi di embedding si basano su idee simili
+## Riferimenti Bibliografici e Risorse Tecniche
 
----
+### Risorse Didattiche Visive e Interattive
 
-## 4. Calcolo differenziale essenziale
+La comprensione intuitiva e geometrica dell'algebra lineare è esposta nella serie didattica [Essence of Linear Algebra](https://essence-of-linear-algebra.vercel.app/) ideata dal canale [3Blue1Brown](https://www.3blue1brown.com/) del divulgatore matematico [Grant Sanderson](https://www.3blue1brown.com/). Le dinamiche probabilistiche e le simulazioni interattive nel browser sono consultabili sul portale accademico [Seeing Theory](https://seeing-theory.brown.edu/basic-probability/index.html) della [Brown University](https://www.brown.edu/) e attraverso i moduli interattivi di [Explained Visually](https://setosa.io/ev/markov-chains/). I percorsi formativi per la statistica descrittiva e inferenziale sono disponibili sulla piattaforma [Khan Academy](https://www.khanacademy.org/math/statistics-probability).
 
-### 4.1 Derivata e gradiente
+### Corsi Accademici e Trattati Fondamentali
 
-Per ML/LLM è sufficiente:
+Per lo studio rigoroso dell'algebra lineare applicata, il corso cardine è [18.06 Linear Algebra](https://web.mit.edu/18.06/www/) tenuto da [Gilbert Strang](https://math.mit.edu/~gs/) presso il [Massachusetts Institute of Technology (MIT)](https://web.mit.edu/). I fondamenti computazionali di machine learning e ottimizzazione per il natural language processing sono approfonditi nei programmi didattici della [Stanford University](https://www.stanford.edu/), in particolare i corsi [CS229: Machine Learning](https://cs229.stanford.edu/materials/handout.pdf) e [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/).
 
-- Derivata di una variabile: pendenza della curva in un punto.
-- **Gradiente** = vettore delle derivate parziali di una funzione multivariata.
+## Appendice Operativa: Laboratori Pratici
 
-Se \(L(\theta)\) è la loss e \(\theta\) il vettore di parametri:
+I seguenti laboratori contengono script Python autonomi ed eseguibili che implementano numericamente i costrutti teorici formalizzati nella monografia.
 
-- il gradiente \(\nabla_\theta L\) indica la direzione di massima crescita della loss
-- per discendere la loss, ci si muove nella direzione opposta:
+### Laboratorio 1: Trasformazioni Affini e Similarità Coseno in NumPy
 
-\[
-\theta_{\text{nuovo}} = \theta_{\text{vecchio}} - \eta \nabla_\theta L
-\]
+Questo script implementa la moltiplicazione matriciale per un layer denso e calcola la similarità coseno tra vettori di embedding multidimensionali.
 
-con \(\eta\) learning rate.
+```python
+import numpy as np
 
-### 4.2 Chain rule (backpropagation)
+# Definizione del vettore di feature e della matrice dei pesi di un layer lineare
+x = np.array([1.2, -0.8, 2.5], dtype=np.float64)
+W = np.array([
+    [0.5, -0.2, 0.8],
+    [-0.1, 0.9, 0.4],
+    [0.3, -0.6, 0.1],
+    [0.7, 0.2, -0.5]
+], dtype=np.float64)
+b = np.array([0.1, -0.05, 0.2, -0.1], dtype=np.float64)
 
-La **chain rule** per funzioni composte:
-
-\[
-\frac{d}{dx} f(g(x)) = f'(g(x)) \cdot g'(x)
-\]
-
-In una rete neurale:
-
-- l’output è composizione di tanti layer \(f_L \circ f_{L-1} \circ \dots \circ f_1(x)\)
-- la **backpropagation** è un’applicazione meccanica della chain rule per calcolare
-  gradiente e aggiornare parametri layer per layer
-
-Importante:
-
-- non devo fare a mano la backpropagation per reti complesse  
-- devo però capire che:
-  - l’errore fluisce all’indietro  
-  - ogni layer riceve un contributo di errore proporzionale all’effetto che ha sull’output
-
----
-
-## 5. Probabilità di base
-
-### 5.1 Eventi, probabilità, variabili aleatorie
-
-Concetti:
-
-- **evento**: risultato o insieme di risultati di un esperimento casuale
-- **probabilità**: misura da 0 a 1 di quanto un evento è probabile  
-  (es. “test positivo”, “piove domani”, “token X in output”)
-
-- **variabile aleatoria**: funzione che associa valori numerici ai risultati
-- **distribuzione**: descrive come sono distribuiti i valori (es. binomiale, normale)
-
-La definizione base vista spesso in Khan Academy:
-
-\[
-\text{Probabilità di un evento} = \frac{\#\text{ modi in cui può accadere}}{\#\text{ risultati possibili}}
-\]
-
-### 5.2 Media, varianza, distribuzioni
-
-Concetti chiave:
-
-- **media**: valore atteso, centro della distribuzione
-- **varianza**: quanto i valori si discostano dalla media
-- **deviazione standard**: radice della varianza, misura della dispersione
-
-In ML:
-
-- la loss spesso è un valore atteso rispetto alla distribuzione dei dati
-- varianza e deviazione standard compaiono ovunque (normalizzazione, errori, rumore)
-
----
-
-## 6. Regole di somma, prodotto e Bayes
-
-### 6.1 Regola della somma e del prodotto
-
-Regole operative:
-
-- **somma**: probabilità che accada almeno uno tra eventi mutuamente esclusivi
-- **prodotto**: probabilità che accadano due eventi indipendenti
-
-Usi:
-
-- calcolo di probabilità in modelli semplici
-- interpretazione di likelihood in modelli generativi
-
-### 6.2 Bayes (solo l’essenziale)
-
-La regola di Bayes collega probabilità a priori, verosimiglianza e posteriori.
-
-Intuizione:
-
-- ho una credenza iniziale (prior)
-- osservo un dato (likelihood)
-- aggiorno la credenza (posterior)
-
-Schema:
-
-\[
-P(A\mid B) = \frac{P(B\mid A) P(A)}{P(B)}
-\]
-
-In ML:
-
-- interpretazione di modelli probabilistici
-- ragionamento su incertezza e aggiornamento delle informazioni
-
----
-
-## 7. Statistica e overfitting
-
-### 7.1 Campioni, popolazione, stima
-
-Concetti:
-
-- **campione**: dati osservati
-- **popolazione**: insieme di tutti i possibili dati
-- **stima**: uso del campione per inferire proprietà della popolazione
-
-Nel training ML:
-
-- dataset che ho = campione
-- dati reali futuri = popolazione
-- voglio che il modello generalizzi dai campioni alla popolazione
-
-### 7.2 Overfitting, underfitting, bias/varianza
-
-Intuizioni pratiche:
-
-- **overfitting**: modello troppo complesso, impara il rumore del training set
-- **underfitting**: modello troppo semplice, non cattura la struttura dei dati
-- **bias/varianza**:
-  - alto bias → modello rigido, errori sistematici
-  - alta varianza → modello instabile, sensibile ai dettagli del training set
-
-In D05/D06/D07 vedrò come questi concetti si traducono in scelte di architettura e training.
-
----
-
-## 8. Come usare questo modulo nello studio
-
-### 8.1 Strategia just-in-time
-
-Con tempo limitato/ADHD, non ha senso studiare tutta la matematica in anticipo:
-
-- uso D04 come **mappa di riferimento**
-- quando in altri moduli incontro un concetto non chiaro (es. autovettori, chain rule),
-  torno alla sezione relativa e poi guardo una risorsa esterna mirata
-- se un concetto resta ostico, lo segno in una nota dedicata (“Debolezze D04”)
-  e pianifico micro-sessioni su quel punto
-
-### 8.2 Fiche/flashcard di concetto
-
-Per ogni concetto chiave posso crearmi una mini-fiche:
-
-- definizione in 2–3 righe
-- intuizione visiva/metafora
-- una formula chiave
-- link a 1 video/articolo ben fatto
-
-Queste fiche diventeranno materiale per il quaderno/study pack e per ripassi veloci.
-
----
-
-## 9. Laboratori ed esercizi
-
-### Laboratorio 1 — Vettori, matrici e trasformazioni
-
-**Obiettivo:** vedere concretamente shape e trasformazioni lineari.
-
-**Passi:**
-
-1. In un notebook Python, creare alcuni vettori 2D e 3D con NumPy.
-2. Definire matrici semplici (rotazioni, scaling) e applicarle ai vettori.
-3. Visualizzare (anche solo tramite stampa) shape e valori prima/dopo.
-4. Annotare in una nota cosa significa “trasformazione lineare” nel contesto di un layer.
-
-**Deliverable:**
-
-- notebook `.ipynb` o script `.py` con esempi
-- breve nota in `private/notes/` che spiega la propria intuizione su vettori/matrici
-
----
-
-### Laboratorio 2 — Gradiente e discesa della loss in 1D
-
-**Obiettivo:** capire il gradiente su una funzione semplice.
-
-**Passi:**
-
-1. Definire in Python una funzione di una variabile, ad esempio \(L(\theta) = (\theta - 3)^2\).
-2. Calcolare la derivata analitica (gradiente): \(L'(\theta) = 2(\theta - 3)\).
-3. Implementare un loop di gradient descent in 1D:
-   - inizializzare \(\theta\) a un valore qualunque (es. 0)
-   - aggiornare \(\theta\) per alcuni passi usando la formula di GD
-4. Stampare i valori di \(\theta\) e \(L(\theta)\) ad ogni iterazione.
-
-**Deliverable:**
-
-- script/notebook con l’implementazione
-- nota che descrive cosa succede variando il learning rate
-
----
-
-### Laboratorio 3 — Probabilità di eventi semplici
-
-**Obiettivo:** usare probabilità base per un esempio concreto.
-
-**Passi:**
-
-1. Modellare in Python un esperimento semplice (es. lanci di moneta o dado).
-2. Simulare l’esperimento molte volte e stimare probabilità empiriche.
-3. Confrontarle con probabilità teoriche.
-4. Riflettere su come questa logica si generalizza a eventi più complessi (es. token in sequenza).
-
-**Deliverable:**
-
-- script con simulazioni
-- nota che collega la simulazione a concetti di probabilità in ML/LLM
-
----
-
-### Laboratorio 4 — Overfitting in un modello giocattolo
-
-**Obiettivo:** visualizzare overfitting e underfitting con un modello semplice.
-
-**Passi:**
-
-1. Generare dati sintetici (es. punti (x, y) da una funzione semplice con rumore).
-2. Fit di un modello lineare e uno polinomiale di grado alto.
-3. Confrontare errori su training set e su un test set separato.
-4. Annotare cosa significa “overfitting” in questo contesto.
-
-**Deliverable:**
-
-- notebook con grafici o almeno valori di errore
-- nota che descrive cosa ha visto e come collega il concetto a modelli più grandi
-
----
-
-## 10. Rubriche e checklist
-
-### Checklist — D04 completato
-
-- [ ] Capisco cosa sono vettori e matrici e che ruolo hanno in un layer lineare.
-- [ ] Ho un’intuizione della differenza tra trasformazione lineare e non lineare.
-- [ ] So spiegare con parole mie cosa sono gradiente e chain rule.
-- [ ] So definire variabile aleatoria, media, varianza, distribuzione in modo semplice.
-- [ ] Ho una visione qualitativa di overfitting, underfitting e bias/varianza.
-- [ ] Ho completato almeno 2 dei 4 laboratori (anche in forma semplificata).
-- [ ] Ho annotato in una nota i concetti che restano più deboli.
-
-### Errori tipici da evitare
-
-- cercare di studiare tutto come un manuale di matematica, senza legarlo subito a esempi ML/LLM.
-- sentirsi “in colpa” perché non si ricordano formule; l’obiettivo è intuizione operativa.
-- ignorare completamente la parte statistica e focalizzarsi solo su algebra lineare.
-- non segnare da nessuna parte i concetti difficili, rischiando di ripetere la stessa fatica ogni volta.
-
-### Segnali che “ho davvero capito” D04
-
-- quando vedo \(y = Wx + b\) so visualizzare \(W\) come trasformazione dello spazio input.
-- se leggo “gradient descent” in un paper o in CS229, non devo più chiedermi “cos’è il gradiente?”.
-- riconosco esempi di overfitting in grafici di training/validation loss.
-- posso spiegare a un collega cos’è una variabile aleatoria e perché la media non è “solo” una media aritmetica, ma un valore atteso.
-
----
-
-## 11. Come ripartire dopo una pausa
-
-Se torno su D04 dopo giorni o settimane:
-
-1. Rileggo solo la sezione di un blocco (es. algebra lineare o probabilità), non tutto il documento.
-2. Scelgo un laboratorio e lo faccio in forma minima (anche solo prima metà).
-3. Segno in una nota quali concetti mi sono tornati più difficili e con quali video/articoli li affronterò.
-4. Collegando D04 ai moduli in corso (es. D07/D09), mi chiedo:
-   - “Quale concetto matematico mi sta bloccando davvero?”
-   - “Quale sezione di D04 posso usare per sbloccare questo punto?”
-
-Obiettivo: usare D04 come **toolbox** e non come esame di matematica.
-
----
-
-## 12. Risorse consigliate
-
-### 12.1 Algebra lineare
-
-- **3Blue1Brown – Essence of Linear Algebra (serie video)**  
-  Serie che visualizza concetti come vettori, matrici, combinazioni lineari, autovettori.  
-  Anteprima e link alla playlist:  
-  https://www.3blue1brown.com/lessons/eola-preview  
-
-- **Essence of Linear Algebra – corso completo**  
-  Raccolta completa della serie con capitoli e descrizioni.  
-  https://essence-of-linear-algebra.vercel.app/  
-
-- **Note di corso basate su Essence of Linear Algebra**  
-  Appunti strutturati che seguono l’intera serie video.  
-  https://github.com/SireJeff/linear-algebra-3blue1brown-notes
-
-- **MIT 18.06 – Linear Algebra (Gilbert Strang)**  
-  Homepage e materiali del corso.  
-  https://web.mit.edu/18.06/www/  
-
----
-
-### 12.2 Probabilità e statistica
-
-- **Khan Academy – Probability & Statistics**  
-  Percorso completo su probabilità e statistica, con esercizi interattivi.  
-  https://www.khanacademy.org/math/statistics-probability  
-
-- **Probability library (Khan Academy)**  
-  Moduli su probabilità base, somma/prodotto, eventi composti.  
-  https://www.khanacademy.org/math/statistics-probability/probability-library  
-
-- **Khan Academy on a Stick – Probability and statistics**  
-  Raccolta strutturata di video su probabilità, variabili aleatorie, distribuzioni, inferenza.  
-  https://ko.mujica.org/math/probability/index.html  
-
----
-
-### 12.3 Collegamenti ai corsi ML / NLP
-
-Queste risorse riprendono in pieno i prerequisiti matematici di D04:
-
-- **Stanford CS229 — Machine Learning**  
-  Sito del corso: https://cs229.stanford.edu/  
-  Syllabus e requisiti matematici:  
-  https://cs229.stanford.edu/syllabus-new.html  
-  Handout con prerequisiti (probabilità e algebra lineare):  
-  https://cs229.stanford.edu/materials/handout.pdf  
-
-- **Stanford CS224N — Natural Language Processing with Deep Learning**  
-  Sito del corso: https://web.stanford.edu/class/cs224n/  
-  Archivio recente: https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/  
-  Versione online:  
-  https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning
-
-
-### Strumenti Visivi e Animazioni Esterne (Web)
-- **[Seeing Theory: Basic Probability](https://seeing-theory.brown.edu/basic-probability/index.html)**: Ottimo per visualizzare concetti base di probabilità. **Come usarlo**: gioca con il lancio della moneta o dei dadi interattivi per "vedere" la legge dei grandi numeri formare le distribuzioni.
-- **[Explained Visually: Markov Chains](https://setosa.io/ev/markov-chains/)**: **Come usarlo**: osserva le "palline" (probabilità) fluire tra gli stati; puoi modificare la matrice di transizione e vedere il sistema assestarsi in tempo reale.
+# Calcolo trasformazione affine: y = Wx + b
+y = np.dot(W, x) + b
+print("Vettore di input x (shape 3,):", x)
+print("Vettore di output y (shape 4,):", y)
+
+# Calcolo della similarita coseno tra due vettori di embedding
+u = np.array([0.2, 0.8, -0.5], dtype=np.float64)
+v = np.array([0.3, 0.7, -0.4], dtype=np.float64)
+similarita_coseno = np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))
+print(f"Similarita Coseno tra u e v: {similarita_coseno:.4f}")
+```
+
+### Laboratorio 2: Ciclo di Ottimizzazione con Discesa del Gradiente
+
+Questo script implementa l'algoritmo di Gradient Descent con controllo esplicito della convergenza numerica e monitoraggio della perdita.
+
+```python
+import numpy as np
+
+def loss_obiettivo(theta):
+    return (theta - 4.0)**2 + 1.5
+
+def calcola_gradiente(theta):
+    return 2.0 * (theta - 4.0)
+
+theta = 0.0
+learning_rate = 0.15
+tolleranza = 1e-6
+max_iterazioni = 50
+
+print(f"Stato iniziale: theta = {theta:.4f}, Loss = {loss_obiettivo(theta):.4f}")
+
+for iterazione in range(1, max_iterazioni + 1):
+    grad = calcola_gradiente(theta)
+    theta_aggiornato = theta - (learning_rate * grad)
+    loss_corrente = loss_obiettivo(theta_aggiornato)
+    
+    if abs(theta_aggiornato - theta) < tolleranza:
+        print(f"Convergenza raggiunta all'iterazione {iterazione}: theta = {theta_aggiornato:.6f}, Loss = {loss_corrente:.6f}")
+        break
+        
+    theta = theta_aggiornato
+    if iterazione % 5 == 0:
+        print(f"Iterazione {iterazione:2d}: theta = {theta:.4f}, gradiente = {grad:.4f}, Loss = {loss_corrente:.4f}")
+```
+
+### Laboratorio 3: Simulazione Monte Carlo e Legge dei Grandi Numeri
+
+Questo script dimostra empiricamente la convergenza statistica della media campionaria verso la probabilità teorica al crescere della dimensione del campione.
+
+```python
+import numpy as np
+
+# Dimostrazione empirica della convergenza probabilistica (Legge dei Grandi Numeri)
+np.random.seed(42)
+volumi_campione = [10, 100, 1_000, 10_000, 100_000, 1_000_000]
+probabilita_teorica = 0.70
+
+print(f"{'Dimensione Campione (N)':>25} | {'Probabilita Stimata':>20} | {'Errore Assoluto':>18}")
+print("-" * 69)
+
+for n in volumi_campione:
+    estrazioni = np.random.choice([0, 1], size=n, p=[1.0 - probabilita_teorica, probabilita_teorica])
+    media_empirica = np.mean(estrazioni)
+    errore_assoluto = abs(media_empirica - probabilita_teorica)
+    print(f"{n:>25,d} | {media_empirica:>20.6f} | {errore_assoluto:>18.6f}")
+```
+
+### Laboratorio 4: Diagnostica Empirica del Compromesso Bias/Varianza
+
+Questo script fitta modelli polinomiali di grado crescente per quantificare e confrontare l'errore di addestramento e di test nei regimi di underfitting e overfitting.
+
+```python
+import numpy as np
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+# Generazione dati sintetici non lineari con rumore stocastico: y = sin(2*pi*x) + epsilon
+np.random.seed(42)
+x_campioni = np.sort(np.random.uniform(0.0, 1.0, 50))
+y_reale = np.sin(2.0 * np.pi * x_campioni) + np.random.normal(0.0, 0.2, 50)
+
+x_train, x_test = x_campioni[:25, np.newaxis], x_campioni[25:, np.newaxis]
+y_train, y_test = y_reale[:25], y_reale[25:]
+
+gradi_polinomio = [1, 3, 12]
+
+for grado in gradi_polinomio:
+    modello = make_pipeline(PolynomialFeatures(degree=grado), LinearRegression())
+    modello.fit(x_train, y_train)
+    
+    pred_train = modello.predict(x_train)
+    pred_test = modello.predict(x_test)
+    
+    mse_train = mean_squared_error(y_train, pred_train)
+    mse_test = mean_squared_error(y_test, pred_test)
+    
+    if grado == 1:
+        diagnostica = "Underfitting marcato (Alto Bias)"
+    elif grado == 3:
+        diagnostica = "Compromesso ottimale (Generalizzazione)"
+    else:
+        diagnostica = "Overfitting severo (Alta Varianza)"
+        
+    print(f"Grado {grado:2d} | MSE Training: {mse_train:.4f} | MSE Test: {mse_test:.4f} | {diagnostica}")
+```

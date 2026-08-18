@@ -1,562 +1,327 @@
-# D03 — Data foundations: NumPy, Pandas, SQL e data quality
-
-## Meta-modulo D03
-
-**Target**  
-Me stesso oggi, e in futuro chiunque voglia lavorare con dati per ML, LLM, OSINT
-senza diventare “data engineer puro”, ma con abbastanza solidità da:
-
-- leggere, pulire e trasformare dataset
-- capire cosa significano shape e tipi
-- riconoscere problemi di data quality e leakage
-
-**Prerequisiti consigliati**
-
-- aver completato D02 (Python refresher e software engineering essentials)
-- sapersela cavare con:
-  - strutture dati Python (`list`, `dict`, `Path`)
-  - lettura/scrittura file (testo, JSON/JSONL)
-  - uso base del terminale e ambiente Python
-
-**Durata indicativa**
-
-- **Modalità minima (~3–4 ore)**  
-  - concetti base di NumPy (array, shape, broadcasting a grandi linee)  
-  - uso di Pandas per caricare CSV e fare operazioni semplici  
-  - rudimenti di SELECT/WHERE/JOIN in SQL  
-  - intuizione di data quality/leakage
-
-- **Modalità standard (~8–10 ore)**  
-  - esercizi con NumPy + Pandas (manipolazione tabelle reali)  
-  - query SQL più articolate su un piccolo database  
-  - definizione di una prima “data card” per un dataset  
-  - check-list di data quality per progetti ML/LLM
-
-- **Modalità deep dive (più giornate)**  
-  - pipeline dati end-to-end (ingest, pulizia, feature, split train/val/test)  
-  - integrazione con Data Cards Playbook e Data Audit Pack  
-  - casi studio di leakage e bias in dataset reali
-
-**Quando considerare il modulo “completato”**
-
-- so caricare un dataset da CSV/Parquet in Pandas e capire `shape`, `dtypes`, `head()`
-- so fare selezioni, filtri, aggregazioni e join semplici
-- so creare e interrogare un piccolo DB SQL con qualche tabella
-- ho scritto almeno una bozza di “scheda dataset” (data card) per un dataset di interesse
-- so elencare 3–5 rischi tipici di data quality/leakage nei progetti ML/LLM
-
 ---
-
-## Perché questo documento
-
-I modelli ML/LLM sono inutili senza dati solidi.  
-Questo documento costruisce le **fondamenta dati**:
-
-- NumPy → array numerici e shape (base per tensori e DL)
-- Pandas → tabelle, manipolazione dati, join, aggregazioni
-- SQL → interrogare e combinare dati in database relazionali
-- Data quality → evitare di “allenare l’intelligenza” su dati sporchi o fuorvianti
-- Dataset cards → documentare dataset in modo responsabile (trasparenza, rischio, contesto)
-
-Serve sia per i moduli ML classico (D05/D06), sia per DL/LLM (D07/D09/D10), sia per OSINT.
-
+aliases: [D03, Data Foundations, Data Engineering ML, NumPy Pandas SQL, Data Quality, Ingegneria dei Dati]
 ---
+# Data Foundations: NumPy, Pandas, SQL e Qualità del Dato
 
-## Obiettivi di apprendimento
+L'**ingegneria dei dati per il machine learning** è la disciplina che standardizza l'ingestione, la bonifica qualitativa, la trasformazione tensoriale e la serializzazione efficiente di flussi informativi eterogenei prima dell'addestramento dei modelli predittivi. Questa architettura si impiega in pipeline di intelligenza artificiale applicata, sistemi di intelligence OSINT e piattaforme analitiche enterprise per convertire dati grezzi non strutturati in matrici numeriche omogenee prive di anomalie sistematiche. La disciplina esiste perché l'accuratezza e l'affidabilità di qualsiasi algoritmo di intelligenza artificiale dipendono rigidamente dalla purezza statistica dei dati in ingresso, dall'assoluta prevenzione del data leakage tra partizioni di training e test, e dall'adozione di strutture dati allineate con l'accelerazione hardware vettoriale.
 
-Dopo questo modulo dovrei essere in grado di:
+## Il Problema della Corruzione del Dato e del Data Leakage
 
-- capire cosa sono array NumPy e come si collegano a tensori DL
-- usare Pandas per operazioni base e intermedie su dataset tabellari
-- scrivere query SQL semplici (SELECT, WHERE, GROUP BY, JOIN)
-- identificare problemi comuni di data quality e leakage
-- compilare una prima “data card” per descrivere un dataset
+Nella pratica ingegneristica, i dati raccolti da sorgenti aperte, sensori di rete o registri transazionali presentano un elevato tasso di entropia: valori mancanti non casuali, formati temporali eterogenei, discrepanze di codifica dei caratteri e distribuzioni fortemente sbilanciate. L'immissione diretta di dati non validati all'interno di un modello statistico innesca il fenomeno **GIGO (Garbage-In, Garbage-Out)**, in cui il sistema ottimizza i propri parametri su artefatti spuri e rumore di misurazione, compromettendo la validità di qualsiasi inferenza a valle.
 
----
+L'anomalia più critica nei workflow di apprendimento automatico è il **Data Leakage** (fuga di dati), che si verifica quando informazioni appartenenti al set di test o al futuro temporale contaminano il set di addestramento prima o durante la fase di preprocessing. Un esempio tipico consiste nel calcolo di parametri statistici globali (come media e deviazione standard per la standardizzazione delle feature, o la mediana per l'imputazione dei valori nulli) sull'intero dataset prima della separazione tra train e test. Questa operazione trasmette surrettiziamente la distribuzione del test set al modello, generando metriche di accuratezza artificialmente perfette in fase di validazione ma causando un crollo catastrofico delle prestazioni non appena il sistema viene distribuito in produzione su dati reali non visti.
 
-## 1. Mappa degli argomenti
+La risposta architetturale consiste nell'ingegnerizzazione di pipeline di trasformazione a compartimenti stagni, in cui ogni manipolazione statistica viene calcolata esclusivamente sul set di training isolato ed applicata deterministicamente ai set di validazione e test.
 
-### 1.1 Blocchi principali
+## Calcolo Tensoriale e Allocazione di Memoria con NumPy
 
-1. NumPy: array, shape, tipi, operazioni base.
-2. Pandas: Series, DataFrame, caricamento dati, filtri, aggregazioni, join.
-3. SQL: tabelle, chiavi, query base/intermedie.
-4. Formati dati: CSV, JSON/JSONL, Parquet.
-5. Data quality: missing values, outlier, incoerenze, duplicati.
-6. Leakage e dataset split.
-7. Dataset cards e trasparenza (Data Cards Playbook).
+I modelli di machine learning e le architetture neurali operano esclusivamente su vettori, matrici e tensori numerici a dimensione fissa. La libreria cardine per la manipolazione di tali strutture in [Python](https://www.python.org/) (il linguaggio di programmazione di riferimento per l'AI) è [NumPy](https://numpy.org/) (la libreria cardine per il calcolo scientifico e la gestione efficiente di array multidimensionali in memoria).
 
----
+### L'Array e le sue Dimensioni (Shape)
 
-## 2. NumPy: array e shape
-
-### 2.1 Perché NumPy
-
-NumPy è la base di quasi tutto lo stack scientifico Python:
-
-- array n-dimensionali efficienti
-- operazioni vettoriali veloci
-- interoperabilità con Pandas, SciPy, PyTorch, ecc.[^numpy-doc]
-
-Per ML/LLM:
-
-- concetto di **array** e **shape** è esattamente ciò che in DL chiamerò *tensore*.
-
-[^numpy-doc]: Documentazione ufficiale NumPy: https://numpy.org/doc/stable/
-
-### 2.2 Array e shape
-
-Concetti chiave:
-
-- un array NumPy è un contenitore n-dimensionale di valori omogenei
-- la **shape** è una tupla che indica le dimensioni: `(n,)`, `(n, m)`, `(batch, features)`, `(batch, seq_len, dim)`
-
-Esempio:
+L'oggetto fondamentale di NumPy è l'`ndarray`, una struttura dati contigua in memoria RAM caratterizzata da un tipo di dato omogeneo (`dtype`) e da una tupla di dimensioni (`shape`). A differenza delle liste native di Python (che memorizzano puntatori sparsi a oggetti eterogenei allocati nella heap), l'`ndarray` alloca un blocco continuo di byte, consentendo l'accesso diretto alla memoria tramite il meccanismo degli *strides* (il numero di byte da attraversare per avanzare di un elemento lungo ciascun asse dimensionale). Le strutture tensoriali di NumPy costituiscono il fondamento computazionale diretto per i tensori di [PyTorch](https://pytorch.org/) (il framework di deep learning open-source basato sul calcolo tensoriale e differenziazione automatica).
 
 ```python
 import numpy as np
 
-x = np.array()
-print(x.shape)  # (3,)
+# Creazione di tensori con specificazione esplicita del tipo di dato (dtype)
+vettore_1d = np.array([1.5, 2.7, 3.2, 4.8], dtype=np.float64)
+matrice_2d = np.arange(12, dtype=np.float32).reshape(3, 4)
 
-X = np.array([,
-              ])
-print(X.shape)  # (2, 3)
+print("Vettore 1D shape:", vettore_1d.shape, "| Dtype:", vettore_1d.dtype)
+print("Matrice 2D shape:", matrice_2d.shape, "| Dimensioni (ndim):", matrice_2d.ndim)
+print("Memory Strides (passo in byte per asse):", matrice_2d.strides)
+print("Occupazione di memoria totale (bytes):", matrice_2d.nbytes)
 ```
 
-Capire shape è fondamentale per:
+### Esecuzione Vettorizzata e Broadcasting
 
-- interpretare dimensioni di input/output di modelli
-- debug di errori di dimensioni (es. mismatch in matrix multiply)
+L'elaborazione di grandi moli di dati numerici tramite cicli iterativi in Python puro comporta un grave degrado prestazionale dovuto all'overhead dell'interprete e al continuo controllo dinamico dei tipi (*type dispatching*). NumPy elimina questo collo di bottiglia delegando le operazioni matematiche a routine scritte in C e Fortran, ottimizzate per sfruttare i registri SIMD (Single Instruction, Multiple Data) dei moderni processori. Il meccanismo del **Broadcasting** estende automaticamente le dimensioni di array con forme compatibili, consentendo operazioni aritmetiche tra matrici e scalari o vettori senza allocazione ridondante di memoria.
 
-### 2.3 Operazioni base e broadcasting
+```python
+import time
+import numpy as np
 
-Operazioni elementari:
+dimensione = 1_000_000
+lista_python = list(range(dimensione))
+array_numpy = np.arange(dimensione, dtype=np.float64)
 
-- somma, sottrazione, moltiplicazione tra array
-- funzioni come `np.mean`, `np.std`, `np.sum(axis=...)`
+# 1. Esecuzione con ciclo iterativo Python standard
+start_time = time.perf_counter()
+risultato_loop = [valore * 2.5 + 1.0 for valore in lista_python]
+tempo_loop = time.perf_counter() - start_time
 
-Broadasting (intuito, non teoria completa):
+# 2. Esecuzione vettorizzata NumPy con istruzioni SIMD e broadcasting
+start_time = time.perf_counter()
+risultato_numpy = array_numpy * 2.5 + 1.0
+tempo_numpy = time.perf_counter() - start_time
 
-- permette di combinare array di shape compatibili senza copiare dati inutilmente
-- es: sommare un vettore “riga” a tutte le righe di una matrice
+print(f"Tempo ciclo Python standard: {tempo_loop:.4f} s")
+print(f"Tempo vettorizzazione NumPy:  {tempo_numpy:.6f} s")
+print(f"Fattore di accelerazione vettoriale: {tempo_loop / tempo_numpy:.1f}x")
+```
 
----
+## Manipolazione Dati Tabellari e Bonifica Qualitativa con Pandas
 
-## 3. Pandas: tabelle e manipolazione dati
+Prima della conversione in matrici numeriche pure, i dati tabellari richiedono un'elaborazione strutturata a livello di colonne, gestita primariamente tramite [Pandas](https://pandas.pydata.org/) (la libreria open-source fondamentale in Python per la manipolazione e l'analisi di dati tabellari strutturati).
 
-### 3.1 Perché Pandas
+### Lavorare sui DataFrame
 
-Pandas è il tool standard per:
+L'astrazione centrale di Pandas è il `DataFrame`, una struttura dati bidimensionale eterogenea indicizzata per righe e colonne. Il DataFrame consente di applicare maschere booleane, eseguire proiezioni e trasformare tipi di dato con sintassi compatta, facilitando la preparazione dei dati prima del training.
 
-- lavorare con tabelle (CSV, Excel, database)
-- fare operazioni “tipo SQL” in Python
-- integrare dati con workflow ML/LLM
+```python
+import pandas as pd
+import numpy as np
 
-Documentazione e “10 minutes to pandas”:[^pandas-doc]
+dati_grezzi = {
+    "id_transazione": [1001, 1002, 1003, 1004, 1005],
+    "cliente": ["Alfa Corp", "Beta LLC", "Gamma Spa", "Alfa Corp", "Delta Inc"],
+    "valore_euro": [1250.0, 450.0, 3100.0, 890.0, 150.0],
+    "stato_approvazione": ["APPROVATO", "SOSPESO", "APPROVATO", "RESPINTO", "APPROVATO"]
+}
 
-- https://pandas.pydata.org/docs/user_guide/index.html  
-- https://pandas.pydata.org/docs/user_guide/10min.html  
+df_transazioni = pd.DataFrame(dati_grezzi)
 
-[^pandas-doc]: Pandas User Guide, includendo “10 Minutes to pandas”.
+# Filtraggio booleano e selezione per colonne
+filtro_approvati = (df_transazioni["stato_approvazione"] == "APPROVATO") & (df_transazioni["valore_euro"] >= 1000.0)
+df_rilevanti = df_transazioni.loc[filtro_approvati, ["id_transazione", "cliente", "valore_euro"]]
 
-### 3.2 Series e DataFrame
+print("Transazioni filtrate ad alto valore:")
+print(df_rilevanti)
+```
 
-Elementi principali:
+### Bonifica dei Dati e Prevenzione Anomalie
 
-- `Series` → colonna con etichette (indice)
-- `DataFrame` → tabella 2D (righe × colonne)
+La fase di data quality identifica e corregge sistematicamente quattro tipologie di difetti: duplicati di riga, formattazione incoerente delle stringhe categoriche, tipi di dato non allineati e valori nulli (`NaN`). L'imputazione dei valori mancanti deve seguire logiche conservative (ad esempio la mediana campionaria per distribuzioni asimmetriche con outlier) per evitare distorsioni arbitrarie della varianza originale.
 
-Esempio:
+```python
+import pandas as pd
+import numpy as np
+
+dati_sporchi = {
+    "id_utente": [1, 2, 3, 4, 5, 5],
+    "eta": [28.0, np.nan, 45.0, 33.0, np.nan, np.nan],
+    "reddito": [35000.0, 62000.0, np.nan, 48000.0, 95000.0, 95000.0],
+    "livello_account": [" premium ", "BASIC", "Premium", " STANDARD", "basic", "basic"],
+    "data_creazione": ["2023-01-10", "2023-02-14", "2022-11-01", "2023-05-20", "2021-09-15", "2021-09-15"]
+}
+
+df_bonifica = pd.DataFrame(dati_sporchi)
+
+# 1. Deduplicazione record
+df_bonifica = df_bonifica.drop_duplicates(subset=["id_utente"]).copy()
+
+# 2. Normalizzazione testo e stringhe categoriche
+df_bonifica["livello_account"] = df_bonifica["livello_account"].str.strip().str.upper()
+
+# 3. Conversione tipi di dato e parsing temporale
+df_bonifica["data_creazione"] = pd.to_datetime(df_bonifica["data_creazione"])
+
+# 4. Imputazione mirata dei valori mancanti tramite mediana
+mediana_eta = df_bonifica["eta"].median()
+mediana_reddito = df_bonifica["reddito"].median()
+df_bonifica["eta"] = df_bonifica["eta"].fillna(mediana_eta)
+df_bonifica["reddito"] = df_bonifica["reddito"].fillna(mediana_reddito)
+
+print("DataFrame post-bonifica:")
+print(df_bonifica)
+```
+
+### Fusione Relazionale (Merge e Join)
+
+L'integrazione di sorgenti informative eterogenee richiede la combinazione relazionale di tabelle tramite chiavi primarie ed esterne. Le operazioni di `merge` (left, inner, outer join) consentono l'arricchimento contestuale dei log operativi senza perdita di integrità referenziale.
 
 ```python
 import pandas as pd
 
-df = pd.read_csv("data/example.csv")
-print(df.head())
-print(df.shape)
-print(df.dtypes)
+df_utenti = pd.DataFrame({
+    "id_utente": [1, 2, 3],
+    "nome_ente": ["Ministero Interno", "Agenzia Dogane", "Polizia Postale"]
+})
+
+df_eventi = pd.DataFrame({
+    "id_evento": [101, 102, 103, 104],
+    "id_utente": [1, 2, 1, 4],
+    "tipo_accesso": ["LOGIN", "EXPORT", "QUERY", "LOGIN"]
+})
+
+# Left Join relazionale per arricchimento dei log di audit
+df_audit = pd.merge(df_eventi, df_utenti, on="id_utente", how="left")
+print("Audit Log con join relazionale:")
+print(df_audit)
 ```
 
-Operazioni base:
+## Estrazione e Pipeline Analitiche su Database Relazionali (SQL)
 
-- selezionare colonne: `df["col"]`, `df[["col1", "col2"]]`
-- filtri: `df[df["col"] > 10]`
-- ordinamento: `df.sort_values("col")`
+Quando i volumi di dati superano la capacità della memoria RAM locale, il caricamento integrale in un DataFrame diventa impraticabile. In questi scenari, il preprocessing e l'aggregazione vengono delegati direttamente al motore del database relazionale tramite [SQL](https://www.sqlite.org/) (il linguaggio standard per l'interrogazione e la manipolazione di basi di dati relazionali).
 
-### 3.3 Aggregazioni, groupby, join
+### Elaborazione Analitica su Database (SQL)
 
-Concetti essenziali:
-
-- `groupby` per aggregare per categoria (es. `df.groupby("country")["sales"].sum()`)
-- join/merge per combinare tabelle (similarmente a SQL JOIN)
-
-Esempio join:
+L'esecuzione di query complesse con clausole di join, raggruppamento (`GROUP BY`) e filtraggio aggregato (`HAVING`) all'interno di motori SQL relazionali come SQLite o database analitici avanzati come [DuckDB](https://duckdb.org/) (il database relazionale analitico OLAP in-process ad altissime prestazioni per query SQL) permette di estrarre e trasferire nella memoria di Python unicamente il sottoinsieme compatto di feature necessarie per l'addestramento.
 
 ```python
-df_users = pd.read_csv("users.csv")
-df_orders = pd.read_csv("orders.csv")
+import sqlite3
+import pandas as pd
 
-df = df_orders.merge(df_users, on="user_id", how="left")
+connessione = sqlite3.connect(":memory:")
+cursore = connessione.cursor()
+
+# Creazione schema relazionale
+cursore.execute("""
+CREATE TABLE unita_operative (
+    id_unita INTEGER PRIMARY KEY,
+    reparto TEXT NOT NULL,
+    sede TEXT NOT NULL
+);
+""")
+
+cursore.execute("""
+CREATE TABLE missioni (
+    id_missione INTEGER PRIMARY KEY,
+    id_unita INTEGER NOT NULL,
+    costo_operativo REAL NOT NULL,
+    data_missione TEXT NOT NULL,
+    FOREIGN KEY (id_unita) REFERENCES unita_operative (id_unita)
+);
+""")
+
+unita_dati = [(1, "Cyber Threat Intel", "Roma"), (2, "SOC Tier 2", "Milano"), (3, "Forensic Lab", "Torino")]
+missioni_dati = [
+    (101, 1, 4500.0, "2024-01-10"),
+    (102, 1, 3200.0, "2024-01-15"),
+    (103, 2, 8900.0, "2024-02-01"),
+    (104, 3, 1200.0, "2024-02-10")
+]
+
+cursore.executemany("INSERT INTO unita_operative VALUES (?, ?, ?)", unita_dati)
+cursore.executemany("INSERT INTO missioni VALUES (?, ?, ?, ?)", missioni_dati)
+connessione.commit()
+
+query_analitica = """
+SELECT 
+    u.reparto,
+    u.sede,
+    COUNT(m.id_missione) AS numero_missioni,
+    SUM(m.costo_operativo) AS spesa_totale,
+    AVG(m.costo_operativo) AS costo_medio
+FROM unita_operative u
+INNER JOIN missioni m ON u.id_unita = m.id_unita
+GROUP BY u.id_unita, u.reparto, u.sede
+HAVING SUM(m.costo_operativo) > 2000.0
+ORDER BY spesa_totale DESC;
+"""
+
+df_report = pd.read_sql_query(query_analitica, connessione)
+print(df_report)
+connessione.close()
 ```
 
----
+## Formati di Archiviazione e Serializzazione: CSV vs JSONL vs Parquet
 
-## 4. SQL: tabelle, query e join
+La scelta del formato di serializzazione su disco determina drasticamente la velocità di I/O e l'efficienza di archiviazione nelle pipeline di intelligenza artificiale.
 
-### 4.1 Perché SQL
+### Archiviazione Colonnare (Parquet e JSONL)
 
-SQL resta fondamentale anche in era LLM:
-
-- molti dati vivono in database relazionali
-- query complesse sono spesso più chiare in SQL che in codice
-- molti strumenti di analytics e BI usano SQL come lingua principale
-
-Per esercitarsi:
-
-- SQLBolt (lezioni interattive): https://sqlbolt.com/  
-
-### 4.2 Concetti base
-
-- tabella, riga, colonna
-- chiavi primarie e chiavi esterne
-- relazioni 1–N, N–N
-
-Query base:
-
-```sql
-SELECT col1, col2
-FROM tabella
-WHERE condizione
-ORDER BY col1 DESC
-LIMIT 10;
-```
-
-### 4.3 Join e aggregazioni
-
-Join:
-
-- INNER JOIN  
-- LEFT JOIN (mantiene tutte le righe della tabella di sinistra)
-
-Aggregazioni:
-
-- `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`
-- `GROUP BY` per raggruppare per categoria
-
----
-
-## 5. Formati dati: CSV, JSON/JSONL, Parquet
-
-### 5.1 CSV
-
-Formato di testo tabellare:
-
-- vantaggi: semplice, leggibile, supportato ovunque
-- svantaggi: nessun tipo, problemi con separatori/virgolette
-
-Uso tipico con Pandas:
+Mentre i file CSV memorizzano i dati riga per riga in formato testuale grezzo privo di metadati sui tipi di colonna, il formato binario [Apache Parquet](https://parquet.apache.org/) (il formato di archiviazione colonnare binario compresso standard per big data e analytics), integrato con le specifiche in-memory di [Apache Arrow](https://arrow.apache.org/) (lo standard multipiattaforma per l'archiviazione colonnare di dati in memoria) ed engine ad alte prestazioni come [Polars](https://pola.rs/) (il motore di elaborazione dati multithread ad alte prestazioni basato su Apache Arrow), adotta una suddivisione colonnare compressa (Snappy o ZSTD). L'archiviazione per colonne consente di caricare in memoria solo le variabili selezionate (*column pruning*), riducendo il tempo di scansione del disco e tagliando lo spazio occupato fino all'80-90% rispetto ai file CSV equivalenti.
 
 ```python
-df = pd.read_csv("data/dataset.csv")
-df.to_csv("data/dataset_clean.csv", index=False)
+import os
+import tempfile
+import numpy as np
+import pandas as pd
+
+campioni = 50_000
+dataset = {
+    "id_sessione": [f"sess_{idx}" for idx in range(campioni)],
+    "ip_hash": np.random.randint(1_000_000, 9_999_999, size=campioni),
+    "tempo_risposta_ms": np.random.normal(45.0, 12.0, size=campioni).astype(np.float32),
+    "codice_stato": np.random.choice([200, 301, 403, 500], size=campioni, p=[0.85, 0.05, 0.08, 0.02])
+}
+
+df_benchmark = pd.DataFrame(dataset)
+
+with tempfile.TemporaryDirectory() as cartella_temp:
+    path_csv = os.path.join(cartella_temp, "log_accessi.csv")
+    path_parquet = os.path.join(cartella_temp, "log_accessi.parquet")
+    path_jsonl = os.path.join(cartella_temp, "log_accessi.jsonl")
+
+    # Scrittura nei vari formati
+    df_benchmark.to_csv(path_csv, index=False)
+    df_benchmark.to_parquet(path_parquet, engine="pyarrow", compression="snappy", index=False)
+    df_benchmark.to_json(path_jsonl, orient="records", lines=True)
+
+    dim_csv = os.path.getsize(path_csv) / (1024 * 1024)
+    dim_jsonl = os.path.getsize(path_jsonl) / (1024 * 1024)
+    dim_parquet = os.path.getsize(path_parquet) / (1024 * 1024)
+
+    print(f"Dimensione file CSV:     {dim_csv:.2f} MB")
+    print(f"Dimensione file JSONL:   {dim_jsonl:.2f} MB")
+    print(f"Dimensione file Parquet: {dim_parquet:.2f} MB")
+    print(f"Fattore di compressione CSV -> Parquet: {dim_csv / dim_parquet:.2f}x")
 ```
 
-### 5.2 JSON / JSONL
+## Trasparenza Metodologica e Schede dei Dataset (Data Cards)
 
-- **JSON** → “documenti” complessi, utile per config e log strutturati
-- **JSONL** → un JSON per riga, ideale per dataset e log che crescono nel tempo
+La corretta validazione numerica dei dati non garantisce l'assenza di bias statistici o limiti sistematici insiti nelle modalità di campionamento.
 
-Pandas può leggere JSONL:
+Per assicurare la verificabilità forense e la responsabilità algoritmica, ogni dataset destinato all'addestramento deve essere corredato da una scheda di documentazione standardizzata, conforme alle linee guida del [Google Data Cards Playbook](https://developers.google.com/learn/pathways/data-cards-playbook) (il framework metodologico ideato da [Google](https://about.google/) per la trasparenza e la documentazione sistematica dei dataset). La Data Card formalizza la provenienza delle fonti, l'intervallo temporale di acquisizione, le limitazioni note, le popolazioni sottorappresentate e i casi d'uso esplicitamente vietati.
 
 ```python
-df = pd.read_json("logs/events.jsonl", lines=True)
+import json
+
+data_card_schema = {
+    "metadata": {
+        "dataset_name": "Cyber_Threat_Events_Corpus",
+        "version": "1.2.0",
+        "maintainer": "Security Operations Center Analytics Team",
+        "license": "CC-BY-4.0",
+        "last_updated": "2026-08-18"
+    },
+    "provenance": {
+        "source": "Network firewall gateway logs and honeytoken telemetry",
+        "collection_method": "Automated ingestion via Kafka stream broker",
+        "time_span": "2025-01-01 to 2025-12-31"
+    },
+    "schema_definition": {
+        "id_sessione": {"type": "string", "description": "Identificativo pseudonimizzato della sessione TCP"},
+        "tempo_risposta_ms": {"type": "float32", "description": "Latenza di risposta in millisecondi"},
+        "codice_stato": {"type": "int32", "description": "Codice HTTP di terminazione connessione"}
+    },
+    "ethical_and_bias_considerations": {
+        "represented_population": "Internal enterprise corporate infrastructure",
+        "known_limitations": "Under-represents UDP anomalies and encrypted micro-tunnels",
+        "prohibited_use_cases": "Automated attribution of physical identities without manual forensics"
+    }
+}
+
+print(json.dumps(data_card_schema, indent=2))
 ```
 
-### 5.3 Parquet
+## Compromessi Operativi e Scelte Architetturali
 
-Formato colonnare compresso, ottimo per dataset grandi:
+La progettazione di pipeline di dati richiede bilanciamenti consapevoli tra consumo di memoria, flessibilità dello schema e throughput computazionale.
 
-- leggibile da Pandas, Spark, molti tool
-- conserva tipi
-- efficiente in spazio e velocità
+### Esecuzione In-Memory vs Scalabilità Out-Of-Core
 
-```python
-df.to_parquet("data/dataset.parquet", index=False)
-df_parquet = pd.read_parquet("data/dataset.parquet")
-```
+L'impiego di Pandas garantisce un'eccellente velocità di manipolazione ma impone che l'intero dataset risieda nella memoria RAM con un fattore di overhead che varia tipicamente da 2x a 5x rispetto alla dimensione del file su disco. Per dataset su larga scala che eccedono le risorse di memoria fisica, l'architettura deve prevedere la transizione verso engine vettorializzati out-of-core o database colonnari in-process come DuckDB o Polars, evitando blocchi di sistema per saturazione di memoria.
 
----
+### Formati Flessibili (JSONL) vs Formati Rigidi Ottimizzati (Parquet)
 
-## 6. Data quality: problemi tipici
+I formati semi-strutturati come JSONL consentono l'acquisizione flessibile di eventi con schemi mutevoli nel tempo, risultando ideali per l'ingestione da scraper web o stream Kafka. Tuttavia, non supportano compressione colonnare nativa né indicizzazione statistica dei blocchi di byte, rendendo Parquet la scelta obbligata per le fasi di archiviazione definitiva e alimentazione di modelli di machine learning su larga scala.
 
-### 6.1 Tipi di problemi
+## Riferimenti Bibliografici e Risorse Tecniche
 
-- **valori mancanti** (missing)  
-  - es: colonne con molti `NaN` o stringhe vuote
-- **outlier**  
-  - valori estremi che possono distorcere metriche e modelli
-- **incoerenze**  
-  - es: stesso concetto scritto in modi diversi (“USA”, “United States”, “U.S.”)
-- **duplicati**  
-  - righe duplicate, chiavi duplicate
-- **tipi sbagliati**  
-  - numeri salvati come stringhe, date come testo
+### Guide Ufficiali e Documentazione di Riferimento
 
-### 6.2 Ispezione e pulizia di base
+I dettagli implementativi sull'architettura interna degli array e sulla gestione della memoria sono consultabili nella [Documentazione ufficiale NumPy](https://numpy.org/doc/stable/). I pattern avanzati di pulizia e trasformazione di dati tabellari sono descritti nella [Guida per l'Utente di Pandas](https://pandas.pydata.org/docs/user_guide/index.html).
 
-Con Pandas:
+### Piattaforme Interattive e Standard di Documentazione
 
-- `df.isna().sum()` per vedere missing per colonna
-- `df.duplicated().sum()` per rilevare righe duplicate
-- `df.describe()` per avere statistiche veloci
+L'apprendimento pratico delle query relazionali e delle strategie di join è supportato dai percorsi interattivi di [SQLBolt](https://sqlbolt.com/) (la piattaforma interattiva per l'apprendimento guidato del linguaggio SQL). Per l'approfondimento della trasparenza e della governance dei dati nell'AI, fare riferimento al [Google Data Cards Playbook](https://developers.google.com/learn/pathways/data-cards-playbook) e alle relative pubblicazioni scientifiche rilasciate dal team di ricerca di [Google Research](https://research.google/).
 
-Strategie:
+## Appendice Operativa: Laboratori Pratici
 
-- drop: rimuovere righe/colonne problematiche (con cautela)
-- imputazione: sostituire missing con mediana, media, valore speciale
-- normalizzazione categorie: mapping esplicito per categorie disallineate
-
----
-
-## 7. Leakage e split dei dati
-
-### 7.1 Che cos’è il leakage
-
-**Data leakage**: quando nel training il modello “vede” informazione che non avrebbe in produzione.
-
-Esempi:
-
-- usare variabili che contengono il target in forma mascherata
-- calcolare statistiche di normalizzazione usando tutto il dataset (training + test)
-- avere lo stesso utente/entità sia in train che in test in compiti di predizione futura
-
-Effetti:
-
-- performance gonfiate artificialmente
-- modelli che crollano in produzione
-
-### 7.2 Split corretto del dataset
-
-Regole operative minime:
-
-- separare chiaramente train / validation / test
-- fare l’eventuale shuffling **prima** dello split e in modo riproducibile
-- calcolare statistiche (es. media, varianza) SOLO sul training set
-
-In D05/D06 (ML classico) e D07 (DL) queste regole tornano esplicitamente.
-
----
-
-## 8. Dataset cards e trasparenza
-
-### 8.1 Idea di dataset card
-
-Una dataset card è un documento che riassume:
-
-- origine del dataset
-- schema e significato delle colonne
-- come è stato raccolto e preprocessato
-- limiti, rischi, possibili bias
-- usi consentiti e sconsigliati
-
-Il **Data Cards Playbook** di Google propone un workflow per creare artefatti di trasparenza per dataset.[^datacards]
-
-[^datacards]: Data Cards Playbook: https://developers.google.com/learn/pathways/data-cards-playbook
-
-### 8.2 Struttura minima di una data card
-
-Campi minimi utili:
-
-- Nome del dataset, versione, maintainer
-- Fonte e modalità di raccolta
-- Popolazione rappresentata (persone, eventi, domini)
-- Scopo originale e scopi ulteriori possibili
-- Preprocessamenti effettuati
-- Rischi noti (bias, buchi, squilibri)
-- Restrizioni d’uso
-
-Questo modulo non richiede di usare lo schema completo del Playbook,
-ma serve a fissare la pratica di **non usare mai dataset “anonimi” e non documentati**.
-
----
-
-## 9. Laboratori ed esercizi
-
-### Laboratorio 1 — Esplorare un dataset CSV con Pandas
-
-**Obiettivo:** prendere confidenza con `DataFrame`, shape, tipi, statistiche.
-
-**Passi:**
-
-1. Scegliere un dataset CSV pubblico (es. da Kaggle, data.gov, ecc.).
-2. Caricarlo in Pandas (`pd.read_csv`).
-3. Stampare:
-   - `df.shape`
-   - `df.dtypes`
-   - `df.head()`
-4. Calcolare statistiche base (`df.describe()`).
-
-**Deliverable:**
-
-- breve nota in `private/notes/` con:
-  - cosa contiene il dataset
-  - quanti record/colonne ha
-  - eventuali problemi subito visibili (missing, outlier evidenti)
-
----
-
-### Laboratorio 2 — Pulizia base e trasformazioni
-
-**Obiettivo:** applicare operazioni Pandas per pulire e trasformare dati.
-
-**Passi:**
-
-1. Continuare dal dataset del laboratorio 1.
-2. Individuare almeno:
-   - una colonna con missing
-   - una con valori “sporchi” o incoerenti
-3. Applicare:
-   - una strategia di imputazione o drop sensata
-   - una normalizzazione di categorie (es. mapping a valori standard)
-4. Salvare il dataset pulito come `dataset_clean.csv` e/o Parquet.
-
-**Deliverable:**
-
-- `dataset_clean.csv` o `.parquet`
-- nota che descrive cosa è stato pulito/cambiato e perché
-
----
-
-### Laboratorio 3 — Mini-database SQL e join
-
-**Obiettivo:** esercitarsi con SQL su un caso semplice.
-
-**Passi:**
-
-1. Prendere due CSV compatibili (es. `users` e `orders`) o crearli a mano.
-2. Importarli in un piccolo DB SQLite (via Python o tool GUI).
-3. Scrivere almeno 3 query:
-   - SELECT con WHERE
-   - SELECT con GROUP BY
-   - JOIN tra due tabelle (es. ordini + utenti)
-4. Salvare le query in un file `.sql` nel progetto.
-
-**Deliverable:**
-
-- file `.db` o `.sql` con le tabelle
-- file `.sql` con le query
-- output di esempio delle query (es. screenshot o esport)
-
----
-
-### Laboratorio 4 — Prima bozza di dataset card
-
-**Obiettivo:** documentare un dataset reale.
-
-**Passi:**
-
-1. Scegliere un dataset che userò in moduli ML/LLM/OSINT.
-2. Creare una nota `dataset_<nome>.md` (in `private/notes/` o in un sottofolder dedicato)
-   con una versione ridotta di data card:
-   - descrizione
-   - fonte
-   - schema (colonne + significato)
-   - scopo d’uso
-   - rischi/limiti
-3. Collegare questa nota in D03 e/o in D05/D06 dove il dataset verrà usato.
-
-**Deliverable:**
-
-- file `dataset_<nome>.md` con una data card minima
-- eventuale link aggiunto in D03 o in index del repo
-
----
-
-## 10. Rubriche e checklist
-
-### Checklist — D03 completato
-
-- [ ] So creare e manipolare array NumPy di base (shape, operazioni).
-- [ ] So caricare un CSV in Pandas e analizzarlo con `head/shape/dtypes/describe`.
-- [ ] So eseguire filtri, selezioni, aggregazioni semplici in Pandas.
-- [ ] So creare e interrogare un piccolo DB SQL con almeno due tabelle e una JOIN.
-- [ ] Ho usato almeno due formati dati (CSV + Parquet o CSV + JSONL).
-- [ ] Ho identificato problemi di data quality in un dataset reale e fatto una pulizia minima.
-- [ ] Ho scritto almeno una bozza di data card per un dataset.
-
-### Errori tipici da evitare
-
-- usare dataset “a scatola chiusa” senza chiedersi da dove vengono e come sono fatti.
-- ignorare completamente i missing (trattare `NaN` e stringhe vuote come se non esistessero).
-- fare split train/test a caso senza pensare a leakage.
-- confondere comodi snippet di Pandas con “analisi” approfondite.
-- non salvare decisioni sulle pulizie/trasformazioni (nessuna nota, nessun log).
-
-### Segnali che “ho davvero capito” D03
-
-- se mi danno un CSV sconosciuto, in 10–15 minuti so dire cosa contiene e dove sono i problemi.
-- so spiegare la differenza tra CSV, JSON/JSONL e Parquet e quando usare ciascuno.
-- so raccontare almeno un esempio di data leakage e come evitarlo.
-- ho un dataset documentato con una data card, non solo con un filename vago.
-
----
-
-## 11. Come ripartire dopo una pausa
-
-Se torno su D03 dopo giorni o settimane:
-
-1. Riprendo il dataset usato nei laboratori (o ne scelgo uno nuovo, ma piccolo).
-2. Rilancio un notebook o script che:
-   - carica il dataset
-   - stampa `head/shape/dtypes`
-3. Completo un micro-task:
-   - aggiungere una pulizia mancante
-   - scrivere una nuova query SQL
-   - migliorare la data card con 2–3 campi nuovi
-4. Aggiorno una nota (`private/notes/`) con:
-   - decisioni prese sul dataset
-   - idee per modelli o analisi da collegare ai moduli ML/LLM successivi
-
-Scopo: mantenere il filo **tra dati, codice e documentazione**
-senza dover rileggere tutto ogni volta.
-
----
-
-## 12. Risorse consigliate
-
-### 12.1 NumPy
-
-- **NumPy documentation (stable)**  
-  Documentazione principale, con guida introduttiva e reference.  
-  https://numpy.org/doc/stable/  
-
-- **NumPy: Absolute Beginner’s Guide**  
-  Sezione introduttiva per chi è nuovo a NumPy (linkata dalla documentazione).  
-  https://numpy.org/doc/stable/user/absolute_beginners.html  *(vedi dal sito principale)*
-
-### 12.2 Pandas
-
-- **Pandas User Guide**  
-  Guida per argomenti: IO, missing data, groupby, join, time series, ecc.  
-  https://pandas.pydata.org/docs/user_guide/index.html  
-
-- **10 Minutes to pandas**  
-  Introduzione rapida con esempi pratici.  
-  https://pandas.pydata.org/docs/user_guide/10min.html  
-
-### 12.3 SQL
-
-- **SQLBolt** — lezioni interattive  
-  Tutorial step-by-step con esercizi in-browser.  
-  https://sqlbolt.com/  
-
-### 12.4 Data cards e documentazione dei dataset
-
-- **Data Cards Playbook (Google)**  
-  Toolkit per progettare e compilare data cards per dataset ML.  
-  https://developers.google.com/learn/pathways/data-cards-playbook  
-
-- **Articolo introduttivo sul Data Cards Playbook**  
-  Contesto, motivazioni e struttura del playbook.  
-  https://research.google/blog/the-data-cards-playbook-a-toolkit-for-transparency-in-dataset-documentation/
+1. Ispezione dimensionale e benchmarking vettoriale: Creare un array NumPy bidimensionale da un milione di righe e dieci colonne, ispezionarne `shape`, `dtype` e `strides`, ed eseguire un benchmark comparativo tra una trasformazione lineare vettorizzata e un ciclo iterativo su lista Python, calcolando l'accelerazione temporale ottenuta.
+2. Pipeline di bonifica e validazione con Pandas: Caricare un dataset tabellare contenente valori nulli, duplicati di riga e formati eterogenei, applicare una pipeline di deduplicazione, normalizzazione delle stringhe e imputazione dei valori mancanti tramite mediana, e serializzare il dataset bonificato in formato Apache Parquet compresso con Snappy.
+3. Query analitiche relazionali in SQLite: Inizializzare un database SQLite in memoria, creare due tabelle relazionali collegate da chiave esterna, inserire record sintetici di telemetria ed eseguire una query complessa con `INNER JOIN`, `GROUP BY` e filtraggio `HAVING`, caricando il risultato aggregato in un DataFrame Pandas.
+4. Redazione di una Data Card standardizzata: Redigere un file di specifica JSON o Markdown conforme al formato Data Card per un dataset reale o sintetico, documentando la provenienza delle fonti, le restrizioni etiche d'uso, le limitazioni tecniche note e le caratteristiche dello schema numerico.

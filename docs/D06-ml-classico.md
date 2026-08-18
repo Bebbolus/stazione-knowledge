@@ -1,440 +1,263 @@
-# D06 — Machine Learning classico: alberi, ensemble e gradient boosting
-
-## Meta-modulo D06
-
-**Target**  
-Me stesso oggi, e chiunque voglia capire e usare i modelli ML “classici” più potenti su dati tabellari:
-alberi decisionali, random forest, gradient boosting (XGBoost/LightGBM/CatBoost), con consapevolezza
-di come funzionano, quando usarli e come non farsi ingannare dalle metriche.
-
-**Prerequisiti consigliati**
-
-- D02 — Python refresher e software engineering essentials
-- D03 — Data foundations (NumPy, Pandas, SQL, data quality)
-- D04 — Matematica e statistica just-in-time
-- D05 — Fondamenti di Machine Learning (workflow supervised, scikit-learn, metriche, overfitting)
-
-**Durata indicativa**
-
-- **Modalità minima (~3–4 ore)**  
-  - idea di albero decisionale, split, impurity  
-  - concetto di ensemble (bagging vs boosting)  
-  - uso di RandomForest e GradientBoosting in scikit-learn
-
-- **Modalità standard (~8–10 ore)**  
-  - confronto tra Random Forest, Gradient Boosting, XGBoost  
-  - tuning di iperparametri base  
-  - error analysis su dataset tabellari reali
-
-- **Modalità deep dive (più giornate)**  
-  - studio di capitoli selezionati di ISLR/ESL su alberi/boosting  
-  - implementazione di pipeline complete con cross-validation e tuning  
-  - confronto tra librerie (scikit-learn, XGBoost, LightGBM)
-
-**Quando considerare il modulo “completato”**
-
-- so spiegare a parole mie come funziona un albero decisionale e perché un ensemble è più robusto
-- so usare RandomForest e GradientBoosting in scikit-learn e XGBoost in Python
-- so fare tuning di base e interpretare feature importance
-- ho almeno un progetto che usa questi modelli su un dataset reale (classificazione o regressione)
-
 ---
-
-## Perché questo documento
-
-Dopo D05 (ML base) serve un passo in più: capire i **modelli più usati in pratica su dati tabellari**:
-
-- alberi decisionali: modelli interpretabili, base per ensemble
-- Random Forest: bagging di alberi, robusto, buona baseline
-- Gradient Boosting / XGBoost / LightGBM / CatBoost: modelli ad alte prestazioni, spesso molto competitivi sui dati tabellari strutturati; la scelta dipende da dataset, preprocessing, metrica, vincoli operativi e confronto sperimentale con altri modelli
-
-Questo modulo è il ponte verso:
-
-- D07 (apprendimento non supervisionato) → per clustering, riduzione dimensionale e analisi esplorativa
-- D08 (Deep Learning e PyTorch) → quando i dati non sono tabellari (immagini, testo, sequenze)
-- D09/D10 (LLM, RAG) → quando la rappresentazione è testuale e semantica
-
+aliases: [D06, Alberi Decisionali, Random Forest, XGBoost, Gradient Boosting, Machine Learning Tabellare]
 ---
+# Machine Learning Classico (Alberi, Random Forest e XGBoost)
 
-## Obiettivi di apprendimento
+Il Machine Learning applicato ai dati tabellari strutturati è dominato dalla famiglia degli alberi decisionali e dei loro ensemble avanzati: Random Forest e Gradient Boosting. Mentre le architetture neurali profonde eccellono su dati percettivi non strutturati come immagini, segnali audio e sequenze testuali, i modelli basati su alberi rappresentano lo standard industriale per accuratezza, robustezza e velocità di convergenza su tabelle relazionali e dataset numerici o categorici. Operano partizionando ricorsivamente lo spazio delle feature mediante iperpiani ortogonali, combinando centinaia o migliaia di stimatori per massimizzare la capacità predittiva e controllare rigorosamente il compromesso tra bias e varianza.
 
-Dopo questo modulo dovrei essere in grado di:
+## Il Problema dei Modelli Lineari e la Soluzione ad Albero
 
-- descrivere come un albero decisionale prende decisioni (split, impurity, profondità)
-- distinguere bagging (Random Forest) e boosting (Gradient Boosting, XGBoost)
-- usare RandomForest, GradientBoosting e XGBoost in Python
-- interpretare feature importance e limiti di queste misure
-- fare tuning di base e capire quando un modello è troppo complesso per i dati
+I modelli lineari tradizionali, come la regressione lineare e la regressione logistica, tentano di separare le classi o stimare i valori continui proiettando un singolo iperpiano nello spazio euclideo. Quando le relazioni tra variabili predittive e target presentano forti non-linearità, discontinuità o interazioni complesse (ad esempio soglie condizionali in cui una feature è rilevante solo se un'altra assume un intervallo specifico), un iperpiano rigido fallisce inevitabilmente, incorrendo in un grave errore di underfitting (alto bias).
 
----
+### Partizionamento Ortogonale dello Spazio (Decision Tree)
 
-## 1. Mappa dei concetti
+Per catturare frontiere di decisione arbitrarie senza imporre ipotesi parametriche globali, l'**Albero Decisionale** (`DecisionTreeClassifier` e `DecisionTreeRegressor` in [Scikit-learn](https://scikit-learn.org/)) adotta una strategia di partizionamento ricorsivo dello spazio (*recursive binary splitting*). L'algoritmo analizza l'intero dataset alla radice e seleziona in modo ingordo (*greedy*) la feature $j$ e la soglia di taglio $t$ che massimizzano la purezza dei due sottoinsiemi generati, tagliando lo spazio con un iperpiano ortogonale all'asse della variabile selezionata.
 
-### 1.1 Blocchi principali
+Nei problemi di classificazione con $C$ classi, l'omogeneità di un nodo viene quantificata tramite la **Gini Impurity** ($I_G$) oppure l'**Entropia di Shannon** ($H$):
 
-1. Alberi decisionali: struttura, split, impurity, overfitting.
-2. Ensemble methods: bagging, boosting, stacking.
-3. Random Forest: bootstrap aggregating di alberi.
-4. Gradient Boosting: correzione sequenziale degli errori.
-5. XGBoost / LightGBM / CatBoost: ottimizzazioni e differenze pratiche.
-6. Feature importance e interpretazione.
+$$I_G(p) = 1 - \sum_{i=1}^C p_i^2$$
 
----
+$$H(p) = -\sum_{i=1}^C p_i \log_2(p_i)$$
 
-## 2. Alberi decisionali
+dove $p_i$ rappresenta la proporzione di campioni appartenenti alla classe $i$ nel nodo corrente. L'algoritmo valuta ogni possibile split calcolando l'**Information Gain** (riduzione dell'impurità):
 
-### 2.1 Come funziona un albero
+$$\Delta I = I(D_{\text{padre}}) - \left( \frac{|D_L|}{|D|} I(D_L) + \frac{|D_R|}{|D|} I(D_R) \right)$$
 
-Un albero decisionale:
+Il processo si ripete ricorsivamente su ciascun sotto-nodo finché non viene soddisfatto un criterio di arresto (come il raggiungimento della purezza totale o una profondità massima prefissata). Nei compiti di regressione, il criterio di partizionamento sostituisce l'impurità con la minimizzazione dell'errore quadratico medio (MSE) rispetto alla media locale del nodo.
 
-- divide i dati con **split** basati su condizioni del tipo “feature X ≤ soglia?”
-- ogni split cerca di rendere i sottoinsiemi più “puri” rispetto al target
-- criteri comuni:
-  - classificazione: Gini impurity, entropy
-  - regressione: varianza ridotta
+## Il Rischio di Memorizzazione del Rumore e la Risposta Ensembling
 
-Problema tipico:
+L'albero decisionale isolato soffre di un'intrinseca instabilità strutturale: piccole variazioni nei dati di training possono alterare drasticamente il primo split alla radice, propagando cambiamenti a cascata lungo tutti i rami sottostanti. Se lasciato crescere senza vincoli di regolarizzazione, l'albero continuerà a ramificare fino a isolare ogni singolo punto di addestramento in una foglia dedicata, memorizzando il rumore statistico e le oscillazioni casuali del campione anziché la funzione generatrice sottostante.
 
-- alberi profondi tendono a **overfittare** (memorizzano il training set)
+Questo comportamento genera un modello ad **altissima varianza** e forte **overfitting**: l'errore sul set di addestramento si annulla, ma la capacità di generalizzazione su dati non visti degrada catastroficamente.
 
-Contromisure:
+### Riduzione della Varianza tramite Bagging (Random Forest)
 
-- limitare `max_depth`
-- richiedere un minimo di campioni per split/foglia
-- pruning (post-training o pre-pruning)
+Per neutralizzare l'alta varianza senza reintrodurre il bias dei modelli rigidi, la tecnica del **Bagging** (*Bootstrap Aggregating*, introdotta da [Leo Breiman](https://www.stat.berkeley.edu/~breiman/) nel 2001) costruisce un comitato di alberi indipendenti e aggrega le loro predizioni. L'algoritmo di riferimento per questa strategia è la **Random Forest** (`RandomForestClassifier` in [Scikit-learn](https://scikit-learn.org/)).
 
----
+La Random Forest introduce una doppia fonte di stocasticità per decorrelare i singoli stimatori:
+In primo luogo, ogni albero viene addestrato su un campione bootstrap generato estraendo con reimmissione $n$ istanze dal dataset originale, garantendo che circa il 63.2% delle osservazioni uniche sia presente nel set di addestramento mentre il restante 36.8% formi il set *Out-Of-Bag* (OOB), utilizzabile per la validazione interna. In secondo luogo, a ogni singolo split, l'albero non valuta tutte le $d$ variabili disponibili, ma un sottoinsieme casuale di dimensione ridotta ($m \approx \sqrt{d}$ per la classificazione, $m \approx d/3$ per la regressione).
 
-## 3. Ensemble methods: bagging e boosting
+Matematicamente, se aggreghiamo $B$ alberi con varianza individuale $\sigma^2$ e correlazione a coppie $\rho$, la varianza della predizione media $\bar{X} = \frac{1}{B}\sum_{b=1}^B X_b$ risulta:
 
-### 3.1 Bagging (Bootstrap Aggregating)
+$$\text{Var}(\bar{X}) = \rho \sigma^2 + \frac{1 - \rho}{B} \sigma^2$$
 
-Idea:
+Al crescere del numero di alberi ($B \to \infty$), il secondo termine si annulla e la varianza totale dell'ensemble converge al limite inferiore $\rho \sigma^2$. Il campionamento casuale delle feature riduce attivamente la correlazione $\rho$, consentendo alla foresta di abbattere la varianza complessiva mantenendo inalterato il basso bias dei singoli alberi profondi.
 
-- addestrare molti modelli indipendenti su sottoinsiemi diversi (con ripetizione) dei dati
-- aggregare le predizioni (media per regressione, voto per classificazione)
+## Riduzione Sequenziale del Bias: Il Gradient Boosting
 
-Effetto:
+Mentre il Bagging allena stimatori ad alta capacità in parallelo per ridurne la varianza, esistono contesti operativi in cui i singoli modelli sono troppo semplici (alto bias) o necessitano di una convergenza guidata su residui complessi. In questi scenari, la strategia vincente è il **Boosting**, che costruisce una sequenza deterministica di stimatori deboli (*weak learners*), ciascuno dedicato a correggere gli errori residui commessi dai predecessori.
 
-- riduce la **varianza** senza aumentare troppo il bias
-- Random Forest è l’esempio più famoso di bagging applicato ad alberi.
+### Ottimizzazione nello Spazio delle Funzioni (Gradient Boosted Trees)
 
-Riferimenti:
+Nel **Gradient Boosting** (formalizzato da [Jerome Friedman](https://hastie.su.domains/) nel 2001), l'addestramento dell'ensemble viene formulato come una discesa del gradiente nello spazio delle funzioni per minimizzare una funzione di perdita differenziabile $L(y, f(x))$.
 
-- [scikit-learn Ensemble Methods](https://scikit-learn.org/stable/modules/ensemble.html)
+Il modello inizia con una stima costante iniziale $f_0(x) = \arg\min_\gamma \sum_{i=1}^n L(y_i, \gamma)$. A ogni iterazione $m = 1, \dots, M$, l'algoritmo calcola i residui pseudo-gradiente per ciascun campione $i$:
 
-### 3.2 Boosting
+$$r_{im} = -\left[ \frac{\partial L(y_i, f(x_i))}{\partial f(x_i)} \right]_{f=f_{m-1}}$$
 
-Idea:
+Un nuovo albero decisionale $h_m(x)$ viene addestrato non sui target originali $y_i$, ma per fittare i vettori dei residui $r_{im}$. L'output del nuovo albero viene scalato tramite un parametro di regolarizzazione chiamato **learning rate** o shrinkage ($\eta \in (0, 1]$) e sommato al modello globale:
 
-- addestrare modelli in **sequenza**, ognuno cerca di correggere gli errori del precedente
-- ogni nuovo modello pesa di più gli esempi sbagliati dal modello precedente
+$$f_m(x) = f_{m-1}(x) + \eta \gamma_m h_m(x)$$
 
-Effetto:
+Lo shrinkage costringe ogni albero a compiere passi microscopici lungo la direzione del gradiente negativo, prevenendo l'overfitting immediato e garantendo una convergenza progressiva e altamente accurata.
 
-- può ridurre il bias rispetto a modelli molto semplici, ma la sua varianza e il rischio
-  di overfitting dipendono da profondità, numero di alberi, learning rate, regolarizzazione
-  e qualità dei dati
-- Gradient Boosting e XGBoost sono esempi di boosting basato su alberi.
+## Scalabilità Computazionale: XGBoost, LightGBM e CatBoost
 
-Riferimenti:
+Il Gradient Boosting classico calcolato in modo esatto richiede la scansione esaustiva di tutte le feature ordinate per identificare la soglia ottimale di ogni split, un'operazione computazionalmente proibitiva su dataset industriali con milioni di record. Per superare questa barriera prestazionale, la ricerca ha sviluppato motori di calcolo altamente ottimizzati a livello hardware.
 
-- [scikit-learn Gradient Boosting](https://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
-- [XGBoost documentation](https://xgboost.readthedocs.io/en/stable/)
+### Ingegneria dei Sistemi per il Gradient Boosting
 
----
+La libreria [XGBoost](https://xgboost.readthedocs.io/) (eXtreme Gradient Boosting, sviluppata da Tianqi Chen) ha rivoluzionato il machine learning tabellare introducendo l'approssimazione di Taylor al secondo ordine della funzione di perdita:
 
-## 4. Random Forest
+$$\tilde{L}^{(m)} \approx \sum_{i=1}^n \left[ g_i f_m(x_i) + \frac{1}{2} h_i f_m^2(x_i) \right] + \Omega(f_m)$$
 
-### 4.1 Concetto
+dove $g_i = \partial_{\hat{y}} L(y_i, \hat{y})$ e $h_i = \partial^2_{\hat{y}} L(y_i, \hat{y})$ rappresentano rispettivamente il gradiente del primo e secondo ordine, mentre $\Omega(f_m) = \gamma T + \frac{1}{2}\lambda \sum_{j=1}^T w_j^2$ penalizza esplicitamente il numero di foglie $T$ e la magnitudo dei pesi $w$. XGBoost implementa strutture dati *Compressed Column* (CSC) pre-ordinate in memoria RAM e algoritmi di quantizzazione approssimata per quantili ponderati.
 
-Random Forest:
+Il framework [LightGBM](https://lightgbm.readthedocs.io/) (sviluppato da [Microsoft](https://www.microsoft.com/)) ottimizza ulteriormente il throughput mediante la discretizzazione continua in istogrammi a 256 bin (*Histogram-based splitting*), l'esclusione di feature mutualmente esclusive (*Exclusive Feature Bundling*, EFB) e il campionamento selettivo delle istanze con gradienti più ampi (*Gradient-based One-Side Sampling*, GOSS). Inoltre, LightGBM adotta una strategia di crescita dell'albero *leaf-wise* (espandendo prima la foglia con massimo guadagno) anziché *depth-wise* (livello per livello), massimizzando la riduzione dell'errore a parità di nodi.
 
-- costruisce molti alberi decisionali
-- ogni albero vede:
-  - un bootstrap sample dei dati
-  - un sottoinsieme casuale delle feature ad ogni split
+La libreria [CatBoost](https://catboost.ai/) (sviluppata da Yandex) si focalizza sulla gestione nativa e rigorosa delle variabili categoriche ad alta cardinalità tramite *Target Statistics* ordinate nel tempo, eliminando il fenomeno del *target leakage*, e costruisce alberi simmetrici (*oblivious trees*) che velocizzano drasticamente la fase di inferenza in produzione.
 
-Risultato:
+## Interpretabilità e Ispezione del Modello (Feature Importance)
 
-- ensemble robusto, spesso migliore di un singolo albero
-- meno sensibile a rumore e outlier
+Quando un modello di Machine Learning aggrega migliaia di regole decisionali distribuite su centinaia di alberi profondi, perde la trasparenza analitica immediata dei modelli lineari, trasformandosi in una complessa scatola nera. Per soddisfare i requisiti di verificabilità e conformità regolatoria nei settori ad alto impatto (come il credito, la diagnostica medica e la sicurezza), è necessario disporre di metodologie matematiche per quantificare il contributo di ogni singola variabile.
 
-In scikit-learn:
+### Metriche di Rilevanza delle Variabili
 
-- `RandomForestClassifier`, `RandomForestRegressor`
-- parametri chiave: `n_estimators`, `max_depth`, `max_features`, `min_samples_leaf`
+La metrica classica **Mean Decrease in Impurity** (MDI, o *Gini Importance*) calcola il miglioramento medio ponderato dell'indice di Gini (o dell'MSE) apportato da tutti gli split che hanno utilizzato una specifica variabile $j$ lungo l'intera foresta. Sebbene computazionalmente istantanea, la MDI soffre di un noto bias statistico a favore di feature continue o categoriche ad alta cardinalità.
 
-Riferimenti:
+La metrica **Permutation Importance** (Mean Decrease in Accuracy, MDA) supera questo limite valutando il modello su un set di validazione non visto: i valori della feature $j$ vengono mescolati casualmente (rompendo la correlazione con il target) e si misura il calo percentuale delle prestazioni predittive. Se la distruzione dell'ordine di una variabile produce un crollo drammatico dell'accuratezza, quella feature è cruciale per la logica decisionale del modello. Nelle pipeline moderne, queste metriche vengono integrate dai valori SHAP (*SHapley Additive exPlanations*), basati sulla teoria dei giochi cooperativi, per attribuire a ogni feature un impatto marginale locale coerente e additivo.
 
-- [Random Forest in scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#forest)
+## Trade-off e Scelte Operative
 
-### 4.2 Quando usarlo
+L'impiego operativo dei modelli basati su alberi richiede un bilanciamento consapevole tra risorse computazionali, rischio di memorizzazione del rumore e latenza di inferenza:
 
-- buona baseline per problemi tabellari
-- quando serve un modello robusto senza tuning estremo
-- quando l’interpretabilità parziale (feature importance) è utile
+La complessità strutturale dei singoli alberi deve essere controllata bilanciando `max_depth`, `min_samples_leaf` e il parametro di potatura basato sul costo-complessità `ccp_alpha`. Alberi troppo profondi aumentano esponenzialmente il consumo di memoria RAM durante il salvataggio dei pesi e rendono il modello fragile di fronte a distribuzioni di dati instabili.
 
----
+La scelta architetturale tra Bagging (Random Forest) e Boosting (XGBoost / LightGBM) dipende dalla natura del dataset e dai vincoli infrastrutturali: Random Forest scala in modo perfettamente parallelo su tutti i core CPU disponibili e tollera elevati livelli di rumore nelle etichette senza richiedere una calibrazione maniacale degli iperparametri. Al contrario, Gradient Boosting raggiunge prestazioni predittive nettamente superiori sui segnali deboli ma richiede un'attenta regolarizzazione del learning rate, l'implementazione dell'early stopping e un monitoraggio costante per evitare la memorizzazione degli outlier.
 
-## 5. Gradient Boosting e XGBoost
+La velocità di training e il footprint di memoria vedono LightGBM e CatBoost dominare su dataset di grandi dimensioni grazie alla discretizzazione in istogrammi, mentre XGBoost offre il controllo più granulare sulle penalizzazioni matematiche L1/L2 e sull'integrazione hardware specializzata.
 
-### 5.1 Gradient Boosting (GBDT)
+## Riferimenti Bibliografici e Risorse Tecniche
 
-Idea:
+La letteratura fondamentale e le implementazioni di riferimento per il machine learning basato su alberi includono trattati teorici, librerie open-source e simulatori visivi.
 
-- ogni nuovo albero approssima il **gradiente della loss** rispetto alle predizioni correnti
-- in pratica: ogni albero cerca di correggere gli errori residui del modello precedente
-
-In scikit-learn:
-
-- `GradientBoostingClassifier`, `GradientBoostingRegressor`
-- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`
-
-Riferimenti:
-
-- [Gradient Boosting in scikit-learn](https://scikit-learn.org/stable/modules/ensemble.html#gradient-boosting)
-
-### 5.2 XGBoost (e cenni a LightGBM/CatBoost)
-
-XGBoost:
-
-- implementazione ottimizzata di gradient boosting
-- caratteristiche:
-  - regolarizzazione esplicita (L1/L2)
-  - gestione efficiente di dati sparsi
-  - parallelizzazione e ottimizzazioni per velocità
-
-Librerie correlate:
-
-- **LightGBM**: enfasi su velocità e dataset grandi
-- **CatBoost**: gestione nativa di feature categoriche
-
-In Python:
-
-- uso tipico con API simile a scikit-learn (`XGBClassifier`, `XGBRegressor`)
-- parametri chiave: `n_estimators`, `learning_rate`, `max_depth`, `subsample`, `colsample_bytree`
-
-Riferimenti:
-
-- [XGBoost documentation](https://xgboost.readthedocs.io/en/stable/)
-- [LightGBM documentation](https://lightgbm.readthedocs.io/en/stable/)
-- [CatBoost documentation](https://catboost.ai/en/docs/)
-
----
-
-## 6. Feature importance e interpretazione
-
-### 6.1 Feature importance negli alberi/ensemble
-
-Tipi comuni:
-
-- **Gini importance** (o “impurity-based”): quanto ogni feature riduce l’impurity media negli split
-- **Permutation importance**: quanto peggiora la performance se si “rompe” una feature (shuffling)
-
-Avvertenze:
-
-- feature correlate possono “dividersi” l’importanza
-- scale diverse e leakage possono distorcere l’interpretazione
-
-Buona pratica:
-
-- usare permutation importance come controllo aggiuntivo
-- non fidarsi ciecamente della ranking di importance per decisioni critiche
-
-Riferimenti:
-
-- [Permutation importance in scikit-learn](https://scikit-learn.org/stable/modules/permutation_importance.html)
-
----
-
-## 7. Laboratori ed esercizi
-
-### Laboratorio 1 — Primo albero decisionale
-
-**Obiettivo:** capire come un albero prende decisioni.
-
-**Passi:**
-
-1. Scegliere un dataset di classificazione o regressione (es. `iris`, `diabetes`, o un CSV proprio).
-2. Splittare in train/test.
-3. Addestrare un `DecisionTreeClassifier` o `DecisionTreeRegressor`.
-4. Visualizzare l’albero (es. con `plot_tree` o export in testo).
-5. Annotare:
-   - quali feature vengono usate per primi split
-   - profondità dell’albero
-   - segnali di overfitting (es. training accuracy molto alta, test più bassa)
-
-**Deliverable:**
-
-- script/notebook con albero addestrato
-- nota con interpretazione degli split e valutazione overfitting
-
----
-
-### Laboratorio 2 — Random Forest vs albero singolo
-
-**Obiettivo:** vedere l’effetto del bagging.
-
-**Passi:**
-
-1. Usare lo stesso dataset del laboratorio 1.
-2. Addestrare:
-   - un albero decisionale
-   - una Random Forest con parametri ragionevoli
-3. Confrontare:
-   - training e test accuracy (o MSE per regressione)
-   - feature importance nei due modelli
-4. Annotare differenze e vantaggi dell’ensemble.
-
-**Deliverable:**
-
-- script/notebook con confronto
-- nota che descrive cosa cambia passando da albero singolo a foresta
-
----
-
-### Laboratorio 3 — Gradient Boosting e XGBoost
-
-**Obiettivo:** confrontare boosting “vanilla” e XGBoost.
-
-**Passi:**
-
-1. Usare un dataset di dimensioni medie (es. `breast_cancer`, o un CSV con qualche migliaio di righe).
-2. Addestrare:
-   - `GradientBoostingClassifier` (scikit-learn)
-   - `XGBClassifier` (XGBoost)
-3. Fare tuning leggero (es. `n_estimators`, `learning_rate`, `max_depth`) con cross-validation.
-4. Confrontare:
-   - performance (accuracy, F1, AUC, ecc.)
-   - tempi di training
-5. Annotare pro/contro delle due librerie.
-
-**Deliverable:**
-
-- script/notebook con confronto
-- nota su quale modello preferiresti per quel tipo di problema e perché
-
----
-
-### Laboratorio 4 — Feature importance e error analysis
-
-**Obiettivo:** interpretare il modello e capire dove sbaglia.
-
-**Passi:**
-
-1. Prendere il modello migliore tra quelli dei laboratori precedenti (RF, GB, XGB).
-2. Calcolare:
-   - feature importance (impurity-based)
-   - (opzionale) permutation importance
-3. Fare error analysis:
-   - guardare esempi sbagliati nel test set
-   - cercare pattern (es. certe classi più confuse, certi range di feature problematici)
-4. Annotare:
-   - quali feature sembrano davvero decisive
-   - quali errori potrebbero essere dovuti a dati sporchi o leakage
-
-**Deliverable:**
-
-- script/notebook con importance ed error analysis
-- nota che collega importance, errori e possibili miglioramenti nei dati
-
----
-
-## 8. Rubriche e checklist
-
-### Checklist — D06 completato
-
-- [ ] So spiegare come funziona un albero decisionale (split, impurity, profondità).
-- [ ] So distinguere bagging (Random Forest) e boosting (Gradient Boosting/XGBoost).
-- [ ] Ho addestrato almeno un modello Random Forest e uno Gradient Boosting/XGBoost.
-- [ ] Ho fatto tuning di base (almeno 2–3 parametri) con cross-validation.
-- [ ] Ho interpretato feature importance e fatto almeno una semplice error analysis.
-- [ ] Ho un progetto che usa questi modelli su un dataset reale (anche piccolo).
-
-### Errori tipici da evitare
-
-- usare alberi molto profondi senza controllo (overfitting garantito).
-- fidarsi solo della accuracy senza guardare matrici di confusione o altre metriche.
-- interpretare la feature importance come “verità assoluta” senza considerare correlazioni e leakage.
-- confrontare modelli su split diversi o senza fissare `random_state`.
-- usare XGBoost/LightGBM senza capire prima le basi di boosting e gradient descent.
-
-### Segnali che “ho davvero capito” D06
-
-- quando vedo un problema tabellare, so dire se un Random Forest o un Gradient Boosting sono candidati ragionevoli.
-- so spiegare a un collega perché un ensemble è più robusto di un singolo albero.
-- non ho più bisogno di “provare a caso” parametri: ho un minimo di metodo (baseline, CV, tuning).
-- so leggere un grafico di feature importance e collegarlo a ciò che so del dominio.
-
----
-
-## 9. Come ripartire dopo una pausa
-
-Se torno su D06 dopo giorni o settimane:
-
-1. Riapro uno dei notebook dei laboratori (RF, GB, XGBoost).
-2. Rieseguo training e valutazione per ricordare la struttura del codice.
-3. Scelgo un micro-miglioramento:
-   - aggiungere una metrica nuova
-   - provare un altro dataset
-   - fare un confronto più sistematico tra modelli
-4. Aggiorno una nota in `private/notes/` con:
-   - quale esperimento ho rifatto
-   - cosa ho consolidato o scoperto di nuovo
-
-Scopo: tenere salda l’idea che **alberi + ensemble sono strumenti pratici**, non solo teoria.
-
----
-
-## 10. Risorse consigliate
-
-### 10.1 scikit-learn: ensemble methods
-
-- **Ensemble methods — scikit-learn User Guide**  
-  Documentazione ufficiale su Random Forest, Gradient Boosting, AdaBoost, bagging, stacking.  
-  https://scikit-learn.org/stable/modules/ensemble.html  
-
-- **Ensemble examples — scikit-learn**  
-  Esempi pratici di confronto tra Random Forest e Gradient Boosting, feature transformations con ensemble, ecc.  
-  https://scikit-learn.org/stable/auto_examples/ensemble/index.html  
-
-### 10.2 XGBoost e gradient boosting in pratica
-
-- **Get Started with XGBoost**  
-  Quickstart ufficiale con snippet per classificazione/regressione.  
-  https://xgboost.readthedocs.io/en/stable/get_started.html  
-
-- **What is XGBoost? (IBM Think)**  
-  Introduzione chiara a XGBoost, differenze con Random Forest e boosting.  
-  https://www.ibm.com/think/topics/xgboost  
-
-- **XGBoost in Python from Start to Finish (StatQuest, video)**  
-  Tutorial completo su XGBoost per classificazione, con tuning e cross-validation.  
-  https://www.youtube.com/watch?v=GrJP9FLV3FE  
-
-- **A Complete Introduction to XGBoost for Machine Learning Engineers (video)**  
-  Corso sintetico su XGBoost per ML engineer.  
-  https://www.youtube.com/watch?v=9nxJr8XzkcM  
-
-- **Ensemble Methods in Scikit Learn (video)**  
-  Panoramica su voting, bagging, AdaBoost, Random Forest e Gradient Boosting.  
-  https://www.youtube.com/watch?v=NqdyfMbVo1Q  
-
-### 10.3 Libri e capitoli su alberi/ensemble
-
-- **Introduction to Statistical Learning (ISLR)**  
-  Capitoli su alberi, bagging, boosting, SVM.  
-  https://www.statlearning.com/  
-
-- **The Elements of Statistical Learning (ESL)**  
-  Trattazione più avanzata di alberi, random forest, boosting.  
-  https://hastie.su.domains/ElemStatLearn/  
-
-Queste risorse non vanno studiate per intero: D06 serve a darti una mappa operativa
-per usare alberi ed ensemble in modo sensato, e a collegarti ai testi classici quando serve approfondire.
-
-
-### Strumenti Visivi e Animazioni Esterne (Web)
-- **[MLU-Explain: Decision Trees](https://mlu-explain.github.io/decision-tree/)**: **Come usarlo**: interagisci con lo scroll per vedere come lo spazio dei dati (2D) viene tagliato ortogonalmente ad ogni split dell'albero.
-- **[MLU-Explain: Random Forest](https://mlu-explain.github.io/random-forest/)**: **Come usarlo**: osserva visivamente il concetto di "bagging" (campionamento) e come alberi diversi creino confini "squadrati" che poi si ammorbidiscono fondendosi insieme.
+### Fondamenti Teorici e Manuali di Riferimento
+Lo studio accademico di riferimento per gli alberi decisionali, il Bagging e il Gradient Boosting è [The Elements of Statistical Learning](https://hastie.su.domains/ElemStatLearn/) (il testo accademico fondamentale scritto dai docenti della [Stanford University](https://www.stanford.edu/) [Trevor Hastie](https://hastie.su.domains/), [Robert Tibshirani](https://tibshirani.su.domains/) e [Jerome Friedman](https://hastie.su.domains/)). Per una panoramica operativa completa sull'implementazione standard in [Python](https://www.python.org/), la documentazione di riferimento è [Scikit-Learn Ensemble Methods](https://scikit-learn.org/stable/modules/ensemble.html).
+
+### Framework di Produzione
+Per il deployment su larga scala e l'addestramento distribuito, le risorse ufficiali primarie sono la [Documentazione Ufficiale di XGBoost](https://xgboost.readthedocs.io/en/stable/), il portale di [LightGBM](https://lightgbm.readthedocs.io/) e la documentazione del framework [CatBoost](https://catboost.ai/).
+
+### Strumenti Visivi e Risorse Didattiche
+Per esplorare geometricamente come gli algoritmi partizionano lo spazio e come l'aggregazione smussa le superfici di decisione, la piattaforma didattica [MLU-Explain](https://mlu-explain.github.io/) di [Amazon](https://www.amazon.science/) mette a disposizione i simulatori interattivi [Decision Trees](https://mlu-explain.github.io/decision-tree/) e [Random Forest](https://mlu-explain.github.io/random-forest/). Inoltre, il canale divulgativo [StatQuest](https://statquest.org/) dell'informatico [Josh Starmer](https://statquest.org/) offre analisi visive dettagliate sui passaggi matematici del gradient boosting e sul calcolo dei residui.
+
+## Appendice Operativa: Laboratori Pratici
+
+I laboratori seguenti forniscono script Python completi, eseguibili e autocontenuti per riprodurre empiricamente il comportamento dei singoli alberi, l'effetto stabilizzante del bagging e la potenza ottimizzativa del gradient boosting.
+
+### Laboratorio 1: Sovradimensionamento dell'Albero Singolo e Potatura
+
+Questo script addestra un albero decisionale non vincolato su dati sintetici tabellari, evidenziando il divario di accuratezza tra training e test causato dall'overfitting, e mostra come la limitazione della profondità ristabilisca la capacità di generalizzazione.
+
+```python
+import numpy as np
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+
+# 1. Generazione del dataset sintetico tabellare
+X, y = make_classification(
+    n_samples=2000,
+    n_features=20,
+    n_informative=12,
+    n_redundant=4,
+    random_state=42
+)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
+
+# 2. Albero profondo non vincolato (overfitting puro)
+unconstrained_tree = DecisionTreeClassifier(random_state=42)
+unconstrained_tree.fit(X_train, y_train)
+
+train_acc_unconstrained = accuracy_score(y_train, unconstrained_tree.predict(X_train))
+test_acc_unconstrained = accuracy_score(y_test, unconstrained_tree.predict(X_test))
+
+# 3. Albero regolarizzato tramite profondità massima
+regularized_tree = DecisionTreeClassifier(max_depth=5, min_samples_leaf=10, random_state=42)
+regularized_tree.fit(X_train, y_train)
+
+train_acc_reg = accuracy_score(y_train, regularized_tree.predict(X_train))
+test_acc_reg = accuracy_score(y_test, regularized_tree.predict(X_test))
+
+print(f"Albero non vincolato - Profondita': {unconstrained_tree.get_depth()} nodi")
+print(f"  Train Accuracy: {train_acc_unconstrained * 100:.2f}% | Test Accuracy: {test_acc_unconstrained * 100:.2f}%")
+print(f"Albero regolarizzato - Profondita': {regularized_tree.get_depth()} nodi")
+print(f"  Train Accuracy: {train_acc_reg * 100:.2f}% | Test Accuracy: {test_acc_reg * 100:.2f}%")
+```
+
+### Laboratorio 2: La Saggezza della Folla con Random Forest e Feature Importance
+
+Questo script dimostra come l'aggregazione di stimatori decorrelati abbatta la varianza del modello, ed estrae i pesi di importanza delle feature per identificare le variabili predittive dominanti.
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
+# 1. Creazione dataset con feature informative e rumore
+X, y = make_classification(
+    n_samples=2500,
+    n_features=15,
+    n_informative=6,
+    n_redundant=2,
+    n_classes=2,
+    random_state=42
+)
+
+feature_names = [f"feature_{i:02d}" for i in range(X.shape[1])]
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+
+# 2. Addestramento Random Forest con 150 stimatori
+rf_model = RandomForestClassifier(
+    n_estimators=150,
+    max_features="sqrt",
+    oob_score=True,
+    n_jobs=-1,
+    random_state=42
+)
+rf_model.fit(X_train, y_train)
+
+# 3. Valutazione e punteggio Out-Of-Bag
+y_pred = rf_model.predict(X_test)
+print(f"Punteggio Out-Of-Bag (OOB Score): {rf_model.oob_score_ * 100:.2f}%")
+print("\nReport di Classificazione sul Test Set:")
+print(classification_report(y_test, y_pred, digits=4))
+
+# 4. Estrazione della Feature Importance (Mean Decrease in Impurity)
+importances = pd.Series(rf_model.feature_importances_, index=feature_names)
+top_features = importances.sort_values(ascending=False)
+
+print("Top 5 Feature piu' rilevanti:")
+print(top_features.head(5).to_string())
+```
+
+### Laboratorio 3: Ottimizzazione e Early Stopping con XGBoost
+
+Questo script implementa una pipeline di classificazione ad alte prestazioni con XGBoost, impiegando la regolarizzazione L2, il learning rate ridotto e l'early stopping per prevenire la sovra-ottimizzazione sui residui.
+
+```python
+import xgboost as xgb
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score, log_loss
+
+# 1. Generazione di un dataset tabellare su larga scala
+X, y = make_classification(
+    n_samples=10000,
+    n_features=30,
+    n_informative=18,
+    n_classes=2,
+    random_state=42
+)
+
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+
+# 2. Configurazione e addestramento del modello XGBoost
+xgb_model = xgb.XGBClassifier(
+    n_estimators=500,
+    learning_rate=0.05,
+    max_depth=6,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    reg_lambda=1.5,
+    early_stopping_rounds=30,
+    eval_metric="logloss",
+    random_state=42
+)
+
+# 3. Addestramento con monitoraggio sul set di validazione
+xgb_model.fit(
+    X_train, y_train,
+    eval_set=[(X_train, y_train), (X_val, y_val)],
+    verbose=False
+)
+
+# 4. Valutazione sul set di test indipendente
+best_iter = xgb_model.best_iteration
+y_probs = xgb_model.predict_proba(X_test)[:, 1]
+auc_score = roc_auc_score(y_test, y_probs)
+test_loss = log_loss(y_test, y_probs)
+
+print(f"Migliore iterazione trovata: {best_iter}")
+print(f"Test ROC-AUC: {auc_score:.4f} | Test Log-Loss: {test_loss:.4f}")
+```
