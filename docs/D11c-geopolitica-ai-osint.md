@@ -126,7 +126,7 @@ Impatto pratico:
 Riferimenti:
 
 - [BIS Export Controls on AI Chips (2023)](https://www.bis.doc.gov/)
-- [CSIS - AI Export Controls](https://www.csis.org/ai-export-controls)
+- [CSIS - AI Export Controls](https://www.csis.org/programs/wadhwani-center-ai-and-advanced-technologies)
 
 ### 2.3 Iniziative di "AI sovrana"
 
@@ -426,7 +426,7 @@ Scopo: mantenere viva la consapevolezza su geopolitica e governance AI per OSINT
   https://www.bis.doc.gov/  
 
 - **CSIS - AI Export Controls**  
-  https://www.csis.org/ai-export-controls  
+  https://www.csis.org/programs/wadhwani-center-ai-and-advanced-technologies  
 
 - **Stanford AI Index Report (Geopolitics chapter)**  
   https://aiindex.stanford.edu/  
@@ -437,7 +437,7 @@ Scopo: mantenere viva la consapevolezza su geopolitica e governance AI per OSINT
   https://www.mandiant.com/resources/reports  
 
 - **Microsoft Threat Intelligence**  
-  https://www.microsoft.com/en-us/security/threat-intelligence  
+  https://www.microsoft.com/en-us/security/blog/threat-intelligence/  
 
 ### 9.3 Supply chain e provenance
 
@@ -453,10 +453,10 @@ Scopo: mantenere viva la consapevolezza su geopolitica e governance AI per OSINT
   https://artificialintelligenceact.eu/  
 
 - **China AI Governance Framework**  
-  https://www.csis.org/china-ai-governance  
+  https://www.csis.org/programs/wadhwani-center-ai-and-advanced-technologies  
 
 - **US AI Policy (OSTP)**  
-  https://www.whitehouse.gov/ostp/ai-bill-of-rights/  
+  https://www.whitehouse.gov/ostp/news-updates/2022/10/04/fact-sheet-biden-harris-administration-announces-key-actions-to-advance-tech-accountability-and-protect-the-rights-of-the-american-public/  
 
 Queste risorse non vanno studiate per intero: D11c serve a darti una mappa operativa
 per capire geopolitica e governance AI per OSINT, e a collegarti a report/policy quando serve approfondire.

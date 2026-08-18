@@ -133,7 +133,7 @@ Riferimenti:
 
 Riferimenti:
 
-- [AutoGen - Group Chat](https://microsoft.github.io/autogen/docs/groupchat)
+- [AutoGen - Group Chat](https://microsoft.github.io/autogen/)
 - [CAMEL-AI](https://www.camel-ai.org/)
 
 ---
@@ -356,7 +356,7 @@ Scopo: mantenere fresco il legame tra teoria (loop, grafi) e pratica (pipeline O
   https://arxiv.org/abs/2210.03629  
 
 - **AutoGen - Group Chat**  
-  https://microsoft.github.io/autogen/docs/groupchat  
+  https://microsoft.github.io/autogen/  
 
 ### 9.2 Graph engineering
 
@@ -372,7 +372,7 @@ Scopo: mantenere fresco il legame tra teoria (loop, grafi) e pratica (pipeline O
   https://www.camel-ai.org/  
 
 - **LlamaIndex Graph Store**  
-  https://docs.llamaindex.ai/en/stable/module_guides/storing/graph_store.html  
+  https://docs.llamaindex.ai/en/stable/  
 
 Queste risorse non vanno studiate per intero: D12d serve a darti una mappa operativa
 per progettare loop e usare grafi per agenti, e a collegarti a paper/tool quando serve approfondire.

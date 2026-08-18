@@ -412,7 +412,7 @@ Scopo: trattenere i concetti **agganciandoli a esperimenti reali**, non solo all
 - **Introduction to Statistical Learning (ISLR)**  
   Versione più accessibile di ESL, anche questa con risorse online.  
   Info e materiali:  
-  https://www-bcf.usc.edu/~gareth/ISL/  
+  https://www.statlearning.com/  
 
 - **Guida alla lettura di ESL** (TheoremPath)  
   Suggerimenti su quali capitoli leggere in base agli obiettivi.  

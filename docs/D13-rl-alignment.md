@@ -107,8 +107,8 @@ Obiettivo:
 
 Riferimenti:
 
-- [Sutton & Barto, Reinforcement Learning: An Introduction](https://www.andrew.cmu.edu/~dimitri/Book/RLbook.html)
-- [CleanRL](https://github.com/vwxyz/cleanrl) (implementazioni pulite di algoritmi RL)
+- [Sutton & Barto, Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)
+- [CleanRL](https://github.com/vwxyzjn/cleanrl) (implementazioni pulite di algoritmi RL)
 
 ---
 
@@ -428,11 +428,11 @@ Scopo: mantenere fresco il legame tra teoria (RL, preference learning) e pratica
 
 - **Sutton & Barto, Reinforcement Learning: An Introduction**  
   Testo di riferimento per RL.  
-  https://www.andrew.cmu.edu/~dimitri/Book/RLbook.html  
+  http://incompleteideas.net/book/the-book-2nd.html  
 
 - **CleanRL**  
   Implementazioni pulite di algoritmi RL.  
-  https://github.com/vwxyz/cleanrl  
+  https://github.com/vwxyzjn/cleanrl  
 
 ### 11.2 RLHF e allineamento
 

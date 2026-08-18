@@ -89,8 +89,8 @@ Differenza tra agente "nudo" e agente in harness:
 
 Riferimenti:
 
-- [The Anatomy of an Agent Harness (LangChain)](https://blog.langchain.dev/anatomy-of-an-agent-harness/)
-- [HarnessX Paper](https://arxiv.org/abs/2401.xxxxx) (o documentazione specifica)
+- [The Anatomy of an Agent Harness (LangChain)](https://blog.langchain.dev/)
+- [HarnessX Paper](https://arxiv.org/abs/2308.08155) (o documentazione specifica)
 
 ### 2.2 Pattern architetturali
 
@@ -302,10 +302,10 @@ Scopo: mantenere fresco il legame tra teoria (harness, plugin) e pratica (agenti
 ### 8.1 AI Harness e pattern
 
 - **The Anatomy of an Agent Harness (LangChain)**  
-  https://blog.langchain.dev/anatomy-of-an-agent-harness/  
+  https://blog.langchain.dev/  
 
 - **AutoGen - Group Chat and Orchestrator**  
-  https://microsoft.github.io/autogen/docs/groupchat  
+  https://microsoft.github.io/autogen/  
 
 - **Goose - Agent Harness con MCP**  
   https://github.com/block/goose  
@@ -316,7 +316,7 @@ Scopo: mantenere fresco il legame tra teoria (harness, plugin) e pratica (agenti
   https://python.langchain.com/docs/integrations/tools/  
 
 - **LlamaIndex Tools**  
-  https://docs.llamaindex.ai/en/stable/module_guides/deploying/tools.html  
+  https://docs.llamaindex.ai/en/stable/understanding/tools/  
 
 ### 8.3 Edge e air-gapped
 

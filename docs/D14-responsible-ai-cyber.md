@@ -144,7 +144,7 @@ Strumenti:
 Riferimenti:
 
 - [Fairness in Machine Learning (libro online)](https://fairmlbook.org/)
-- [AI Fairness 360 (IBM)](https://aif360.mybluemix.net/)
+- [AI Fairness 360 (IBM)](https://github.com/Trusted-AI/AIF360)
 
 ---
 
@@ -174,7 +174,7 @@ Riferimenti:
 
 Riferimenti:
 
-- [Prompt Injection Primer (Greshake)](https://github.com/jailbreaks/prompt-injection)
+- [Prompt Injection Primer (Greshake)](https://github.com/leondz/awesome-prompt-injection)
 - [OWASP Top 10 for LLM](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 
 ### 4.2 Difese
@@ -474,7 +474,7 @@ Scopo: mantenere viva la consapevolezza su etica, sicurezza e governance AI.
   https://fairmlbook.org/  
 
 - **AI Fairness 360 (IBM)**  
-  https://aif360.mybluemix.net/  
+  https://github.com/Trusted-AI/AIF360  
 
 - **Google Responsible AI Practices**  
   https://ai.google/responsibilities/  
@@ -485,7 +485,7 @@ Scopo: mantenere viva la consapevolezza su etica, sicurezza e governance AI.
   https://owasp.org/www-project-top-10-for-large-language-model-applications/  
 
 - **Prompt Injection Primer (Greshake)**  
-  https://github.com/jailbreaks/prompt-injection  
+  https://github.com/leondz/awesome-prompt-injection  
 
 - **MITRE ATLAS (Adversarial Threat Landscape for AI Systems)**  
   https://atlas.mitre.org/  

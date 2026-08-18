@@ -162,7 +162,7 @@ Pattern:
 
 Riferimenti:
 
-- [ICM: Interpretable Context Methodology](https://github.com/interpretable-context-methodology/Interpreted-Context-Methdology)
+- [ICM: Interpretable Context Methodology](https://github.com/modelcontextprotocol)
 
 ### 3.3 File system come contesto
 
@@ -382,7 +382,7 @@ Scopo: mantenere fresco il legame tra teoria (prompt, contesto) e pratica (task 
 ### 9.2 Context engineering e MCP
 
 - **ICM: Interpretable Context Methodology**  
-  https://github.com/interpretable-context-methodology/Interpreted-Context-Methdology  
+  https://github.com/modelcontextprotocol  
 
 - **MCP (Model Context Protocol)**  
   https://modelcontextprotocol.io/  

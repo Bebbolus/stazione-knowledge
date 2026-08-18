@@ -197,7 +197,7 @@ Riferimenti:
 
 - [FAISS GitHub](https://github.com/facebookresearch/faiss)
 - [Chroma docs](https://docs.trychroma.com/)
-- [Qdrant docs](https://qdrant.tech/docs/)
+- [Qdrant docs](https://qdrant.tech/documentation/)
 
 ### 4.2 Schema concettuale
 
@@ -533,7 +533,7 @@ Scopo: mantenere fresco il legame tra teoria (embedding, grafi) e pratica (pipel
 
 - **Qdrant documentation**  
   Vector DB orientato a produzione.  
-  https://qdrant.tech/docs/  
+  https://qdrant.tech/documentation/  
 
 ### 12.3 Grafi e Neo4j
 

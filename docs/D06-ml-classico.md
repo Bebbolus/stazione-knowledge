@@ -425,7 +425,7 @@ Scopo: tenere salda l’idea che **alberi + ensemble sono strumenti pratici**, n
 
 - **Introduction to Statistical Learning (ISLR)**  
   Capitoli su alberi, bagging, boosting, SVM.  
-  https://www-bcf.usc.edu/~gareth/ISL/  
+  https://www.statlearning.com/  
 
 - **The Elements of Statistical Learning (ESL)**  
   Trattazione più avanzata di alberi, random forest, boosting.  

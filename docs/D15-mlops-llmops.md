@@ -510,7 +510,7 @@ Scopo: mantenere fresco il legame tra teoria (MLOps/LLMOps) e pratica (pipeline,
 
 - **Hugging Face MLOps course**  
   LLMOps con Hugging Face.  
-  https://huggingface.co/learn/mlops-course  
+  https://huggingface.co/learn/  
 
 ### 12.2 Strumenti
 

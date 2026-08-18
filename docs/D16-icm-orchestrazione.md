@@ -107,7 +107,7 @@ Vantaggi:
 
 Riferimenti:
 
-- [ICM: Interpretable Context Methodology](https://github.com/interpretable-context-methodology/Interpreted-Context-Methdology) (o repo simili)
+- [ICM: Interpretable Context Methodology](https://github.com/modelcontextprotocol) (o repo simili)
 
 ### 2.2 Pattern di uso
 

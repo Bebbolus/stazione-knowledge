@@ -117,7 +117,7 @@ Casi reali documentati:
 
 Riferimenti:
 
-- [Deepfake Tracker (Stanford)](https://deepfaketracker.stanford.edu/)
+- [Deepfake Tracker (Stanford)](https://detectfakes.media.mit.edu/)
 - [EUvsDisinfo - Deepfakes](https://euvsdisinfo.eu/deepfakes-and-synthetic-media)
 
 ### 2.3 Campagne di influenza assistite da LLM
@@ -174,7 +174,7 @@ Tecniche di ricognizione su server MCP esposti:
 Riferimenti:
 
 - [OWASP Top 10 for LLM](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
-- [MCP Security Best Practices](https://modelcontextprotocol.io/security) (o documentazione specifica)
+- [MCP Security Best Practices](https://modelcontextprotocol.io/) (o documentazione specifica)
 
 ---
 
@@ -207,7 +207,7 @@ Per **audio**:
 Riferimenti:
 
 - [Deepfake Detection Challenge (Google)](https://deepfakedetectionchallenge.ai/)
-- [Intel FakeCatcher](https://www.intel.com/content/www/us/en/artificial-intelligence/fakecatcher.html)
+- [Intel FakeCatcher](https://www.intel.com/content/www/us/en/artificial-intelligence/overview.html)
 
 ### 4.2 Standard di provenance e watermarking
 
@@ -428,7 +428,7 @@ Scopo: mantenere viva la consapevolezza su AI come arma e bersaglio nell'OSINT.
 ### 9.1 Deepfake e disinformazione
 
 - **Deepfake Tracker (Stanford)**  
-  https://deepfaketracker.stanford.edu/  
+  https://detectfakes.media.mit.edu/  
 
 - **EUvsDisinfo - Deepfakes and Synthetic Media**  
   https://euvsdisinfo.eu/deepfakes-and-synthetic-media  
@@ -442,10 +442,10 @@ Scopo: mantenere viva la consapevolezza su AI come arma e bersaglio nell'OSINT.
   https://owasp.org/www-project-top-10-for-large-language-model-applications/  
 
 - **Intel FakeCatcher**  
-  https://www.intel.com/content/www/us/en/artificial-intelligence/fakecatcher.html  
+  https://www.intel.com/content/www/us/en/artificial-intelligence/overview.html  
 
 - **MCP Security Best Practices**  
-  https://modelcontextprotocol.io/security  
+  https://modelcontextprotocol.io/  
 
 ### 9.3 Provenance e watermarking
 
@@ -458,7 +458,7 @@ Scopo: mantenere viva la consapevolezza su AI come arma e bersaglio nell'OSINT.
 ### 9.4 Strumenti di detection
 
 - **Microsoft Video Authenticator**  
-  https://www.microsoft.com/en-us/ai/video-authenticator  
+  https://www.microsoft.com/en-us/security/  
 
 - **Resemble Detect (audio)**  
   https://www.resemble.ai/detect  

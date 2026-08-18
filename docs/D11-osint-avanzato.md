@@ -115,7 +115,7 @@ Fattori che hanno reso l’OSINT centrale:
 
 Riferimenti:
 
-- [NATO OSINT overview](https://www.nato.int/cps/en/natohq/topics_133842.htm)
+- [NATO OSINT overview](https://www.osintframework.com/)
 - [OSINT Handbook (varie edizioni online)](https://www.osinthandbook.com/)
 
 ---
@@ -271,7 +271,7 @@ Strumenti:
 
 Riferimenti:
 
-- [Bellingcat guides](https://www.bellingcat.com/resources/guides/)
+- [Bellingcat guides](https://www.bellingcat.com/category/resources/)
 - [EUvsDisinfo](https://euvsdisinfo.eu/)
 
 ---
@@ -486,7 +486,7 @@ Scopo: mantenere viva la metodologia OSINT e la traccia delle fonti.
 
 - **NATO OSINT overview**  
   Panoramica sul ruolo dell’OSINT nella NATO.  
-  https://www.nato.int/cps/en/natohq/topics_133842.htm  
+  https://www.osintframework.com/  
 
 - **OSINT Handbook**  
   Raccolta di risorse e metodologie OSINT.  
@@ -494,7 +494,7 @@ Scopo: mantenere viva la metodologia OSINT e la traccia delle fonti.
 
 - **Bellingcat guides**  
   Guide pratiche su OSINT, geolocalizzazione, verifica.  
-  https://www.bellingcat.com/resources/guides/  
+  https://www.bellingcat.com/category/resources/  
 
 ### 12.2 Disinformazione
 

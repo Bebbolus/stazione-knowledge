@@ -224,7 +224,7 @@ Entrambe sono spesso usate per:
 
 Riferimenti:
 
-- [t‑SNE e UMAP cheat sheet](https://omkamal.github.io/dimensionalityreduction.html)
+- [t‑SNE e UMAP cheat sheet](https://scikit-learn.org/stable/modules/decomposition.html)
 
 ---
 
@@ -449,6 +449,6 @@ Obiettivo: mantenere un **legame visivo-intuitivo** con clustering e riduzione d
 
 - **t‑SNE e UMAP cheat sheet (implementazioni Python)**  
   Esempi di codice per applicare t‑SNE e UMAP e confrontarne le visualizzazioni.  
-  https://omkamal.github.io/dimensionalityreduction.html  
+  https://scikit-learn.org/stable/modules/decomposition.html  
 
 Queste risorse vanno usate come toolbox: D07 definisce concetti e pattern, i link servono per approfondimenti mirati quando lavorerò su dataset e problemi concreti.
