@@ -107,6 +107,12 @@ In supervised learning conosco i target; in unsupervised, no:
 
 Scikit‑learn implementa k‑means come `KMeans` e `MiniBatchKMeans`.
 
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: K-Means Clustering</p>
+  <p>Premi "Prossimo Passo" per vedere l'algoritmo in azione: prima assegna ogni punto al centroide (X) più vicino, poi sposta i centroidi al centro esatto dei punti appena assegnati. Il ciclo si ripete fino a trovare l'equilibrio.</p>
+  <iframe src="../widgets/kmeans.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
 Punti chiave:
 
 - serve scegliere \(K\)
@@ -197,6 +203,12 @@ Uso:
 - visualizzazione 2D/3D
 
 In scikit‑learn: `sklearn.decomposition.PCA`.
+
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: PCA e Varianza Catturata</p>
+  <p>Uso della PCA intuitivo: muovi lo slider per ruotare l'asse di proiezione. L'obiettivo della PCA è trovare l'angolo che <strong>massimizza la varianza catturata</strong> (cioè i punti rossi proiettati sono più sparpagliati possibile lungo la linea). Premi il bottone per vedere l'algoritmo agganciare matematicamente l'autovettore principale!</p>
+  <iframe src="../widgets/pca.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
 
 Riferimenti:
 
@@ -452,3 +464,8 @@ Obiettivo: mantenere un **legame visivo-intuitivo** con clustering e riduzione d
   https://scikit-learn.org/stable/modules/decomposition.html  
 
 Queste risorse vanno usate come toolbox: D07 definisce concetti e pattern, i link servono per approfondimenti mirati quando lavorerò su dataset e problemi concreti.
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[Explained Visually: PCA](https://setosa.io/ev/principal-component-analysis/)**: **Come usarlo**: usa i controlli 2D e 3D per far ruotare lo spazio e "schiacciare" i punti, vedendo come la varianza (la sparpagliatura) viene preservata o persa.
+- **[How to Use t-SNE Effectively (Distill.pub)](https://distill.pub/2016/misread-tsne/)**: **Come usarlo**: usa gli slider di "Perplexity" per vedere come i cluster si frammentano o si uniscono in base ai parametri, per evitare di prendere le forme dei cluster troppo sul serio.

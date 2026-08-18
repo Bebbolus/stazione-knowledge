@@ -433,3 +433,8 @@ Scopo: tenere salda l’idea che **alberi + ensemble sono strumenti pratici**, n
 
 Queste risorse non vanno studiate per intero: D06 serve a darti una mappa operativa
 per usare alberi ed ensemble in modo sensato, e a collegarti ai testi classici quando serve approfondire.
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[MLU-Explain: Decision Trees](https://mlu-explain.github.io/decision-tree/)**: **Come usarlo**: interagisci con lo scroll per vedere come lo spazio dei dati (2D) viene tagliato ortogonalmente ad ogni split dell'albero.
+- **[MLU-Explain: Random Forest](https://mlu-explain.github.io/random-forest/)**: **Come usarlo**: osserva visivamente il concetto di "bagging" (campionamento) e come alberi diversi creino confini "squadrati" che poi si ammorbidiscono fondendosi insieme.

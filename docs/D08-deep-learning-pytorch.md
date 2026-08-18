@@ -114,7 +114,13 @@ PyTorch costruisce un **grafo computazionale dinamico**:
 
 - ogni operazione su tensori con `requires_grad=True` viene tracciata
 - chiamando `loss.backward()` PyTorch calcola i gradienti rispetto a tutti i parametri
-- gli optimizer usano questi gradienti per aggiornare i pesi
+- gli optimizer usano questi gradienti per aggiornare i pesi (es. `w = w - lr * grad`)
+
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: Discesa del Gradiente</p>
+  <p>Immagina che la funzione sottostante sia la tua Loss calcolata da PyTorch. Usa lo slider per regolare il Learning Rate (α), poi premi "Fai un passo" per vedere come il parametro (la pallina) "scivola" verso il minimo locale sfruttando la pendenza (gradiente) della curva.</p>
+  <iframe src="../widgets/discesa_gradiente.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
 
 Esempio minimale:
 
@@ -501,6 +507,8 @@ Scopo: mantenere fresco il legame tra teoria (gradienti, loss) e pratica (codice
 
 ## 12. Risorse consigliate
 
+- **[3Blue1Brown - Neural Networks (Playlist YouTube)](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi)**: *(Fonte Integrativa / Percorso di studio)*. Serie di video eccezionali da guardare per intero se vuoi avere un'intuizione geometrica profonda su Reti Neurali e Backpropagation prima o durante lo studio di D08.
+
 ### 12.1 PyTorch ufficiale
 
 - **PyTorch Documentation**  
@@ -537,3 +545,7 @@ Scopo: mantenere fresco il legame tra teoria (gradienti, loss) e pratica (codice
 
 Queste risorse non vanno studiate per intero: D08 serve a darti una base operativa
 per usare PyTorch in autonomia e collegarti ai testi/corsi quando serve approfondire.
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[TensorFlow Playground](https://playground.tensorflow.org/)**: **Come usarlo**: qui puoi sbizzarrirti aggiungendo strati nascosti. Scegli il dataset a "spirale", metti la funzione di attivazione ReLU e guarda i neuroni creare confini non lineari complessi.

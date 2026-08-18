@@ -122,6 +122,12 @@ Esempi:
   - precision, recall, F1 (soprattutto con classi sbilanciate)
   - ROC-AUC
 
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: Confine di Decisione (k-NN)</p>
+  <p>Scegli una classe (Blu o Arancio) e aggiungi punti sul piano. Lo sfondo si colorerà in tempo reale per mostrarti il <strong>confine di classificazione</strong> (decision boundary). Il modello (k-NN con k=3) classifica ogni punto dello spazio in base alla maggioranza dei 3 punti reali più vicini.</p>
+  <iframe src="../widgets/classificazione.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
 Modelli classici:
 
 - regressione logistica
@@ -136,6 +142,12 @@ Modelli classici:
   - MSE (Mean Squared Error), RMSE
   - MAE (Mean Absolute Error)
   - R² (coefficient of determination)
+
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: Regressione Lineare e MSE</p>
+  <p>Clicca nell'area sottostante per aggiungere punti. La retta si aggiusterà in tempo reale cercando di minimizzare l'Errore Quadratico Medio (MSE) – ovvero "tirando" il più vicino possibile a ogni punto.</p>
+  <iframe src="../widgets/regressione_lineare.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
 
 Modelli classici:
 
@@ -420,3 +432,8 @@ Scopo: trattenere i concetti **agganciandoli a esperimenti reali**, non solo all
 
 Queste risorse non vanno esaurite tutte: D05 serve a darti una mappa e gli “hook” giusti
 per approfondire in D06 e oltre, senza perdersi in teoria astratta.
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[MLU-Explain: Logistic Regression](https://mlu-explain.github.io/logistic-regression/)**: **Come usarlo**: fai scorrere la pagina (scrollytelling) per vedere fisicamente la retta lineare piegarsi in una curva sigmoide per adattarsi ai dati di classificazione.
+- **[TensorFlow Playground](https://playground.tensorflow.org/)**: **Come usarlo**: per capire la classificazione lineare, azzera gli strati nascosti (hidden layers a 0) e prova a separare il dataset a due blob.

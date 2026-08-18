@@ -1,554 +1,94 @@
-# D01 — Workspace local-first, Git, Obsidian e LLM Wiki
-
-## Meta-modulo D01
-
-**Target**  
-Me stesso oggi, e in futuro chiunque voglia usare un workspace *local-first* per AI / LLM / OSINT
-con Git + Obsidian + wiki-LLM, senza essere DevOps full-time.
-
-**Prerequisiti consigliati**
-
-- uso base di terminale (cd, ls, mkdir, git clone/pull/commit)
-- concetti minimi di Git (commit, branch main, remote)
-- familiarità base con file di testo e Markdown
-- nessuna conoscenza obbligatoria di ML/LLM, ma curiosità per AI e automazione
-
-**Durata indicativa**
-
-- **Modalità minima (~1,5–2 ore)**  
-  - creare la cartella `Stazione/`  
-  - clonare il repo `stazione-knowledge`  
-  - configurare il primo vault Obsidian  
-  - capire a grandi linee il flusso sorgente → nota → lezione
-
-- **Modalità standard (~4 ore)**  
-  - completare struttura cartelle (pubblico/privato/inbox)  
-  - creare AGENTS.md e prime regole di uso degli agenti  
-  - eseguire almeno 1–2 laboratori  
-  - impostare un piano di backup minimo
-
-- **Modalità deep dive (più sessioni)**  
-  - definire in dettaglio ICM e flussi raw → source note → wiki → artefatti  
-  - integrare LLM wiki stile Karpathy  
-  - impostare automazioni (task per agenti, script di sincronizzazione)
-
-**Quando considerare il modulo “completato”**
-
-- esiste la cartella `Stazione/` con sottostruttura chiara
-- il repo `stazione-knowledge` è funzionante (clone locale + remote GitHub)
-- Obsidian può aprire `Stazione/` come vault e mostrare D01
-- ho almeno una nota che segue il flusso:
-  sorgente → distillazione → collegamento nel wiki
-- esiste una bozza di `AGENTS.md` con permessi e limiti per gli agenti
-
 ---
-
-## Perché questo documento
-
-Questo documento definisce il mio *workspace* di studio e lavoro per AI / agenti / OSINT:
-come organizzo i file, dove vive la conoscenza, come tengo tutto sincronizzato
-tra Mac, Windows e mobile, e come preparo il terreno per un wiki mantenuto da LLM.
-
-L’obiettivo è avere:
-
-- una struttura stabile e portabile nel tempo (plain-text + Git)
-- un unico deposito di conoscenza leggibile da Obsidian, da GitHub e da strumenti AI
-- una base pronta per diventare in futuro un vero corso per altre persone
-- un flusso chiaro e auditabile tra sorgenti grezze, note distillate e lezioni stabili
-
+aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale]
 ---
+# Architettura Workspace Local-First (Git, Obsidian, LLM)
 
-## Obiettivi di apprendimento
+Un workspace local-first per knowledge base AI è un'infrastruttura di gestione dell'informazione in cui i dati risiedono fisicamente sulla memoria di massa dell'utente sotto forma di file di testo piano (Markdown), e vengono sincronizzati asincronamente tramite sistemi di controllo di versione (Git). Questa architettura trova applicazione nello sviluppo di ecosistemi di knowledge management, OSINT (Open Source Intelligence) e pipeline RAG (Retrieval-Augmented Generation). L'adozione di questo modello garantisce la persistenza del dato disaccoppiandolo da formati proprietari, permette il versionamento incrementale della conoscenza e abilita l'interazione diretta a livello di file system con Large Language Model (LLM) locali o remoti, aggirando le restrizioni di accesso tipiche dei servizi cloud chiusi.
 
-Dopo questo modulo dovrei essere in grado di:
+## Il Problema del Lock-in e della Frammentazione
 
-- descrivere l’architettura della mia “Stazione” (cartelle, repo, vault, backup)
-- creare e mantenere il repository GitHub pubblico `stazione-knowledge`
-- capire come si incastrano Obsidian (vault locale) e repo GitHub (pubblico)
-- definire il flusso ICM (raw → note → wiki → artefatti) e dove si collocano gli agenti
-- impostare regole base per usare LLM e agenti sulla mia knowledge base senza rovinarla
+Storicamente, la gestione della conoscenza si è appoggiata a piattaforme cloud proprietarie che centralizzano la memorizzazione e l'indicizzazione dei documenti all'interno di database relazionali o NoSQL non direttamente accessibili. Questi sistemi offrono interfacce utente pronte all'uso e risolvono nativamente il problema della sincronizzazione multisede.
 
----
+L'avvento dell'intelligenza artificiale generativa ha evidenziato i limiti strutturali di queste piattaforme. Il testo intrappolato in backend chiusi risulta inaccessibile agli script di automazione locale o agli agenti LLM senza passare per API di rete. Tali API introducono colli di bottiglia legati a limitazioni di traffico, costi per chiamata e instabilità dovuta ai continui mutamenti dei termini di servizio. Inoltre, l'invio sistematico di documenti non processati a server cloud esterni espone l'architettura a vulnerabilità critiche in termini di privacy e sovranità del dato.
 
-## 1. Architettura generale della Stazione
+Nasce quindi l'esigenza di strutturare un deposito di conoscenza che mantenga l'interconnessione ipertestuale dei moderni strumenti di personal knowledge management, ma che esponga la totalità dell'informazione in un formato nativamente digeribile da script e modelli linguistici, senza l'interposizione di intermediari proprietari.
 
-### 1.1 Componenti principali
+La soluzione ingegneristica consiste nell'implementare un'architettura **local-first** debolmente accoppiata. Il sistema combina il file system locale per la persistenza del dato, Git per il tracciamento distribuito delle modifiche, Obsidian come motore per la risoluzione e visualizzazione del grafo dei collegamenti, e agenti AI che operano in lettura e scrittura sui file stessi agendo da elaboratori del linguaggio naturale.
 
-La mia Stazione è composta da quattro elementi:
+## Architettura dei Componenti Modulari
 
-1. **Repo GitHub pubblico** `stazione-knowledge`  
-   raccoglie le lezioni (D01–D16) e alcune note curate, leggibile anche da cellulare.
+Il sistema si fonda su tre livelli funzionali indipendenti. Ognuno di essi comunica esclusivamente leggendo e scrivendo i medesimi file Markdown sulla memoria di massa, eliminando la necessità di database middleware o protocolli di rete interni.
 
-2. **Cartella locale sincronizzata** (SSD / cloud)  
-   contiene il clone del repo pubblico più altri file non pubblici; è la “root” del vault.
+### Il Livello di Memorizzazione (File System e Git)
+Il fondamento dell'infrastruttura è costituito da una singola directory (frequentemente denominata "Stazione"), organizzata ad albero. I nodi informativi sono file testuali puri. Il controllo di versione è interamente delegato a **Git**, che tratta il database di conoscenza al pari di una base di codice sorgente. Questo approccio espone i documenti a operazioni di branching esplorativo, commit incrementali e risoluzione formale dei conflitti, garantendo il backup e la distribuzione tramite repository remoti senza alterare il formato dei file.
 
-3. **Vault Obsidian personale**  
-   punta alla stessa cartella locale, per avere backlink, grafi, query e viste personalizzate.
+### Il Livello di Visualizzazione (Obsidian)
+L'indicizzazione umana è demandata a **Obsidian**, un applicativo client-side che scansiona la directory e costruisce in tempo reale una cache locale dei collegamenti bidirezionali (backlink). Obsidian non maschera i file, né applica codifiche proprietarie o database occulti. Qualsiasi modifica applicata ai file Markdown da processi esterni in background causa un aggiornamento istantaneo del grafo visibile nell'interfaccia.
 
-4. **Strumenti AI / agenti**  
-   leggono i file Markdown e li usano come contesto (modelli locali sul Mac, API cloud ovunque),
-   seguendo regole chiare definite in `AGENTS.md` e nei prompt di sistema.
+### Il Livello di Elaborazione (Agenti AI)
+Le operazioni di sintesi, estrazione e formattazione avvengono tramite **Agenti LLM**, intesi come script o demoni locali. Poiché il formato testuale è l'input nativo per il calcolo dei tensori nei modelli linguistici, gli agenti processano direttamente i file leggendo i path locali, producono il risultato in memoria e lo sovrascrivono su disco. La base di conoscenza agisce simultaneamente da contesto esteso (prompt) e da memoria a lungo termine per l'intelligenza artificiale.
 
-Questa architettura deve funzionare sia su Mac (M4 Max) sia su portatile Windows,
-con la stessa identica struttura di cartelle e file.
+## Pipeline Unidirezionale di Ingestione (ICM)
 
----
+Per evitare l'entropia derivante dall'accumulo caotico di testo, il ciclo di vita dell'informazione (Information Capture and Management) segue un rigido schema di propagazione diviso in quattro domini logici.
 
-### 1.2 Struttura di cartelle di base
+### 1. Livello Raw (Inbox)
+I dati di input (come PDF, dump HTML o log testuali) vengono immagazzinati in uno spazio di **staging** iniziale. I documenti in questo perimetro sono considerati immutabili. Fungono esclusivamente da fonte di verità grezza e non vengono formattati o alterati, garantendo una rigorosa tracciabilità verso le fonti esterne primarie in fase di auditing.
 
-A livello locale (su disco, Mac o Windows):
+### 2. Livello Distillato (Note Private)
+I concetti estratti dal livello grezzo vengono trasferiti in un dominio privato dedicato alla sintesi. La struttura testuale di questo livello è frammentata e ottimizzata per l'elaborazione ad alto volume. Si tratta di annotazioni, sintesi e associazioni logiche ancora in fase di maturazione, che l'operatore o gli script AI generano per condensare il rumore informativo della fonte primaria.
 
-```text
-Stazione/
-├── stazione-knowledge/        # clone del repo GitHub pubblico
-│   ├── README.md
-│   ├── index.md
-│   └── docs/
-│       ├── D01-workspace-llm-wiki.md
-│       ├── D02-python-refresher.md
-│       └── ...
-├── private/                   # note, script, config non pubblici
-│   ├── notes/                 # note di lavoro, journaling, appunti grezzi
-│   ├── code/                  # script, prototipi, tool non destinati al pubblico
-│   └── infra/                 # config, docker-compose, VM, AGENTS.md (se non pubblico)
-└── inbox/                     # materiale grezzo (download, PDF, export da LLM, web clip)
-```
+### 3. Livello Wiki (Conoscenza Consolidata)
+I nodi concettuali stabilizzati migrano in un repository esposto, assumendo la forma di monografie strutturate autoconclusive. Questo dominio rappresenta la **knowledge base** consolidata: è privo di appunti incompleti, rigorosamente tassonomizzato ed è il target finale per l'esportazione verso generatori di siti web statici e l'interrogazione RAG da parte di agenti in produzione.
 
-- `stazione-knowledge/` è ciò che vede il mondo esterno e GitHub.
-- `private/` e `inbox/` restano locali o su un repo separato (anche privato).
-- Obsidian apre **tutta** `Stazione/` come vault, così può navigare sia pubblico che privato.
+### 4. Livello Artefatti
+L'ultima fase del ciclo di vita sfrutta i contenuti consolidati del Wiki per generare output operativi. Script eseguibili, report distribuiti in formato PDF o modelli formali di prompt vengono esportati a partire dalla base di conoscenza, finalizzando l'impiego dei dati.
 
----
+## Accesso e Sicurezza per Operatori Autonomi
 
-## 2. Struttura concettuale: raw → note → wiki → artefatti
+L'integrazione di agenti con capacità di scrittura sul file system espone il sistema al rischio di sovrascritture distruttive o "allucinazioni" persistenti. La mitigazione si implementa definendo un **Manifesto Operativo** testuale (tipicamente `AGENTS.md`) che funge da vincolo direttivo per l'intelligenza artificiale.
 
-### 2.1 I livelli ICM delle note
+### Asimmetria dei Permessi (Read/Write)
+Il manifesto stabilisce rigorose regole di accesso a livello di directory. Agli agenti viene garantito un accesso in sola lettura globale per consentire operazioni di ricerca documentale e l'analisi del grafo semantico. L'autorizzazione di scrittura viene invece confinata a domini temporanei o di elaborazione (es. cartelle isolate del livello Distillato). Nessun agente automatizzato è autorizzato ad alterare autonomamente le monografie stabilizzate nel livello Wiki senza l'approvazione formale umana (human-in-the-loop).
 
-Per non perdere provenance e tenere tutto auditabile,
-il materiale segue questi livelli (in parte ispirati a ICM e wiki‑LLM):
+### Tracciamento e Audit dei Log
+Qualsiasi interazione condotta da agenti locali deve lasciare un rintracciamento ispezionabile. Le alterazioni sui file vengono precedute da un salvataggio in un registro in formato JSONL. In scenari più complessi, le modifiche possono essere confermate su Git tramite commit espliciti assegnati all'identità crittografica del bot, garantendo la possibilità di un ripristino atomico dei file qualora la risposta generata dal modello linguistico si rivelasse errata o distruttiva.
 
-1. **Raw / Sorgenti**  
-   - file originali in `inbox/` (PDF, HTML, esport di chat, ritagli web)
-   - immutabili: non li modifico, solo li aggiungo o elimino
+## Trade-offs Operativi
 
-2. **Note distillate**  
-   - note in `private/notes/` che riassumono e analizzano le sorgenti
-   - includono link alla sorgente, concetti chiave, domande aperte
+L'adozione di un ecosistema local-first introduce attriti architetturali specifici che impattano negativamente determinati scenari di utilizzo rispetto all'adozione di un servizio gestito in cloud.
 
-3. **Wiki / Lezioni stabili**  
-   - file in `stazione-knowledge/docs/` e collegamenti in `index.md`
-   - testo curato, più stabile e “pubblicabile”, usato per corsi, articoli, briefing
+### Risoluzione dei Conflitti e Latenza di Rete
+La natura asincrona di Git e l'uso di file di testo piano implicano che le modifiche simultanee provenienti da nodi differenti generino divergenze strutturali. I database cloud integrano meccanismi CRDT (Conflict-free Replicated Data Type) o Operational Transformation per l'editing concorrente in tempo reale, unendo le modifiche in background. Nel sistema local-first, la risoluzione dei conflitti Git su file Markdown richiede un intervento manuale che interrompe il flusso operativo, introducendo frizione tecnica durante le sessioni di lavoro asincrone.
 
-4. **Artefatti / Output**  
-   - report, slide, script pronti, modelli di agenti, workflow
-   - possono finire in repo dedicati o in sezioni specifiche del vault
+### Limiti di Scala e Ricerche Vettoriali
+La semplicità lineare del file system diventa un collo di bottiglia elaborativo su dataset di grande entità. Interrogare semanticamente migliaia di file in puro Markdown risulta impraticabile in assenza di indici inversi strutturati. Per implementare ricerche ad alta precisione a bassa latenza, è necessario affiancare all'architettura un database vettoriale locale (come ChromaDB o Qdrant). Questo vincolo reintroduce parzialmente la complessità dell'infrastruttura client-server, costringendo il sistema a mantenere processi in background dedicati esclusivamente al ricalcolo degli *embeddings* in risposta a ogni variazione dei file di testo.
 
-Il passaggio è:
+## Riferimenti Bibliografici e Risorse Tecniche
 
-```text
-inbox/ (raw) → private/notes/ (distillato) → stazione-knowledge/docs/ (wiki/lezioni) → deliverable
-```
+La letteratura tecnica relativa alle implementazioni *local-first* e *docs-as-code* fornisce modelli architetturali validati per l'espansione del workspace.
 
-Ogni passaggio aggiunge struttura e riduce rumore.
+### Knowledge Base e Gestione Local-First
+Il saggio di Adam Bray, [A Personal Git Repo as a Knowledge Base Wiki](https://dev.to/adam_b/a-personal-git-repo-as-a-knowledge-base-wiki-j51), documenta l'approccio base all'utilizzo di repository Git come infrastruttura primaria per l'indicizzazione dei file testuali. Modelli operativi simili, incentrati sull'ingegneria *docs-as-code*, sono analizzati da [ingegneri di Alibaba](https://lifetips.alibaba.com/tech-efficiency/personal-knowledge-base-with-markdown-git) e su [Medium](https://marklowg.medium.com/creating-a-personal-knowledgebase-on-github-d1d8bb9222a4), validando la robustezza del formato Markdown. Esempi pratici di repository strutturati sono ispezionabili nei vault pubblici su GitHub, come la [Public Knowledgebase di Exasol](https://github.com/exasol/public-knowledgebase), l'[Obsidian Knowledge Base](https://github.com/sketchbuch/obsidian-knowledge-base) o la [NPKB di Nagi](https://github.com/brklntmhwk/npkb).
 
----
+### Integrazione LLM e Architetture Wiki
+L'estensione dell'architettura verso il mantenimento autonomo dei contenuti è esplorata in repository specializzati come il [Karpathy-style LLM wiki per Obsidian](https://github.com/shannhk/llm-wikid), che offre template e workflow per wiki persistenti gestite da LLM. Similmente, il documento [LLM-KB — LLM Knowledge Base con Obsidian](https://ocholuo.github.io/posts/LLM-KnowledgeBase-Obsidian/) espone le differenze architetturali tra la mera implementazione RAG e la persistenza proattiva del dato su file system locale operata da agenti AI.
 
-### 2.2 Mappare questa struttura nel vault Obsidian
+### Fondamenti Accademici (Machine Learning e NLP)
+Per la comprensione dei meccanismi di base dei modelli linguistici che operano sul formato testuale, i corsi della Stanford University rappresentano i vertici accademici. Il corso [CS229 - Machine Learning](https://cs229.stanford.edu/) (disponibile anche [online](https://online.stanford.edu/courses/cs229-machine-learning)) fornisce le basi matematiche, mentre il corso [CS224N - Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/) (archivio [lezioni online](https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning)) disseziona l'architettura dei transformer e i meccanismi di estrazione semantica applicabili al contenuto testuale del vault.
 
-Nel vault Obsidian posso modellare questa logica in modo leggermente diverso,
-mantenendo la tua preferenza per una struttura piatta con cartelle “Sistema” e “Analisi”:
+## Appendice Operativa: Laboratori di Implementazione
 
-- **Sistema**  
-  - note su architettura, workflow, regole, AGENTS.md, documentazione del sistema stesso  
-  - include la descrizione di come funziona la Stazione, di fatto “manuale d’uso”
+La validazione dell'architettura si ottiene tramite l'esecuzione sequenziale di quattro laboratori di configurazione. L'obiettivo è istanziare i componenti del sistema e definire le barriere di accesso.
 
-- **Analisi**  
-  - note di contenuto (OSINT, AI, agenti, geopolitica, ecc.)
-  - qui finiscono le note distillate e i draft che, se maturi, diventano lezioni Dxx pubbliche
+### Laboratorio 1: Inizializzazione della Stazione Base
+Il primo step richiede l'allocazione della directory di lavoro (la *Stazione*) nel file system locale e l'inizializzazione del repository Git principale. L'operatore struttura l'albero delle directory creando i domini logici separati, istanziando la cartella di *staging* (Inbox) e lo spazio privato, per poi verificare l'integrità dei percorsi aprendo il file di configurazione (index) dal proprio editor.
 
-Fisicamente, posso far corrispondere:
+### Laboratorio 2: Risoluzione del Grafo tramite Obsidian
+L'indicizzazione client-side viene verificata avviando Obsidian e puntando il vault direttamente alla root della Stazione. L'operatore si assicura che il software riconosca correttamente l'albero delle directory senza alterare il formato dei file, e testa l'inserimento di metadati YAML o annotazioni per validare la fluidità dell'interfaccia nel riflettere i cambiamenti su disco.
 
-- `stazione-knowledge/docs/` ↔ sottoinsieme delle note “stabili” che vivono anche sul repo
-- `private/notes/` ↔ bozze, appunti, log giornalieri, analisi non ancora promosse
+### Laboratorio 3: Validazione della Pipeline ICM
+Il flusso unidirezionale dei dati viene testato importando un documento grezzo reale (es. un articolo OSINT) all'interno del dominio Inbox. Successivamente, l'operatore genera una nota distillata nel dominio privato estraendone i concetti critici, e conclude il test inserendo un backlink verificato verso una monografia pubblica, validando così la progressione dell'informazione attraverso i tre livelli architetturali.
 
----
-
-## 3. Repo GitHub `stazione-knowledge`
-
-### 3.1 Scopo del repo
-
-Il repository pubblico `stazione-knowledge` serve per:
-
-- raccogliere le **lezioni** del mio percorso (D01–D16) in formato Markdown
-- dare una **mappa leggibile** (`index.md`) del percorso e dei livelli (Fondamenti / Operativo / Avanzato / Specialistico)
-- permettermi di leggere e ripassare le lezioni da qualunque dispositivo (desktop, laptop, smartphone)
-- offrire in futuro una base per un corso pubblico, senza esporre materiale sensibile
-
-Non contiene:
-
-- dati sensibili o indagini reali
-- appunti troppo grezzi o personali
-- configurazioni con credenziali o segreti
-
----
-
-### 3.2 Struttura del repo
-
-Richiamo la struttura base:
-
-```text
-stazione-knowledge/
-├── README.md       # descrizione generale del progetto
-├── index.md        # mappa del percorso e tabella D01–D16
-└── docs/
-    ├── D01-workspace-llm-wiki.md
-    ├── D02-python-refresher.md
-    ├── D03-...md
-    └── ...
-```
-
-Caratteristiche:
-
-- ogni `Dxx-...md` è una *lezione autonoma*, con:
-  - titolo chiaro
-  - obiettivi
-  - sezioni leggibili anche su schermo piccolo
-  - link ad altre lezioni e risorse esterne
-- `index.md` è la *home page* (GitHub Pages) con:
-  - spiegazione dei livelli (Fondamenti, Operativo, Avanzato, Specialistico)
-  - tabella D01–D16 → livello → file
-
----
-
-### 3.3 Lettura come sito (GitHub Pages)
-
-Abilitando GitHub Pages:
-
-- `index.md` diventa la home di un sito statico  
-- i link a `docs/Dxx-...md` diventano pagine navigabili
-- da mobile posso leggere le lezioni come se fossero un piccolo libro tecnico
-
-Questo modulo non richiede di configurare un generatore statico complesso:
-Markdown puro + GitHub Pages basta come primo step.
-
----
-
-## 4. Vault Obsidian e vista personale
-
-### 4.1 Obsidian come “vista privata” sulla stessa knowledge
-
-Il vault Obsidian punta alla cartella `Stazione/`:
-
-- vede il clone del repo `stazione-knowledge/`
-- vede anche `private/` e `inbox/`
-
-Vantaggi:
-
-- posso avere backlink e grafi tra note private e lezioni Dxx
-- posso usare proprietà/frontmatter per classificare note e lezioni
-- posso creare viste (Dataview, query, dashboard) per seguire il progresso e le relazioni
-
-### 4.2 Convenzioni per le note (nome, proprietà)
-
-Per tenere ordine:
-
-- **lezione pubblica** → file in `stazione-knowledge/docs/`  
-- **nota privata di lavoro** su quella lezione → file in `private/notes/`, con link a `Dxx-...md`
-- **materiale grezzo** → file in `inbox/` + link dalle note
-
-Esempio di proprietà che posso usare in Obsidian:
-
-```yaml
-***
-tipo: lezione
-codice: D01
-livello: fondamenti
-stato: stabile
-tags:
-  - workspace
-  - obsidian
-  - git
-***
-```
-
-Per note private:
-
-```yaml
-***
-tipo: nota
-relazione:
-  - D01
-stato: bozza
-***
-```
-
----
-
-## 5. LLM wiki e agenti: come si inseriscono
-
-### 5.1 LLM wiki stile Karpathy
-
-L’idea di LLM wiki è:
-
-- LLM + agenti non rispondono solo “al volo”, ma aggiornano un wiki persistente
-- le risposte sostanziali diventano nuove pagine o aggiornano pagine esistenti
-- la knowledge base *compone* nel tempo invece di restare effimera
-
-Nel mio caso:
-
-- layer “Raw” = `inbox/`
-- layer “Wiki” = `stazione-knowledge/docs/` + eventuali pagine wiki in altre cartelle
-- layer “Schema” = documenti come D01, AGENTS.md, CLAUDE.md/SCHEMA.md che spiegano struttura e regole
-
-Lo scopo di D01 è definire il *schema* e i confini,
-in modo che in moduli successivi possa collegare un agente wiki a questo vault
-senza perdere controllo.
-
-### 5.2 AGENTS.md e permessi
-
-`AGENTS.md` (pubblico o in `private/infra/`) descrive:
-
-- quali agenti esistono (es. `@curator`, `@auditor`, `@devil`, `@sherman`)
-- quali cartelle possono leggere e/o scrivere
-- quali operazioni devono sempre lasciare log
-
-Esempio di convenzioni:
-
-- agenti **leggono**:
-  - sempre `stazione-knowledge/docs/` (wiki/lezioni)
-  - opzionalmente `private/notes/` per lavoro personale
-- agenti **scrivono**:
-  - solo in cartelle specifiche (es. `private/notes_agent/` o `private/drafts/`)
-  - mai direttamente in `stazione-knowledge/docs/` senza review umana
-
----
-
-## 6. Backup, sicurezza, privacy
-
-### 6.1 Backup
-
-Minimo indispensabile:
-
-- `Stazione/` sincronizzata su:
-  - SSD esterno o NAS
-  - servizio cloud (GitHub per repo pubblico, altro per privato)
-
-- per il repo pubblico:
-  - Git è già un backup incrementale
-  - eventuali tag o release per milestone importanti
-
-### 6.2 Privacy e separazione
-
-Anche se qui non tratto dati classificati:
-
-- distinguo chiaramente fra:
-  - contenuti pubblicabili (lezioni, schemi, materiali didattici)
-  - contenuti sensibili (casi studio reali, dati di terzi, log di lavoro)
-- tutto ciò che non deve mai uscire va in:
-  - repo privati
-  - `private/` non sincronizzato su servizi esterni che non controllo
-
----
-
-## 7. Workflow quotidiano (bozza)
-
-Un flusso minimo di lavoro:
-
-1. **Quando trovo materiale interessante**  
-   - lo salvo in `inbox/` (PDF, MD con link, ritaglio web)
-
-2. **Quando studio o distillo**  
-   - creo/aggiorno una nota in `private/notes/` con sintesi, concetti chiave, domande
-   - se il contenuto è “modello” (riutilizzabile), creo/aggiorno una lezione Dxx in `docs/`
-
-3. **Quando faccio un passo significativo**  
-   - `git add`, `git commit`, `git push` nel repo `stazione-knowledge`
-   - opzionale: commit separati per note private in un repo dedicato
-
-4. **Periodicamente**  
-   - rivedo `index.md` per vedere dove mancano lezioni
-   - aggiorno la tabella D01–D16 con titoli e livelli più accurati
-   - aggiorno `AGENTS.md` se il modo di usare agenti/LLM cambia
-
----
-
-## 8. Laboratori ed esercizi
-
-### Laboratorio 1 — Creare la Stazione base
-
-**Obiettivo:** avere la struttura di cartelle e il repo Git pronti su una macchina (Mac o Windows).
-
-**Passi:**
-
-1. Creare la cartella `Stazione/` in una posizione comoda (home o SSD esterno).
-2. Clonare il repo `stazione-knowledge` dentro `Stazione/`.
-3. Creare `private/` e `inbox/` accanto a `stazione-knowledge/`.
-4. Aprire `README.md` e `index.md` dal filesystem locale, verificare i link alle lezioni.
-
-**Deliverable:**
-
-- screenshot o nota che descrive dove si trova `Stazione/` e come è strutturata.
-
----
-
-### Laboratorio 2 — Primo vault Obsidian
-
-**Obiettivo:** vedere la knowledge base dal punto di vista di Obsidian.
-
-**Passi:**
-
-1. Aprire Obsidian e creare/aprire un vault puntando alla cartella `Stazione/`.
-2. Verificare che `stazione-knowledge/`, `private/` e `inbox/` compaiano nella vista file.
-3. Aprire `docs/D01-workspace-llm-wiki.md` da Obsidian e aggiungere un piccolo commento personale
-   (es. una sezione “Note personali” in fondo, anche se non verrà pubblicata).
-
-**Deliverable:**
-
-- screenshot della vista dei file Obsidian con la struttura `Stazione/`;
-- breve nota in `private/notes/` che descrive l’impressione sull’uso di Obsidian con il repo.
-
----
-
-### Laboratorio 3 — Primo flusso ICM: da sorgente a nota wiki
-
-**Obiettivo:** esercitarsi nel flusso “sorgente → distillazione → wiki” usando una singola fonte reale.
-
-**Passi:**
-
-1. Scegliere un articolo, video o documento OSINT/AI e salvarlo in `inbox/`
-   (es. file PDF o `.md` con link).
-2. Creare una nota distillata in `private/notes/` che riassume i concetti chiave,
-   include link alla sorgente e annota eventuali dubbi.
-3. Aggiungere un riferimento nel repo pubblico:
-   - per esempio una riga in una sezione “Letture consigliate” di una lezione Dxx,
-     descrivendo in 2–3 frasi cosa aggiunge quella fonte al percorso.
-
-**Deliverable:**
-
-- file sorgente in `inbox/`;
-- nota distillata in `private/notes/`;
-- aggiornamento in una lezione Dxx che punta alla nota o alla sorgente.
-
----
-
-### Laboratorio 4 — Definire AGENTS.md e regole di base
-
-**Obiettivo:** preparare il terreno per agenti/LLM che lavorano sul vault senza creare caos.
-
-**Passi:**
-
-1. Creare un file `AGENTS.md` (nel repo pubblico o in `private/infra/`) con:
-   - elenco dei tipi di agenti che intendo usare (es. `@curator`, `@auditor`, `@devil`, `@sherman`);
-   - permessi e limiti (cosa possono leggere, cosa possono scrivere, dove non toccano nulla).
-2. Aggiungere almeno 3–5 regole chiare per proteggere il vault, per esempio:
-   - “gli agenti non modificano mai i file in `stazione-knowledge/docs/` direttamente”;
-   - “le modifiche passano prima da `private/notes/` o `private/drafts/` e poi, se verificate, vengono promosse”;
-   - “ogni esecuzione di un agente deve lasciare un log minimal in una nota dedicata o in un file JSONL”.
-
-**Deliverable:**
-
-- file `AGENTS.md` con una prima bozza di policy;
-- eventuale nota in `private/notes/` che documenta come usare questi agenti nei moduli successivi.
-
----
-
-## 9. Rubriche e checklist
-
-### Checklist — Setup D01 completo
-
-- [ ] Esiste la cartella `Stazione/` con:
-  - [ ] `stazione-knowledge/` (repo clonato e funzionante)
-  - [ ] `private/` (note e codice non pubblici)
-  - [ ] `inbox/` (materiale grezzo)
-- [ ] Posso aprire il vault Obsidian puntando a `Stazione/` senza errori.
-- [ ] Riesco a leggere D01 sia da Obsidian sia da GitHub / GitHub Pages.
-- [ ] Ho creato almeno una nota distillata a partire da una sorgente reale.
-- [ ] Esiste un file `AGENTS.md` con permessi/limiti anche se abbozzati.
-- [ ] Ho deciso dove verranno salvati i backup (cloud / disco esterno / altro) e l’ho annotato.
-
-### Errori tipici da evitare
-
-- usare Google Drive o altro cloud come **unica** fonte della verità, senza clone locale;
-- mischiare materiale grezzo (`inbox/`) con note distillate e lezioni (stesso posto, nessuna distinzione);
-- lasciare agenti/LLM liberi di modificare qualsiasi file senza policy o log;
-- non versionare il repo `stazione-knowledge` (nessun commit/push) e perdere lo storico di modifiche;
-- configurare solo una macchina (es. solo Mac) e rendere difficile ripartire da un’altra (es. portatile Windows).
-
-### Segnali che “ho davvero capito” D01
-
-- se si rompe un computer, so esattamente come ripristinare la Stazione altrove;
-- so spiegare a voce a un collega come funziona il flusso
-  “sorgente → distillazione → nota wiki → uso da parte di agenti”;
-- so distinguere chiaramente tra:
-  - sorgenti grezze,
-  - note distillate,
-  - lezioni stabili nel repo pubblico;
-- so dire quali cartelle gli agenti possono toccare e quali no.
-
----
-
-## 10. Come ripartire dopo una pausa
-
-Se torno su D01 dopo giorni o settimane:
-
-1. Apro `index.md` del repo `stazione-knowledge` su GitHub o Obsidian.
-2. Controllo la checklist “Setup D01 completo” e marco cosa è già fatto.
-3. Scelgo **un solo laboratorio breve** (1 o 2) e lo completo in una sessione da 25–40 minuti.
-4. Aggiorno `AGENTS.md` o una nota in `private/notes/` con:
-   - cosa ho fatto oggi
-   - cosa vorrei fare alla prossima sessione.
-
-L’obiettivo non è “finire tutto D01 in una volta”, ma **ricostruire il contesto** rapidamente
-e lasciare tracce chiare per il “me del futuro”.
-
----
-
-## 11. Risorse consigliate
-
-### 11.1 Workspace, second brain e knowledge base
-
-- Adam Bray — *A Personal Git Repo as a Knowledge Base Wiki*  
-  Idea di usare un singolo repo Git come wiki personale in Markdown.  
-  https://dev.to/adam_b/a-personal-git-repo-as-a-knowledge-base-wiki-j51
-
-- Articoli su personal knowledge base con Markdown + Git  
-  Approcci “docs as code” per knowledge base personali.  
-  https://lifetips.alibaba.com/tech-efficiency/personal-knowledge-base-with-markdown-git  
-  https://marklowg.medium.com/creating-a-personal-knowledgebase-on-github-d1d8bb9222a4
-
-- Esempi di knowledge base pubblica in Markdown su GitHub  
-  https://github.com/exasol/public-knowledgebase  
-  https://github.com/sketchbuch/obsidian-knowledge-base
-
-- Nagi’s Personal Knowledge Base (Obsidian vault pubblica)  
-  Esempio di vault Obsidian usato come knowledge base personale versionata con Git.  
-  https://github.com/brklntmhwk/npkb
-
-### 11.2 Obsidian, LLM wiki e second brain AI
-
-- Karpathy-style LLM wiki per Obsidian  
-  Template di vault e workflow per wiki mantenuta da LLM.  
-  https://github.com/shannhk/llm-wikid
-
-- LLM-KB — LLM Knowledge Base con Obsidian  
-  Architettura “LLM mantiene un wiki persistente” invece di RAG puro.  
-  https://ocholuo.github.io/posts/LLM-KnowledgeBase-Obsidian/
-
-- Articoli su knowledge base machine-readable con Obsidian  
-  Esempi di uso di frontmatter e strutture per rendere la knowledge base leggibile da agenti.
-
-### 11.3 Corsi universitari di riferimento (ML / NLP) da usare più avanti
-
-Queste risorse non si studiano in D01, ma le collego già qui
-come ancore per moduli successivi (D04, D07, D09).
-
-- Stanford CS229 — Machine Learning  
-  Sito corso: https://cs229.stanford.edu/  
-  Syllabus: https://cs229.stanford.edu/syllabus-new.html  
-  Versione online: https://online.stanford.edu/courses/cs229-machine-learning
-
-- Stanford CS224N — Natural Language Processing with Deep Learning  
-  Sito corso: https://web.stanford.edu/class/cs224n/  
-  Archivio recente: https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/  
-  Versione online:  
-  https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning
+### Laboratorio 4: Stesura del Manifesto Operativo
+La sicurezza del vault viene implementata redigendo il file strutturale `AGENTS.md`. L'operatore definisce all'interno del file l'anagrafica degli agenti autorizzati (es. *curator*, *auditor*), codificandone i limiti operativi. Vengono esplicitate le regole per prevenire la mutazione diretta del livello Wiki e viene istituito l'obbligo di tracciamento di ogni alterazione generata artificialmente.

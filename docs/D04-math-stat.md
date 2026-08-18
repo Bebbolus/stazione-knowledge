@@ -528,3 +528,8 @@ Queste risorse riprendono in pieno i prerequisiti matematici di D04:
   Archivio recente: https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/  
   Versione online:  
   https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[Seeing Theory: Basic Probability](https://seeing-theory.brown.edu/basic-probability/index.html)**: Ottimo per visualizzare concetti base di probabilità. **Come usarlo**: gioca con il lancio della moneta o dei dadi interattivi per "vedere" la legge dei grandi numeri formare le distribuzioni.
+- **[Explained Visually: Markov Chains](https://setosa.io/ev/markov-chains/)**: **Come usarlo**: osserva le "palline" (probabilità) fluire tra gli stati; puoi modificare la matrice di transizione e vedere il sistema assestarsi in tempo reale.

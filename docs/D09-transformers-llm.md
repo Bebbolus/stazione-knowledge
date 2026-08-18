@@ -162,6 +162,12 @@ Idea di base:
 - per ogni token, calcolo quanto “prestare attenzione” a ciascun altro token
 - ottengo una rappresentazione contestuale che dipende da tutta la sequenza
 
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: Self-Attention</p>
+  <p>Passa il mouse sopra ogni parola della frase per vedere i <strong>pesi di attenzione</strong>. Una parola (la <em>Query</em>) cerca informazioni in altre parole (le <em>Key</em>) per disambiguare il proprio significato, e "assorbe" i loro valori (<em>Value</em>). Nota come il pronome "esso" debba guardare a "robot" per essere decodificato correttamente.</p>
+  <iframe src="../widgets/attention.html" style="width: 100%; height: 500px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
 Formula semplificata (scaled dot-product attention):
 
 \[
@@ -531,3 +537,8 @@ Scopo: mantenere fresco il legame tra teoria (transformer, tokenizzazione) e pra
 
 Queste risorse non vanno studiate per intero: D09 serve a darti una mappa operativa
 per usare transformer e LLM in modo consapevole, e a collegarti a paper/corsi quando serve approfondire.
+
+
+### Strumenti Visivi e Animazioni Esterne (Web)
+- **[LLM Visualization (bbycroft.net)](https://bbycroft.net/llm)**: **Come usarlo**: il "pezzo forte". Ti mostra un Transformer intero in 3D. Clicca su un token di input e naviga attraverso i blocchi di Attention per vedere letteralmente le matrici Q, K, V popolarsi di numeri reali.
+- **[The Illustrated Transformer (Jay Alammar)](https://jalammar.github.io/illustrated-transformer/)**: **Come usarlo**: scorri lentamente le GIF della Self-Attention matrix; fermati dove le matrici si moltiplicano per formare il punteggio e confrontalo con il widget che abbiamo creato per vedere la formula in azione.

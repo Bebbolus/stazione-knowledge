@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCA - Principal Component Analysis</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 15px;
+            background: #f0efec;
+            padding: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background-color: #184f95;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            flex: 1;
+        }
+        button:hover {
+            background-color: #032042;
+        }
+        input[type=range] {
+            flex: 1;
+            margin: 0 15px;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6d6b67;
+        }
+        .stats {
+            font-family: "JetBrains Mono", monospace, sans-serif;
+            font-size: 15px;
+            font-weight: bold;
+            color: #184f95;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>Riduzione dimensionale (PCA):</strong> Usa lo slider per ruotare l'asse di proiezione. La PCA cerca l'asse che <strong>massimizza la varianza</strong> dei dati (cioè li sparpaglia il più possibile lungo la linea).
+    </div>
+    
+    <canvas id="plot" width="500" height="400"></canvas>
+    
+    <div class="controls">
+        <div class="row">
+            <label for="angleSlider">Angolo:</label>
+            <input type="range" id="angleSlider" min="0" max="180" step="1" value="45">
+            <span id="angleVal" style="width: 40px; text-align: right;">45°</span>
+        </div>
+        <div class="stats">
+            Varianza catturata: <span id="varVal">0.00</span>
+        </div>
+        <div class="row" style="margin-top: 5px;">
+            <button id="findPcaBtn">Trova la Componente Principale (Max Varianza)</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('plot');
+    const ctx = canvas.getContext('2d');
+    const slider = document.getElementById('angleSlider');
+    const angleVal = document.getElementById('angleVal');
+    const varVal = document.getElementById('varVal');
+    const findPcaBtn = document.getElementById('findPcaBtn');
+    
+    let points = [];
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    let angle = parseFloat(slider.value) * Math.PI / 180;
+    
+    // Generate an elongated blob of points
+    function init() {
+        points = [];
+        // True PCA angle around 30 degrees
+        const trueAngle = 30 * Math.PI / 180;
+        const cosA = Math.cos(trueAngle);
+        const sinA = Math.sin(trueAngle);
+        
+        for (let i = 0; i < 100; i++) {
+            // Elongated ellipse
+            let u = (Math.random() - 0.5) * 300; // wide spread
+            let v = (Math.random() - 0.5) * 60;  // narrow spread
+            
+            // Rotate by trueAngle
+            let x = u * cosA - v * sinA;
+            let y = u * sinA + v * cosA;
+            
+            points.push({ x: cx + x, y: cy + y });
+        }
+        draw();
+    }
+    
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw axis
+        const axisLength = 400;
+        const dx = Math.cos(angle) * axisLength;
+        const dy = Math.sin(angle) * axisLength; // invert y for visual? Actually standard canvas y is down.
+        
+        ctx.strokeStyle = '#d97757';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(cx - dx, cy - dy);
+        ctx.lineTo(cx + dx, cy + dy);
+        ctx.stroke();
+        
+        // Direction vector of the line
+        const ux = Math.cos(angle);
+        const uy = Math.sin(angle);
+        
+        let projections = [];
+        let meanP = 0;
+        
+        // Draw projections
+        ctx.strokeStyle = 'rgba(137, 135, 129, 0.4)';
+        ctx.lineWidth = 1;
+        
+        for (let p of points) {
+            // Vector from center to point
+            let vx = p.x - cx;
+            let vy = p.y - cy;
+            // Dot product gives scalar projection
+            let scalar = vx * ux + vy * uy;
+            projections.push(scalar);
+            meanP += scalar;
+            
+            // Projected point coordinates
+            let px = cx + scalar * ux;
+            let py = cy + scalar * uy;
+            
+            // Draw perpendicular line
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(px, py);
+            ctx.stroke();
+            
+            // Draw projected point
+            ctx.fillStyle = '#d97757';
+            ctx.beginPath();
+            ctx.arc(px, py, 3, 0, 2*Math.PI);
+            ctx.fill();
+            
+            // Draw original point
+            ctx.fillStyle = '#184f95';
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 4, 0, 2*Math.PI);
+            ctx.fill();
+        }
+        
+        // Calculate variance of projections
+        meanP /= points.length;
+        let variance = 0;
+        for (let s of projections) {
+            variance += (s - meanP) ** 2;
+        }
+        variance /= points.length;
+        
+        varVal.innerText = (variance / 100).toFixed(2); // scaled for readability
+        angleVal.innerText = slider.value + "°";
+    }
+    
+    slider.addEventListener('input', (e) => {
+        angle = parseFloat(e.target.value) * Math.PI / 180;
+        draw();
+    });
+    
+    findPcaBtn.addEventListener('click', () => {
+        // Simple scan to find max variance angle
+        let maxVar = -1;
+        let bestDeg = 0;
+        
+        for (let deg = 0; deg <= 180; deg++) {
+            let a = deg * Math.PI / 180;
+            let ux = Math.cos(a);
+            let uy = Math.sin(a);
+            let mean = 0;
+            let proj = [];
+            for (let p of points) {
+                let scalar = (p.x - cx) * ux + (p.y - cy) * uy;
+                proj.push(scalar);
+                mean += scalar;
+            }
+            mean /= points.length;
+            let v = 0;
+            for (let s of proj) {
+                v += (s - mean) ** 2;
+            }
+            if (v > maxVar) {
+                maxVar = v;
+                bestDeg = deg;
+            }
+        }
+        
+        // Animate slider to bestDeg
+        let currentDeg = parseInt(slider.value);
+        let stepDir = bestDeg > currentDeg ? 1 : -1;
+        let diff = Math.abs(bestDeg - currentDeg);
+        if (diff > 90) { // take shortest path wrapping around 180
+            stepDir *= -1;
+        }
+        
+        let interval = setInterval(() => {
+            if (currentDeg === bestDeg) {
+                clearInterval(interval);
+                return;
+            }
+            currentDeg += stepDir;
+            if (currentDeg > 180) currentDeg -= 180;
+            if (currentDeg < 0) currentDeg += 180;
+            
+            slider.value = currentDeg;
+            angle = currentDeg * Math.PI / 180;
+            draw();
+        }, 15);
+    });
+    
+    init();
+</script>
+
+</body>
+</html>

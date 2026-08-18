@@ -8,8 +8,8 @@ a quale livello appartiene ciascun modulo.
 
 Per organizzare il percorso uso quattro livelli:
 
-- **Fondamenti** – basi di AI, OSINT, informatica, second brain, sicurezza personale.
-- **Operativo** – competenze pratiche necessarie per lavorare davvero (Python, strumenti, workflow, OPSEC di base).
+- **Fondamenti** – basi informatiche, second brain, programmazione (Python), matematica e data foundations.
+- **Operativo** – competenze pratiche e applicative per lavorare davvero (fondamenti di Machine Learning, modelli classici e non supervisionati).
 - **Avanzato** – tecniche e infrastrutture più profonde (RAG, agenti, orchestrazione, infrastruttura locale/cloud).
 - **Specialistico** – moduli à la carte su discipline OSINT, attacchi agli LLM, OPSEC avanzata, governance, ecc.
 
