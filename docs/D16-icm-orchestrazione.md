@@ -182,3 +182,272 @@ Vantaggi:
 ### 5.1 Principi generali
 
 - **chiarezza**: messaggio principale evidente
+- **brevità**: solo informazioni rilevanti
+- **struttura**: introduzione, corpo, conclusioni, raccomandazioni
+- **fonti**: tracciare fonti e limiti
+- **adattamento**: diversi formati per diversi stakeholder
+
+### 5.2 Report
+
+- documento strutturato (Markdown, PDF)
+- sezioni tipiche:
+  - executive summary
+  - contesto e obiettivi
+  - metodologia e fonti
+  - analisi e evidenze
+  - conclusioni e raccomandazioni
+  - appendici (dettagli tecnici, fonti)
+
+### 5.3 Briefing
+
+- documento più breve (1–2 pagine)
+- focalizzato su:
+  - cosa è successo
+  - perché è rilevante
+  - cosa fare (opzionale)
+
+### 5.4 Dashboard
+
+- visualizzazione interattiva (grafici, mappe, timeline)
+- utile per:
+  - monitoring continuo
+  - esplorazione dati
+  - supporto a decisioni
+
+Strumenti:
+
+- Obsidian (note, grafi)
+- Streamlit, Dash (dashboard Python)
+- Power BI, Tableau (business intelligence)
+
+---
+
+## 6. Integrazione con knowledge base (documenti, grafi)
+
+### 6.1 Knowledge base come sorgente
+
+- documenti (vector DB) per RAG
+- grafi (Neo4j) per relazioni ed eventi
+- note (Obsidian) per analisi e scenari
+
+### 6.2 Flusso integrato
+
+1. agente legge `CONTEXT.md` (task, fonti)
+2. usa RAG per recuperare documenti rilevanti
+3. interroga grafo per relazioni ed eventi
+4. analizza e correla informazioni
+5. scrive `STATE.md` e `LOG.md`
+6. produce `REPORT.md` con fonti e limiti
+
+---
+
+## 7. Feedback loop e miglioramento continuo
+
+### 7.1 Raccolta feedback
+
+- da stakeholder:
+  - utilità del report
+  - chiarezza, completezza
+  - azioni intraprese (se applicabile)
+
+- da analisti/agenti:
+  - problemi nel flusso (raccolta, analisi, report)
+  - suggerimenti per migliorare
+
+### 7.2 Uso del feedback
+
+- aggiornare `CONTEXT.md` per task futuri
+- migliorare istruzioni agenti (`AGENTS.md`)
+- arricchire knowledge base (nuovi documenti, relazioni)
+- affinare metriche di valutazione (qualità report, tempi, errori)
+
+### 7.3 Metriche di successo
+
+- **qualità**: accuratezza, completezza, chiarezza
+- **tempi**: dalla richiesta al report
+- **impatto**: decisioni prese, azioni intraprese
+- **soddisfazione**: feedback stakeholder
+
+---
+
+## 8. Laboratori ed esercizi
+
+### Laboratorio 1 — Progettare flusso ICM end-to-end
+
+**Obiettivo:** progettare un flusso ICM per un caso reale.
+
+**Passi:**
+
+1. Scegliere un caso (geopolitica, cyber threat, business intelligence).
+2. Definire task e obiettivi in `CONTEXT.md`.
+3. Progettare flusso:
+   - raccolta (fonti, RAG, grafi)
+   - analisi (correlazione, valutazione)
+   - report (formato, stakeholder)
+4. Definire `STATE.md` e `LOG.md` per tracciamento.
+5. Annotare:
+   - punti critici del flusso
+   - rischi (fonti, bias, sicurezza)
+
+**Deliverable:**
+
+- documenti `CONTEXT.md`, `STATE.md`, `LOG.md` (bozza)
+- nota con osservazioni
+
+---
+
+### Laboratorio 2 — Orchestrazione con agenti
+
+**Obiettivo:** orchestrare agenti per un flusso ICM.
+
+**Passi:**
+
+1. Usare agenti specializzati (raccoglitore, analista, redattore, verificatore).
+2. Configurare MCP (cartelle, file).
+3. Eseguire flusso:
+   - raccolta → analisi → report
+4. Tracciare azioni in `LOG.md`.
+5. Annotare:
+   - coordinamento tra agenti
+   - errori o ridondanze
+
+**Deliverable:**
+
+- log esecuzioni agenti
+- nota con osservazioni su orchestrazione
+
+---
+
+### Laboratorio 3 — Produzione report e briefing
+
+**Obiettivo:** produrre report e briefing per stakeholder.
+
+**Passi:**
+
+1. Usare analisi da laboratorio 1 o 2.
+2. Produrre:
+   - report completo (Markdown/PDF)
+   - briefing sintetico (1–2 pagine)
+3. Adattare formato per diversi stakeholder (executive, tecnici, operativi).
+4. Includere:
+   - evidenze
+   - fonti
+   - limiti
+   - raccomandazioni (opzionale)
+5. Annotare:
+   - feedback (simulato o reale)
+   - miglioramenti possibili
+
+**Deliverable:**
+
+- report e briefing
+- nota con feedback e miglioramenti
+
+---
+
+### Laboratorio 4 — Feedback loop e miglioramento
+
+**Obiettivo:** usare feedback per migliorare flussi.
+
+**Passi:**
+
+1. Raccogliere feedback su report/briefing (simulato o reale).
+2. Identificare aree di miglioramento:
+   - qualità analisi
+   - chiarezza comunicazione
+   - tempi di esecuzione
+3. Aggiornare:
+   - `CONTEXT.md` per task futuri
+   - `AGENTS.md` per istruzioni agenti
+   - knowledge base (nuovi documenti, relazioni)
+4. Annotare:
+   - cambiamenti apportati
+   - impatto atteso
+
+**Deliverable:**
+
+- documenti aggiornati (`CONTEXT.md`, `AGENTS.md`, ecc.)
+- nota con cambiamenti e rationale
+
+---
+
+## 9. Rubriche e checklist
+
+### Checklist — D16 completato
+
+- [ ] So descrivere ICM e il suo ruolo nell’orchestrazione di flussi analitici.
+- [ ] Ho progettato un flusso end-to-end per un caso OSINT/analisi.
+- [ ] So produrre report e briefing efficaci per diversi stakeholder.
+- [ ] Ho orchestrato agenti per un flusso ICM completo.
+- [ ] So usare feedback per migliorare flussi e knowledge base.
+
+### Errori tipici da evitare
+
+- non tracciare stato e decisioni (impossibile audit o miglioramento).
+- produrre report troppo lunghi o confusi per stakeholder.
+- ignorare feedback (nessun miglioramento continuo).
+- non adattare formato/comunicazione a diversi stakeholder.
+- sottovalutare limiti e incertezze nel report.
+
+### Segnali che “ho davvero capito” D16
+
+- posso prendere un caso complesso e progettare un flusso ICM end-to-end.
+- so produrre report e briefing efficaci per diversi stakeholder.
+- so orchestrare agenti per flussi analitici completi.
+- uso feedback per migliorare continuamente flussi e knowledge base.
+- vedo ICM come metodologia operativa, non come teoria astratta.
+
+---
+
+## 10. Come ripartire dopo una pausa
+
+Se torno su D16 dopo giorni o settimane:
+
+1. Riapro un caso studio ICM già fatto.
+2. Rileggo report, briefing, log.
+3. Aggiungo una piccola attività:
+   - nuovo flusso per un caso diverso
+   - miglioramento report/briefing
+   - aggiornamento knowledge base
+4. Aggiorno una nota con:
+   - cosa ho aggiunto
+   - effetto su flussi e risultati
+
+Scopo: mantenere vivo il legame tra orchestrazione (ICM, agenti) e comunicazione efficace.
+
+---
+
+## 11. Risorse consigliate
+
+### 11.1 ICM e orchestrazione
+
+- **ICM: Interpretable Context Methodology**  
+  Metodologia per orchestrazione con filesystem come contesto.  
+  (Cercare repo e documentazione su GitHub.)
+
+- **MCP (Model Context Protocol)**  
+  Approccio a contesto strutturato per agenti.  
+  (Vedi D12 e documentazione specifica.)
+
+### 11.2 Comunicazione e report
+
+- **The Pyramid Principle (Barbara Minto)**  
+  Libro su strutturazione logica di report e presentazioni.
+
+- **Writing for Decision Makers (guide varie)**  
+  Cercare “executive briefing”, “intelligence report writing”.
+
+### 11.3 Knowledge base e dashboard
+
+- **Obsidian**  
+  https://obsidian.md/  
+
+- **Streamlit**  
+  https://streamlit.io/  
+
+- **Power BI / Tableau**  
+  https://powerbi.microsoft.com/  
+  https://www.tableau.com/  
+
+Queste risorse non vanno studiate per intero: D16 serve a darti una mappa operativa
+per orchestrare flussi analitici e comunicare risultati in modo efficace, e a collegarti a metodologie/tool quando serve approfondire.

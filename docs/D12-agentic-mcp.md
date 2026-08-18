@@ -414,4 +414,130 @@ Flusso:
    - consolida risultati
 3. Testare su un caso OSINT:
    - ricerca su un tema
-   - analisi
+   - analisi e report
+4. Annotare:
+   - come gli agenti collaborano
+   - conflitti o ridondanze
+
+**Deliverable:**
+
+- script con multi-agente
+- nota con osservazioni su coordinamento
+
+---
+
+### Laboratorio 4 — Agente + MCP + knowledge base
+
+**Obiettivo:** integrare agenti con contesto strutturato e knowledge base.
+
+**Passi:**
+
+1. Creare una struttura di cartelle per MCP:
+   - `context/`, `state/`, `log/`
+2. Usare file Markdown per:
+   - istruzioni (`AGENTS.md`)
+   - contesto (`CONTEXT.md`)
+   - stato (`STATE.md`)
+3. Collegare agente a:
+   - vector DB (RAG)
+   - Neo4j (grafi)
+4. Far eseguire all’agente task che usano:
+   - retrieval documenti
+   - query grafo
+   - scrittura stato/log
+5. Annotare:
+   - vantaggi del contesto strutturato
+   - problemi di coordinamento
+
+**Deliverable:**
+
+- struttura di cartelle + script agente
+- nota con osservazioni su MCP e knowledge base
+
+---
+
+## 10. Rubriche e checklist
+
+### Checklist — D12 completato
+
+- [ ] So spiegare differenza tra chat, workflow e agente.
+- [ ] Ho progettato un agente con tool calling.
+- [ ] Ho usato pattern ReAct e planning in task reali.
+- [ ] Ho sperimentato un sistema multi-agente (orchestrator + worker).
+- [ ] Ho usato MCP o approccio simile per contesto strutturato.
+- [ ] So identificare e mitigare failure mode (loop, allucinazioni, drift).
+- [ ] Ho integrato agenti con knowledge base (RAG, grafi).
+
+### Errori tipici da evitare
+
+- dare all’agente troppi tool senza regole (caos, azioni pericolose).
+- non mettere limiti di step (loop infiniti).
+- fidarsi ciecamente delle azioni dell’agente senza log/audit.
+- non tracciare stato e decisioni (impossibile debug).
+- usare multi-agent senza coordinamento chiaro (ridondanze, conflitti).
+
+### Segnali che “ho davvero capito” D12
+
+- posso prendere un task complesso e progettare un sistema agentico adatto.
+- so spiegare a un collega perché un agente è diverso da una chat.
+- so riconoscere failure mode e proporre mitigazioni.
+- uso MCP e knowledge base per dare contesto e memoria agli agenti.
+- vedo gli agenti come “colleghi digitali” da governare, non come magia.
+
+---
+
+## 11. Come ripartire dopo una pausa
+
+Se torno su D12 dopo giorni o settimane:
+
+1. Riapro un sistema agente già costruito.
+2. Rieseguo un task per ricordare il flusso.
+3. Aggiungo una piccola modifica:
+   - nuovo tool
+   - nuovo pattern (es. reflection)
+   - nuova regola di guardrail
+4. Aggiorno una nota con:
+   - cosa ho cambiato
+   - effetto su comportamento dell’agente
+
+Scopo: mantenere fresco il legame tra teoria (pattern, MCP) e pratica (agenti, tool).
+
+---
+
+## 12. Risorse consigliate
+
+### 12.1 Paper e articoli
+
+- **ReAct: Synergizing Reasoning and Acting in Language Models (Yao et al., 2022)**  
+  Paper originale su ReAct.  
+  https://arxiv.org/abs/2210.03629  
+
+- **CAMEL: Communicative Agents for “Mind” Exploration of Large Scale Language Model Society**  
+  Multi-agent e comunicazione tra agenti.  
+  https://www.camel-ai.org/  
+
+- **AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation**  
+  Framework multi-agent di Microsoft.  
+  https://microsoft.github.io/autogen/  
+
+### 12.2 Strumenti e framework
+
+- **LangChain**  
+  Framework per catene e agenti LLM.  
+  https://python.langchain.com/  
+
+- **LlamaIndex**  
+  Framework per RAG e agenti su dati.  
+  https://www.llamaindex.ai/  
+
+- **Goose / OpenWork / OmniRoute**  
+  Strumenti per agenti e orchestrazione (vedi documentazione specifica).  
+
+### 12.3 MCP e contesto strutturato
+
+- **ICM: Interpretable Context Methodology**  
+  Approccio a filesystem come contesto per agenti.  
+  (Cercare repo e documentazione su GitHub.)
+
+Queste risorse non vanno studiate per intero: D12 serve a darti una mappa operativa
+per progettare sistemi agentici affidabili, e a collegarti a paper/framework quando serve approfondire.
