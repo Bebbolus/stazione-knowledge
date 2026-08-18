@@ -177,3 +177,40 @@ Un flusso minimo di lavoro:
 - Rifinire i nomi delle cartelle e delle note in base a come utilizzo davvero Mac e Windows.
 - Aggiungere esempi concreti di configurazione (percorsi reali su macOS e Windows).
 - Documentare una prima versione delle regole per gli agenti (es. file `AGENTS.md` separato).
+
+---
+
+## 7. Risorse consigliate
+
+### 7.1 Workspace, second brain e knowledge base
+
+- Adam Bray — *A Personal Git Repo as a Knowledge Base Wiki*  
+  https://dev.to/adam_b/a-personal-git-repo-as-a-knowledge-base-wiki-j51
+
+- Articoli e guide su personal knowledge base con Markdown + Git  
+  https://lifetips.alibaba.com/tech-efficiency/personal-knowledge-base-with-markdown-git  
+  https://marklowg.medium.com/creating-a-personal-knowledgebase-on-github-d1d8bb9222a4
+
+- Esempi di knowledge base pubblica in Markdown su GitHub  
+  https://github.com/exasol/public-knowledgebase  
+  https://github.com/sketchbuch/obsidian-knowledge-base
+
+### 7.2 Corsi universitari di riferimento (ML / NLP)
+
+> Qui non studio ancora il contenuto, ma tengo le “ancore” per i moduli successivi
+> (es. D04/D07/D09). Li metto già ora per averli a portata di mano.
+
+- Stanford CS229 — Machine Learning  
+  Sito corso: https://cs229.stanford.edu/  
+  Syllabus e risorse: https://cs229.stanford.edu/syllabus-new.html  
+  Versione online: https://online.stanford.edu/courses/cs229-machine-learning
+
+- Stanford CS224N — Natural Language Processing with Deep Learning  
+  Sito corso: https://web.stanford.edu/class/cs224n/  
+  Archivio + video: https://web.stanford.edu/class/archive/cs/cs224n/cs224n.1246/  
+  Scheda corso online: https://online.stanford.edu/courses/cs224n-natural-language-processing-deep-learning
+
+- Libri e testi utili suggeriti da CS224N  
+  - *Speech and Language Processing* — Jurafsky & Martin (pre-release 2024, online)
+  - *Neural Networks and Deep Learning* — Michael Nielsen
+  - *Deep Learning* — Goodfellow, Bengio, Courville
