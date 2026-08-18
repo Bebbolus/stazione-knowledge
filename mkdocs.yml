@@ -1,7 +1,6 @@
 site_name: Stazione — Percorso OSINT & AI
 site_description: Knowledge base personale per diventare osinter del futuro
 site_url: https://bebbolus.github.io/stazione-knowledge/
-docs_dir: .
 repo_url: https://github.com/Bebbolus/stazione-knowledge
 repo_name: Bebbolus/stazione-knowledge
 edit_uri: edit/main/docs/
@@ -71,27 +70,27 @@ extra:
 nav:
   - Home: index.md
   - Fondamenti:
-      - D01 — Workspace local-first, Git, Obsidian, LLM wiki: docs/D01-workspace-llm-wiki.md
-      - D02 — Python refresher e software engineering essentials: docs/D02-python-refresher.md
-      - D03 — Data foundations (NumPy, Pandas, SQL): docs/D03-data-foundations.md
-      - D04 — Matematica e statistica just-in-time: docs/D04-math-stat.md
+      - D01 — Workspace local-first, Git, Obsidian, LLM wiki: D01-workspace-llm-wiki.md
+      - D02 — Python refresher e software engineering essentials: D02-python-refresher.md
+      - D03 — Data foundations (NumPy, Pandas, SQL): D03-data-foundations.md
+      - D04 — Matematica e statistica just-in-time: D04-math-stat.md
   - Operativo:
-      - D05 — Fondamenti di Machine Learning: docs/D05-ml-fondamenti.md
-      - "D06 — ML classico: alberi, ensemble, gradient boosting": docs/D06-ml-classico.md
-      - D07 — Apprendimento non supervisionato: docs/D07-unsupervised-learning.md
+      - D05 — Fondamenti di Machine Learning: D05-ml-fondamenti.md
+      - "D06 — ML classico: alberi, ensemble, gradient boosting": D06-ml-classico.md
+      - D07 — Apprendimento non supervisionato: D07-unsupervised-learning.md
   - Avanzato:
-      - D08 — Deep Learning e PyTorch: docs/D08-deep-learning-pytorch.md
-      - D09 — Transformers, LLM e inference engineering: docs/D09-transformers-llm.md
-      - D10 — RAG, knowledge base e grafi OSINT: docs/D10-rag-knowledge-osint.md
-      - D11 — OSINT avanzato e discipline principali: docs/D11-osint-avanzato.md
-      - "D11b — AI come arma e come bersaglio nell'OSINT": docs/D11b-ai-arma-bersaglio-osint.md
-      - "D11c — Geopolitica e governance dell'AI per l'OSINT": docs/D11c-geopolitica-ai-osint.md
+      - D08 — Deep Learning e PyTorch: D08-deep-learning-pytorch.md
+      - D09 — Transformers, LLM e inference engineering: D09-transformers-llm.md
+      - D10 — RAG, knowledge base e grafi OSINT: D10-rag-knowledge-osint.md
+      - D11 — OSINT avanzato e discipline principali: D11-osint-avanzato.md
+      - "D11b — AI come arma e come bersaglio nell'OSINT": D11b-ai-arma-bersaglio-osint.md
+      - "D11c — Geopolitica e governance dell'AI per l'OSINT": D11c-geopolitica-ai-osint.md
   - Specialistico:
-      - D12 — Agentic systems, MCP e automazione affidabile: docs/D12-agentic-mcp.md
-      - D12b — AI Harness e Plugin per agenti OSINT portatili: docs/D12b-ai-harness-plugin-osint.md
-      - D12c — Prompt engineering e context engineering avanzati: docs/D12c-prompt-context-engineering.md
-      - D12d — Loop engineering e graph engineering per agenti: docs/D12d-loop-graph-engineering.md
-      - D13 — RL, preference learning, alignment: docs/D13-rl-alignment.md
-      - D14 — Responsible AI, cybersecurity e governance: docs/D14-responsible-ai-cyber.md
-      - D15 — MLOps / LLMOps e deployment local-first: docs/D15-mlops-llmops.md
-      - D16 — ICM, orchestrazione e comunicazione dei risultati: docs/D16-icm-orchestrazione.md
+      - D12 — Agentic systems, MCP e automazione affidabile: D12-agentic-mcp.md
+      - D12b — AI Harness e Plugin per agenti OSINT portatili: D12b-ai-harness-plugin-osint.md
+      - D12c — Prompt engineering e context engineering avanzati: D12c-prompt-context-engineering.md
+      - D12d — Loop engineering e graph engineering per agenti: D12d-loop-graph-engineering.md
+      - D13 — RL, preference learning, alignment: D13-rl-alignment.md
+      - D14 — Responsible AI, cybersecurity e governance: D14-responsible-ai-cyber.md
+      - D15 — MLOps / LLMOps e deployment local-first: D15-mlops-llmops.md
+      - D16 — ICM, orchestrazione e comunicazione dei risultati: D16-icm-orchestrazione.md

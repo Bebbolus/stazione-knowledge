@@ -1,0 +1,60 @@
+# ── macOS ──────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDouble
+.LSOverride
+
+# ── Obsidian ───────────────────────────────────────────
+.obsidian/
+.trash/
+*.obsidian.vimrc
+
+# ── Windows (nel caso usi anche il portatile) ──────────
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# ── MkDocs build output ─────────────────────────────────
+site/
+
+# ── Python / venv (se lavori in locale con virtualenv) ─
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+*.egg-info/
+
+# ── Editor / IDE ────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── File locali che non vuoi pubblicare per errore ─────
+private/
+inbox/
+*.local.md
+.env
+.env.*
+*.key
+*.pem
+
+# ── Log e file temporanei generici ─────────────────────
+*.log
+*.tmp
+.cache/
