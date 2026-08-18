@@ -75,15 +75,15 @@ nav:
       - D04 — Matematica e statistica just-in-time: docs/D04-math-stat.md
   - Operativo:
       - D05 — Fondamenti di Machine Learning: docs/D05-ml-fondamenti.md
-      - D06 — ML classico: alberi, ensemble, gradient boosting: docs/D06-ml-classico.md
+      - "D06 — ML classico: alberi, ensemble, gradient boosting": docs/D06-ml-classico.md
       - D07 — Apprendimento non supervisionato: docs/D07-unsupervised-learning.md
   - Avanzato:
       - D08 — Deep Learning e PyTorch: docs/D08-deep-learning-pytorch.md
       - D09 — Transformers, LLM e inference engineering: docs/D09-transformers-llm.md
       - D10 — RAG, knowledge base e grafi OSINT: docs/D10-rag-knowledge-osint.md
       - D11 — OSINT avanzato e discipline principali: docs/D11-osint-avanzato.md
-      - D11b — AI come arma e come bersaglio nell'OSINT: docs/D11b-ai-arma-bersaglio-osint.md
-      - D11c — Geopolitica e governance dell'AI per l'OSINT: docs/D11c-geopolitica-ai-osint.md
+      - "D11b — AI come arma e come bersaglio nell'OSINT": docs/D11b-ai-arma-bersaglio-osint.md
+      - "D11c — Geopolitica e governance dell'AI per l'OSINT": docs/D11c-geopolitica-ai-osint.md
   - Specialistico:
       - D12 — Agentic systems, MCP e automazione affidabile: docs/D12-agentic-mcp.md
       - D12b — AI Harness e Plugin per agenti OSINT portatili: docs/D12b-ai-harness-plugin-osint.md
