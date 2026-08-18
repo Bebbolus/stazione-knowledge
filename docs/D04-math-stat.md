@@ -107,7 +107,7 @@ Punti chiave:
 - prodotto scalare = “quanto due vettori puntano nella stessa direzione”
 - norma = “lunghezza” del vettore
 
-La serie *Essence of Linear Algebra* di 3Blue1Brown visualizza proprio queste intuizioni.[cite:91][cite:150][cite:152]
+La serie *Essence of Linear Algebra* di 3Blue1Brown visualizza proprio queste intuizioni.
 
 ### 2.2 Combinazioni lineari, span e base
 
@@ -245,7 +245,7 @@ La definizione base vista spesso in Khan Academy:
 
 \[
 \text{Probabilità di un evento} = \frac{\#\text{ modi in cui può accadere}}{\#\text{ risultati possibili}}
-\][cite:94][cite:153]
+\]
 
 ### 5.2 Media, varianza, distribuzioni
 

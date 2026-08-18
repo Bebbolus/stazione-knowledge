@@ -45,7 +45,7 @@ Questo documento introduce i **fondamenti concettuali del machine learning class
 
 - cos’è un modello, cosa significa “imparare dai dati”
 - come costruire un workflow affidabile (non solo “prova un algoritmo e guarda il numero di accuracy”)
-- come usare scikit-learn come laboratorio standard per modelli classici, prima di passare a DL/LLM.[cite:158][cite:161][cite:171]
+- come usare scikit-learn come laboratorio standard per modelli classici, prima di passare a DL/LLM.
 
 È il ponte naturale tra:
 
@@ -83,7 +83,7 @@ Dopo questo modulo dovrei essere in grado di:
 
 ### 1.2 Pipeline standard ML (scikit-learn style)
 
-Pipeline concettuale (scikit-learn la formalizza esplicitamente):[cite:161][cite:171]
+Pipeline concettuale (scikit-learn la formalizza esplicitamente):
 
 1. definire il problema (dominio, obiettivo, vincoli)
 2. esplorare i dati (EDA, data quality → D03)
@@ -127,7 +127,7 @@ Modelli classici:
 - regressione logistica
 - k-Nearest Neighbors
 - SVM
-- alberi, random forest, gradient boosting (approfonditi in D06)[cite:163][cite:158]
+- alberi, random forest, gradient boosting (approfonditi in D06)
 
 ### 2.3 Regressione
 
@@ -149,7 +149,7 @@ Modelli classici:
 
 ### 3.1 Visione “estimator API”
 
-scikit-learn standardizza i modelli come **stimatori** con due metodi chiave:[cite:161][cite:171][cite:158]
+scikit-learn standardizza i modelli come **stimatori** con due metodi chiave:
 
 - `fit(X, y)` — addestra il modello sui dati
 - `predict(X)` — genera predizioni su nuovi dati
@@ -174,7 +174,7 @@ Per valutare correttamente un modello:
 - separare un **test set** da usare solo alla fine
 - durante lo sviluppo, usare:
   - un validation set esplicito, oppure
-  - cross-validation (`cross_val_score`, `GridSearchCV`, ecc.)[cite:158][cite:163]
+  - cross-validation (`cross_val_score`, `GridSearchCV`, ecc.)
 
 Cross-validation:
 
@@ -201,7 +201,7 @@ Effetti:
 In D05:
 
 - vedo come bias/varianza si manifesta su modelli concreti (curve di training/test)
-- in D06 approfondisco tecniche per controllarla (regolarizzazione, ensemble, ecc.)[cite:167][cite:169]
+- in D06 approfondisco tecniche per controllarla (regolarizzazione, ensemble, ecc.)
 
 ### 4.2 Curve di apprendimento
 
@@ -229,7 +229,7 @@ Dipende dal problema:
 - classificazione sbilanciata → meglio precision/recall/F1, ROC-AUC
 - regressione → MSE/RMSE/MAE, a seconda della penalizzazione che voglio
 
-scikit-learn offre molte metriche in `sklearn.metrics` (accuracy_score, precision_score, recall_score, roc_auc_score, mean_squared_error, ecc.).[cite:158][cite:163]
+scikit-learn offre molte metriche in `sklearn.metrics` (accuracy_score, precision_score, recall_score, roc_auc_score, mean_squared_error, ecc.).
 
 ### 5.2 Baseline e modelli complessi
 
@@ -256,7 +256,7 @@ Se un modello complesso non batte la baseline in modo chiaro:
 
 **Passi:**
 
-1. Usare il dataset `iris` di scikit-learn (classico esempio).[cite:171][cite:158]
+1. Usare il dataset `iris` di scikit-learn (classico esempio).
 2. Splittare in train/test (es. 80/20).
 3. Addestrare un classificatore semplice (es. `LogisticRegression`).
 4. Calcolare accuracy e, se possibile, matrice di confusione.
@@ -296,7 +296,7 @@ Se un modello complesso non batte la baseline in modo chiaro:
 
 **Passi:**
 
-1. Usare un dataset relativamente piccolo (es. `digits` di scikit-learn).[cite:171]
+1. Usare un dataset relativamente piccolo (es. `digits` di scikit-learn).
 2. Addestrare:
    - un modello semplice (es. Logistic Regression o albero poco profondo)
    - un modello complesso (es. RandomForest con molti alberi molto profondi)
