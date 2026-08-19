@@ -1,166 +1,67 @@
-# D09 — Transformers, LLM e inference engineering
-
-## Meta-modulo D09
-
-**Target**  
-Me stesso oggi, e chiunque voglia capire come funzionano i transformer e i large language model (LLM)
-e come usarli in modo consapevole: architettura, tokenizzazione, pretraining/finetuning,
-inferenza locale/cloud, ottimizzazione e integrazione in pipeline.
-
-**Prerequisiti consigliati**
-
-- D02 — Python refresher e software engineering essentials
-- D04 — Matematica e statistica just-in-time (algebra lineare, probabilità, derivate)
-- D05 — Fondamenti di Machine Learning
-- D08 — Deep Learning e PyTorch (tensori, autograd, MLP, CNN, RNN, training loop)
-
-**Durata indicativa**
-
-- **Modalità minima (~3–4 ore)**  
-  - idea di transformer (attention, encoder/decoder)  
-  - cos’è un LLM e come viene addestrato (pretraining, finetuning)  
-  - uso di API cloud e modelli locali (concetti base)
-
-- **Modalità standard (~8–10 ore)**  
-  - tokenizzazione (BPE, WordPiece, SentencePiece)  
-  - architettura transformer (attention, positional encoding, layer norm)  
-  - pretraining vs instruction tuning vs alignment  
-  - inferenza locale (Ollama, llama.cpp, vLLM) e cloud (API provider)
-
-- **Modalità deep dive (più giornate)**  
-  - studio di paper e note su transformer (Attention Is All You Need, ecc.)  
-  - esperimenti con modelli open (Llama, Mistral, Qwen, ecc.)  
-  - ottimizzazione inferenza (quantizzazione, batching, caching, speculative decoding)
-
-**Quando considerare il modulo “completato”**
-
-- so spiegare a parole mie cos’è l’attention e perché i transformer hanno scalato meglio delle RNN
-- so descrivere il ciclo di vita di un LLM: pretraining, finetuning, instruction tuning, alignment
-- so usare almeno un’API cloud e un modello locale per inferenza
-- so leggere documentazione di modelli (Hugging Face, repo GitHub) e capire architettura e limiti
-- ho almeno un progetto che integra un LLM in una pipeline (chat, analisi testo, OSINT, ecc.)
-
 ---
-
-## Perché questo documento
-
-Dopo D08 ho le basi di deep learning con PyTorch.  
-D09 si concentra sui **transformer e LLM**, che sono:
-
-- l’architettura dominante per NLP moderno (e non solo)
-- la base di ChatGPT, Claude, Gemini, Llama, Mistral, ecc.
-- il “motore” dietro molti sistemi agentici e di RAG
-
-Questo modulo non vuole:
-
-- trasformarmi in ricercatore di architetture transformer
-- farmi implementare da zero un modello frontier
-
-Vuole invece:
-
-- darmi una mappa chiara di come funzionano
-- permettermi di scegliere e usare modelli in modo consapevole
-- collegarmi a risorse serie per approfondire quando serve
-
+aliases: [D09, Transformers, LLM, Large Language Models, Self-Attention, Ingegneria dell'Inferenza, llama.cpp, vLLM]
 ---
+# Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza
 
-## Obiettivi di apprendimento
+L'**architettura Transformer** è una topologia di rete neurale fondata integralmente sul meccanismo di auto-attenzione (*Self-Attention*), concepita per elaborare sequenze di dati catturando dipendenze e correlazioni contestuali a lungo raggio in parallelo. Questa architettura costituisce il motore computazionale primario di tutti i moderni Large Language Model (LLM), trovando applicazione critica nell'elaborazione del linguaggio naturale, nella generazione e sintesi di codice sorgente, nell'analisi documentale complessa e nei sistemi di intelligenza artificiale per l'intelligence delle fonti aperte (OSINT). L'architettura nasce per superare il vincolo intrinsecamente sequenziale e il degrado del gradiente tipici delle reti neurali ricorrenti, consentendo la parallelizzazione massiva dei carichi di addestramento su cluster di GPU e scalando l'efficienza predittiva su corpora testuali composti da miliardi di token.
 
-Dopo questo modulo dovrei essere in grado di:
+## I Limiti della Ricorrenza e la Genesi dell'Attenzione
 
-- descrivere l’architettura transformer (attention, encoder/decoder, positional encoding)
-- spiegare cos’è un LLM e le fasi di pretraining, finetuning, instruction tuning, alignment
-- usare tokenizzatori e capire problemi di vocabolario, OOV, chunking
-- usare API cloud (es. OpenAI, Anthropic, Google) e modelli locali (Ollama, llama.cpp, ecc.)
-- valutare trade-off tra modelli locali e cloud (costo, latenza, privacy, controllo)
+Prima dell'avvento dei Transformer, l'elaborazione di sequenze temporali e testuali nel campo del deep learning era dominata dalle reti neurali ricorrenti (RNN) e dalle loro varianti a porte, quali le reti Long Short-Term Memory (LSTM) e le Gated Recurrent Unit (GRU). Sebbene tali strutture fossero concepite per mantenere uno stato nascosto persistente lungo la sequenza, il loro funzionamento implicava una dipendenza temporale strettamente sequenziale: il calcolo dello stato nascosto al passo temporale corrente dipendeva in modo indissolubile dal completamento dello stato calcolato al passo precedente.
 
----
+Questa dipendenza lineare impediva la parallelizzazione computazionale durante la fase di propagazione in avanti e di retropropagazione del gradiente, limitando fortemente lo sfruttamento dei core di calcolo delle GPU moderne e rendendo proibitivo l'addestramento su dataset di dimensioni massive. Inoltre, lungo sequenze composte da centinaia o migliaia di passi, il flusso di informazione andava incontro al fenomeno del gradiente evanescente o esplosivo, provocando una rapida perdita del contesto semantico iniziale e riducendo drasticamente la capacità del modello di correlare concetti distanti nel testo.
 
-## 1. Mappa dei concetti
+La svolta teorica e architetturale è avvenuta con la pubblicazione dello studio fondamentale [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762) da parte dei ricercatori di [Google](https://about.google/) (la multinazionale tecnologica leader nei servizi Internet, calcolo distribuito e ricerca fondamentale nell'AI) e [Google DeepMind](https://deepmind.google/) (la divisione di ricerca sull'intelligenza artificiale di Google pioniera del deep learning). Il lavoro ha dimostrato come fosse possibile eliminare completamente ogni componente ricorrente o convoluzionale, affidando la modellazione delle relazioni tra token a meccanismi di attenzione diretta *all-to-all*, capaci di collegare istantaneamente qualsiasi coppia di elementi della sequenza con complessità di percorso costante pari a un singolo passaggio di calcolo.
 
-### 1.1 Blocchi principali
+## Formulazione Matematica e Geometrica della Self-Attention
 
-1. Dai transformer ai LLM: evoluzione storica e motivazioni.
-2. Tokenizzazione: BPE, WordPiece, SentencePiece.
-3. Architettura transformer: attention, multi-head, encoder/decoder.
-4. Pretraining, finetuning, instruction tuning, alignment.
-5. Inferenza locale vs cloud: provider, modelli, vincoli.
-6. Ottimizzazione inferenza: quantizzazione, batching, caching, speculative decoding.
-7. Integrazione in pipeline: chat, analisi testo, OSINT, agenti.
+Il meccanismo di Self-Attention elabora una matrice di input formata da vettori di embedding associati a ciascun token della sequenza. Data una matrice di input $X \in \mathbb{R}^{N \times d_{\text{model}}}$, dove $N$ rappresenta la lunghezza della sequenza e $d_{\text{model}}$ la dimensione dello spazio latente, il modello proietta linearmente $X$ in tre distinti spazi vettoriali mediante matrici di peso addestrabili: la matrice delle interrogazioni $W^Q \in \mathbb{R}^{d_{\text{model}} \times d_k}$, la matrice delle chiavi $W^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ e la matrice dei valori $W^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$.
 
----
+$$Q = X W^Q, \quad K = X W^K, \quad V = X W^V$$
 
-## 2. Dai transformer ai LLM
+La proiezione genera le matrici di Query $Q \in \mathbb{R}^{N \times d_k}$, Key $K \in \mathbb{R}^{N \times d_k}$ e Value $V \in \mathbb{R}^{N \times d_v}$. Da una prospettiva geometrica, ogni riga di $Q$ funge da vettore di ricerca orientato nello spazio semantico per interrogare le caratteristiche dei token circostanti; le righe di $K$ fungono da etichette descrittive del contenuto di ciascun token; le righe di $V$ contengono l'effettivo contenuto informativo da estrarre e ricombinare linearmente per formare la nuova rappresentazione contestuale.
 
-### 2.1 Evoluzione storica (sintesi)
+```
+                    ┌────────────────────────┐
+                    │ Matrice di Input X     │  (N x d_model)
+                    └───────────┬────────────┘
+         ┌──────────────────────┼──────────────────────┐
+         ▼                      ▼                      ▼
+    ┌─────────┐            ┌─────────┐            ┌─────────┐
+    │   W^Q   │            │   W^K   │            │   W^V   │  (Proiezioni lineari)
+    └────┬────┘            └────┬────┘            └────┬────┘
+         ▼                      ▼                      ▼
+   Query (Q)               Key (K)                Value (V)
+   (N x d_k)               (N x d_k)              (N x d_v)
+         │                      │                      │
+         └──────────► ⊗ ◄───────┘                      │
+                      │  (Q · K^T)                     │
+                      ▼                                │
+             Matrice di Similarità                     │
+                      │                                │
+                      ▼  (/ sqrt(d_k))                 │
+              Scaling Factor                           │
+                      │                                │
+                      ▼  (+ Maschera M)                │
+             Causal Masking                            │
+                      │                                │
+                      ▼                                │
+                   Softmax                             │
+                      │  (Pesi di Attenzione A)        │
+                      └──────────────► ⊗ ◄─────────────┘
+                                       │
+                                       ▼
+                             Output Contestuale Z
+                                  (N x d_v)
+```
 
-Prima dei transformer:
+La quantificazione dell'affinità semantica tra il token $i$-esimo e il token $j$-esimo avviene tramite il prodotto scalare tra il rispettivo vettore di query $q_i$ e il vettore di chiave $k_j$. Quando due vettori puntano nella medesima direzione nello spazio vettoriale, il loro prodotto scalare assume un valore elevato, segnalando una forte rilevanza contestuale. La moltiplicazione matriciale $Q K^\top$ calcola simultaneamente tutti gli $N \times N$ prodotti scalari della sequenza.
 
-- RNN/LSTM dominanti per sequenze (testo, audio, tempo)
-- problemi di parallelizzazione e dipendenze a lungo raggio
+All'aumentare della dimensione $d_k$, il valore atteso dei prodotti scalari cresce linearmente in magnitudo, spingendo i valori in ingresso alla funzione Softmax verso regioni a saturazione estrema dove i gradienti risultano prossimi allo zero. Per preservare la stabilità numerica e garantire gradienti robusti durante l'addestramento, il prodotto scalare viene normalizzato mediante un fattore di scala pari a $\frac{1}{\sqrt{d_k}}$. L'equazione canonica della Scaled Dot-Product Attention assume la forma:
 
-Pubblicazione chiave:
+$$\text{Attention}(Q, K, V) = \text{Softmax}\left(\frac{Q K^\top}{\sqrt{d_k}} + M\right) V$$
 
-- **“Attention Is All You Need” (Vaswani et al., 2017)**  
-  introduce il transformer, basato su self-attention invece che ricorrenza.
-
-Conseguenze:
-
-- modelli più paralleli e scalabili
-- nascita di BERT (encoder-only), GPT (decoder-only), T5 (encoder-decoder)
-- esplosione dei LLM su larga scala
-
-Riferimenti:
-
-- [Attention Is All You Need (paper)](https://arxiv.org/abs/1706.03762)
-- [The Illustrated Transformer (blog)](https://jalammar.github.io/illustrated-transformer/)
-
-### 2.2 Cosa rende speciali i transformer
-
-- **Self-attention**: ogni token può “guardare” tutti gli altri nella sequenza
-- **Parallelizzazione**: tutti i token elaborati in parallelo (non sequenziale come RNN)
-- **Scalabilità**: più dati + più parametri → performance migliori (fino a certi limiti)
-
----
-
-## 3. Tokenizzazione
-
-### 3.1 Cos’è un token
-
-Un **token** è un’unità di testo su cui lavora il modello:
-
-- può essere una parola intera, un sotto-parola, un carattere
-- dipende dal vocabolario e dall’algoritmo di tokenizzazione
-
-### 3.2 Algoritmi comuni
-
-- **BPE (Byte Pair Encoding)**  
-  usato da GPT, RoBERTa, ecc.
-- **WordPiece**  
-  usato da BERT, molti modelli Google
-- **SentencePiece**  
-  tratta il testo come sequenza di byte/char, utile per lingue diverse
-
-Problemi tipici:
-
-- token diversi per stessa parola (maiuscole/minuscole, punteggiatura)
-- OOV (out-of-vocabulary) gestiti con subword
-- lunghezza massima della sequenza (context window)
-
-Riferimenti:
-
-- [Hugging Face Tokenizers docs](https://huggingface.co/docs/tokenizers/index)
-
----
-
-## 4. Architettura transformer
-
-### 4.1 Attention
-
-Idea di base:
-
-- per ogni token, calcolo quanto “prestare attenzione” a ciascun altro token
-- ottengo una rappresentazione contestuale che dipende da tutta la sequenza
+La matrice di mascheramento $M \in \mathbb{R}^{N \times N}$ è impiegata nei modelli generativi autoregressivi per preservare il principio di causalità: per ciascun elemento con indice temporale futuro ($j > i$), viene assegnato un valore pari a $M_{ij} = -\infty$, azzerando rigorosamente la probabilità calcolata dalla Softmax e impedendo al token presente di accedere ad informazioni future.
 
 <div class="admonition abstract">
   <p class="admonition-title">Animazione Interattiva: Self-Attention</p>
@@ -168,377 +69,605 @@ Idea di base:
   <iframe src="../widgets/attention.html" style="width: 100%; height: 500px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
 </div>
 
-Formula semplificata (scaled dot-product attention):
+### Multi-Head Attention e Proiezioni in Sottospazi Multipli
 
-\[
-\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V
-\]
+Una singola operazione di attenzione tende a mediare l'informazione concentrandosi su una sola relazione dominante alla volta. Per consentire al modello di monitorare congiuntamente differenti tipologie di dipendenze linguistiche — quali relazioni sintattiche soggetto-verbo, richiami anaforici a lungo raggio o correlazioni tematiche globali — l'architettura adotta il paradigma della Multi-Head Attention (MHA).
 
-dove:
+L'architettura suddivide lo spazio dimensionale $d_{\text{model}}$ in $h$ teste di attenzione indipendenti, ciascuna operante su una dimensione ridotta $d_k = d_v = d_{\text{model}} / h$. Ciascuna testa $i$-esima dispone di proiezioni lineari dedicate $W_i^Q \in \mathbb{R}^{d_{\text{model}} \times d_k}$, $W_i^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ e $W_i^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$. Gli output calcolati in parallelo da ciascuna testa vengono concatenati e moltiplicati per una matrice di proiezione finale $W^O \in \mathbb{R}^{h d_v \times d_{\text{model}}}$:
 
-- \(Q\) (query), \(K\) (key), \(V\) (value) sono proiezioni lineari degli input
-- \(d_k\) è la dimensione delle key/query
+$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) W^O \quad \text{dove} \quad \text{head}_i = \text{Attention}(X W_i^Q, X W_i^K, X W_i^V)$$
 
-### 4.2 Multi-head attention
+Questa scomposizione garantisce che il costo computazionale complessivo rimanga paragonabile a quello di una singola testa a piena dimensione, arricchendo tuttavia in modo esponenziale la capacità espressiva del modello.
 
-- invece di una sola attention, uso più “teste” in parallelo
-- ogni testa impara pattern diversi (sintassi, relazioni a lungo raggio, ecc.)
-- le uscite delle teste sono concatenate e proiettate
+### Positional Encoding: Dalle Funzioni Sinusoidali a RoPE e ALiBi
 
-### 4.3 Encoder, decoder, encoder-decoder
+Poiché l'operazione di Self-Attention è intrinsecamente invariante rispetto all'ordine dei token, scambiare arbitrariamente la posizione degli elementi della sequenza produrrebbe rappresentazioni identiche prive di ordinamento sintattico. L'architettura richiede pertanto l'iniezione esplicita di segnali di posizione all'interno delle rappresentazioni dei vettori di embedding.
 
-- **Encoder-only** (es. BERT): vede tutto il contesto, usato per rappresentazioni, classification
-- **Decoder-only** (es. GPT): genera token uno alla volta, usato per LLM generativi
-- **Encoder-decoder** (es. T5): traduzione, summarization, task seq2seq
+Nei primi modelli Transformer, l'ordinamento era garantito da funzioni trigonometriche fisse a frequenze scalari crescenti:
 
-Altri componenti:
+$$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right), \quad PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)$$
 
-- **Positional encoding**: informa il modello sulla posizione dei token
-- **LayerNorm + residui**: stabilizzano il training di reti molto profonde
+Nelle architetture contemporanee, la codifica sinusoidale statica è stata superata da meccanismi di posizionamento relativo e rotazionale. Il metodo d'elezione per modelli all'avanguardia come LLaMA e Mistral è il **Rotary Position Embedding (RoPE)**. RoPE opera applicando una matrice di rotazione complessa bidimensionale ortogonale ai vettori di Query e Key prima del calcolo del loro prodotto scalare.
 
-Riferimenti:
+Dato un vettore bidimensionale $x = (x_1, x_2)$, la rotazione associata alla posizione $m$ con frequenza angolare $\theta$ è formulata come moltiplicazione matriciale nel piano complesso:
 
-- [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/)
-- [Hugging Face Course – Transformers](https://huggingface.co/learn/nlp-course)
+$$R_{\theta, m} x = \begin{pmatrix} \cos(m\theta) & -\sin(m\theta) \\ \sin(m\theta) & \cos(m\theta) \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \end{pmatrix}$$
 
----
+Grazie a questa rotazione, il prodotto scalare risultante $\langle R_{\theta, m} q, R_{\theta, n} k \rangle$ dipende unicamente dalla distanza relativa $(m - n)$ tra le posizioni dei due token e non dalla loro posizione assoluta, conferendo al modello eccellenti proprietà di generalizzazione su finestre di contesto estese. In alternativa a RoPE, l'approccio **ALiBi (Attention with Linear Biases)** inietta un termine di penalità lineare direttamente nella matrice dei punteggi di attenzione prima della Softmax, penalizzando il peso proporzionalmente alla distanza geometrica $|i - j|$ tra i token.
 
-## 5. Pretraining, finetuning, instruction tuning, alignment
+## Meccanica della Tokenizzazione e Gestione del Vocabolario
 
-### 5.1 Pretraining
+L'interfaccia tra il flusso di testo in linguaggio naturale e l'elaborazione tensoriale interna del modello è costituita dal modulo di **tokenizzazione**. Un tokenizzatore segmenta stringhe arbitrarie di caratteri grezzi in indici discreti appartenenti a un vocabolario predefinito di cardinalità finita $|V|$.
 
-- addestramento su grandi corpora non etichettati (web, libri, codice, ecc.)
-- obiettivi tipici:
-  - language modeling (predire il token successivo)
-  - masked language modeling (predire token mascherati)
+```
+  Stringa Grezza: "L'ingegneria dei Transformer scala linearmente."
+                           │
+                           ▼  [Algoritmo Byte-level BPE / Tokenizers]
+  Segmenti Subword:  ["L'", "ingegner", "ia", " dei", " Trans", "former", " scala", " linear", "mente", "."]
+                           │
+                           ▼  [Mappatura su Vocabolario Vocab ID]
+  Indici Tensoriali: [421, 18940, 287, 856, 3102, 14201, 7812, 12044, 492, 28723]
+```
 
-Risultato:
+La progettazione di un algoritmo di tokenizzazione deve risolvere il compromesso tra la dimensione del vocabolario e la lunghezza della sequenza prodotta. Una tokenizzazione a livello di singola parola genererebbe un vocabolario sterminato e intrattabile, incapace di gestire neologismi, errori ortografici e forme grammaticali flesse, incorrendo costantemente nell'errore di token non riconosciuto (*Out-Of-Vocabulary*, OOV). Al contrario, una tokenizzazione a livello di singolo carattere ridurrebbe il vocabolario a pochi simboli, dilatando tuttavia a dismisura il numero di token per frase e saturando rapidamente la capacità computazionale quadratica della Self-Attention.
 
-- modello “base” con conoscenza linguistica e fattuale compressa nei pesi
+La soluzione ingegneristica standard è la **tokenizzazione a subword**, basata su tre algoritmi principali. L'algoritmo **Byte-Pair Encoding (BPE)** parte da un vocabolario base di caratteri individuali e calcola iterativamente la frequenza statistica delle coppie di simboli adiacenti nell'intero corpus di addestramento, fondendo la coppia più frequente in una nuova unità lessicale fino al raggiungimento della dimensione del vocabolario target (tipicamente compresa tra 32.000 e 128.000 token). Nella variante Byte-level BPE, impiegata nelle famiglie GPT e LLaMA, il vocabolario base è costituito dai 256 byte elementari dello standard UTF-8, garantendo la decodifica universale di qualsiasi sequenza binaria ed eliminando alla radice il problema dei token OOV. L'algoritmo **WordPiece**, d'altra parte, adotta un principio simile a BPE ma guidato da un criterio probabilistico invece che puramente frequenziale: la fusione di due subword viene eseguita solo se incrementa la verosimiglianza del modello di linguaggio calcolato sul corpus di training, rappresentando lo standard per modelli come BERT. Infine, il framework **SentencePiece** opera in modo indipendente dal linguaggio trattando il testo grezzo come un flusso continuo di byte o caratteri Unicode, includendo esplicitamente gli spazi bianchi come metacaratteri e rimuovendo qualsiasi fase preliminare di pre-segmentazione lessicale specifica per singola lingua.
 
-### 5.2 Finetuning
+L'efficienza del tokenizzatore influenza direttamente il consumo di memoria e la latenza dei Large Language Model: lingue a bassa rappresentazione statistica o testi contenenti strutture numeriche dense richiedono un numero sensibilmente maggiore di token a parità di contenuto informativo, riducendo l'effettiva capacità della finestra di contesto disponibile.
 
-- addestramento ulteriore su task specifici (classification, QA, ecc.)
-- dataset etichettati, loss supervisionata
-- il modello si specializza mantenendo gran parte della conoscenza generale
+## Architetture Transformer: Tassonomia dei Modelli
 
-### 5.3 Instruction tuning
+La famiglia dei modelli Transformer si suddivide in tre classi architetturali distinte, ciascuna ottimizzata per specifici compiti operativi.
 
-- addestramento su coppie (istruzione, risposta desiderata)
-- obiettivo: far seguire meglio le istruzioni (chat, task vari)
-- usato per modelli “chat” e assistant-like
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                        TASSONOMIA ARCHITETTURE TRANSFORMER                       │
+├──────────────────────┬─────────────────────────────┬─────────────────────────────┤
+│  ENCODER-ONLY (BERT) │     DECODER-ONLY (GPT)      │   ENCODER-DECODER (T5)      │
+├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ • Attenzione         │ • Attenzione Causale        │ • Encoder bidirezionale     │
+│   Bidirezionale      │   Mascherata                │ • Decoder autoregressivo    │
+│ • Vede tutto il      │ • Predizione autoregressiva │ • Cross-Attention tra       │
+│   testo in parallelo │   del token successivo      │   input e output            │
+│ • Task: Embedding,   │ • Task: Generazione aperta, │ • Task: Traduzione,         │
+│   Classificazione,   │   Ragionamento, Chat,       │   Sintesi astrattiva,       │
+│   Analisi Semantica  │   Ingegneria dei Prompt     │   Seq2Seq deterministico    │
+└──────────────────────┴─────────────────────────────┴─────────────────────────────┘
+```
 
-### 5.4 Alignment (RLHF, DPO, ecc.)
+I modelli **Encoder-Only** (come BERT e RoBERTa) utilizzano matrici di Self-Attention completamente bidirezionali, consentendo a ciascun token di accedere simultaneamente al contesto precedente e successivo. Vengono addestrati mediante compiti di *Masked Language Modeling* (MLM), in cui una percentuale dei token viene nascosta e predetta sulla base del contesto globale. Questi modelli non sono strutturati per la generazione aperta di testo, ma rappresentano lo standard industriale per la generazione di embedding densi, l'estrazione di entità nominate e la classificazione documentale.
 
-- tecniche per allineare il modello a preferenze umane:
-  - RLHF (Reinforcement Learning from Human Feedback)
-  - DPO (Direct Preference Optimization)
-  - altre varianti
+I modelli **Decoder-Only** (come le famiglie GPT, LLaMA, Mistral e Qwen) rappresentano il paradigma dominante per i moderni Large Language Model. Adottano una matrice di attenzione causale triangolare inferiore che impedisce la visione di token futuri, operando attraverso la predizione autoregressiva del token successivo (*Causal Language Modeling*, CLM). Questa topologia massimizza l'efficienza della generazione sequenziale e costituisce la base per i sistemi conversazionali, il ragionamento logico e l'esecuzione di istruzioni complesse.
 
-Scopo:
+I modelli **Encoder-Decoder** (come T5 e BART) integrano due blocchi distinti: un encoder bidirezionale che elabora la sequenza sorgente e un decoder autoregressivo che genera la sequenza di destinazione integrando strati intermedi di *Cross-Attention*. In questo passaggio, le matrici $K$ e $V$ provengono dall'output dell'encoder, mentre la matrice $Q$ è generata dagli strati del decoder. Questa struttura eccelle nei compiti di trasformazione diretta da sequenza a sequenza, quali la traduzione automatica e la sintesi vincolata.
 
-- ridurre output dannosi, allucinati, non allineati
-- migliorare utilità, sicurezza, coerenza
+## Il Ciclo di Vita dei Large Language Model
 
-Riferimenti:
+La creazione e l'adattamento di un Large Language Model si articola lungo una pipeline ingegneristica composta da fasi sequenziali con obiettivi e fabbisogni computazionali nettamente differenziati.
 
-- [InstructGPT paper](https://arxiv.org/abs/2203.02155)
-- [DPO paper](https://arxiv.org/abs/2305.18290)
+```
+┌─────────────────┐       ┌──────────────────────┐       ┌────────────────────────┐
+│   PRE-TRAINING  │ ────► │ SUPERVISED FINE-TUNE │ ────► │  PREFERENCE ALIGNMENT  │
+│                 │       │        (SFT)         │       │      (RLHF / DPO)      │
+└────────┬────────┘       └──────────┬───────────┘       └───────────┬────────────┘
+         │                           │                               │
+         ▼                           ▼                               ▼
+  Corpora Web/Libri           Coppie Domanda/             Ranking Umano/Preferenze:
+  (Trilioni di token)         Risposta Curate             Rifiuto di risposte tossiche
+  Loss: Cross-Entropy         Comportamento Assistente    e allineamento alle intenzioni
+```
 
----
+### Pre-Training Fondazionale
 
-## 6. Inferenza locale vs cloud
+Il pre-training costituisce la fase a più elevata intensità computazionale, assorbendo oltre il 95% delle risorse di calcolo complessive. Il modello viene inizializzato con pesi casuali e addestrato su corpora testuali non etichettati composti da trilioni di token eterogenei (pagine web, documentazione scientifica, enciclopedie e repository di codice sorgente).
 
-### 6.1 Modelli cloud (API)
+L'obiettivo matematico è la massimizzazione della log-verosimiglianza nella predizione del token successivo lungo la sequenza $x = (x_1, x_2, \dots, x_T)$:
 
-Provider tipici:
+$$\mathcal{L}_{\text{pretrain}}(\theta) = -\sum_{t=1}^T \log P(x_t \mid x_1, x_2, \dots, x_{t-1}; \theta)$$
 
-- OpenAI (GPT-4, GPT-4o, ecc.)
-- Anthropic (Claude)
-- Google (Gemini)
-- Altri (Cohere, Mistral via API, ecc.)
+Durante questa fase, il modello apprende le regole della sintassi, le strutture logico-argomentative e un'estesa rappresentazione della conoscenza sul mondo, comprimendola all'interno delle matrici di peso dei suoi miliardi di parametri. L'output di questa fase è denominato *Base Model* (o *Foundational Model*), non ancora specializzato nel dialogo o nel rispetto di formati vincolati.
 
-Vantaggi:
+### Supervised Fine-Tuning e Instruction Tuning
 
-- accesso a modelli frontier senza gestire infrastruttura
-- aggiornamenti continui, scaling automatico
+Il modello base, se interrogato con una domanda, tende per sua natura a continuare statisticamente la frase piuttosto che rispondere in modo costruttivo. Per trasformare il modello in un assistente interattivo, si esegue il **Supervised Fine-Tuning (SFT)** o **Instruction Tuning**.
 
-Svantaggi:
+In questa fase, il modello viene riaddestrato su dataset curati composti da centinaia di migliaia di coppie strutturate $(I_k, R_k)$, dove $I_k$ rappresenta un'istruzione o prompt esplicito e $R_k$ rappresenta la risposta accurata e coerente redatta da revisori esperti. L'addestramento preserva la medesima funzione di costo di cross-entropy applicata tuttavia esclusivamente sui token generati nella risposta $R_k$, mascherando i token appartenenti al prompt $I_k$.
 
-- costo per token
-- dipendenza da provider esterni
-- limiti di privacy e controllo sui dati
+Per eseguire il fine-tuning senza dover aggiornare l'intera matrice dei parametri (operazione dispendiosa che rischia di provocare oblio catastrofico), la pratica ingegneristica adotta tecniche di **Parameter-Efficient Fine-Tuning (PEFT)**, tra cui eccelle **LoRA (Low-Rank Adaptation)**. LoRA blocca i pesi originari del modello $W_0 \in \mathbb{R}^{d \times k}$ e introduce due matrici a basso rango $A \in \mathbb{R}^{r \times k}$ e $B \in \mathbb{R}^{d \times r}$ con rango $r \ll \min(d, k)$, calcolando l'aggiornamento come:
 
-### 6.2 Modelli locali
+$$W = W_0 + \Delta W = W_0 + \frac{\alpha}{r} (B \cdot A)$$
 
-Strumenti comuni:
+Questa tecnica riduce il numero di parametri addestrabili di oltre il 99%, consentendo l'adattamento del modello su singole GPU commerciali.
 
-- **Ollama** – gestione semplice di modelli locali (Llama, Mistral, Qwen, ecc.)
-- **llama.cpp** – inference ottimizzata in C++ con quantizzazione
-- **vLLM** – serving ad alte prestazioni per LLM
-- **Hugging Face Transformers** – caricamento modelli PyTorch
+### Allineamento delle Preferenze: Da RLHF a DPO
 
-Vantaggi:
+La fase conclusiva garantisce che il modello generi risposte sicure, veritiere, concise ed esenti da contenuti malevoli, allineando le distribuzioni di probabilità ai giudizi di preferenza umana.
 
-- controllo totale su dati e configurazione
-- possibilità di usare modelli open (Llama, Mistral, Qwen, Phi, ecc.)
-- integrazione con pipeline locali (OSINT, agenti, RAG)
+Il paradigma storico introdotto da [OpenAI](https://openai.com/) (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) nello studio [InstructGPT (Ouyang et al., 2022)](https://arxiv.org/abs/2203.02155) è il **Reinforcement Learning from Human Feedback (RLHF)**. Questo metodo prevede l'addestramento preliminare di una rete ausiliaria denominata *Reward Model* ($r_\psi(x, y)$), istruita a predire un punteggio scalare di qualità a partire da coppie di risposte graduate da utenti umani. Successivamente, la policy del modello linguistico $\pi_\theta$ viene ottimizzata mediante l'algoritmo di reinforcement learning Proximal Policy Optimization (PPO), integrando un vincolo di penalizzazione basato sulla divergenza di Kullback-Leibler ($D_{\text{KL}}(\pi_\theta \parallel \pi_{\text{SFT}})$) per evitare derive estreme rispetto alla distribuzione originaria.
 
-Svantaggi:
+L'elevata complessità di RLHF — che richiede di mantenere quattro reti neurali attive simultaneamente in VRAM (modello da ottimizzare, modello di riferimento, reward model e value network del critico) — ha guidato la transizione verso il metodo **Direct Preference Optimization (DPO)**, formalizzato dai ricercatori della [Stanford University](https://www.stanford.edu/) (la prestigiosa università di ricerca della California) nello studio [Direct Preference Optimization (Rafailov et al., 2023)](https://arxiv.org/abs/2305.18290). DPO ricava analiticamente la funzione di loss direttamente dalla distribuzione delle preferenze umane, eliminando del tutto la necessità del Reward Model e del loop di reinforcement learning:
 
-- richiede hardware adeguato (GPU/TPU o CPU potente + RAM)
-- gestione di aggiornamenti, sicurezza, performance
+$$\mathcal{L}_{\text{DPO}}(\theta; \pi_{\text{ref}}) = -\mathbb{E}_{(x, y_w, y_l) \sim \mathcal{D}}\left[\log \sigma\left(\beta \log \frac{\pi_\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)}\right)\right]$$
 
-Riferimenti:
+dove $y_w$ indica la risposta preferita (*winning*), $y_l$ la risposta scartata (*losing*) e $\beta$ è un iperparametro che controlla la conservazione della policy di riferimento.
 
-- [Ollama](https://ollama.com/)
-- [llama.cpp](https://github.com/ggerganov/llama.cpp)
-- [vLLM](https://github.com/vllm-project/vllm)
-- [Hugging Face Transformers](https://huggingface.co/docs/transformers)
+## Ingegneria dell'Inferenza: Il Muro della Memoria e la KV-Cache
 
----
+Nel ciclo di vita applicativo di un Large Language Model, l'inferenza rappresenta la voce preponderante dei costi operativi e di consumo energetico. L'esecuzione di un modello generativo autoregressivo si articola in due fasi computazionali con profili hardware diametralmente opposti.
 
-## 7. Ottimizzazione dell’inferenza
+In primo luogo, la **Fase di Prefill (Prompt Processing)** riceve l'intera sequenza di input di lunghezza $N_{\text{in}}$ e calcola simultaneamente i tensori di attivazione per tutti i token in un unico passaggio in avanti. Questa fase è limitata dalla capacità di calcolo puro (*compute-bound*), saturando pienamente i Tensor Core della GPU grazie a operazioni di moltiplicazione matriciale ad alta intensità aritmetica. In secondo luogo, la **Fase di Generazione (Token Decoding)** emette un singolo token alla volta. A ogni passo iterativo, il nuovo token generato viene accodato alla sequenza e rielaborato per predire l'elemento successivo. In questa fase, la GPU deve trasferire l'intera matrice dei pesi del modello dalla memoria ad alta larghezza di banda (HBM o VRAM) alle registrazioni interne dei core di calcolo per generare un unico vettore di attivazione. Di conseguenza, la generazione è strettamente limitata dalla larghezza di banda della memoria (*memory-bandwidth bound*), con un'intensità aritmetica estremamente ridotta ($\text{FLOPs} / \text{Byte} \ll 1$).
 
-### 7.1 Quantizzazione
+### Meccanica e Impronta di Memoria della KV-Cache
 
-- ridurre precisione dei pesi (es. da FP16 a INT8/INT4)
-- vantaggi:
-  - meno memoria
-  - inferenza più veloce su certi hardware
-- svantaggi:
-  - possibile perdita di qualità
+Senza meccanismi di memorizzazione, la generazione del $t$-esimo token imporrebbe il ricalcolo completo delle proiezioni di Key e Value per tutti i $t-1$ token precedenti ad ogni singolo passo temporale, con un costo computazionale pari a $O(t^2)$.
 
-Strumenti:
+La **KV-Cache** risolve questa inefficienza memorizzando in VRAM i tensori di Key e Value già calcolati per tutti i token pregressi lungo ciascuno strato dell'architettura. In fase di generazione del nuovo token $x_t$, il modello calcola unicamente il vettore $q_t$ relativo al token corrente e il nuovo vettore $k_t, v_t$, che viene concatenato alla KV-Cache persistente. La complessità computazionale del singolo step si riduce così a $O(t)$.
 
-- quantizzazione GGUF (llama.cpp)
-- quantizzazione in Hugging Face (bitsandbytes, GPTQ, AWQ, ecc.)
+Tuttavia, l'allocazione della KV-Cache introduce un'impronta di memoria massiva che cresce linearmente con la lunghezza della finestra di contesto e il numero di richieste concorrenti elaborate. La quantità esatta di memoria VRAM richiesta dalla KV-Cache è regolata dalla formula:
 
-### 7.2 Batching e caching
+$$\text{Memoria KV-Cache (Byte)} = 2 \times n_{\text{layers}} \times n_{\text{heads\_kv}} \times d_{\text{head}} \times \text{seq\_len} \times \text{batch\_size} \times \text{bytes\_per\_element}$$
 
-- **batching**: elaborare più richieste insieme per sfruttare meglio GPU
-- **caching**: riutilizzare stati (es. key/value cache in decoder) per velocizzare generazione
+dove il fattore 2 tiene conto sia delle Key che dei Value, $n_{\text{layers}}$ rappresenta il numero di blocchi Transformer, $n_{\text{heads\_kv}}$ il numero di teste di attenzione dedicate a chiavi e valori, $d_{\text{head}}$ la dimensione di ciascuna testa e $\text{bytes\_per\_element}$ la precisione numerica (pari a 2 byte per FP16/BF16).
 
-### 7.3 Speculative decoding e tecniche avanzate
+```
+Esempio di Calcolo dell'Impronta di Memoria della KV-Cache:
+Modello: LLaMA-3-70B (80 strati, 8 teste KV con GQA, d_head = 128, precisione FP16 = 2 Byte)
+Finestra di Contesto: 8.192 token
+Batch Size: 4 richieste concorrenti
 
-- **speculative decoding**: usare un modello piccolo per “indovinare” token, poi verificare con modello grande
-- altre tecniche:
-  - distillazione
-  - pruning
-  - early exit
+Memoria = 2 * 80 * 8 * 128 * 8192 * 4 * 2 Byte
+Memoria = 10.737.418.240 Byte = 10,00 GiB di VRAM dedicati alla sola KV-Cache!
+```
 
-Riferimenti:
+Per mitigare questa pressione sulla memoria, le architetture moderne hanno evoluto la topologia di attenzione introducendo **Multi-Query Attention (MQA)** (che condivide una singola testa di Key e Value tra tutte le $h$ teste di Query, riducendo l'allocazione di memoria della cache di un fattore $h$) e **Grouped-Query Attention (GQA)** (la soluzione adottata da LLaMA-2/3 e Mistral, che raggruppa le teste di Query in $G$ partizioni, ciascuna servita da una singola testa di Key e Value, garantendo un risparmio di memoria fino all'87.5% senza degrado significativo della qualità generativa).
 
-- [Speculative decoding paper](https://arxiv.org/abs/2304.11336)
+## Algoritmi di Quantizzazione e Compressione dei Pesi
 
----
+Per consentire l'esecuzione di Large Language Model su workstation locali e acceleratori con limiti di VRAM, l'industria impiega tecniche di **Post-Training Quantization (PTQ)**. La quantizzazione riduce il numero di bit impiegati per rappresentare ciascun parametro di peso del modello, passando dalla precisione standard a 16-bit (FP16 o BF16, pari a 2 byte per parametro) a formati interi a 8-bit, 4-bit o inferiori.
 
-## 8. Integrazione in pipeline
+La quantizzazione uniforme lineare trasforma un valore continuo a virgola mobile $w \in \mathbb{R}$ in un intero discreto $q$ mediante un fattore di scala $S \in \mathbb{R}$ e un punto di zero $Z \in \mathbb{Z}$:
 
-### 8.1 Pattern comuni
+$$q = \text{clamp}\left(\left\lfloor \frac{w}{S} \right\rceil + Z, q_{\min}, q_{\max}\right), \quad \hat{w} = S \cdot (q - Z)$$
 
-- **Chat / assistant**: loop di prompt → modello → risposta → memoria conversazione
-- **Analisi testo**: classificazione, estrazione entità, summarization
-- **OSINT**: analisi documenti, correlazione eventi, generazione report
-- **Agenti**: LLM come “cervello” che chiama tool, legge file, scrive note
+### Tassonomia degli Algoritmi di Quantizzazione
 
-### 8.2 Considerazioni pratiche
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                     ALGORITMI E METRICHE DI QUANTIZZAZIONE                       │
+├─────────────────┬──────────────────┬─────────────────┬───────────────────────────┤
+│    ALGORITMO    │  FORMATO OUTPUT  │ TARGET HARDWARE │ CARATTERISTICA CHIAVE     │
+├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+│ GGUF (k-quants) │ Q4_K_M, Q5_K_M   │ CPU + GPU       │ Blocchi non uniformi,     │
+│ (llama.cpp)     │ Q8_0, Q2_K       │ Apple Silicon   │ offload granulare strati  │
+├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+│ AWQ             │ INT4 (pesi) +    │ GPU NVIDIA      │ Protegge l'1% dei pesi    │
+│ (Activation-AW) │ FP16 (attivaz.)  │ Tensor Core     │ critici basandosi su act. │
+├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+│ GPTQ            │ INT4 / INT8      │ GPU NVIDIA /    │ Risolve Hessian inverso   │
+│                 │ per layer        │ AMD             │ minimizzando errore O(H)  │
+├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+│ BitsAndBytes    │ NF4 (NormalFloat)│ GPU (PyTorch    │ Distribuzione gaussiana,  │
+│ (QLoRA)         │ INT8 LLM.int8()  │ Fine-tuning)    │ Double Quantization       │
+└─────────────────┴──────────────────┴─────────────────┴───────────────────────────┘
+```
 
-- gestione del contesto (context window, chunking, RAG)
-- logging e audit delle chiamate
-- gestione errori (timeout, rate limit, fallback)
-- sicurezza (prompt injection, data leakage, allucinazioni)
+Nel panorama della compressione parametrica si distinguono quattro approcci fondamentali. In primo luogo, il formato **GGUF e K-Quants** sviluppato da [Georgi Gerganov](https://github.com/ggerganov) (lo sviluppatore software open-source creatore di whisper.cpp e [llama.cpp](https://github.com/ggerganov/llama.cpp)) organizza i pesi in super-blocchi con quantizzazione non uniforme. Nelle varianti ibride (come Q4_K_M o Q5_K_M), gli strati di attenzione e le proiezioni più sensibili all'errore vengono conservati a 5 o 6 bit, mentre le matrici di feed-forward meno critiche vengono compresse a 4 bit, massimizzando il rapporto qualità/memoria su CPU e GPU consumer. In secondo luogo, **AWQ (Activation-aware Weight Quantization)** si basa sull'evidenza empirica che non tutti i parametri hanno pari importanza: AWQ osserva le distribuzioni delle attivazioni su un piccolo dataset di calibrazione e individua l'1% dei canali salienti che presentano magnitudo elevata, proteggendoli dalla distorsione da arrotondamento e consentendo una quantizzazione a 4-bit con perdita di perplexity trascurabile. In terzo luogo, **GPTQ (Generalized Post-Training Quantization)** è un algoritmo di quantizzazione per strato basato su un'approssimazione del secondo ordine dell'errore di ricostruzione tramite l'inversione della matrice Hessiana $H = 2 X X^\top$, quantizzando i pesi colonna per colonna e aggiornando simultaneamente i coefficienti non ancora quantizzati per compensare l'errore introdotto. Infine, la libreria [BitsAndBytes](https://github.com/TimDettmers/bitsandbytes) (la libreria di quantizzazione a 8-bit e 4-bit per modelli deep learning) definisce il formato teoricamente ottimale NormalFloat 4 (NF4) per pesi distribuiti normalmente con media zero e varianza unitaria, integrando la tecnica della *Double Quantization* per comprimere i fattori di scala.
 
----
+## Motori di Serving e Architetture di Esecuzione in Produzione
 
-## 9. Laboratori ed esercizi
+La scelta dell'infrastruttura di erogazione e serving determina la latenza percepita, la concorrenza massima gestibile e i costi di infrastruttura.
 
-### Laboratorio 1 — Usare un’API cloud
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                   ARCHITETTURA ENGINE DI SERVING vLLM / PAGEDATTENTION           │
+├──────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                  │
+│   Richieste Client ──► [Continuous Batching Scheduler]                           │
+│                              │                                                   │
+│                              ▼                                                   │
+│   Tabella Pagine Virtuali:   [Pagina Logica 0] ──► [Blocco VRAM GPU 14]          │
+│                              [Pagina Logica 1] ──► [Blocco VRAM GPU 89]          │
+│                              [Pagina Logica 2] ──► [Blocco VRAM GPU 03]          │
+│                                                                                  │
+│   (Allocazione non contigua: zero frammentazione interna ed esterna)             │
+│                              │                                                   │
+│                              ▼                                                   │
+│   Esecuzione Kernel CUDA:    [Chunked Prefill] + [Speculative Decoding Step]     │
+│                                                                                  │
+└──────────────────────────────────────────────────────────────────────────────────┘
+```
 
-**Obiettivo:** chiamare un’API LLM cloud e analizzare output.
+### vLLM e PagedAttention per Carichi ad Alto Throughput
 
-**Passi:**
+Nei server di inferenza tradizionali, la VRAM per la KV-Cache viene preallocata in modo contiguo per ciascuna richiesta assumendo la lunghezza massima teorica del contesto (es. 4.096 o 8.192 token). Poiché la maggior parte dei prompt reali e delle risposte generate occupa solo una frazione di tale spazio, fino all'80% della memoria GPU rimaneva inutilizzato per frammentazione interna ed esterna.
 
-1. Scegliere un provider (OpenAI, Anthropic, Google, ecc.).
-2. Ottenere una API key.
-3. Scrivere uno script che:
-   - invia un prompt semplice
-   - riceve e stampa la risposta
-4. Provare prompt diversi (domanda fattuale, task creativo, analisi testo).
-5. Annotare:
-   - tempi di risposta
-   - qualità delle risposte
-   - eventuali allucinazioni o errori
+L'engine [vLLM](https://github.com/vllm-project/vllm) (l'engine open-source di inferenza LLM ad alto throughput basato sull'algoritmo di gestione della memoria PagedAttention) risolve radicalmente il problema ispirandosi al meccanismo di memoria virtuale con paginazione dei sistemi operativi. Con **PagedAttention**, la KV-Cache viene suddivisa in blocchi di dimensione fissa (es. 16 o 32 token) allocati dinamicamente in pagine fisiche di VRAM non contigue. Una tabella delle pagine virtuale mantiene la mappatura tra sequenza logica e locazioni fisiche.
 
-**Deliverable:**
+Grazie a PagedAttention, vLLM abilita il **Continuous Batching** (o *iteration-level scheduling*): quando una richiesta nel batch termina la propria generazione, la memoria dei suoi blocchi viene immediatamente riallocata per accogliere una nuova richiesta in ingresso senza attendere il completamento dell'intero batch, moltiplicando il throughput del sistema di 2–4 volte rispetto ai server classici.
 
-- script di chiamata API
-- nota con osservazioni su costi, latenza, qualità
+### llama.cpp e l'Inferenza Efficace su Risorse Consumer
 
----
+Per scenari locali, edge o workstation prive di cluster GPU dedicati, [llama.cpp](https://github.com/ggerganov/llama.cpp) (l'engine di inferenza in C/C++ ottimizzato per modelli quantizzati in formato GGUF su CPU e GPU consumer) rappresenta lo standard industriale. Scritto interamente in C/C++ senza dipendenze pesanti, il framework implementa kernel di moltiplicazione matriciale altamente ottimizzati tramite istruzioni vettoriali SIMD (AVX2, AVX-512 per processori x86 e NEON per architetture ARM).
 
-### Laboratorio 2 — Usare un modello locale (Ollama o llama.cpp)
+llama.cpp supporta il partizionamento granulare degli strati del modello (*layer offloading*): se una GPU dispone di VRAM insufficiente per ospitare l'intero modello quantizzato, una porzione di strati viene caricata sulla GPU (sfruttando backend CUDA, Metal o Vulkan) e i restanti vengono eseguiti sulla RAM di sistema tramite la CPU, massimizzando le prestazioni ottenibili su qualsiasi combinazione hardware.
 
-**Obiettivo:** eseguire inferenza con un modello locale.
+### Speculative Decoding
 
-**Passi:**
+La tecnica dello **Speculative Decoding** sfrutta il disallineamento tra la fase di prefill (compute-bound) e la fase di decode (memory-bound). Un modello compatto e ultra-rapido (denominato *Draft Model*, es. da 1B parametri) genera in modo autoregressivo una sequenza provvisoria di $K$ token candidati.
 
-1. Installare Ollama o llama.cpp.
-2. Scaricare un modello (es. Llama 3, Mistral, Qwen).
-3. Eseguire inferenza via CLI o API locale.
-4. Confrontare con un modello cloud (stesso prompt).
-5. Annotare:
-   - differenze di velocità
-   - differenze di qualità/stile
-   - limiti hardware
+Successivamente, il modello principale di grandi dimensioni (*Target Model*, es. da 70B parametri) valuta tutti i $K$ token candidati simultaneamente in un unico forward pass parallelo di tipo prefill. Un algoritmo di campionamento con rifiuto (*rejection sampling*) accetta i token che rispettano la distribuzione di probabilità del modello target, correggendo il primo token divergente. Questo paradigma consente di accelerare la generazione del 150–250% preservando matematicamente l'esatta distribuzione statistica del modello target.
 
-**Deliverable:**
+## Compromessi Operativi, Vincoli Hardware e Scenari di Fallimento
 
-- script/note con comandi usati
-- nota di confronto locale vs cloud
+La progettazione di sistemi basati su Large Language Model impone l'analisi rigorosa dei compromessi ingegneristici tra latenza, throughput, sovranità dei dati e fedeltà semantica.
 
----
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                    MATRICE DEI COMPROMESSI OPERATIVI: LOCALE VS CLOUD            │
+├──────────────────────┬─────────────────────────────┬─────────────────────────────┤
+│  DIMENSIONE ANALISI  │ MODELLI LOCALI (GGUF/vLLM)  │      API CLOUD HOSTED       │
+├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Sovranità e Privacy  │ Totale: nessun dato lascia  │ Limitata: dati inviati      │
+│                      │ l'infrastruttura locale     │ verso endpoint di terzi     │
+├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Costi Operativi      │ Spesa capitale iniziale HW, │ Costo variabile operativo   │
+│                      │ costo per token nullo       │ per milione di token        │
+├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Latenza di Rete      │ Zero latenza di rete, vinco-│ Dipendente da latenza HTTP/ │
+│                      │ lata dalla banda VRAM locale│ TLS e code del fornitore    │
+├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+│ Manutenzione e Scala │ Gestione manuale di driver, │ Nessuna gestione infra,     │
+│                      │ VRAM, kernel e quantizzaz.  │ auto-scaling garantito      │
+└──────────────────────┴─────────────────────────────┴─────────────────────────────┘
+```
 
-### Laboratorio 3 — Tokenizzazione e context window
-
-**Obiettivo:** capire come funziona la tokenizzazione e i limiti di contesto.
-
-**Passi:**
-
-1. Usare un tokenizzatore (Hugging Face o libreria del provider).
-2. Tokenizzare testi di diversa lunghezza e lingua.
-3. Contare token e confrontare con lunghezza in caratteri/parole.
-4. Provare a superare la context window e osservare comportamenti (truncation, errore, ecc.).
-5. Annotare:
-   - come cambia il numero di token tra lingue e stili
-   - implicazioni per prompt lunghi e RAG
-
-**Deliverable:**
-
-- script di tokenizzazione
-- nota con osservazioni su token, contesto e strategie di chunking
-
----
-
-### Laboratorio 4 — Integrare un LLM in una pipeline semplice
-
-**Obiettivo:** usare un LLM in un mini-workflow (es. analisi testo o OSINT).
-
-**Passi:**
-
-1. Scegliere un task semplice:
-   - classificazione di documenti
-   - estrazione di entità
-   - generazione di riassunti
-2. Usare un modello (cloud o locale) per elaborare un piccolo dataset.
-3. Salvare output e confrontare con baseline (es. regole semplici, keyword).
-4. Annotare:
-   - vantaggi dell’uso del LLM
-   - limiti e errori tipici
-   - possibili miglioramenti (prompt, modello, post-processing)
-
-**Deliverable:**
-
-- script/pipeline completa
-- nota con risultati e riflessioni
-
----
-
-## 10. Rubriche e checklist
-
-### Checklist — D09 completato
-
-- [ ] So spiegare cos’è un transformer e perché ha scalato meglio delle RNN.
-- [ ] So descrivere le fasi: pretraining, finetuning, instruction tuning, alignment.
-- [ ] Ho usato almeno un’API cloud e un modello locale per inferenza.
-- [ ] So usare un tokenizzatore e contare token di un testo.
-- [ ] Ho integrato un LLM in una pipeline semplice (analisi testo, OSINT, chat, ecc.).
-- [ ] So discutere trade-off tra modelli locali e cloud (costo, latenza, privacy, controllo).
-
-### Errori tipici da evitare
-
-- trattare i LLM come oracoli infallibili (ignorare allucinazioni e bias).
-- usare prompt vaghi e aspettarsi risultati precisi.
-- non considerare limiti di context window e tokenizzazione.
-- esporre API key o dati sensibili in log o repo pubblici.
-- scegliere modelli senza considerare vincoli hardware e di latenza.
-
-### Segnali che “ho davvero capito” D09
-
-- posso leggere la doc di un modello (Hugging Face, repo GitHub) e capire architettura, limiti e uso.
-- so scegliere tra modello locale e cloud in base a task, budget e vincoli.
-- so spiegare a un collega cos’è l’attention e perché i transformer sono diversi dalle RNN.
-- non vedo più i LLM come “magia”, ma come modelli statistici con punti di forza e debolezze.
-
----
-
-## 11. Come ripartire dopo una pausa
-
-Se torno su D09 dopo giorni o settimane:
-
-1. Riapro uno script di inferenza (cloud o locale).
-2. Eseguo qualche chiamata per ricordare il flusso.
-3. Modifico un parametro (modello, prompt, temperatura) e osservo differenze.
-4. Aggiorno una nota con:
-   - cosa ho cambiato
-   - effetto su output e performance
-
-Scopo: mantenere fresco il legame tra teoria (transformer, tokenizzazione) e pratica (chiamate, pipeline).
-
----
-
-## 12. Risorse consigliate
-
-### 12.1 Paper e articoli fondamentali
-
-- **Attention Is All You Need**  
-  Il paper originale sui transformer.  
-  https://arxiv.org/abs/1706.03762  
-
-- **The Illustrated Transformer**  
-  Spiegazione visiva e intuitiva dell’architettura.  
-  https://jalammar.github.io/illustrated-transformer/  
-
-- **InstructGPT paper**  
-  Istruzioni e allineamento per modelli chat.  
-  https://arxiv.org/abs/2203.02155  
-
-- **DPO paper**  
-  Direct Preference Optimization per alignment.  
-  https://arxiv.org/abs/2305.18290  
-
-### 12.2 Corsi e tutorial
-
-- **Hugging Face NLP Course**  
-  Corso gratuito su transformer, tokenizzazione, finetuning.  
-  https://huggingface.co/learn/nlp-course  
-
-- **Dive into Deep Learning (D2L)**  
-  Capitoli su attention, transformer, LLM.  
-  https://d2l.ai/  
-
-### 12.3 Strumenti e librerie
-
-- **Hugging Face Transformers**  
-  Libreria principale per modelli transformer.  
-  https://huggingface.co/docs/transformers  
-
-- **Ollama**  
-  Gestione semplice di modelli locali.  
-  https://ollama.com/  
-
-- **llama.cpp**  
-  Inference ottimizzata in C++ con quantizzazione.  
-  https://github.com/ggerganov/llama.cpp  
-
-- **vLLM**  
-  Serving ad alte prestazioni per LLM.  
-  https://github.com/vllm-project/vllm  
-
-Queste risorse non vanno studiate per intero: D09 serve a darti una mappa operativa
-per usare transformer e LLM in modo consapevole, e a collegarti a paper/corsi quando serve approfondire.
-
-
-### Strumenti Visivi e Animazioni Esterne (Web)
-- **[LLM Visualization (bbycroft.net)](https://bbycroft.net/llm)**: **Come usarlo**: il "pezzo forte". Ti mostra un Transformer intero in 3D. Clicca su un token di input e naviga attraverso i blocchi di Attention per vedere letteralmente le matrici Q, K, V popolarsi di numeri reali.
-- **[The Illustrated Transformer (Jay Alammar)](https://jalammar.github.io/illustrated-transformer/)**: **Come usarlo**: scorri lentamente le GIF della Self-Attention matrix; fermati dove le matrici si moltiplicano per formare il punteggio e confrontalo con il widget che abbiamo creato per vedere la formula in azione.
+### Metriche Prestazionali di Inferenza
+
+La profilazione delle prestazioni di inferenza richiede l'analisi di tre metriche cardine complementari: il **Time To First Token (TTFT)**, che misura il tempo intercorso tra l'invio del prompt e l'emissione del primo token dominato dalla fase di prefill; l'**Inter-Token Latency (ITL)** (o Time Per Output Token), che quantifica il tempo necessario per emettere ciascun token successivo al primo durante la fase di decode ed è regolato in via quasi esclusiva dalla larghezza di banda della memoria VRAM; il **Throughput Globale**, che esprime il numero complessivo di token generati al secondo aggregati su tutti gli utenti contemporanei, massimizzato da scheduler a continuous batching come vLLM.
+
+### Scenari di Fallimento e Limiti Intrinseci
+
+L'impiego dei Large Language Model evidenzia diverse vulnerabilità strutturali. Le **allucinazioni fattuali** derivano dal fatto che gli LLM sono generatori probabilistici ottimizzati sulla plausibilità statistica della sequenza e non database relazionali deterministici: se interrogati su fatti rari o estranei al corpus di pre-training, generano affermazioni false con elevata confidenza linguistica, richiedendo l'integrazione di architetture di Retrieval-Augmented Generation (approfondite in [D10](D10-rag-knowledge-osint.md)). Il **degrado nel lungo contesto (*Lost in the Middle*)** comporta che all'aumentare della sequenza verso i limiti della finestra di contesto (es. oltre 32.000 token), l'accuratezza di estrazione delle informazioni situate nella parte mediana del prompt decada esponenzialmente. Infine, la **suscettibilità al prompt injection** dovuta all'assenza di separazione formale tra istruzioni di sistema e dati utente non fidati espone i modelli ad attacchi di manipolazione semantica (trattati in [D14](D14-responsible-ai-cyber.md)).
+
+## Riferimenti Bibliografici e Risorse Tecniche
+
+### Articoli Scientifici Fondamentali
+
+L'architettura Transformer e le sue evoluzioni sono state formalizzate in una serie di pubblicazioni cardine della letteratura sull'apprendimento automatico. Lo studio pionieristico [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762) descrive la prima architettura basata interamente sulla Self-Attention scalata. Le dinamiche di allineamento e ottimizzazione delle preferenze umane sono state introdotte da [OpenAI](https://openai.com/) (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) nell'articolo [InstructGPT (Ouyang et al., 2022)](https://arxiv.org/abs/2203.02155) e perfezionate dal laboratorio di intelligenza artificiale della [Stanford University](https://www.stanford.edu/) (la prestigiosa università di ricerca californiana) nella pubblicazione [Direct Preference Optimization (Rafailov et al., 2023)](https://arxiv.org/abs/2305.18290).
+
+L'ottimizzazione dei carichi computazionali durante l'inferenza è documentata nello studio sulla generazione parallela speculativa [Speculative Decoding (Leviathan et al., 2023)](https://arxiv.org/abs/2304.11336) condotto da [Google](https://about.google/) e nell'articolo su PagedAttention e vLLM [Efficient Memory Management for Large Language Model Serving with PagedAttention (Kwon et al., 2023)](https://arxiv.org/abs/2309.06180) sviluppato presso la [Stanford University](https://www.stanford.edu/).
+
+### Framework, Strumenti Open-Source e Didattica Visiva
+
+L'ecosistema di sviluppo per modelli linguistici fa perno sulla suite open-source curata da [Hugging Face](https://huggingface.co/) (la piattaforma e comunità open-source leader per modelli di intelligenza artificiale) tramite la libreria [Hugging Face Transformers](https://huggingface.co/docs/transformers) (la libreria open-source per modelli di linguaggio e visione), affiancata dalla libreria di tokenizzazione [Hugging Face Tokenizers](https://huggingface.co/docs/tokenizers), dallo strumento di gestione dataset [Hugging Face Datasets](https://huggingface.co/docs/datasets) e dal modulo per il calcolo distribuito [Hugging Face Accelerate](https://huggingface.co/docs/accelerate). L'adattamento efficiente dei parametri è gestito tramite la libreria [PEFT](https://huggingface.co/docs/peft) e il framework di allineamento [TRL](https://huggingface.co/docs/trl).
+
+Per l'esecuzione locale e il deployment in produzione su hardware consumer e server, i riferimenti d'elezione sono il motore di inferenza C++ [llama.cpp](https://github.com/ggerganov/llama.cpp) creato da [Georgi Gerganov](https://github.com/ggerganov), l'infrastruttura di gestione locale semplificata [Ollama](https://ollama.com/) (lo strumento open-source multipiattaforma per scaricare ed eseguire LLM in locale), il server di serving ad alto throughput [vLLM](https://github.com/vllm-project/vllm) e il server enterprise di NVIDIA [TensorRT-LLM](https://github.com/NVIDIA/TensorRT-LLM) (la libreria open-source di NVIDIA per l'ottimizzazione e inferenza ultra-rapida di modelli LLM).
+
+Per la comprensione visiva e intuitiva della dinamica dei tensori, la guida didattica [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) redatta da [Jay Alammar](https://jalammar.github.io/) (il ricercatore e divulgatore AI autore di autorevoli guide visive) e il visualizzatore tridimensionale interattivo [LLM Visualization](https://bbycroft.net/llm) offrono una rappresentazione chiara del passaggio dei dati attraverso i blocchi di attenzione. I corsi avanzati della Stanford University [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/) e il [Corso NLP di Hugging Face](https://huggingface.co/learn/nlp-course) costituiscono i percorsi accademici gratuiti più completi per approfondire la materia.
+
+## Appendice Operativa: Laboratori Pratici
+
+I laboratori seguenti forniscono implementazioni complete e riproducibili in linguaggio [Python](https://www.python.org/) per esplorare la meccanica della Self-Attention, la tokenizzazione avanzata e l'inferenza locale quantizzata.
+
+### Laboratorio 1: Implementazione da Zero di Multi-Head Attention con Causal Masking e KV-Cache
+
+Questo laboratorio implementa un modulo completo di Multi-Head Attention autoregressivo in [PyTorch](https://pytorch.org/) (il framework open-source di deep learning e calcolo tensoriale accelerato su GPU), dimostrando sia la fase di forward pass completo sia la fase di generazione incrementale passo-passo supportata da KV-Cache.
+
+```python
+import math
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from typing import Optional, Tuple
+
+class CausalMultiHeadAttentionWithKVCache(nn.Module):
+    """
+    Modulo di Multi-Head Attention causale con supporto esplicito
+    alla KV-Cache per generazione autoregressiva incrementale.
+    """
+    def __init__(self, d_model: int, n_heads: int):
+        super().__init__()
+        assert d_model % n_heads == 0, "d_model deve essere divisibile per n_heads"
+        
+        self.d_model = d_model
+        self.n_heads = n_heads
+        self.d_k = d_model // n_heads
+        
+        # Proiezioni lineari per Query, Key, Value e Output
+        self.w_q = nn.Linear(d_model, d_model, bias=False)
+        self.w_k = nn.Linear(d_model, d_model, bias=False)
+        self.w_v = nn.Linear(d_model, d_model, bias=False)
+        self.w_o = nn.Linear(d_model, d_model, bias=False)
+        
+    def forward(
+        self, 
+        x: torch.Tensor, 
+        kv_cache: Optional[Tuple[torch.Tensor, torch.Tensor]] = None,
+        use_causal_mask: bool = True
+    ) -> Tuple[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]]:
+        """
+        Argomenti:
+            x: Tensore di input di forma (Batch, SeqLen, d_model)
+            kv_cache: Tupla opzionale (past_keys, past_values) con forma (Batch, n_heads, PastLen, d_k)
+            use_causal_mask: Se True, applica la maschera triangolare superiore causale
+            
+        Ritorna:
+            output: Tensore proiettato di forma (Batch, SeqLen, d_model)
+            new_kv_cache: Nuova tupla (keys, values) aggiornata per i passi successivi
+        """
+        batch_size, seq_len, _ = x.shape
+        
+        # 1. Proiezioni lineari e rimodellamento tensoriale in (Batch, n_heads, SeqLen, d_k)
+        q = self.w_q(x).view(batch_size, seq_len, self.n_heads, self.d_k).transpose(1, 2)
+        k = self.w_k(x).view(batch_size, seq_len, self.n_heads, self.d_k).transpose(1, 2)
+        v = self.w_v(x).view(batch_size, seq_len, self.n_heads, self.d_k).transpose(1, 2)
+        
+        # 2. Gestione della KV-Cache per generazione incrementale
+        if kv_cache is not None:
+            past_k, past_v = kv_cache
+            k = torch.cat([past_k, k], dim=2)
+            v = torch.cat([past_v, v], dim=2)
+            
+        current_kv_cache = (k, v)
+        total_k_len = k.size(2)
+        
+        # 3. Calcolo dei punteggi di attenzione: (Q · K^T) / sqrt(d_k)
+        scores = torch.matmul(q, k.transpose(-2, -1)) / math.sqrt(self.d_k)
+        
+        # 4. Applicazione della maschera causale se richiesta (solo durante il prefill o senza cache)
+        if use_causal_mask and seq_len > 1:
+            mask = torch.triu(torch.full((seq_len, total_k_len), float("-inf"), device=x.device), diagonal=1)
+            scores = scores + mask.unsqueeze(0).unsqueeze(0)
+            
+        # 5. Normalizzazione Softmax e moltiplicazione per la matrice dei Valori
+        attn_weights = F.softmax(scores, dim=-1)
+        context = torch.matmul(attn_weights, v)  # (Batch, n_heads, SeqLen, d_k)
+        
+        # 6. Concatenazione delle teste e proiezione lineare finale
+        context = context.transpose(1, 2).contiguous().view(batch_size, seq_len, self.d_model)
+        output = self.w_o(context)
+        
+        return output, current_kv_cache
+
+if __name__ == "__main__":
+    # Test di verifica numerica e coerenza tra forward parallelo e generazione con KV-Cache
+    torch.manual_seed(42)
+    B, T, D, H = 1, 4, 64, 4
+    mha = CausalMultiHeadAttentionWithKVCache(d_model=D, n_heads=H)
+    x_prompt = torch.randn(B, T, D)
+    
+    # 1. Forward pass completo (Prefill parallelo)
+    out_parallel, cache_prompt = mha(x_prompt, use_causal_mask=True)
+    print(f"Forma output prefill parallelo: {out_parallel.shape}")
+    
+    # 2. Generazione del token successivo (Decode con KV-Cache)
+    x_new_token = torch.randn(B, 1, D)
+    out_next_token, updated_cache = mha(x_new_token, kv_cache=cache_prompt, use_causal_mask=False)
+    print(f"Forma output step generativo con cache: {out_next_token.shape}")
+    print(f"Dimensione aggiornata della chiave in cache: {updated_cache[0].shape}")
+```
+
+### Laboratorio 2: Analisi della Tokenizzazione Subword BPE e Profilazione della Finestra di Contesto
+
+Questo laboratorio esplora la segmentazione del testo tramite algoritmi Byte-level BPE impiegando la libreria [Hugging Face Tokenizers](https://huggingface.co/docs/tokenizers) e [Hugging Face Transformers](https://huggingface.co/docs/transformers), analizzando le differenze di fertilità tra lingue e implementando una funzione di chunking con sovrapposizione (*sliding window*).
+
+```python
+import json
+from transformers import AutoTokenizer
+
+def analizza_tokenizzazione(testo: str, nome_modello: str = "gpt2"):
+    """
+    Esegue l'ispezione della sequenza di token, dei rispettivi ID e dei byte sottostanti.
+    """
+    tokenizer = AutoTokenizer.from_pretrained(nome_modello)
+    encoded = tokenizer(testo, return_offsets_mapping=True)
+    token_ids = encoded["input_ids"]
+    tokens = tokenizer.convert_ids_to_tokens(token_ids)
+    
+    print(f"--- Analisi con Tokenizzatore: {nome_modello} ---")
+    print(f"Lunghezza testo (caratteri): {len(testo)}")
+    print(f"Numero di token generati: {len(token_ids)}")
+    print(f"Rapporto caratteri/token (fertilità): {len(testo) / max(1, len(token_ids)):.2f}\n")
+    
+    print("Mappatura Subword -> Token ID:")
+    for idx, (t, tid) in enumerate(zip(tokens[:10], token_ids[:10])):
+        print(f"  [{idx:02d}] ID: {tid:<6} | Token: {repr(t)}")
+    if len(tokens) > 10:
+        print(f"  ... ({len(tokens) - 10} token rimanenti omessi per brevità)")
+    print()
+
+def chunking_finestra_scorrevole(testo: str, max_tokens: int, overlap_tokens: int, nome_modello: str = "gpt2"):
+    """
+    Divide un testo esteso in chunk di dimensione vincolata con overlap per non perdere contesto.
+    """
+    tokenizer = AutoTokenizer.from_pretrained(nome_modello)
+    token_ids = tokenizer.encode(testo)
+    step = max_tokens - overlap_tokens
+    chunks = []
+    
+    for i in range(0, len(token_ids), step):
+        chunk_ids = token_ids[i:i + max_tokens]
+        chunk_text = tokenizer.decode(chunk_ids, skip_special_tokens=True)
+        chunks.append({
+            "chunk_index": len(chunks),
+            "start_token": i,
+            "end_token": i + len(chunk_ids),
+            "token_count": len(chunk_ids),
+            "text": chunk_text
+        })
+        if i + max_tokens >= len(token_ids):
+            break
+            
+    return chunks
+
+if __name__ == "__main__":
+    frase_it = "L'architettura Transformer risolve le dipendenze semantiche tramite matrici di attenzione."
+    analizza_tokenizzazione(frase_it, nome_modello="gpt2")
+    
+    documento = "I modelli linguistici autoregressivi operano predicendo il token successivo. " * 30
+    chunks = chunking_finestra_scorrevole(documento, max_tokens=64, overlap_tokens=16)
+    print(f"Documento suddiviso in {len(chunks)} chunk con sliding window.")
+    print(f"Esempio chunk 0: {json.dumps(chunks[0], ensure_ascii=False, indent=2)}")
+```
+
+### Laboratorio 3: Inferenza Locale Quantizzata ad Alte Prestazioni con llama-cpp-python
+
+Questo script illustra come eseguire inferenza locale deterministica su modelli in formato GGUF quantizzato utilizzando l'interfaccia [Python](https://www.python.org/) di [llama.cpp](https://github.com/ggerganov/llama.cpp) (`llama-cpp-python`), misurando la latenza Time-To-First-Token (TTFT) e la velocità di generazione.
+
+```python
+import time
+from typing import Generator
+
+def esegui_inferenza_quantizzata(
+    model_path: str,
+    prompt: str,
+    max_tokens: int = 256,
+    temperature: float = 0.2,
+    top_p: float = 0.9,
+    n_gpu_layers: int = -1
+):
+    """
+    Esegue inferenza su un file GGUF locale con offload su GPU e misurazione di latenza.
+    Richiede: pip install llama-cpp-python
+    """
+    try:
+        from llama_cpp import Llama
+    except ImportError:
+        print("[ERRORE] La libreria 'llama-cpp-python' non è installata nel virtual environment.")
+        print("Installala eseguendo: pip install llama-cpp-python")
+        return
+
+    print(f"Caricamento modello quantizzato da: {model_path}")
+    print(f"Configurazione: n_gpu_layers={n_gpu_layers} (tutti gli strati su GPU se supportato)")
+    
+    llm = Llama(
+        model_path=model_path,
+        n_gpu_layers=n_gpu_layers,
+        n_ctx=4096,
+        verbose=False
+    )
+    
+    print("\n--- Avvio Generazione Risposta ---")
+    start_time = time.perf_counter()
+    first_token_time = None
+    token_count = 0
+    
+    stream = llm(
+        prompt=prompt,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        stream=True
+    )
+    
+    output_testo = []
+    for chunk in stream:
+        if first_token_time is None:
+            first_token_time = time.perf_counter()
+        testo_chunk = chunk["choices"][0]["text"]
+        output_testo.append(testo_chunk)
+        print(testo_chunk, end="", flush=True)
+        token_count += 1
+        
+    end_time = time.perf_counter()
+    print("\n\n--- Metriche di Prestazione ---")
+    if first_token_time:
+        ttft = (first_token_time - start_time) * 1000
+        total_generation_time = end_time - first_token_time
+        tps = token_count / max(1e-6, total_generation_time)
+        print(f"Time to First Token (TTFT): {ttft:.2f} ms")
+        print(f"Token totali generati: {token_count}")
+        print(f"Velocità di generazione (Decode): {tps:.2f} token/s")
+    else:
+        print("Nessun token generato.")
+
+if __name__ == "__main__":
+    prompt_test = "<|im_start|>system\nSei un analista esperto di cybersecurity e intelligenza artificiale.<|im_end|>\n<|im_start|>user\nSpiega in sintesi il vantaggio della quantizzazione k-quants in llama.cpp.<|im_end|>\n<|im_start|>assistant\n"
+    # Sostituire con il percorso del file GGUF presente nel sistema
+    mock_model_path = "models/llama-3-8b-instruct.Q4_K_M.gguf"
+    print(f"[DEMO] Script di esecuzione locale per modelli GGUF con llama.cpp: {mock_model_path}")
+```
+
+### Laboratorio 4: Pipeline OSINT di Analisi Documentale ed Estrazione di Entità Strutturate con Modelli Locali
+
+Questo laboratorio dimostra l'integrazione di un modello linguistico locale in una pipeline di analisi intelligence, interrogando l'endpoint REST locale di [Ollama](https://ollama.com/) per estrarre entità e relazioni in formato JSON validato schema-first.
+
+```python
+import json
+import urllib.request
+import urllib.error
+from typing import Dict, Any
+
+def estrai_entita_intelligence_ollama(
+    testo_sorgente: str, 
+    modello: str = "llama3",
+    endpoint: str = "http://localhost:11434/api/generate"
+) -> Dict[str, Any]:
+    """
+    Invia un documento grezzo a un'istanza locale di Ollama richiedendo
+    l'estrazione rigorosa di indicatori OSINT in formato JSON conforme.
+    """
+    system_prompt = (
+        "Sei un sistema automatico di Information Extraction per intelligence OSINT. "
+        "Analizza il testo fornito ed estrai esclusivamente un oggetto JSON valido con la seguente struttura:\n"
+        "{\n"
+        '  "persone": ["nome completo"],\n'
+        '  "organizzazioni": ["nome ente"],\n'
+        '  "infrastrutture_digitali": ["domini", "indirizzi IP", "software"],\n'
+        '  "vettori_minaccia": ["tipologia attacco o attività sospetta"]\n'
+        "}\n"
+        "Non includere alcun commento, testo introduttivo o blocchi markdown prima o dopo il JSON."
+    )
+    
+    payload = {
+        "model": modello,
+        "system": system_prompt,
+        "prompt": f"Documento da analizzare:\n\"\"\"\n{testo_sorgente}\n\"\"\"",
+        "stream": False,
+        "format": "json",
+        "options": {
+            "temperature": 0.0,
+            "num_predict": 512
+        }
+    }
+    
+    req_data = json.dumps(payload).encode("utf-8")
+    req = urllib.request.Request(
+        endpoint, 
+        data=req_data, 
+        headers={"Content-Type": "application/json"}
+    )
+    
+    try:
+        with urllib.request.urlopen(req, timeout=60) as response:
+            result = json.loads(response.read().decode("utf-8"))
+            raw_response = result.get("response", "{}")
+            parsed_json = json.loads(raw_response)
+            return parsed_json
+    except urllib.error.URLError as e:
+        print(f"[AVVISO] Impossibile connettersi all'endpoint Ollama ({endpoint}): {e}")
+        print("Verifica che Ollama sia in esecuzione localmente ('ollama serve').")
+        return {"errore": "endpoint_non_raggiungibile"}
+    except json.JSONDecodeError as e:
+        print(f"[ERRORE] Il modello non ha restituito un JSON valido: {e}")
+        return {"errore": "json_non_valido"}
+
+if __name__ == "__main__":
+    report_osint = (
+        "Il gruppo APT28 ha condotto una campagna di spear-phishing contro il Ministero degli Esteri "
+        "utilizzando il dominio malevolo mail-update-auth.com e indirizzi IP attestati sulla subnet "
+        "198.51.100.45. Gli analisti hanno identificato l'uso del malware Zebrocy per l'esfiltrazione."
+    )
+    
+    print("Invio testo alla pipeline di estrazione OSINT...")
+    risultato = estrai_entita_intelligence_ollama(report_osint)
+    print("Risultato strutturato estratto:")
+    print(json.dumps(risultato, ensure_ascii=False, indent=2))
+```
+
+### Guida alle Procedure dei Laboratori
+
+1. Esecuzione del modulo Multi-Head Attention da riga di comando: Attivare il virtual environment del progetto in `.venv`, installare i pacchetti necessari tramite `pip install torch transformers tokenizers` ed eseguire lo script del Laboratorio 1 per verificare la corrispondenza dei tensori di output e l'evoluzione della KV-Cache.
+2. Ispezione della tokenizzazione e chunking: Eseguire lo script del Laboratorio 2 per quantificare l'efficienza della tokenizzazione BPE su testi in lingua italiana e verificare la ripartizione di documenti lunghi in segmenti sovrapposti per l'ingestione in database vettoriali.
+3. Benchmarking dell'inferenza locale: Predisporre un file modello quantizzato in formato `.gguf` all'interno della cartella `models/`, configurare i parametri di offload degli strati ed eseguire il Laboratorio 3 per monitorare il tempo di risposta del primo token e il throughput di generazione in token al secondo.
+4. Elaborazione automatica di documenti OSINT: Avviare il demone locale di Ollama con `ollama run llama3`, inviare un comunicato o un report investigativo tramite lo script del Laboratorio 4 e verificare la conformità dello schema JSON estratto.
