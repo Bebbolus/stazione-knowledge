@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-08-19T06:00:00Z",
+  "drift_share": 0.6666666666666666,
+  "alert_triggered": true,
+  "features": {
+    "feature_signal_amplitude": {
+      "ks_statistic": 0.432,
+      "p_value": 3.677996330485201e-84,
+      "wasserstein_distance": 1.1132,
+      "psi": 1.0841,
+      "drift_detected": true
+    },
+    "feature_response_delay": {
+      "ks_statistic": 0.229,
+      "p_value": 2.1603957516211753e-23,
+      "wasserstein_distance": 0.9478,
+      "psi": 0.3101,
+      "drift_detected": true
+    },
+    "feature_packet_size": {
+      "ks_statistic": 0.033,
+      "p_value": 0.647814872077161,
+      "wasserstein_distance": 0.0972,
+      "psi": 0.0053,
+      "drift_detected": false
+    }
+  }
+}
