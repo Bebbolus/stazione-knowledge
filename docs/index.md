@@ -3,6 +3,9 @@ aliases: [Index, Mappa del Percorso, Indice Generale, Stazione Knowledge Base]
 ---
 # Percorso Didattico e Mappa della Knowledge Base
 
+> [!TIP]
+> **Versione Interattiva**: Vuoi metterti alla prova? È disponibile la versione interattiva di questo percorso didattico in stile Duolingo / Axon ML con quiz, flashcard e laboratori di codice! Accedi qui: [**Stazione App Interattiva**](./interactive/index.html).
+
 La **Mappa del Percorso** è l'indice sistematico della Stazione Knowledge Base, progettato per guidare la consultazione delle ventuno monografie tecniche dedicate all'ingegneria dell'Intelligenza Artificiale e all'OSINT avanzato. Questo documento struttura l'intero curriculum didattico all'interno del framework [MkDocs](https://www.mkdocs.org/) (il generatore di siti statici per documentazione tecnica), categorizzando ogni modulo in base alla complessità concettuale e ai prerequisiti operativi. L'indice consente a sviluppatori, ricercatori e analisti di orientarsi rapidamente tra i principi teorici, le architetture di sistema e i laboratori applicativi, garantendo un apprendimento progressivo, verificabile e privo di frammentazione informativa.
 
 ## Architettura dei Livelli Didattici
