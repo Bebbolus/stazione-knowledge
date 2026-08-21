@@ -243,82 +243,106 @@ if __name__ == "__main__":
     print(np.round(np.max(Q_learned, axis=1).reshape(4, 4), 2))
 ```
 
-### Laboratorio 2: Calcolo Vettorizzato della Loss di PPO con PyTorch
+### Laboratorio 2: Calcolo Vettorizzato della Loss di PPO in NumPy
 
-Questo laboratorio implementa la funzione di perdita completa dell'algoritmo Proximal Policy Optimization in modo puramente vettorizzato utilizzando [PyTorch](https://pytorch.org/) (il framework open-source di deep learning e differenziazione automatica). La perdita calcola il Clipped Surrogate Objective per la policy, la Value Function Loss con regolarizzazione MSE e il bonus di entropia per incoraggiare l'esplorazione.
+Questo laboratorio implementa la funzione di perdita completa dell'algoritmo Proximal Policy Optimization in modo puramente vettorizzato utilizzando [NumPy](https://numpy.org/) e [Python](https://www.python.org/) (con derivazione analitica dei gradienti ed equivalenza computazionale ai framework di deep learning come [PyTorch](https://pytorch.org/)). La perdita calcola il Clipped Surrogate Objective per la policy, la Value Function Loss con regolarizzazione MSE e il bonus di entropia per incoraggiare l'esplorazione.
 
 ```python
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
+import numpy as np
+from typing import Dict, Any, Optional, Tuple
 
-class PPOLossEngine(nn.Module):
-    """Motore di calcolo vettorizzato per la funzione di perdita PPO (Actor-Critic)."""
-    def __init__(self, clip_eps=0.2, vf_coef=0.5, ent_coef=0.01):
-        super().__init__()
+class PPOLossEngine:
+    """Motore di calcolo vettorizzato per la funzione di perdita PPO (Actor-Critic) in NumPy."""
+    def __init__(self, clip_eps: float = 0.2, vf_coef: float = 0.5, ent_coef: float = 0.01):
         self.clip_eps = clip_eps
         self.vf_coef = vf_coef
         self.ent_coef = ent_coef
 
-    def forward(self, logprobs, old_logprobs, advantages, values, returns, entropy=None):
+    def compute_loss_and_gradients(
+        self,
+        logprobs: np.ndarray,
+        old_logprobs: np.ndarray,
+        advantages: np.ndarray,
+        values: np.ndarray,
+        returns: np.ndarray,
+        entropy: Optional[np.ndarray] = None
+    ) -> Tuple[Dict[str, float], Dict[str, np.ndarray]]:
         """
-        Calcola i componenti della perdita PPO su un batch vettoriale.
+        Calcola i componenti della perdita PPO e i gradienti analitici su un batch vettoriale.
         Dimensioni attese: (batch_size, sequence_length) o (batch_size,)
         """
         # 1. Calcolo del Probability Ratio: r_t(theta) = exp(logpi_theta - logpi_old)
         log_ratio = logprobs - old_logprobs
-        ratio = torch.exp(log_ratio)
+        ratio = np.exp(log_ratio)
 
         # 2. Normalizzazione del termine di vantaggio per stabilità numerica
-        adv_mean = advantages.mean()
-        adv_std = advantages.std() + 1e-8
+        adv_mean = np.mean(advantages)
+        adv_std = np.std(advantages) + 1e-8
         norm_advantages = (advantages - adv_mean) / adv_std
 
         # 3. Clipped Surrogate Policy Objective
         surr1 = ratio * norm_advantages
-        surr2 = torch.clamp(ratio, 1.0 - self.clip_eps, 1.0 + self.clip_eps) * norm_advantages
-        policy_loss = -torch.min(surr1, surr2).mean()
+        clipped_ratio = np.clip(ratio, 1.0 - self.clip_eps, 1.0 + self.clip_eps)
+        surr2 = clipped_ratio * norm_advantages
+        
+        # Policy loss: -E[min(surr1, surr2)]
+        min_surr = np.minimum(surr1, surr2)
+        policy_loss = -float(np.mean(min_surr))
 
         # 4. Value Function Loss (MSE tra valore stimato dal Critic e ritorno empirico)
-        value_loss = 0.5 * F.mse_loss(values, returns)
+        value_diff = values - returns
+        value_loss = 0.5 * float(np.mean(value_diff ** 2))
 
-        # 5. Bonus di Entropia (se non fornito, approssimato stocasticamente)
+        # 5. Bonus di Entropia (se non fornito, approssimato stocasticamente da logprobs)
         if entropy is None:
-            entropy_loss = -(-logprobs * torch.exp(logprobs)).mean()
+            entropy_loss = -float(np.mean(-logprobs * np.exp(logprobs)))
         else:
-            entropy_loss = -entropy.mean()
+            entropy_loss = -float(np.mean(entropy))
 
         # 6. Perdita Totale Combinata
         total_loss = policy_loss + self.vf_coef * value_loss + self.ent_coef * entropy_loss
 
-        # Metriche diagnostiche
-        with torch.no_grad():
-            approx_kl = ((ratio - 1.0) - log_ratio).mean()
-            clip_fraction = ((ratio - 1.0).abs() > self.clip_eps).float().mean()
+        # 7. Diagnostica
+        approx_kl = float(np.mean((ratio - 1.0) - log_ratio))
+        clip_fraction = float(np.mean(np.abs(ratio - 1.0) > self.clip_eps))
 
-        return {
+        # 8. Gradienti analitici esatti
+        batch_count = logprobs.size
+        mask_unclipped = (surr1 <= surr2).astype(float)
+        d_policy_d_logprobs = -(mask_unclipped * norm_advantages * ratio) / batch_count
+        d_value_d_values = (values - returns) / values.size
+
+        grad_logprobs = d_policy_d_logprobs
+        grad_values = self.vf_coef * d_value_d_values
+
+        metrics = {
             "total_loss": total_loss,
-            "policy_loss": policy_loss.item(),
-            "value_loss": value_loss.item(),
-            "entropy_loss": entropy_loss.item(),
-            "approx_kl": approx_kl.item(),
-            "clip_fraction": clip_fraction.item()
+            "policy_loss": policy_loss,
+            "value_loss": value_loss,
+            "entropy_loss": entropy_loss,
+            "approx_kl": approx_kl,
+            "clip_fraction": clip_fraction
         }
+        gradients = {
+            "grad_logprobs": grad_logprobs,
+            "grad_values": grad_values
+        }
+        return metrics, gradients
 
 if __name__ == "__main__":
-    torch.manual_seed(42)
+    np.random.seed(42)
     batch_size = 64
     seq_len = 16
 
     # Simulazione di tensori di rollout
-    sim_logprobs = torch.randn(batch_size, seq_len, requires_grad=True)
-    sim_old_logprobs = sim_logprobs.detach() + torch.randn(batch_size, seq_len) * 0.05
-    sim_advantages = torch.randn(batch_size, seq_len)
-    sim_values = torch.randn(batch_size, seq_len, requires_grad=True)
-    sim_returns = sim_values.detach() + torch.randn(batch_size, seq_len) * 0.5
+    sim_logprobs = np.random.randn(batch_size, seq_len)
+    sim_old_logprobs = sim_logprobs + np.random.randn(batch_size, seq_len) * 0.05
+    sim_advantages = np.random.randn(batch_size, seq_len)
+    sim_values = np.random.randn(batch_size, seq_len)
+    sim_returns = sim_values + np.random.randn(batch_size, seq_len) * 0.5
 
     ppo_engine = PPOLossEngine(clip_eps=0.2, vf_coef=0.5, ent_coef=0.01)
-    results = ppo_engine(
+    results, grads = ppo_engine.compute_loss_and_gradients(
         logprobs=sim_logprobs,
         old_logprobs=sim_old_logprobs,
         advantages=sim_advantages,
@@ -327,67 +351,81 @@ if __name__ == "__main__":
     )
 
     print("=== VERIFICA CALCOLO LOSS PPO ===")
-    print(f"Total Loss:       {results['total_loss'].item():.4f}")
+    print(f"Total Loss:       {results['total_loss']:.4f}")
     print(f"Policy Loss:      {results['policy_loss']:.4f}")
     print(f"Value Loss:       {results['value_loss']:.4f}")
     print(f"Approx KL Div:    {results['approx_kl']:.6f}")
     print(f"Clip Fraction:    {results['clip_fraction'] * 100:.2f}%")
-
-    # Verifica backward pass
-    results["total_loss"].backward()
-    print(f"Gradiente Policy computato: {sim_logprobs.grad is not None}")
-    print(f"Gradiente Critic computato: {sim_values.grad is not None}")
+    print(f"Gradiente Policy computato: {grads['grad_logprobs'] is not None} (Norma L2: {np.linalg.norm(grads['grad_logprobs']):.6f})")
+    print(f"Gradiente Critic computato: {grads['grad_values'] is not None} (Norma L2: {np.linalg.norm(grads['grad_values']):.6f})")
 ```
 
-### Laboratorio 3: Addestramento di un Reward Model Pairwise con Bradley-Terry Loss in PyTorch
+### Laboratorio 3: Addestramento di un Reward Model Pairwise con Bradley-Terry Loss in NumPy
 
-Questo laboratorio implementa e addestra una rete neurale per la stima delle preferenze umane basata sulla verosimiglianza di Bradley-Terry in [PyTorch](https://pytorch.org/). Il modello riceve coppie di risposte rappresentate da embedding sintetici, calcola i punteggi scalari $r_\psi(x, y_w)$ e $r_\psi(x, y_l)$, e ottimizza la separazione di margine tramite `torch.nn.functional.logsigmoid`.
+Questo laboratorio implementa e addestra una rete neurale per la stima delle preferenze umane basata sulla verosimiglianza di Bradley-Terry in [Python](https://www.python.org/) e [NumPy](https://numpy.org/). Il modello riceve coppie di risposte rappresentate da embedding sintetici, calcola i punteggi scalari $r_\psi(x, y_w)$ e $r_\psi(x, y_l)$, e ottimizza la separazione di margine tramite backpropagation vettorizzata e ottimizzazione Adam.
 
 ```python
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+import numpy as np
+from typing import Tuple, Dict
 
-class NeuralRewardModel(nn.Module):
-    """Architettura per la stima del Reward scalare su sequenze concatenate."""
-    def __init__(self, embedding_dim=64, hidden_dim=128):
-        super().__init__()
-        self.backbone = nn.Sequential(
-            nn.Linear(embedding_dim, hidden_dim),
-            nn.LayerNorm(hidden_dim),
-            nn.GELU(),
-            nn.Linear(hidden_dim, hidden_dim // 2),
-            nn.LayerNorm(hidden_dim // 2),
-            nn.GELU(),
-            nn.Linear(hidden_dim // 2, 1)
-        )
+class NeuralRewardModelNumPy:
+    """Architettura neurale MLP a due livelli per la stima del Reward scalare in NumPy."""
+    def __init__(self, embedding_dim: int = 64, hidden_dim: int = 128, seed: int = 42):
+        rng = np.random.RandomState(seed)
+        self.W1 = rng.randn(embedding_dim, hidden_dim) * np.sqrt(2.0 / embedding_dim)
+        self.b1 = np.zeros((1, hidden_dim))
+        self.W2 = rng.randn(hidden_dim, 1) * np.sqrt(2.0 / hidden_dim)
+        self.b2 = np.zeros((1, 1))
 
-    def forward(self, input_embeddings):
-        # input_embeddings: (batch_size, embedding_dim)
-        scalar_reward = self.backbone(input_embeddings).squeeze(-1)
-        return scalar_reward
+    def forward(self, x: np.ndarray) -> Tuple[np.ndarray, Dict[str, np.ndarray]]:
+        """Forward pass con attivazione ReLU e caching per backpropagation."""
+        z1 = np.dot(x, self.W1) + self.b1
+        a1 = np.maximum(0, z1)
+        scalar_reward = (np.dot(a1, self.W2) + self.b2).squeeze(-1)
+        cache = {"x": x, "z1": z1, "a1": a1}
+        return scalar_reward, cache
 
-class BradleyTerryRewardLoss(nn.Module):
-    """Loss di preferenza a coppie: -E[log sigma(r(x, y_w) - r(x, y_l))]."""
-    def __init__(self, margin=0.0):
-        super().__init__()
+    def backward(self, d_reward: np.ndarray, cache: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
+        """Backpropagation dei gradienti rispetto ai pesi e bias dell'MLP."""
+        x = cache["x"]
+        z1 = cache["z1"]
+        a1 = cache["a1"]
+
+        d_out = d_reward.reshape(-1, 1)
+        dW2 = np.dot(a1.T, d_out)
+        db2 = np.sum(d_out, axis=0, keepdims=True)
+
+        da1 = np.dot(d_out, self.W2.T)
+        dz1 = da1 * (z1 > 0).astype(float)
+        dW1 = np.dot(x.T, dz1)
+        db1 = np.sum(dz1, axis=0, keepdims=True)
+
+        return {"W1": dW1, "b1": db1, "W2": dW2, "b2": db2}
+
+class BradleyTerryRewardLoss:
+    """Loss di preferenza a coppie: -E[log sigma(r(x, y_w) - r(x, y_l) - margin)]."""
+    def __init__(self, margin: float = 0.0):
         self.margin = margin
 
-    def forward(self, rewards_chosen, rewards_rejected):
-        # Differenza tra reward della risposta vincente e perdente
-        reward_diff = rewards_chosen - rewards_rejected - self.margin
-        loss = -F.logsigmoid(reward_diff).mean()
-        accuracy = (rewards_chosen > rewards_rejected).float().mean()
-        return loss, accuracy
+    def compute_loss(self, rewards_chosen: np.ndarray, rewards_rejected: np.ndarray) -> Tuple[float, float, np.ndarray, np.ndarray]:
+        diff = rewards_chosen - rewards_rejected - self.margin
+        loss = float(np.mean(np.logaddexp(0, -diff)))
+        accuracy = float(np.mean((rewards_chosen > rewards_rejected).astype(float)))
 
-def generate_synthetic_preference_dataset(n_samples=1000, dim=64):
-    """Genera embedding in cui le risposte prescelte contengono un segnale positivo intrinseco."""
-    # Pattern latente: le feature nelle prime 10 dimensioni determinano la qualità
-    prompts = torch.randn(n_samples, dim) * 0.5
-    chosen_noise = torch.randn(n_samples, dim) * 0.2
-    chosen_noise[:, :10] += 0.8  # Segnale di alta qualità
-    rejected_noise = torch.randn(n_samples, dim) * 0.2
+        sigma_neg_diff = 1.0 / (1.0 + np.exp(np.clip(diff, -50, 50)))
+        d_diff = -sigma_neg_diff / len(diff)
+
+        d_chosen = d_diff
+        d_rejected = -d_diff
+        return loss, accuracy, d_chosen, d_rejected
+
+def generate_synthetic_preference_dataset(n_samples: int = 1200, dim: int = 64, seed: int = 42) -> Tuple[np.ndarray, np.ndarray]:
+    """Genera embedding sintetici in cui le risposte prescelte contengono un segnale positivo intrinseco."""
+    rng = np.random.RandomState(seed)
+    prompts = rng.randn(n_samples, dim) * 0.5
+    chosen_noise = rng.randn(n_samples, dim) * 0.2
+    chosen_noise[:, :10] += 0.8  # Segnale di qualità elevata
+    rejected_noise = rng.randn(n_samples, dim) * 0.2
     rejected_noise[:, :10] -= 0.8 # Segnale di bassa qualità
     
     emb_chosen = prompts + chosen_noise
@@ -395,151 +433,191 @@ def generate_synthetic_preference_dataset(n_samples=1000, dim=64):
     return emb_chosen, emb_rejected
 
 if __name__ == "__main__":
-    torch.manual_seed(42)
     dim = 64
     n_samples = 1200
-    
-    emb_chosen, emb_rejected = generate_synthetic_preference_dataset(n_samples, dim)
-    
+    emb_chosen, emb_rejected = generate_synthetic_preference_dataset(n_samples, dim, seed=42)
+
     # Split train / validation
     train_chosen, val_chosen = emb_chosen[:1000], emb_chosen[1000:]
     train_rejected, val_rejected = emb_rejected[:1000], emb_rejected[1000:]
 
-    reward_model = NeuralRewardModel(embedding_dim=dim, hidden_dim=128)
+    reward_model = NeuralRewardModelNumPy(embedding_dim=dim, hidden_dim=128, seed=42)
     criterion = BradleyTerryRewardLoss()
-    optimizer = optim.AdamW(reward_model.parameters(), lr=1e-3, weight_decay=1e-4)
+    
+    # Ottimizzatore Adam
+    lr = 1e-3
+    beta1, beta2 = 0.9, 0.999
+    eps = 1e-8
+    m = {k: np.zeros_like(getattr(reward_model, k)) for k in ["W1", "b1", "W2", "b2"]}
+    v = {k: np.zeros_like(getattr(reward_model, k)) for k in ["W1", "b1", "W2", "b2"]}
+    t = 0
 
     print("=== ADDESTRAMENTO REWARD MODEL BRADLEY-TERRY ===")
     epochs = 15
     batch_size = 64
 
     for epoch in range(1, epochs + 1):
-        reward_model.train()
-        permutation = torch.randperm(train_chosen.size(0))
+        perm = np.random.permutation(len(train_chosen))
         epoch_loss = 0.0
         epoch_acc = 0.0
         batches = 0
 
-        for i in range(0, train_chosen.size(0), batch_size):
-            indices = permutation[i:i + batch_size]
-            b_chosen = train_chosen[indices]
-            b_rejected = train_rejected[indices]
+        for i in range(0, len(train_chosen), batch_size):
+            t += 1
+            idx = perm[i:i + batch_size]
+            b_chosen = train_chosen[idx]
+            b_rejected = train_rejected[idx]
 
-            optimizer.zero_grad()
-            r_w = reward_model(b_chosen)
-            r_l = reward_model(b_rejected)
-            loss, acc = criterion(r_w, r_l)
-            loss.backward()
-            optimizer.step()
+            r_w, cache_w = reward_model.forward(b_chosen)
+            r_l, cache_l = reward_model.forward(b_rejected)
+            loss, acc, d_rw, d_rl = criterion.compute_loss(r_w, r_l)
 
-            epoch_loss += loss.item()
-            epoch_acc += acc.item()
+            grads_w = reward_model.backward(d_rw, cache_w)
+            grads_l = reward_model.backward(d_rl, cache_l)
+            
+            for k in ["W1", "b1", "W2", "b2"]:
+                grad = grads_w[k] + grads_l[k]
+                m[k] = beta1 * m[k] + (1.0 - beta1) * grad
+                v[k] = beta2 * v[k] + (1.0 - beta2) * (grad ** 2)
+                m_hat = m[k] / (1.0 - beta1 ** t)
+                v_hat = v[k] / (1.0 - beta2 ** t)
+                param = getattr(reward_model, k)
+                param -= lr * m_hat / (np.sqrt(v_hat) + eps)
+                setattr(reward_model, k, param)
+
+            epoch_loss += loss
+            epoch_acc += acc
             batches += 1
 
         if epoch % 3 == 0 or epoch == 1:
-            reward_model.eval()
-            with torch.no_grad():
-                val_rw = reward_model(val_chosen)
-                val_rl = reward_model(val_rejected)
-                val_loss, val_acc = criterion(val_rw, val_rl)
-                margin_mean = (val_rw - val_rl).mean().item()
-                print(f"Epoch {epoch:2d} | Train Loss: {epoch_loss/batches:.4f} | "
-                      f"Val Loss: {val_loss.item():.4f} | Val Acc: {val_acc.item()*100:.1f}% | "
-                      f"Mean Margin: {margin_mean:.3f}")
+            val_rw, _ = reward_model.forward(val_chosen)
+            val_rl, _ = reward_model.forward(val_rejected)
+            val_loss, val_acc, _, _ = criterion.compute_loss(val_rw, val_rl)
+            margin_mean = float(np.mean(val_rw - val_rl))
+            print(f"Epoch {epoch:2d} | Train Loss: {epoch_loss/batches:.4f} | "
+                  f"Val Loss: {val_loss:.4f} | Val Acc: {val_acc*100:.1f}% | "
+                  f"Mean Margin: {margin_mean:.3f}")
 ```
 
-### Laboratorio 4: Implementazione della Direct Preference Optimization (DPO) Loss con PyTorch
+### Laboratorio 4: Implementazione della Direct Preference Optimization (DPO) Loss in NumPy
 
-Questo laboratorio implementa la funzione di perdita esatta in forma chiusa di Direct Preference Optimization (DPO) in [PyTorch](https://pytorch.org/). Il codice calcola i log-ratio della policy rispetto alla reference policy, valuta i reward impliciti per sequenze prescelte e scartate, monitora la convergenza della perdita contrastiva e misura la divergenza implicita rispetto alla distribuzione originale.
+Questo laboratorio implementa la funzione di perdita esatta in forma chiusa di Direct Preference Optimization (DPO) in [Python](https://www.python.org/) e [NumPy](https://numpy.org/). Il codice calcola i log-ratio della policy rispetto alla reference policy, valuta i reward impliciti per sequenze prescelte e scartate, monitora la convergenza della perdita contrastiva e misura la divergenza implicita rispetto alla distribuzione originale.
 
 ```python
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+import numpy as np
+from typing import Dict, Tuple
 
-class DPOLossEngine(nn.Module):
+class DPOLossEngine:
     """
-    Implementazione formale della Direct Preference Optimization (DPO).
+    Implementazione formale della Direct Preference Optimization (DPO) in NumPy.
     L_DPO = -E[log sigma(beta * log(pi(y_w|x)/pi_ref(y_w|x)) - beta * log(pi(y_l|x)/pi_ref(y_l|x)))]
     """
-    def __init__(self, beta=0.1, label_smoothing=0.0):
-        super().__init__()
+    def __init__(self, beta: float = 0.1, label_smoothing: float = 0.0):
         self.beta = beta
         self.label_smoothing = label_smoothing
 
-    def forward(self, policy_chosen_logps, policy_rejected_logps, 
-                reference_chosen_logps, reference_rejected_logps):
+    def compute_loss_and_gradients(
+        self,
+        policy_chosen_logps: np.ndarray,
+        policy_rejected_logps: np.ndarray,
+        reference_chosen_logps: np.ndarray,
+        reference_rejected_logps: np.ndarray
+    ) -> Tuple[Dict[str, float], Tuple[np.ndarray, np.ndarray]]:
         """
+        Calcola la perdita DPO, le metriche diagnostiche e i gradienti analitici.
         Input: log-probabilità aggregate sulle sequenze (batch_size,)
         """
         # 1. Calcolo dei log-ratio per risposte prescelte (chosen) e scartate (rejected)
         pi_chosen_ratio = policy_chosen_logps - reference_chosen_logps
         pi_rejected_ratio = policy_rejected_logps - reference_rejected_logps
 
-        # 2. Ricompense implicite calcolate in forma chiusa
+        # 2. Ricompense implicite calcolate in forma chiusa: r_theta(x, y) = beta * log(pi/pi_ref)
         implicit_rewards_chosen = self.beta * pi_chosen_ratio
         implicit_rewards_rejected = self.beta * pi_rejected_ratio
 
-        # 3. Differenza contrastiva scalata da beta
-        logits = self.beta * (pi_chosen_ratio - pi_rejected_ratio)
+        # 3. Differenza contrastiva dei reward impliciti (logits)
+        logits = implicit_rewards_chosen - implicit_rewards_rejected
 
-        # 4. Calcolo della DPO Loss con eventuale label smoothing
+        # 4. Calcolo della perdita DPO con log-sigmoide numericamente stabile
+        log_sig_pos = -np.logaddexp(0, -logits)
+        log_sig_neg = -np.logaddexp(0, logits)
+
         if self.label_smoothing > 0.0:
-            loss = (
-                -F.logsigmoid(logits) * (1.0 - self.label_smoothing)
-                - F.logsigmoid(-logits) * self.label_smoothing
-            ).mean()
+            loss_elements = -(log_sig_pos * (1.0 - self.label_smoothing) + log_sig_neg * self.label_smoothing)
         else:
-            loss = -F.logsigmoid(logits).mean()
+            loss_elements = -log_sig_pos
+        
+        loss = float(np.mean(loss_elements))
 
         # 5. Metriche di monitoraggio
-        chosen_rewards = implicit_rewards_chosen.detach()
-        rejected_rewards = implicit_rewards_rejected.detach()
-        accuracy = (chosen_rewards > rejected_rewards).float().mean()
-        reward_margin = (chosen_rewards - rejected_rewards).mean()
+        accuracy = float(np.mean((implicit_rewards_chosen > implicit_rewards_rejected).astype(float)))
+        reward_margin = float(np.mean(implicit_rewards_chosen - implicit_rewards_rejected))
 
-        return {
+        # 6. Gradienti analitici esatti rispetto ai parametri ottimizzabili
+        sigma_pos = 1.0 / (1.0 + np.exp(np.clip(-logits, -50, 50)))
+        d_loss_d_logits = -(1.0 - self.label_smoothing) * (1.0 - sigma_pos) + self.label_smoothing * sigma_pos
+        d_loss_d_logits = d_loss_d_logits / len(logits)
+
+        grad_policy_chosen = d_loss_d_logits * self.beta
+        grad_policy_rejected = -d_loss_d_logits * self.beta
+
+        metrics = {
             "loss": loss,
-            "accuracy": accuracy.item(),
-            "reward_margin": reward_margin.item(),
-            "chosen_reward_mean": chosen_rewards.mean().item(),
-            "rejected_reward_mean": rejected_rewards.mean().item()
+            "accuracy": accuracy,
+            "reward_margin": reward_margin,
+            "chosen_reward_mean": float(np.mean(implicit_rewards_chosen)),
+            "rejected_reward_mean": float(np.mean(implicit_rewards_rejected))
         }
+        gradients = (grad_policy_chosen, grad_policy_rejected)
+        return metrics, gradients
 
 if __name__ == "__main__":
-    torch.manual_seed(42)
+    np.random.seed(42)
     batch_size = 128
     beta_param = 0.1
 
     # Definizione di parametri di policy simulati
-    # Inizialmente la policy è quasi identica alla reference policy
-    ref_chosen_logps = torch.full((batch_size,), -15.0)
-    ref_rejected_logps = torch.full((batch_size,), -15.0)
+    ref_chosen_logps = np.full((batch_size,), -15.0)
+    ref_rejected_logps = np.full((batch_size,), -15.0)
 
     # Parametri ottimizzabili della policy
-    policy_chosen_logps = nn.Parameter(ref_chosen_logps.clone() + torch.randn(batch_size) * 0.1)
-    policy_rejected_logps = nn.Parameter(ref_rejected_logps.clone() + torch.randn(batch_size) * 0.1)
+    policy_chosen_logps = ref_chosen_logps.copy() + np.random.randn(batch_size) * 0.1
+    policy_rejected_logps = ref_rejected_logps.copy() + np.random.randn(batch_size) * 0.1
 
     dpo_engine = DPOLossEngine(beta=beta_param)
-    optimizer = optim.Adam([policy_chosen_logps, policy_rejected_logps], lr=0.05)
+    
+    # Ottimizzatore Adam in NumPy
+    lr = 0.05
+    m_chosen, v_chosen = np.zeros_like(policy_chosen_logps), np.zeros_like(policy_chosen_logps)
+    m_rejected, v_rejected = np.zeros_like(policy_rejected_logps), np.zeros_like(policy_rejected_logps)
+    beta1, beta2, eps = 0.9, 0.999, 1e-8
 
     print("=== OTTIMIZZAZIONE DIRETTA DELLE PREFERENZE (DPO) ===")
     print("Addestramento della policy per massimizzare il log-ratio implicito:")
 
     for step in range(1, 21):
-        optimizer.zero_grad()
-        metrics = dpo_engine(
+        metrics, (g_chosen, g_rejected) = dpo_engine.compute_loss_and_gradients(
             policy_chosen_logps=policy_chosen_logps,
             policy_rejected_logps=policy_rejected_logps,
             reference_chosen_logps=ref_chosen_logps,
             reference_rejected_logps=ref_rejected_logps
         )
-        metrics["loss"].backward()
-        optimizer.step()
+
+        # Aggiornamento policy con Adam
+        m_chosen = beta1 * m_chosen + (1 - beta1) * g_chosen
+        v_chosen = beta2 * v_chosen + (1 - beta2) * (g_chosen ** 2)
+        m_c_hat = m_chosen / (1 - beta1 ** step)
+        v_c_hat = v_chosen / (1 - beta2 ** step)
+        policy_chosen_logps -= lr * m_c_hat / (np.sqrt(v_c_hat) + eps)
+
+        m_rejected = beta1 * m_rejected + (1 - beta1) * g_rejected
+        v_rejected = beta2 * v_rejected + (1 - beta2) * (g_rejected ** 2)
+        m_r_hat = m_rejected / (1 - beta1 ** step)
+        v_r_hat = v_rejected / (1 - beta2 ** step)
+        policy_rejected_logps -= lr * m_r_hat / (np.sqrt(v_r_hat) + eps)
 
         if step % 5 == 0 or step == 1:
-            print(f"Step {step:2d} | DPO Loss: {metrics['loss'].item():.4f} | "
+            print(f"Step {step:2d} | DPO Loss: {metrics['loss']:.4f} | "
                   f"Accuracy: {metrics['accuracy'] * 100:5.1f}% | "
                   f"Implicit Margin: {metrics['reward_margin']:+.4f} | "
                   f"r(y_w): {metrics['chosen_reward_mean']:+.3f} | "

@@ -25,6 +25,8 @@ La tabella seguente elenca tutti i moduli formativi disponibili, specificando pe
 | :--- | :--- | :--- | :--- |
 | **D01** | Architettura Workspace Local-First (Git, Obsidian, LLM) | Fondamenti | [D01-workspace-llm-wiki.md](D01-workspace-llm-wiki.md) |
 | **D02** | Ingegneria del Software e Python Essentials per Pipeline AI | Fondamenti | [D02-python-refresher.md](D02-python-refresher.md) |
+| **D02b** | Virtualizzazione e Container: Isolamento dell'Infrastruttura AI | Fondamenti | [D02b-virtualizzazione-e-container.md](D02b-virtualizzazione-e-container.md) |
+| **D02c** | Gateway e Routing LLM: Il Controllo del Flusso API | Fondamenti | [D02c-gateway-e-routing-llm.md](D02c-gateway-e-routing-llm.md) |
 | **D03** | Data Foundations: NumPy, Pandas, SQL e Qualità del Dato | Fondamenti | [D03-data-foundations.md](D03-data-foundations.md) |
 | **D04** | Matematica e Statistica Just-in-Time per Machine Learning | Fondamenti | [D04-math-stat.md](D04-math-stat.md) |
 | **D05** | Fondamenti di Machine Learning e Metriche Diagnostiche | Operativo | [D05-ml-fondamenti.md](D05-ml-fondamenti.md) |
@@ -42,8 +44,16 @@ La tabella seguente elenca tutti i moduli formativi disponibili, specificando pe
 | **D12d** | Loop Engineering, Grafi di Stato Ciclici e Flussi Multi-Agente | Specialistico | [D12d-loop-graph-engineering.md](D12d-loop-graph-engineering.md) |
 | **D13** | Reinforcement Learning, Allineamento di Modelli e Ottimizzazione DPO | Specialistico | [D13-rl-alignment.md](D13-rl-alignment.md) |
 | **D14** | Sicurezza Informatica dei Sistemi LLM, Difesa OWASP e Responsible AI | Specialistico | [D14-responsible-ai-cyber.md](D14-responsible-ai-cyber.md) |
+| **D14b** | Guardrails Locali e Privacy: LLM Guard e Rizzo-PII | Specialistico | [D14b-guardrails-e-privacy.md](D14b-guardrails-e-privacy.md) |
 | **D15** | MLOps, LLMOps e Pipeline di Deployment Local-First | Specialistico | [D15-mlops-llmops.md](D15-mlops-llmops.md) |
 | **D16** | Metodologia ICM, Orchestrazione Strategica e Comunicazione Esecutiva | Specialistico | [D16-icm-orchestrazione.md](D16-icm-orchestrazione.md) |
+| **D16b** | 12-Factor Agents: Progettazione di Agenti Deterministici | Specialistico | [D16b-twelve-factor-agents.md](D16b-twelve-factor-agents.md) |
+| **D17** | Agent Context Platform e Model Context Protocol (MCP) | Specialistico | [D17-agent-context-platform-mcp.md](D17-agent-context-platform-mcp.md) |
+| **D17b** | Standard Agent Plugins: Pacchettizzazione e Distribuzione Universale | Specialistico | [D17b-standard-agent-plugins.md](D17b-standard-agent-plugins.md) |
+| **D18** | Ecosistema Interfacce e Client: Il Single Pane of Glass | Specialistico | [D18-ecosistema-interfacce-client.md](D18-ecosistema-interfacce-client.md) |
+| **D19** | Ingegneria delle Identità: Contratti Comportamentali ICM | Specialistico | [D19-ingegneria-delle-identita.md](D19-ingegneria-delle-identita.md) |
+| **D20** | Tech Radar e Tool Scouting: Ingegneria della Valutazione | Specialistico | [D20-tech-radar-e-scouting.md](D20-tech-radar-e-scouting.md) |
+| **D21** | Architettura SOTA Definitiva: Sintesi del Sistema | Specialistico | [D21-architettura-sota-definitiva.md](D21-architettura-sota-definitiva.md) |
 
 ## Standard Metodologico e Norme Redazionali
 

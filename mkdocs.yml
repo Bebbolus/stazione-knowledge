@@ -72,6 +72,8 @@ nav:
   - Fondamenti:
       - D01 — Workspace local-first, Git, Obsidian, LLM wiki: D01-workspace-llm-wiki.md
       - D02 — Python refresher e software engineering essentials: D02-python-refresher.md
+      - D02b — Virtualizzazione e Container: D02b-virtualizzazione-e-container.md
+      - D02c — Gateway e Routing LLM (LiteLLM): D02c-gateway-e-routing-llm.md
       - D03 — Data foundations (NumPy, Pandas, SQL): D03-data-foundations.md
       - D04 — Matematica e statistica just-in-time: D04-math-stat.md
   - Operativo:
@@ -92,5 +94,13 @@ nav:
       - D12d — Loop engineering e graph engineering per agenti: D12d-loop-graph-engineering.md
       - D13 — RL, preference learning, alignment: D13-rl-alignment.md
       - D14 — Responsible AI, cybersecurity e governance: D14-responsible-ai-cyber.md
+      - D14b — Guardrails Locali e Privacy: D14b-guardrails-e-privacy.md
       - D15 — MLOps / LLMOps e deployment local-first: D15-mlops-llmops.md
       - D16 — ICM, orchestrazione e comunicazione dei risultati: D16-icm-orchestrazione.md
+      - D16b — 12-Factor Agents: D16b-twelve-factor-agents.md
+      - D17 — Agent Context Platform e MCP: D17-agent-context-platform-mcp.md
+      - D17b — Standard Agent Plugins: D17b-standard-agent-plugins.md
+      - D18 — Ecosistema Interfacce e Client SPoG: D18-ecosistema-interfacce-client.md
+      - D19 — Ingegneria delle Identità ICM: D19-ingegneria-delle-identita.md
+      - D20 — Tech Radar e Scouting: D20-tech-radar-e-scouting.md
+      - D21 — Architettura SOTA Definitiva: D21-architettura-sota-definitiva.md

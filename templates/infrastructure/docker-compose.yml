@@ -1,0 +1,47 @@
+# docker-compose.yml - Infrastruttura Stazione SOTA 2026
+# Gateway LiteLLM, Guardrails Rizzo-PII/LLM Guard, Vector Search Qdrant
+
+version: '3.8'
+
+services:
+  # 1. Gateway LLM
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    container_name: stazione_gateway
+    ports:
+      - "4000:4000"
+    environment:
+      - LITELLM_MASTER_KEY=stazione_secret_key
+    volumes:
+      - ./litellm_config.yaml:/app/config.yaml
+    command: [ "--config", "/app/config.yaml" ]
+    restart: unless-stopped
+
+  # 2. Vector Database per Ricerca Ibrida (Sostituisce GraphRAG)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: stazione_qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - ./qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+
+  # 3. Embedding Server Locale (Opzionale)
+  embedding_server:
+    image: ghcr.io/huggingface/text-embeddings-inference:cpu-latest
+    container_name: stazione_embedder
+    ports:
+      - "8080:80"
+    volumes:
+      - ./models:/data
+    command: [ "--model-id", "nomic-ai/nomic-embed-text-v1.5" ]
+    restart: unless-stopped
+
+  # 4. LLM Guard API
+  llm_guard:
+    image: protectai/llm-guard-api:latest
+    container_name: stazione_guard
+    ports:
+      - "8000:8000"
+    restart: unless-stopped

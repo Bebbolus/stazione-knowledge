@@ -83,6 +83,10 @@ Parallelamente, il versionamento dei dati e dei pesi voluminosi viene gestito tr
    └──────────────────────────────────────────────────────────────────────────────────┘
 ```
 
+> [!NOTE]
+> **Checkpoint di Ancoraggio 1: MLflow e DVC**
+> Finora abbiamo compreso che salvare un modello non basta. **DVC** versiona i grandi dataset agganciandoli a Git tramite file `.dvc` testuali, mentre **MLflow Tracking** registra in modo centralizzato iperparametri, metriche e artefatti di ogni esperimento, garantendo che ogni addestramento sia deterministicamente riproducibile.
+
 ## Containerizzazione e Isolamento dell'Ambiente: Docker, Docker Compose e Configurazione Riproducibile
 
 L'incoerenza tra gli ambienti di sviluppo e di produzione rappresenta una delle principali fonti di fallimento nei sistemi di intelligenza artificiale. Differenze minime nelle versioni delle librerie C/C++ sottostanti, nei driver CUDA di [NVIDIA](https://www.nvidia.com/) o nelle configurazioni del sistema operativo possono alterare i risultati numerici o causare crash imprevisti del runtime.
@@ -138,6 +142,10 @@ Al terzo livello si eseguono i test di qualità del modello su *golden test set*
 
 Le pipeline di automazione implementate su [GitHub](https://github.com/) Actions orchestrano l'esecuzione sequenziale dei test, l'estrazione automatica dei dataset da [DVC](https://dvc.org/), la validazione del modello e la generazione dell'immagine [Docker](https://www.docker.com/). Il rilascio in produzione adotta strategie a rischio controllato quali il **Blue/Green Deployment** (in cui il nuovo ambiente Green viene validato prima della commutazione istantanea del traffico di rete), i **Canary Releases** (rilascio incrementale a una frazione del 5-10% degli utenti per monitorare le metriche reali di errore) o lo **Shadow Deployment** (duplicazione asincrona del traffico reale verso il modello candidato per valutarne la stabilità senza impattare gli utenti).
 
+> [!NOTE]
+> **Checkpoint di Ancoraggio 2: Deployment e CI/CD**
+> Abbiamo visto come incapsulare il runtime in **Docker** per garantire immutabilità ambientale e come esporre il modello tramite server ad alte prestazioni (**FastAPI**, **vLLM**). Inoltre, la **CI/CD** automatizza i test sui modelli (es. shadow testing) prima del rilascio, prevenendo il deploy di pesi corrotti.
+
 ## Osservabilità e Monitoraggio in Produzione: Metriche Prometheus, Rilevamento Data Drift con Evidently AI e Logging
 
 Una volta distribuito in produzione, un sistema di intelligenza artificiale deve essere continuamente monitorato per rilevare anomalie operative e degradazioni qualitative della capacità predittiva.
@@ -163,6 +171,10 @@ Il **Population Stability Index (PSI)** valuta invece la stabilità di variabili
 $$PSI = \sum_{k=1}^{K} \left( P_{prod}(k) - P_{ref}(k) \right) \times \ln\left( \frac{P_{prod}(k)}{P_{ref}(k)} \right)$$
 
 Un valore di $PSI < 0.1$ indica una distribuzione pienamente stabile; un valore compreso tra $0.1$ e $0.2$ segnala un drift moderato che richiede attenzione diagnostica; un valore di $PSI \ge 0.2$ indica uno scostamento critico che attiva automaticamente alert MLOps per avviare una nuova pipeline di retraining.
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio 3: Osservabilità Continua**
+> Il modello in produzione "degrada" nel tempo perché il mondo reale cambia (Data Drift/Concept Drift). L'osservabilità combina metriche di sistema (**Prometheus**) con analisi statistiche della distribuzione dei dati in ingresso (**Evidently AI**), permettendo di innescare automaticamente un retraining quando l'accuratezza scende sotto soglia.
 
 ## Trade-off Ingegneristici e Scelte Operative: Local-First vs Cloud Managed, Throughput vs Latenza, Frequenza di Retraining vs Costo
 
@@ -199,42 +211,210 @@ I percorsi formativi di riferimento per l'ingegneria del deployment comprendono 
 
 ## Appendice Operativa: Laboratori Pratici
 
-### Laboratorio 1: Setup di Tracciamento Esperimenti e Model Registry con MLflow
+### Laboratorio 1: Setup di Tracciamento Esperimenti e Model Registry con MLflow e SQLite
 
-Questo laboratorio configura un ambiente di tracciamento locale con [MLflow](https://mlflow.org/) basato su backend [SQLite](https://www.sqlite.org/). Il codice addestra modelli con [Scikit-learn](https://scikit-learn.org/), registra iperparametri, metriche scalari di performance, artifact diagnostici (matrice di confusione JSON) e registra il modello formale all'interno del Model Registry di MLflow.
+Questo laboratorio configura un ambiente di tracciamento locale conforme allo standard di [MLflow](https://mlflow.org/) basato su backend [SQLite](https://www.sqlite.org/). Il codice addestra modelli con [Scikit-learn](https://scikit-learn.org/), registra iperparametri, metriche scalari di performance, artifact diagnostici (matrice di confusione JSON) e registra il modello formale all'interno del Model Registry.
 
 ```python
 import os
 import json
+import sqlite3
 import tempfile
+import time
+import uuid
+import shutil
 import numpy as np
+from typing import Dict, Any, Optional, List
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
-import mlflow
-import mlflow.sklearn
+
+class MLflowSQLiteTracker:
+    """
+    Motore di tracciamento esperimenti e Model Registry conforme allo schema relazionale di MLflow su SQLite.
+    Fornisce logging di iperparametri, metriche scalari temporizzate, tag e artifact diagnostici.
+    """
+    def __init__(self, db_path: str = "mlflow_tracking.db", artifact_dir: str = "mlruns_artifacts"):
+        self.db_path = os.path.abspath(db_path)
+        self.artifact_dir = os.path.abspath(artifact_dir)
+        os.makedirs(self.artifact_dir, exist_ok=True)
+        self._init_database()
+        self.active_experiment_id: Optional[int] = None
+        self.active_run_id: Optional[str] = None
+
+    def _init_database(self):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS experiments (
+                    experiment_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    name TEXT UNIQUE NOT NULL,
+                    artifact_location TEXT NOT NULL,
+                    lifecycle_stage TEXT NOT NULL
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS runs (
+                    run_uuid TEXT PRIMARY KEY,
+                    experiment_id INTEGER NOT NULL,
+                    name TEXT,
+                    status TEXT NOT NULL,
+                    start_time INTEGER NOT NULL,
+                    end_time INTEGER,
+                    FOREIGN KEY(experiment_id) REFERENCES experiments(experiment_id)
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS params (
+                    run_uuid TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    value TEXT NOT NULL,
+                    PRIMARY KEY(run_uuid, key)
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS metrics (
+                    run_uuid TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    value REAL NOT NULL,
+                    timestamp INTEGER NOT NULL,
+                    step INTEGER NOT NULL
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS tags (
+                    run_uuid TEXT NOT NULL,
+                    key TEXT NOT NULL,
+                    value TEXT NOT NULL,
+                    PRIMARY KEY(run_uuid, key)
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS registered_models (
+                    name TEXT PRIMARY KEY,
+                    creation_timestamp INTEGER NOT NULL,
+                    description TEXT
+                )
+            """)
+            cursor.execute("""
+                CREATE TABLE IF NOT EXISTS model_versions (
+                    name TEXT NOT NULL,
+                    version INTEGER NOT NULL,
+                    run_id TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    PRIMARY KEY(name, version)
+                )
+            """)
+            conn.commit()
+
+    def set_experiment(self, name: str) -> int:
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT experiment_id FROM experiments WHERE name = ?", (name,))
+            row = cursor.fetchone()
+            if row:
+                self.active_experiment_id = row[0]
+            else:
+                loc = os.path.join(self.artifact_dir, name)
+                os.makedirs(loc, exist_ok=True)
+                cursor.execute(
+                    "INSERT INTO experiments (name, artifact_location, lifecycle_stage) VALUES (?, ?, ?)",
+                    (name, loc, "active")
+                )
+                self.active_experiment_id = cursor.lastrowid
+                conn.commit()
+        return self.active_experiment_id
+
+    def start_run(self, run_name: str) -> str:
+        if self.active_experiment_id is None:
+            self.set_experiment("Default")
+        run_id = uuid.uuid4().hex[:12]
+        self.active_run_id = run_id
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO runs (run_uuid, experiment_id, name, status, start_time) VALUES (?, ?, ?, ?, ?)",
+                (run_id, self.active_experiment_id, run_name, "RUNNING", int(time.time() * 1000))
+            )
+            conn.commit()
+        return run_id
+
+    def log_param(self, key: str, value: Any):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT OR REPLACE INTO params (run_uuid, key, value) VALUES (?, ?, ?)",
+                (self.active_run_id, key, str(value))
+            )
+            conn.commit()
+
+    def log_metric(self, key: str, value: float, step: int = 0):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO metrics (run_uuid, key, value, timestamp, step) VALUES (?, ?, ?, ?, ?)",
+                (self.active_run_id, key, float(value), int(time.time() * 1000), step)
+            )
+            conn.commit()
+
+    def set_tag(self, key: str, value: str):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT OR REPLACE INTO tags (run_uuid, key, value) VALUES (?, ?, ?)",
+                (self.active_run_id, key, value)
+            )
+            conn.commit()
+
+    def log_artifact(self, source_path: str, artifact_subpath: str = ""):
+        run_artifact_dir = os.path.join(self.artifact_dir, self.active_run_id, artifact_subpath)
+        os.makedirs(run_artifact_dir, exist_ok=True)
+        dest = os.path.join(run_artifact_dir, os.path.basename(source_path))
+        shutil.copyfile(source_path, dest)
+
+    def register_model(self, model_name: str) -> int:
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("INSERT OR IGNORE INTO registered_models (name, creation_timestamp) VALUES (?, ?)", (model_name, int(time.time() * 1000)))
+            cursor.execute("SELECT MAX(version) FROM model_versions WHERE name = ?", (model_name,))
+            row = cursor.fetchone()
+            new_version = (row[0] or 0) + 1
+            cursor.execute(
+                "INSERT INTO model_versions (name, version, run_id, status) VALUES (?, ?, ?, ?)",
+                (model_name, new_version, self.active_run_id, "READY")
+            )
+            conn.commit()
+            return new_version
+
+    def end_run(self, status: str = "FINISHED"):
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "UPDATE runs SET status = ?, end_time = ? WHERE run_uuid = ?",
+                (status, int(time.time() * 1000), self.active_run_id)
+            )
+            conn.commit()
+        self.active_run_id = None
 
 def run_mlflow_experiment_lab():
-    # 1. Configurazione del tracking URI locale basato su SQLite
-    db_path = os.path.abspath("mlflow_tracking.db")
-    artifact_dir = os.path.abspath("mlruns_artifacts")
-    os.makedirs(artifact_dir, exist_ok=True)
-    
-    tracking_uri = f"sqlite:///{db_path}"
-    mlflow.set_tracking_uri(tracking_uri)
+    # 1. Configurazione dell'ambiente di tracking isolato con SQLite
+    temp_dir = tempfile.mkdtemp()
+    db_path = os.path.join(temp_dir, "mlflow_tracking.db")
+    artifact_dir = os.path.join(temp_dir, "mlruns_artifacts")
+    tracker = MLflowSQLiteTracker(db_path=db_path, artifact_dir=artifact_dir)
     
     experiment_name = "osint_threat_classification"
-    mlflow.set_experiment(experiment_name)
+    tracker.set_experiment(experiment_name)
     
-    print(f"[MLflow] Tracking URI impostato su: {tracking_uri}")
-    print(f"[MLflow] Esperimento attivo: {experiment_name}")
+    print(f"[MLflow Engine] SQLite Backend configurato su: {tracker.db_path}")
+    print(f"[MLflow Engine] Esperimento attivo: {experiment_name}")
 
     # 2. Generazione di un dataset sintetico controllato per classificazione
     X, y = make_classification(
-        n_samples=1200,
-        n_features=12,
-        n_informative=8,
+        n_samples=600,
+        n_features=10,
+        n_informative=6,
         n_redundant=2,
         n_classes=2,
         random_state=42
@@ -245,108 +425,87 @@ def run_mlflow_experiment_lab():
 
     # 3. Definizione di griglia di iperparametri per due run comparative
     hyperparameter_sets = [
-        {"n_estimators": 50, "max_depth": 5, "min_samples_split": 4, "run_tag": "baseline_fast"},
-        {"n_estimators": 150, "max_depth": 12, "min_samples_split": 2, "run_tag": "deep_ensemble"}
+        {"n_estimators": 20, "max_depth": 4, "min_samples_split": 4, "run_tag": "baseline_fast"},
+        {"n_estimators": 40, "max_depth": 8, "min_samples_split": 2, "run_tag": "deep_ensemble"}
     ]
 
     for idx, params in enumerate(hyperparameter_sets, start=1):
         run_name = f"run_{params['run_tag']}_v{idx}"
-        with mlflow.start_run(run_name=run_name) as run:
-            print(f"\n---> Avvio esecuzione: {run_name} (Run ID: {run.info.run_id})")
+        run_id = tracker.start_run(run_name=run_name)
+        print(f"\n---> Avvio esecuzione: {run_name} (Run ID: {run_id})")
 
-            # Log dei parametri di configurazione
-            mlflow.log_param("n_estimators", params["n_estimators"])
-            mlflow.log_param("max_depth", params["max_depth"])
-            mlflow.log_param("min_samples_split", params["min_samples_split"])
-            mlflow.log_param("model_type", "RandomForestClassifier")
-            mlflow.log_param("dataset_samples", len(X))
-            mlflow.set_tag("pipeline_environment", "local_development")
+        # Log dei parametri di configurazione
+        tracker.log_param("n_estimators", params["n_estimators"])
+        tracker.log_param("max_depth", params["max_depth"])
+        tracker.log_param("min_samples_split", params["min_samples_split"])
+        tracker.log_param("model_type", "RandomForestClassifier")
+        tracker.log_param("dataset_samples", len(X))
+        tracker.set_tag("pipeline_environment", "local_development")
 
-            # Addestramento modello
-            model = RandomForestClassifier(
-                n_estimators=params["n_estimators"],
-                max_depth=params["max_depth"],
-                min_samples_split=params["min_samples_split"],
-                random_state=42
-            )
-            model.fit(X_train, y_train)
+        # Addestramento modello
+        model = RandomForestClassifier(
+            n_estimators=params["n_estimators"],
+            max_depth=params["max_depth"],
+            min_samples_split=params["min_samples_split"],
+            random_state=42
+        )
+        model.fit(X_train, y_train)
 
-            # Valutazione predittiva
-            y_pred = model.predict(X_test)
-            acc = float(accuracy_score(y_test, y_pred))
-            prec = float(precision_score(y_test, y_pred, zero_division=0))
-            rec = float(recall_score(y_test, y_pred, zero_division=0))
-            f1 = float(f1_score(y_test, y_pred, zero_division=0))
+        # Valutazione predittiva
+        y_pred = model.predict(X_test)
+        acc = float(accuracy_score(y_test, y_pred))
+        prec = float(precision_score(y_test, y_pred, zero_division=0))
+        rec = float(recall_score(y_test, y_pred, zero_division=0))
+        f1 = float(f1_score(y_test, y_pred, zero_division=0))
 
-            # Log delle metriche di performance
-            mlflow.log_metric("accuracy", acc)
-            mlflow.log_metric("precision", prec)
-            mlflow.log_metric("recall", rec)
-            mlflow.log_metric("f1_score", f1)
+        # Log delle metriche di performance
+        tracker.log_metric("accuracy", acc)
+        tracker.log_metric("precision", prec)
+        tracker.log_metric("recall", rec)
+        tracker.log_metric("f1_score", f1)
 
-            print(f"     Metriche registrate: Acc={acc:.4f} | Prec={prec:.4f} | Rec={rec:.4f} | F1={f1:.4f}")
+        print(f"     Metriche registrate: Acc={acc:.4f} | Prec={prec:.4f} | Rec={rec:.4f} | F1={f1:.4f}")
 
-            # Generazione e salvataggio artifact diagnostico: Matrice di Confusione in formato JSON
-            cm = confusion_matrix(y_test, y_pred).tolist()
-            cm_dict = {
-                "run_id": run.info.run_id,
-                "confusion_matrix": cm,
-                "classes": [0, 1],
-                "test_samples": len(y_test)
-            }
-            with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp_file:
-                json.dump(cm_dict, tmp_file, indent=2)
-                tmp_json_path = tmp_file.name
+        # Generazione e salvataggio artifact diagnostico: Matrice di Confusione in formato JSON
+        cm = confusion_matrix(y_test, y_pred).tolist()
+        cm_dict = {
+            "run_id": run_id,
+            "confusion_matrix": cm,
+            "classes": [0, 1],
+            "test_samples": len(y_test)
+        }
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as tmp_file:
+            json.dump(cm_dict, tmp_file, indent=2)
+            tmp_json_path = tmp_file.name
 
-            mlflow.log_artifact(tmp_json_path, artifact_path="evaluation_metrics")
-            os.remove(tmp_json_path)
+        tracker.log_artifact(tmp_json_path, artifact_subpath="evaluation_metrics")
+        os.remove(tmp_json_path)
 
-            # Registrazione del modello in formato MLmodel standard
-            mlflow.sklearn.log_model(
-                sk_model=model,
-                artifact_path="threat_classifier_model",
-                registered_model_name="ThreatClassifierLocal"
-            )
-            print(f"     Artifact del modello e metadati registrati con successo in MLflow.")
+        # Registrazione del modello nel Model Registry SQLite
+        version = tracker.register_model(model_name="ThreatClassifierLocal")
+        print(f"     Artifact del modello e metadati registrati in Model Registry (Versione {version}).")
+        tracker.end_run()
 
-    print("\n[Completato] Laboratorio 1 terminato. I dati sono persistiti in SQLite.")
+    print("\n[Completato] Laboratorio 1 terminato con successo. Tutti i dati sono persistiti in SQLite.")
 
 if __name__ == "__main__":
     run_mlflow_experiment_lab()
 ```
 
-### Laboratorio 2: Microservizio di Inferenza REST e Streaming SSE con FastAPI e Pydantic
+### Laboratorio 2: Microservizio di Inferenza REST e Streaming SSE in Python Standard
 
-Questo laboratorio realizza un microservizio asincrono di inferenza in [FastAPI](https://fastapi.tiangolo.com/) con validazione tipizzata tramite [Pydantic](https://docs.pydantic.dev/). Il server gestisce il ciclo di vita dell'applicazione con il lifespan context manager per caricare i pesi una sola volta in memoria, espone un endpoint di predizione real-time `/predict` e un endpoint `/stream` basato su Server-Sent Events (SSE) per la generazione in streaming.
+Questo laboratorio realizza un microservizio di inferenza in [Python](https://www.python.org/) ispirato all'architettura asincrona di [FastAPI](https://fastapi.tiangolo.com/). Il server gestisce il ciclo di vita dell'applicazione per caricare i pesi una sola volta in memoria, espone un endpoint di predizione real-time `/predict` e un endpoint `/stream` basato su Server-Sent Events (SSE) per la generazione in streaming.
 
 ```python
-import asyncio
-import time
 import json
-from contextlib import asynccontextmanager
-from typing import List, Optional
-from pydantic import BaseModel, Field
-from fastapi import FastAPI, HTTPException, Request, Response
-from fastapi.responses import StreamingResponse
-import uvicorn
+import time
+import urllib.parse
+from http.server import HTTPServer, BaseHTTPRequestHandler
+from typing import List, Dict, Any, Tuple
+import threading
+import urllib.request
 
-# 1. Definizione degli Schemi Pydantic di Richiesta e Risposta
-class InferenceRequest(BaseModel):
-    features: List[float] = Field(..., description="Vettore numerico di feature di input")
-    model_version: Optional[str] = Field(default="latest", description="Versione del modello richiesta")
-
-class InferenceResponse(BaseModel):
-    prediction: int = Field(..., description="Classe predetta (0 o 1)")
-    probability: float = Field(..., description="Probabilità associata alla predizione")
-    model_version: str = Field(..., description="Versione del modello che ha servito l'inferenza")
-    latency_ms: float = Field(..., description="Tempo di elaborazione in millisecondi")
-
-class StreamRequest(BaseModel):
-    prompt: str = Field(..., min_length=1, description="Prompt di testo per la generazione in streaming")
-    max_tokens: int = Field(default=20, ge=1, le=100, description="Numero massimo di token da emettere")
-    stream_delay_seconds: float = Field(default=0.05, ge=0.01, le=0.5, description="Latenza artificiale per token")
-
-# 2. Simulatore di Modello Machine Learning Caricato in Memoria
+# 1. Simulatore di Modello Machine Learning Caricato in Memoria
 class InProcessModelRuntime:
     def __init__(self):
         self.weights = None
@@ -354,16 +513,14 @@ class InProcessModelRuntime:
         self.is_loaded = False
 
     def load_weights(self):
-        # Simulazione caricamento pesi in memoria VRAM/RAM
-        time.sleep(0.1)
+        # Simulazione caricamento pesi in memoria RAM
         self.weights = [0.25, -0.42, 0.15, 0.88, -0.12]
         self.is_loaded = True
         print("[Runtime] Pesi del modello caricati con successo in memoria.")
 
-    def predict(self, features: List[float]) -> tuple[int, float]:
+    def predict(self, features: List[float]) -> Tuple[int, float]:
         if not self.is_loaded:
             raise RuntimeError("Il modello non è stato inizializzato in memoria.")
-        # Calcolo deterministico rapido: combinazione lineare + sigmoide
         score = sum(f * w for f, w in zip(features[:len(self.weights)], self.weights))
         prob = 1.0 / (1.0 + (2.718281828 ** (-score)))
         pred_class = 1 if prob >= 0.5 else 0
@@ -374,96 +531,157 @@ class InProcessModelRuntime:
         self.is_loaded = False
         print("[Runtime] Risorse del modello liberate correttamente.")
 
-# Istanza globale dello stato dell'applicazione
+# Istanza globale del runtime
 runtime_engine = InProcessModelRuntime()
 
-# 3. Lifespan Context Manager per Caricamento Unico al Boot
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Startup: inizializzazione del modello
-    runtime_engine.load_weights()
-    yield
-    # Shutdown: pulizia delle risorse
-    runtime_engine.release()
-
-app = FastAPI(
-    title="High-Performance Local Inference Gateway",
-    description="Microservizio FastAPI per inferenza locale batch, real-time e streaming SSE",
-    version="1.0.0",
-    lifespan=lifespan
-)
-
-# Middleware per misurazione del tempo di risposta totale
-@app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    start_time = time.perf_counter()
-    response: Response = await call_next(request)
-    process_time = (time.perf_counter() - start_time) * 1000
-    response.headers["X-Process-Time-Ms"] = f"{process_time:.2f}"
-    return response
-
-# 4. Endpoint di Healthcheck
-@app.get("/health")
-async def health_check():
-    return {
-        "status": "healthy" if runtime_engine.is_loaded else "unhealthy",
-        "model_version": runtime_engine.version,
-        "runtime": "FastAPI ASGI"
-    }
-
-# 5. Endpoint di Inferenza Sincrona / Real-Time
-@app.post("/predict", response_model=InferenceResponse)
-async def predict_endpoint(payload: InferenceRequest):
-    start_op = time.perf_counter()
-    if len(payload.features) == 0:
-        raise HTTPException(status_code=400, detail="Il vettore di feature non può essere vuoto.")
-    
-    # Esecuzione dell'inferenza in thread pool asincrono per non bloccare l'event loop
-    pred_class, prob = await asyncio.to_thread(runtime_engine.predict, payload.features)
-    latency = (time.perf_counter() - start_op) * 1000
-    
-    return InferenceResponse(
-        prediction=pred_class,
-        probability=round(prob, 4),
-        model_version=runtime_engine.version,
-        latency_ms=round(latency, 3)
-    )
-
-# 6. Endpoint di Inferenza Generativa con Streaming Server-Sent Events (SSE)
-@app.post("/stream")
-async def stream_endpoint(payload: StreamRequest):
-    async def token_generator():
-        prompt_words = payload.prompt.strip().split()
-        yield f"data: {json.dumps({'event': 'start', 'prompt_length': len(prompt_words)})}\n\n"
-        
-        simulated_tokens = [
-            f"token_{i}[" + str(hash(f"{payload.prompt}_{i}") % 1000) + "]"
-            for i in range(payload.max_tokens)
-        ]
-        
-        for idx, tok in enumerate(simulated_tokens):
-            await asyncio.sleep(payload.stream_delay_seconds)
-            chunk = {
-                "index": idx,
-                "token": tok,
-                "finished": idx == len(simulated_tokens) - 1
+# 2. Handler HTTP nativo per API REST e Server-Sent Events (SSE)
+class InferenceHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        if self.path == "/health":
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            payload = {
+                "status": "healthy" if runtime_engine.is_loaded else "unhealthy",
+                "model_version": runtime_engine.version,
+                "runtime": "Python Standard HTTP Gateway"
             }
-            yield f"data: {json.dumps(chunk)}\n\n"
-            
-        yield f"data: {json.dumps({'event': 'done'})}\n\n"
+            self.wfile.write(json.dumps(payload).encode("utf-8"))
+        else:
+            self.send_response(404)
+            self.end_headers()
 
-    return StreamingResponse(
-        token_generator(),
-        media_type="text/event-stream",
-        headers={
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "X-Accel-Buffering": "no"
-        }
-    )
+    def do_POST(self):
+        start_time = time.perf_counter()
+        content_length = int(self.headers.get("Content-Length", 0))
+        body = self.rfile.read(content_length).decode("utf-8") if content_length > 0 else "{}"
+        
+        try:
+            data = json.loads(body)
+        except Exception:
+            data = {}
+
+        if self.path == "/predict":
+            features = data.get("features", [])
+            if not features:
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                self.wfile.write(json.dumps({"detail": "Il vettore di feature non può essere vuoto."}).encode("utf-8"))
+                return
+
+            pred_class, prob = runtime_engine.predict(features)
+            latency_ms = (time.perf_counter() - start_time) * 1000
+            response_payload = {
+                "prediction": pred_class,
+                "probability": round(prob, 4),
+                "model_version": runtime_engine.version,
+                "latency_ms": round(latency_ms, 3)
+            }
+            
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("X-Process-Time-Ms", f"{latency_ms:.2f}")
+            self.end_headers()
+            self.wfile.write(json.dumps(response_payload).encode("utf-8"))
+
+        elif self.path == "/stream":
+            prompt = data.get("prompt", "OSINT Threat Query")
+            max_tokens = min(data.get("max_tokens", 4), 20)
+            delay = min(data.get("stream_delay_seconds", 0.005), 0.05)
+
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream")
+            self.send_header("Cache-Control", "no-cache")
+            self.send_header("Connection", "keep-alive")
+            self.end_headers()
+
+            # Invio evento di avvio
+            start_event = f"data: {json.dumps({'event': 'start', 'prompt': prompt})}\n\n"
+            self.wfile.write(start_event.encode("utf-8"))
+            self.wfile.flush()
+
+            # Emissione token in streaming SSE
+            for idx in range(max_tokens):
+                time.sleep(delay)
+                chunk = {
+                    "index": idx,
+                    "token": f"token_{idx}[{hash(f'{prompt}_{idx}') % 1000}]",
+                    "finished": idx == (max_tokens - 1)
+                }
+                event_data = f"data: {json.dumps(chunk)}\n\n"
+                self.wfile.write(event_data.encode("utf-8"))
+                self.wfile.flush()
+
+            # Evento di chiusura
+            done_event = f"data: {json.dumps({'event': 'done'})}\n\n"
+            self.wfile.write(done_event.encode("utf-8"))
+            self.wfile.flush()
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        pass
 
 if __name__ == "__main__":
-    print("[Server] Configurazione del microservizio FastAPI pronta.")
+    runtime_engine.load_weights()
+    
+    server_address = ("127.0.0.1", 0)
+    server = HTTPServer(server_address, InferenceHTTPRequestHandler)
+    server.timeout = 2.0
+    port = server.server_port
+    
+    def process_test_requests():
+        for _ in range(3):
+            server.handle_request()
+
+    server_thread = threading.Thread(target=process_test_requests, daemon=True)
+    server_thread.start()
+    
+    print(f"[Server] Microservizio di inferenza attivo su http://127.0.0.1:{port}")
+    
+    # 1. Test Endpoint /health
+    req_health = urllib.request.Request(f"http://127.0.0.1:{port}/health")
+    with urllib.request.urlopen(req_health) as resp:
+        health_data = json.loads(resp.read().decode("utf-8"))
+        print(f"[Client] Health Check: {health_data}")
+
+    # 2. Test Endpoint /predict
+    predict_payload = json.dumps({"features": [1.2, -0.5, 0.8, 2.1, -1.0]}).encode("utf-8")
+    req_predict = urllib.request.Request(
+        f"http://127.0.0.1:{port}/predict",
+        data=predict_payload,
+        headers={"Content-Type": "application/json"}
+    )
+    with urllib.request.urlopen(req_predict) as resp:
+        predict_data = json.loads(resp.read().decode("utf-8"))
+        print(f"[Client] Predizione Real-Time: {predict_data}")
+
+    # 3. Test Endpoint /stream (Server-Sent Events)
+    stream_payload = json.dumps({"prompt": "Analisi minaccia APT29", "max_tokens": 4, "stream_delay_seconds": 0.005}).encode("utf-8")
+    req_stream = urllib.request.Request(
+        f"http://127.0.0.1:{port}/stream",
+        data=stream_payload,
+        headers={"Content-Type": "application/json"}
+    )
+    with urllib.request.urlopen(req_stream, timeout=3.0) as resp:
+        print("[Client] Ricezione flusso token Server-Sent Events (SSE):")
+        while True:
+            line = resp.readline()
+            if not line:
+                break
+            decoded = line.decode("utf-8").strip()
+            if decoded.startswith("data:"):
+                chunk_obj = json.loads(decoded[5:].strip())
+                print(f"         {chunk_obj}")
+                if chunk_obj.get("event") == "done":
+                    break
+
+    server_thread.join(timeout=2.0)
+    server.server_close()
+    runtime_engine.release()
+    print("[Completato] Test microservizio REST e SSE completato con successo.")
 ```
 
 ### Laboratorio 3: Rilevamento Matematico del Data Drift e Degradazione di Modello con Statistica KS e PSI
@@ -585,76 +803,110 @@ if __name__ == "__main__":
 
 ### Laboratorio 4: Servizio di Inferenza con Esportazione Telemetrica Prometheus e Containerizzazione Multi-Stage
 
-Questo laboratorio illustra la strumentazione telemetrica di un microservizio di inferenza con la libreria `prometheus_client` in [Python](https://www.python.org/) per esporre contatori di richieste, istogrammi di latenza e gauge di allocazione memoria sull'endpoint `/metrics`, corredato dai file dichiarativi `Dockerfile` multi-stage e `docker-compose.yml` per l'orchestrazione con [Prometheus](https://prometheus.io/).
+Questo laboratorio illustra la strumentazione telemetrica di un microservizio di inferenza in [Python](https://www.python.org/) per esporre contatori di richieste, istogrammi di latenza e gauge di allocazione memoria sull'endpoint `/metrics` secondo lo standard di [Prometheus](https://prometheus.io/), corredato dai file dichiarativi `Dockerfile` multi-stage e `docker-compose.yml` per l'orchestrazione dei container.
 
 ```python
 import time
 import random
-from fastapi import FastAPI, Response
-from prometheus_client import Counter, Histogram, Gauge, generate_latest, CONTENT_TYPE_LATEST
-import uvicorn
+from typing import Dict, List, Any, Tuple
 
-# 1. Definizione delle Metriche Prometheus Native per MLOps/LLMOps
-REQUEST_COUNTER = Counter(
-    "model_inference_requests_total",
-    "Numero totale di richieste di inferenza ricevute dal microservizio",
-    ["model_name", "status_code"]
-)
+class PrometheusMetricRegistry:
+    """
+    Motore di telemetria e formattazione metriche nativo conforme allo standard Prometheus Exposition Format.
+    Supporta Counter cumulativi, Histogram con bucket esponenziali e Gauge di stato istantaneo.
+    """
+    def __init__(self):
+        self.counters: Dict[str, Dict[Tuple[Tuple[str, str], ...], float]] = {}
+        self.gauges: Dict[str, Dict[Tuple[Tuple[str, str], ...], float]] = {}
+        self.histograms: Dict[str, Dict[str, Any]] = {}
+        self.help_text: Dict[str, str] = {}
+        self.type_text: Dict[str, str] = {}
 
-INFERENCE_LATENCY = Histogram(
-    "model_inference_latency_seconds",
-    "Distribuzione della latenza di elaborazione dell'inferenza in secondi",
-    ["model_name"],
-    buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5]
-)
+    def register_counter(self, name: str, doc: str):
+        self.counters[name] = {}
+        self.help_text[name] = doc
+        self.type_text[name] = "counter"
 
-ACTIVE_REQUESTS = Gauge(
-    "model_active_inference_requests",
-    "Numero di richieste di inferenza attualmente in fase di elaborazione attiva"
-)
+    def register_gauge(self, name: str, doc: str):
+        self.gauges[name] = {}
+        self.help_text[name] = doc
+        self.type_text[name] = "gauge"
 
-MODEL_MEMORY_USAGE = Gauge(
-    "model_memory_footprint_megabytes",
-    "Stima della memoria RAM/VRAM occupata dai pesi del modello caricato in MB",
-    ["model_name"]
-)
-
-app = FastAPI(title="Prometheus Instrumented Inference Server")
-
-# Inizializzazione della metrica di memoria
-MODEL_MEMORY_USAGE.labels(model_name="ThreatDetector_v1").set(482.5)
-
-@app.get("/metrics")
-async def metrics_endpoint():
-    """Endpoint standard per lo scraping periodico da parte di Prometheus."""
-    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
-
-@app.post("/predict")
-async def predict_with_telemetry():
-    """Endpoint di inferenza con tracciamento della latenza e dei contatori."""
-    ACTIVE_REQUESTS.inc()
-    start_time = time.perf_counter()
-    model_name = "ThreatDetector_v1"
-    
-    try:
-        # Simulazione elaborazione inferenziale con latenza casuale calibrata
-        simulated_delay = random.uniform(0.012, 0.085)
-        time.sleep(simulated_delay)
-        
-        # Registrazione metrica di successo
-        REQUEST_COUNTER.labels(model_name=model_name, status_code="200").inc()
-        return {
-            "prediction": "benign",
-            "score": 0.942,
-            "inference_time_s": simulated_delay
+    def register_histogram(self, name: str, doc: str, buckets: List[float]):
+        self.histograms[name] = {
+            "buckets": sorted(buckets) + [float("inf")],
+            "counts": {},
+            "sums": {},
+            "total_counts": {}
         }
-    except Exception as e:
-        REQUEST_COUNTER.labels(model_name=model_name, status_code="500").inc()
-        raise e
-    finally:
-        latency = time.perf_counter() - start_time
-        INFERENCE_LATENCY.labels(model_name=model_name).observe(latency)
-        ACTIVE_REQUESTS.dec()
+        self.help_text[name] = doc
+        self.type_text[name] = "histogram"
+
+    def inc_counter(self, name: str, labels: Dict[str, str], value: float = 1.0):
+        key = tuple(sorted(labels.items()))
+        self.counters[name][key] = self.counters[name].get(key, 0.0) + value
+
+    def set_gauge(self, name: str, labels: Dict[str, str], value: float):
+        key = tuple(sorted(labels.items()))
+        self.gauges[name][key] = value
+
+    def observe_histogram(self, name: str, labels: Dict[str, str], value: float):
+        key = tuple(sorted(labels.items()))
+        hist = self.histograms[name]
+        
+        if key not in hist["counts"]:
+            hist["counts"][key] = [0] * len(hist["buckets"])
+            hist["sums"][key] = 0.0
+            hist["total_counts"][key] = 0
+
+        hist["sums"][key] += value
+        hist["total_counts"][key] += 1
+
+        for i, b in enumerate(hist["buckets"]):
+            if value <= b:
+                hist["counts"][key][i] += 1
+
+    def generate_latest(self) -> str:
+        """Serializza le metriche nel formato testuale standard di Prometheus."""
+        lines = []
+
+        # 1. Gauges
+        for name, series in self.gauges.items():
+            lines.append(f"# HELP {name} {self.help_text[name]}")
+            lines.append(f"# TYPE {name} gauge")
+            for label_tuple, val in series.items():
+                lbl_str = ",".join(f'{k}="{v}"' for k, v in label_tuple)
+                lbl_suffix = f"{{{lbl_str}}}" if lbl_str else ""
+                lines.append(f"{name}{lbl_suffix} {val}")
+
+        # 2. Counters
+        for name, series in self.counters.items():
+            lines.append(f"# HELP {name} {self.help_text[name]}")
+            lines.append(f"# TYPE {name} counter")
+            for label_tuple, val in series.items():
+                lbl_str = ",".join(f'{k}="{v}"' for k, v in label_tuple)
+                lbl_suffix = f"{{{lbl_str}}}" if lbl_str else ""
+                lines.append(f"{name}{lbl_suffix} {val}")
+
+        # 3. Histograms
+        for name, hist in self.histograms.items():
+            lines.append(f"# HELP {name} {self.help_text[name]}")
+            lines.append(f"# TYPE {name} histogram")
+            for label_tuple in hist["counts"].keys():
+                base_lbl = ",".join(f'{k}="{v}"' for k, v in label_tuple)
+                
+                cum_count = 0
+                for i, b in enumerate(hist["buckets"]):
+                    cum_count += hist["counts"][label_tuple][i]
+                    le_str = "+Inf" if b == float("inf") else str(b)
+                    lbl_combined = f'{base_lbl},le="{le_str}"' if base_lbl else f'le="{le_str}"'
+                    lines.append(f"{name}_bucket{{{lbl_combined}}} {cum_count}")
+                
+                sum_lbl = f"{{{base_lbl}}}" if base_lbl else ""
+                lines.append(f"{name}_sum{sum_lbl} {hist['sums'][label_tuple]:.6f}")
+                lines.append(f"{name}_count{sum_lbl} {hist['total_counts'][label_tuple]}")
+
+        return "\n".join(lines) + "\n"
 
 # ---------------------------------------------------------------------------------
 # ARTIFACT DI CONFIGURAZIONE DOCKER E PROMETHEUS (Generati come stringhe di riferimento)
@@ -740,6 +992,33 @@ scrape_configs:
 """
 
 if __name__ == "__main__":
-    print("[Docker Compose Spec]:\n", DOCKER_COMPOSE_CONTENT)
-    print("\n[Prometheus Config]:\n", PROMETHEUS_YML_CONTENT)
+    registry = PrometheusMetricRegistry()
+    registry.register_counter("model_inference_requests_total", "Numero totale di richieste di inferenza ricevute")
+    registry.register_gauge("model_memory_footprint_megabytes", "Memoria RAM occupata dai pesi del modello in MB")
+    registry.register_gauge("model_active_inference_requests", "Numero di richieste di inferenza attive")
+    registry.register_histogram(
+        "model_inference_latency_seconds",
+        "Distribuzione della latenza di elaborazione in secondi",
+        buckets=[0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5]
+    )
+
+    registry.set_gauge("model_memory_footprint_megabytes", {"model_name": "ThreatDetector_v1"}, 482.5)
+
+    print("=== SIMULAZIONE INFERENZA CON MONITORAGGIO PROMETHEUS ===")
+    random.seed(42)
+    for req_id in range(1, 11):
+        registry.set_gauge("model_active_inference_requests", {}, 1.0)
+        simulated_latency = random.uniform(0.012, 0.085)
+        time.sleep(simulated_latency * 0.05)
+        
+        status = "200" if random.random() > 0.1 else "500"
+        registry.inc_counter("model_inference_requests_total", {"model_name": "ThreatDetector_v1", "status_code": status})
+        registry.observe_histogram("model_inference_latency_seconds", {"model_name": "ThreatDetector_v1"}, simulated_latency)
+        registry.set_gauge("model_active_inference_requests", {}, 0.0)
+
+    metrics_output = registry.generate_latest()
+    print("\n--- ESPORTAZIONE ENDPOINT /metrics (Prometheus Format) ---")
+    print(metrics_output.strip())
+
+    print("\n[Docker Compose Spec Preview]:\n", DOCKER_COMPOSE_CONTENT.strip())
 ```

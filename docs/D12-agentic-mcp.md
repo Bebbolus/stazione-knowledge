@@ -860,7 +860,59 @@ def run_laboratory_demo() -> None:
     assert "Investigazione completata" in result
     print("Test dell'agente autonomo Laboratorio 4 superato con successo.")
 
+### Laboratorio 5: Integrazione di Qdrant come Server MCP di Ricerca Semantica
+
+Questo laboratorio finale dimostra come convertire un database vettoriale come Qdrant in un server MCP, aderendo all'architettura SOTA 2026. Questo approccio disaccoppia la Knowledge Base (es. Obsidian) dall'agente LLM.
+
+```python
+"""
+lab_qdrant_mcp.py
+Costruisce un server MCP per esporre la ricerca ibrida di Qdrant all'Harness.
+"""
+from typing import Dict, Any
+import requests
+
+class QdrantSemanticSearchMCP:
+    def __init__(self, qdrant_url: str = "http://localhost:6333", collection: str = "obsidian_vault"):
+        self.url = qdrant_url
+        self.collection = collection
+
+    def get_tool_schema(self) -> Dict[str, Any]:
+        return {
+            "name": "obsidian_semantic_search",
+            "description": "Esegue una ricerca semantica ibrida (Vettore + BM25) sul Vault Obsidian.",
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "query": {"type": "string", "description": "La query in linguaggio naturale"},
+                    "limit": {"type": "integer", "description": "Numero di frammenti da restituire (max 10)", "default": 5}
+                },
+                "required": ["query"]
+            }
+        }
+
+    def execute_search(self, query: str, limit: int = 5) -> Dict[str, Any]:
+        # Simulazione del calcolo dell'embedding locale e della chiamata a Qdrant
+        print(f"[*] Embedding generato per: '{query}'")
+        print(f"[*] Chiamata a {self.url}/collections/{self.collection}/points/search")
+        
+        # Mock della risposta di Qdrant
+        return {
+            "results": [
+                {"id": 1, "score": 0.92, "payload": {"file": "Strategia.md", "content": "La strategia 2026 prevede l'uso di ICM."}},
+                {"id": 2, "score": 0.85, "payload": {"file": "Infrastruttura.md", "content": "I container Docker isolano il backend."}}
+            ],
+            "status": "success"
+        }
+
+def run_lab_5() -> None:
+    server = QdrantSemanticSearchMCP()
+    schema = server.get_tool_schema()
+    print("Schema MCP Esportato:", schema["name"])
+    res = server.execute_search("strategia infrastrutturale")
+    print("Risultati Ricerca:", res["results"][0]["payload"]["file"])
 
 if __name__ == "__main__":
     run_laboratory_demo()
+    run_lab_5()
 ```

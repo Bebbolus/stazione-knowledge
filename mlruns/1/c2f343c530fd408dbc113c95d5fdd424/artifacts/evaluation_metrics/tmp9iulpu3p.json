@@ -1,0 +1,18 @@
+{
+  "run_id": "c2f343c530fd408dbc113c95d5fdd424",
+  "confusion_matrix": [
+    [
+      131,
+      19
+    ],
+    [
+      24,
+      126
+    ]
+  ],
+  "classes": [
+    0,
+    1
+  ],
+  "test_samples": 300
+}

@@ -36,7 +36,7 @@ $$\mathcal{M}_{Lap}(D) = f(D) + \text{Lap}\left(0, \frac{\Delta f}{\epsilon}\rig
 
 Nell'addestramento neurale, l'algoritmo Differentially Private Stochastic Gradient Descent (DP-SGD) garantisce privacy differenziale limitando la norma $L_2$ dei gradienti per singolo esempio attraverso una soglia di clipping $C$ e aggiungendo rumore Gaussiano calibrato prima dell'aggiornamento dei pesi. In tal modo, nessun singolo dato di addestramento può influenzare i pesi della rete in misura sufficiente da consentirne la ricostruzione o l'inferenza di appartenenza.
 
-Sul piano operativo e di conformità al [GDPR](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32016R0679), l'autorità europea [EDPB](https://www.edpb.europa.eu/) (l'European Data Protection Board, l'organismo indipendente dell'Unione Europea per l'applicazione uniforme del GDPR) impone una distinzione netta tra anonimizzazione irreversibile e pseudonimizzazione. La pseudonimizzazione crittografica deterministica basata su HMAC-SHA256 con chiave segreta consente di sostituire identificatori diretti con token opachi mantenendo l'integrità referenziale nelle analisi senza esporre dati personali in chiaro agli embedding model.
+Sul piano operativo e di conformità al [GDPR](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32016R0679), l'autorità europea [EDPB](https://www.edpb.europa.eu/) (l'European Data Protection Board, l'organismo indipendente dell'Unione Europea per l'applicazione uniforme del GDPR) impone una distinzione netta tra anonimizzazione irreversibile e pseudonimizzazione. Nella nostra architettura locale, questa operazione è delegata all'azione congiunta di [LLM Guard](https://llm-guard.com/) (il framework open-source per neutralizzare le prompt injection) e librerie specifiche come Rizzo-PII (dedicate alla sanificazione di formati italiani complessi come Codici Fiscali e Partite IVA). La pseudonimizzazione crittografica deterministica basata su HMAC-SHA256 con chiave segreta consente di sostituire identificatori diretti con token opachi, mantenendo l'integrità referenziale nelle analisi senza esporre dati personali in chiaro prima di instradarli verso i provider LLM.
 
 ## Equità Algoritmica e Mitigazione dei Bias: Metriche Matematiche e Toolkit AIF360
 
@@ -226,7 +226,7 @@ Questo laboratorio implementa una simulazione quantitativa di Membership Inferen
 
 ```python
 import numpy as np
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Any
 
 class MIADifferentialPrivacySimulator:
     """
@@ -266,7 +266,7 @@ class MIADifferentialPrivacySimulator:
         sorted_true = y_true[sorted_indices]
         tpr_points = np.cumsum(sorted_true) / np.sum(y_true)
         fpr_points = np.cumsum(1 - sorted_true) / np.sum(1 - y_true)
-        roc_auc = np.trapz(tpr_points, fpr_points)
+        roc_auc = np.trapezoid(tpr_points, fpr_points) if hasattr(np, "trapezoid") else np.trapz(tpr_points, fpr_points)
         
         return {
             "attack_accuracy": float(accuracy),

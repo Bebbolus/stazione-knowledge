@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "c:/codeproject/Stazione/stazione-knowledge"
+      ]
+    },
+    "graphify": {
+      "command": "python",
+      "args": [
+        "-m",
+        "graphify.server"
+      ],
+      "env": {
+        "GRAPHIFY_DB_PATH": "c:/codeproject/Stazione/db"
+      }
+    }
+  }
+}

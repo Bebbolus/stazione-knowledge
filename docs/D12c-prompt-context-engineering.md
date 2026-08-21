@@ -95,7 +95,7 @@ $$P(w_t \mid w_{<t}) = \text{Softmax}(z_t + M_t)$$
 
 I token che violerebbero la sintassi grammaticale in quel punto della sequenza ricevono un valore di logit pari a $-\infty$, rendendo matematicamente impossibile per il modello generare token non conformi. Librerie specializzate come [Outlines](https://github.com/dottxt-ai/outlines) (la libreria open-source per la generazione guidata da grammatiche EBNF e automi a stati finiti su logits tensoriali), [Guidance](https://github.com/guidance-ai/guidance) (il framework open-source di Microsoft per il controllo vincolato della generazione e strutturazione dei prompt) sviluppato da [Microsoft](https://www.microsoft.com/) (la multinazionale tecnologica leader nei sistemi operativi, cloud Azure e software per sviluppatori) e i motori di inferenza come [llama.cpp](https://github.com/ggerganov/llama.cpp) (l'engine di inferenza in C/C++ ottimizzato per modelli quantizzati in formato GGUF su CPU e GPU consumer) integrano il grammar decoding nativamente.
 
-A livello applicativo, la validazione semantica viene garantita dalla libreria [Pydantic](https://docs.pydantic.dev/) (la libreria open-source in Python di riferimento per la validazione di strutture dati tipizzate a runtime). L'output JSON generato viene deserializzato all'interno di classi Pydantic tipizzate, applicando controlli rigorosi su tipi primitivi, vincoli numerici ed enumerazioni. Qualora si verifichi un'eccezione di validazione (`ValidationError`), l'harness attiva un ciclo di **Self-Healing**: cattura il messaggio di errore diagnostico emesso da Pydantic, lo formatta in un prompt di feedback mirato e richiede al modello una correzione circoscritta, ottenendo un tasso di convergenza corretto prossimo alla totalità entro due tentativi.
+A livello applicativo, la validazione semantica viene garantita dalla libreria [Pydantic](https://docs.pydantic.dev/) (la libreria open-source in [Python](https://www.python.org/) di riferimento per la validazione di strutture dati tipizzate a runtime). L'output JSON generato viene deserializzato all'interno di classi Pydantic tipizzate, applicando controlli rigorosi su tipi primitivi, vincoli numerici ed enumerazioni. Qualora si verifichi un'eccezione di validazione (`ValidationError`), l'harness attiva un ciclo di **Self-Healing**: cattura il messaggio di errore diagnostico emesso da Pydantic, lo formatta in un prompt di feedback mirato e richiede al modello una correzione circoscritta, ottenendo un tasso di convergenza corretto prossimo alla totalità entro due tentativi.
 
 ## Ottimizzazione Dichiarativa dei Prompt: Il Paradigma DSPy
 
@@ -398,7 +398,7 @@ class ContextWindowManager:
 
 
 if __name__ == "__main__":
-    manager = ContextWindowManager(max_tokens=250, system_reserve_tokens=60, recent_messages_to_keep=2)
+    manager = ContextWindowManager(max_tokens=120, system_reserve_tokens=30, recent_messages_to_keep=2)
     manager.set_system_prompt("Sei un analista cyber-threat intelligence specializzato in correlazione IoC.")
 
     manager.add_message("user", "Inizia l'investigazione sul gruppo APT28 attivo nel settore energetico.")
@@ -596,15 +596,16 @@ class SimulatedDSPyEngine:
     """Motore LLM che adatta il proprio output in funzione della presenza di dimostrazioni Few-Shot nel prompt."""
 
     def complete(self, prompt: str) -> str:
+        target_section = prompt.split("Esegui il seguente task:")[-1] if "Esegui il seguente task:" in prompt else prompt
         if "Dimostrazione 1:" in prompt:
-            if "Phishing credenziali bancarie" in prompt:
+            if "Phishing credenziali bancarie" in target_section:
                 return "Rationale: L'attacco prende di mira credenziali finanziarie senza impatto sistemico.\nSeverity: MEDIUM"
-            elif "Ransomware blocca server ospedaliero" in prompt:
+            elif "Ransomware blocca server ospedaliero" in target_section:
                 return "Rationale: L'interruzione dei sistemi ospedalieri compromette servizi essenziali salvavita.\nSeverity: CRITICAL"
-            elif "Scansione porte non autorizzata" in prompt:
+            elif "Scansione porte non autorizzata" in target_section:
                 return "Rationale: Ricognizione superficiale senza evidenza di violazione.\nSeverity: LOW"
 
-        if "ospedaliero" in prompt:
+        if "ospedaliero" in target_section or "Ransomware" in target_section:
             return "Rationale: Incidente rilevato.\nSeverity: HIGH"
         return "Rationale: Evento standard.\nSeverity: MEDIUM"
 
