@@ -191,6 +191,12 @@ if not API_KEY:
     raise RuntimeError("La variabile SERVICE_API_KEY non è impostata. Verificare il file .env o l'ambiente locale.")
 ```
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D02-python-refresher. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Client HTTP Resilienti e Pattern di Rete
 
 Le interazioni con endpoint esterni, API di modelli linguistici e servizi OSINT richiedono client HTTP robusti in grado di gestire latenze variabili, disconnessioni temporanee ed errori di stato.
@@ -336,7 +342,13 @@ Per approfondire l'architettura dei test con fixture e mocking, la documentazion
 
 ## Appendice Operativa: Laboratori Pratici
 
-1. Configurazione dell'ambiente e logging strutturato: Creare la cartella di lavoro `stazione-python-lab/`, inizializzare l'ambiente virtuale con `python -m venv .venv`, attivarlo e configurare `main.py` per registrare messaggi informativi e di errore sia su standard output sia su file persistente `logs/app.log`.
-2. Elaborazione di dataset in formato JSONL: Scrivere uno script che genera dieci dizionari di test e li scrive in modalità append all'interno di `logs/events.jsonl`. Realizzare una seconda funzione che esegue lo streaming del file riga per riga, deserializza gli oggetti con `json.loads()` e calcola il conteggio aggregato degli eventi per tipologia.
-3. Client API resiliente con variabili d'ambiente: Implementare il modulo `src/my_project/api_client.py` con una funzione che acquisisce l'endpoint da configurazione YAML e la chiave di autorizzazione dalla variabile d'ambiente `SERVICE_API_KEY`, eseguendo una richiesta GET con timeout e gestione delle eccezioni di rete.
-4. Costruzione di interfaccia CLI e suite di test: Esporre i comandi di ispezione ed elaborazione tramite `argparse` all'interno di `main.py`. Creare la cartella `tests/`, implementare il test unitario per una funzione di utilità matematica e validare l'intera suite eseguendo `pytest -q`.
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
+- [ ] Configurazione dell'ambiente e logging strutturato: Creare la cartella di lavoro `stazione-python-lab/`, inizializzare l'ambiente virtuale con `python -m venv .venv`, attivarlo e configurare `main.py` per registrare messaggi informativi e di errore sia su standard output sia su file persistente `logs/app.log`.
+- [ ] Elaborazione di dataset in formato JSONL: Scrivere uno script che genera dieci dizionari di test e li scrive in modalità append all'interno di `logs/events.jsonl`. Realizzare una seconda funzione che esegue lo streaming del file riga per riga, deserializza gli oggetti con `json.loads()` e calcola il conteggio aggregato degli eventi per tipologia.
+- [ ] Client API resiliente con variabili d'ambiente: Implementare il modulo `src/my_project/api_client.py` con una funzione che acquisisce l'endpoint da configurazione YAML e la chiave di autorizzazione dalla variabile d'ambiente `SERVICE_API_KEY`, eseguendo una richiesta GET con timeout e gestione delle eccezioni di rete.
+- [ ] Costruzione di interfaccia CLI e suite di test: Esporre i comandi di ispezione ed elaborazione tramite `argparse` all'interno di `main.py`. Creare la cartella `tests/`, implementare il test unitario per una funzione di utilità matematica e validare l'intera suite eseguendo `pytest -q`.

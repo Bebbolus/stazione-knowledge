@@ -71,6 +71,12 @@ $$PD = \frac{TPP}{\text{Die Area mm}^2}$$
 
 In base alla nuova regola, qualsiasi processore con $TPP \ge 4800$ oppure con $1600 \le TPP < 4800$ e $PD \ge 5.92$ ricade nel divieto di esportazione automatica (ECCN 3A090.a/b), estendendo il blocco a schede grafiche enterprise e consumer come la RTX 4090. In risposta, NVIDIA ha calibrato l'acceleratore H20 con TPP ridotto ma elevata ampiezza di banda di memoria. L'analista OSINT monitora costantemente i tentativi di elusione di tali vincoli, tracciando triangolazioni commerciali attraverso società fittizie in giurisdizioni terze (come Emirati Arabi Uniti o Sud-Est asiatico) e l'accesso remoto a cluster di calcolo esteri tramite servizi cloud IaaS non conformi.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D11c-geopolitica-ai-osint. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Divergenza regolatoria: Brussels Effect, tecno-nazionalismo USA e governance cinese
 
 Il panorama globale della governance dell'intelligenza artificiale si caratterizza per una profonda frammentazione tra blocchi geopolitici, ciascuno guidato da priorità strategiche e visioni normative divergenti.
@@ -132,6 +138,12 @@ L'analista deve tuttavia considerare il rischio di operazioni sotto falsa bandie
 
 La sicurezza della supply chain dei modelli aperti impone un'ispezione rigorosa del formato di memorizzazione dei pesi. I vecchi file di checkpoint serializzati con il modulo nativo `pickle` di [Python](https://www.python.org/) (`.pt` o `.bin`) presentano gravissime vulnerabilità di esecuzione arbitraria di codice (RCE) all'atto del caricamento in memoria. La transizione verso il formato `safetensors` promosso dalla piattaforma [Hugging Face](https://huggingface.co/) (la piattaforma per modelli e dataset di machine learning) garantisce l'isolamento del codice, archiviando esclusivamente array numerici serializzati in modo immutabile con intestazione JSON descrittiva. L'integrità dei modelli viene infine certificata mediante il calcolo e il confronto degli hash crittografici SHA-256 di ciascuno shard dei pesi.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Compromessi architetturali, vincoli geopolitici e limiti etico-legali
 
 L'investigatore e il progettista di sistemi informativi affrontano compromessi strutturali tra sovranità operativa, prestazioni computazionali e conformità giuridica.
@@ -161,6 +173,12 @@ Le evidenze relative a campagne di disinformazione coordinate e attori di minacc
 
 ## Appendice operativa: laboratori pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 I seguenti quattro laboratori forniscono procedure operative e codice [Python](https://www.python.org/) eseguibile per quantificare le metriche di export control, valutare la vulnerabilità della supply chain dei semiconduttori, classificare il rischio secondo l'EU AI Act e analizzare la sicurezza binaria dei formati dei modelli.
 
 ### Laboratorio 1: Calcolo delle metriche BIS (TPP e Performance Density) per acceleratori GPU
@@ -169,10 +187,10 @@ Questo laboratorio implementa un modulo in [Python](https://www.python.org/) che
 
 Procedura operativa:
 
-1. Definire le specifiche fisiche dell'acceleratore (TFLOPS densi a 16-bit, larghezza di bit pari a 16 e area superficiale del die in $\text{mm}^2$).
-2. Calcolare il $TPP$ moltiplicando $2 \times \text{TFLOPS} \times \text{bit\_width}$.
-3. Calcolare il $PD$ dividendo il $TPP$ per l'area del die.
-4. Applicare le condizioni logiche del regolamento BIS per determinare se il processore è liberamente esportabile, soggetto a notifica o vietato.
+- [ ] Definire le specifiche fisiche dell'acceleratore (TFLOPS densi a 16-bit, larghezza di bit pari a 16 e area superficiale del die in $\text{mm}^2$).
+- [ ] Calcolare il $TPP$ moltiplicando $2 \times \text{TFLOPS} \times \text{bit\_width}$.
+- [ ] Calcolare il $PD$ dividendo il $TPP$ per l'area del die.
+- [ ] Applicare le condizioni logiche del regolamento BIS per determinare se il processore è liberamente esportabile, soggetto a notifica o vietato.
 
 ```python
 from typing import Dict, Any, List
@@ -259,10 +277,10 @@ Questo laboratorio implementa un modello a grafo in [Python](https://www.python.
 
 Procedura operativa:
 
-1. Modellare i segmenti critici della filiera dei semiconduttori (Litografia EUV, Ottiche, Fonderia sub-3nm, Packaging CoWoS, EDA Software).
-2. Calcolare l'indice HHI per ciascun segmento per identificare mercati a concentrazione monopolistica ($\text{HHI} > 2500$).
-3. Simulare la propagazione di un blocco delle fonderie taiwanesi identificando le industrie e i provider cloud a valle impattati.
-4. Emettere il report quantitativo di vulnerabilità geopolitica.
+- [ ] Modellare i segmenti critici della filiera dei semiconduttori (Litografia EUV, Ottiche, Fonderia sub-3nm, Packaging CoWoS, EDA Software).
+- [ ] Calcolare l'indice HHI per ciascun segmento per identificare mercati a concentrazione monopolistica ($\text{HHI} > 2500$).
+- [ ] Simulare la propagazione di un blocco delle fonderie taiwanesi identificando le industrie e i provider cloud a valle impattati.
+- [ ] Emettere il report quantitativo di vulnerabilità geopolitica.
 
 ```python
 from typing import Dict, List, Any
@@ -355,10 +373,10 @@ Questo laboratorio implementa un motore di conformità in [Python](https://www.p
 
 Procedura operativa:
 
-1. Strutturare il profilo funzionale del sistema di intelligenza artificiale indicando il dominio di impiego, la tecnologia e il calcolo cumulativo di addestramento in FLOPs.
-2. Verificare se l'applicazione ricade nei divieti assoluti dell'Articolo 5 (Rischio Inaccettabile).
-3. Verificare se l'applicazione rientra nell'Allegato III dei sistemi ad Alto Rischio (Articolo 6).
-4. Verificare se i modelli GPAI superano la soglia computazionale di $10^{25}$ FLOPs per la presunzione di rischio sistemico (Articoli 51–52).
+- [ ] Strutturare il profilo funzionale del sistema di intelligenza artificiale indicando il dominio di impiego, la tecnologia e il calcolo cumulativo di addestramento in FLOPs.
+- [ ] Verificare se l'applicazione ricade nei divieti assoluti dell'Articolo 5 (Rischio Inaccettabile).
+- [ ] Verificare se l'applicazione rientra nell'Allegato III dei sistemi ad Alto Rischio (Articolo 6).
+- [ ] Verificare se i modelli GPAI superano la soglia computazionale di $10^{25}$ FLOPs per la presunzione di rischio sistemico (Articoli 51–52).
 
 ```python
 from typing import Dict, Any
@@ -463,10 +481,10 @@ Questo laboratorio implementa un modulo di scansione di sicurezza in [Python](ht
 
 Procedura operativa:
 
-1. Creare una struttura di byte conforme al formato standard `safetensors` (lunghezza header a 8 byte little-endian seguita da metadati JSON).
-2. Simulare un file di checkpoint legacy con payload malevolo `pickle`.
-3. Effettuare il parsing dell'header `safetensors` estraendo la mappa dei tensori e i metadati senza eseguire codice.
-4. Scansionare il file legacy identificando le istruzioni pericolose (`REDUCE`, `GLOBAL`, `system`) e calcolare l'hash SHA-256 di audit.
+- [ ] Creare una struttura di byte conforme al formato standard `safetensors` (lunghezza header a 8 byte little-endian seguita da metadati JSON).
+- [ ] Simulare un file di checkpoint legacy con payload malevolo `pickle`.
+- [ ] Effettuare il parsing dell'header `safetensors` estraendo la mappa dei tensori e i metadati senza eseguire codice.
+- [ ] Scansionare il file legacy identificando le istruzioni pericolose (`REDUCE`, `GLOBAL`, `system`) e calcolare l'hash SHA-256 di audit.
 
 ```python
 import hashlib

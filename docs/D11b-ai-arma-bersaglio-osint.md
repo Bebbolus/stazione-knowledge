@@ -58,6 +58,12 @@ I rilevatori di deepfake basati su classificazione visuale euristica degradano r
 
 Il principio bio-ottico della fotopletismografia remota si fonda sulla dinamica cardiocircolatoria umana. A ogni contrazione del ventricolo cardiaco, un'onda sfigmica di sangue ossigenato attraversa la fitta rete di vasi capillari del volto. L'emoglobina presenta un picco di assorbimento della luce nello spettro cromatico del verde (lunghezze d'onda comprese tra 500 e 600 nanometri), generando variazioni periodiche impercettibili della riflettanza cutanea. Analizzando l'evoluzione temporale dell'intensità del canale verde su diverse regioni anatomiche facciali e applicando un filtro passa-banda tarato sulle frequenze cardiache fisiologiche (tra 0,75 Hz e 2,5 Hz, equivalenti a 45–150 battiti al minuto), l'algoritmo calcola la densità spettrale di potenza tramite trasformata di Fourier. Mentre un individuo reale manifesta un picco energetico netto e sincrono tra fronte e guance, i video generati sinteticamente non modellano la perfusione sanguigna, restituendo uno spettro privo di periodicità biologica.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D11b-ai-arma-bersaglio-osint. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Infrastrutture AI come superficie d'attacco e bersaglio OSINT
 
 La proliferazione di modelli open-weight e la necessità di internalizzare l'elaborazione dei dati hanno incentivato il deployment locale di motori di inferenza e database vettoriali. Tuttavia, la configurazione affrettata di questi strumenti in ambienti cloud o server aziendali genera gravi falle di sicurezza esposte direttamente alla rete Internet pubblica.
@@ -102,6 +108,12 @@ Il vettore d'attacco più insidioso è rappresentato dall'[Indirect Prompt Injec
 ```
 
 A queste minacce si aggiungono gli attacchi di *Model Inversion* e *Membership Inference*. Analizzando le distribuzioni di probabilità delle risposte emesse da un modello, un osservatore esterno può dedurre se specifiche identità o documenti riservati facevano parte del dataset di addestramento originale, determinando rischi di violazione della riservatezza soggetti al controllo dell'[EDPB](https://www.edpb.europa.eu/) (l'European Data Protection Board, l'organismo indipendente dell'Unione Europea per l'applicazione uniforme del GDPR).
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
 
 ## Crittografia della provenienza, watermarking e standard C2PA
 
@@ -151,6 +163,12 @@ Le risorse per la ricognizione passiva della superficie d'attacco delle infrastr
 
 ## Appendice operativa: laboratori pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 I seguenti quattro laboratori forniscono codice sorgente eseguibile e procedure dettagliate per testare le metodologie descritte in ambiente [Python](https://www.python.org/).
 
 ### Laboratorio 1: Estrazione forense e verifica crittografica dei manifest C2PA
@@ -159,10 +177,10 @@ Questo laboratorio implementa un modulo in [Python](https://www.python.org/) che
 
 Procedura operativa:
 
-1. Caricare i byte grezzi del media digitale e il relativo manifest JUMBF [C2PA](https://c2pa.org/).
-2. Calcolare l'hash SHA-256 indipendente del flusso di byte del media.
-3. Estrarre l'asserzione crittografica dichiarata all'interno del manifest e confrontarla con l'hash calcolato.
-4. Verificare il tipo di sorgente digitale (cattura ottica originale vs sintesi algoritmica) ed emettere il report forense.
+- [ ] Caricare i byte grezzi del media digitale e il relativo manifest JUMBF [C2PA](https://c2pa.org/).
+- [ ] Calcolare l'hash SHA-256 indipendente del flusso di byte del media.
+- [ ] Estrarre l'asserzione crittografica dichiarata all'interno del manifest e confrontarla con l'hash calcolato.
+- [ ] Verificare il tipo di sorgente digitale (cattura ottica originale vs sintesi algoritmica) ed emettere il report forense.
 
 ```python
 import hashlib
@@ -260,10 +278,10 @@ Questo laboratorio implementa un algoritmo in [Python](https://www.python.org/) 
 
 Procedura operativa:
 
-1. Generare serie temporali che simulano l'intensità media del canale verde per un volto umano autentico (con battito a 72 BPM) e per un deepfake sintetico (rumore stocastico).
-2. Applicare un filtro passa-banda di Butterworth di terzo ordine compreso tra 0,75 Hz e 2,5 Hz.
-3. Calcolare la trasformata rapida di Fourier (FFT) del segnale filtrato per estrarre le componenti frequenziali dominanti.
-4. Calcolare il rapporto segnale-rumore (SNR) e classificare il flusso video come umano autentico o manipolato sinteticamente.
+- [ ] Generare serie temporali che simulano l'intensità media del canale verde per un volto umano autentico (con battito a 72 BPM) e per un deepfake sintetico (rumore stocastico).
+- [ ] Applicare un filtro passa-banda di Butterworth di terzo ordine compreso tra 0,75 Hz e 2,5 Hz.
+- [ ] Calcolare la trasformata rapida di Fourier (FFT) del segnale filtrato per estrarre le componenti frequenziali dominanti.
+- [ ] Calcolare il rapporto segnale-rumore (SNR) e classificare il flusso video come umano autentico o manipolato sinteticamente.
 
 ```python
 import numpy as np
@@ -334,10 +352,10 @@ Questo laboratorio implementa un analizzatore di telemetria passiva in [Python](
 
 Procedura operativa:
 
-1. Strutturare un dataset di risposte HTTP e banner collezionati passivamente da scansioni di rete.
-2. Identificare i motori di inferenza e i database vettoriali tramite analisi delle intestazioni `Server`, delle porte e degli schemi JSON.
-3. Rilevare l'elenco dei pesi dei modelli o delle collezioni vettoriali esposte senza autenticazione.
-4. Generare un report di sicurezza contenente la classificazione della severità e le misure di bonifica raccomandate.
+- [ ] Strutturare un dataset di risposte HTTP e banner collezionati passivamente da scansioni di rete.
+- [ ] Identificare i motori di inferenza e i database vettoriali tramite analisi delle intestazioni `Server`, delle porte e degli schemi JSON.
+- [ ] Rilevare l'elenco dei pesi dei modelli o delle collezioni vettoriali esposte senza autenticazione.
+- [ ] Generare un report di sicurezza contenente la classificazione della severità e le misure di bonifica raccomandate.
 
 ```python
 from typing import Dict, Any, List
@@ -426,10 +444,10 @@ Questo laboratorio implementa una pipeline di ingestione OSINT in [Python](https
 
 Procedura operativa:
 
-1. Inizializzare il registro di audit crittografico concatenando ciascuna voce all'hash del record precedente.
-2. Analizzare il testo non fidato proveniente dalla fonte OSINT per individuare pattern noti di iniezione avversaria.
-3. Bloccare i payload malevoli e isolare i contenuti validi all'interno di delimitatori XML protetti.
-4. Registrare ogni evento con il relativo flag di sicurezza e produrre la catena di custodia digitale verificabile.
+- [ ] Inizializzare il registro di audit crittografico concatenando ciascuna voce all'hash del record precedente.
+- [ ] Analizzare il testo non fidato proveniente dalla fonte OSINT per individuare pattern noti di iniezione avversaria.
+- [ ] Bloccare i payload malevoli e isolare i contenuti validi all'interno di delimitatori XML protetti.
+- [ ] Registrare ogni evento con il relativo flag di sicurezza e produrre la catena di custodia digitale verificabile.
 
 ```python
 import hashlib

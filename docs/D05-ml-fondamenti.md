@@ -138,6 +138,12 @@ print(f"Accuratezza media CV:   {punteggi_cv.mean():.4f}")
 print(f"Deviazione standard CV: {punteggi_cv.std():.4f}")
 ```
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D05-ml-fondamenti. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Trade-off Operativi e Diagnostica delle Prestazioni
 
 La valutazione quantitativa di un modello richiede l'analisi comparativa rispetto a modelli ingenui di riferimento e l'impiego di metriche insensibili allo sbilanciamento delle classi.
@@ -227,7 +233,13 @@ Per l'esplorazione geometrica delle superfici decisionali e della convergenza de
 
 ## Appendice Operativa: Laboratori Pratici
 
-1. Classificazione con partizionamento stratificato: Importare il dataset standard Iris da `sklearn.datasets`, suddividere i dati con `train_test_split` mantenendo la stratificazione delle classi, addestrare un modello di regressione logistica multinominale, calcolare la matrice di confusione e analizzare gli errori di predizione su ciascuna classe.
-2. Pipeline di preprocessing e classificazione integrata: Costruire una pipeline completa con `ColumnTransformer` contenente imputazione dei valori nulli e standardizzazione delle variabili continue, addestrare lo stimatore su dati eterogenei e verificare la totale assenza di data leakage tra train e test.
-3. Diagnostica delle curve di apprendimento: Implementare la funzione `learning_curve` su un modello a bassa capacità (DecisionTree con limitazione di profondità) e su un modello ad alta capacità (RandomForest non vincolato), plottando o stampando l'andamento del generalization gap al crescere delle istanze di training.
-4. Valutazione multi-metrica su dataset sbilanciato: Generare un dataset sintetico con sbilanciamento di classe 90:10, definire una baseline con `DummyClassifier`, addestrare un classificatore logistico e calcolare il report completo comprensivo di Precision, Recall, F1-Score e ROC-AUC.
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
+- [ ] Classificazione con partizionamento stratificato: Importare il dataset standard Iris da `sklearn.datasets`, suddividere i dati con `train_test_split` mantenendo la stratificazione delle classi, addestrare un modello di regressione logistica multinominale, calcolare la matrice di confusione e analizzare gli errori di predizione su ciascuna classe.
+- [ ] Pipeline di preprocessing e classificazione integrata: Costruire una pipeline completa con `ColumnTransformer` contenente imputazione dei valori nulli e standardizzazione delle variabili continue, addestrare lo stimatore su dati eterogenei e verificare la totale assenza di data leakage tra train e test.
+- [ ] Diagnostica delle curve di apprendimento: Implementare la funzione `learning_curve` su un modello a bassa capacità (DecisionTree con limitazione di profondità) e su un modello ad alta capacità (RandomForest non vincolato), plottando o stampando l'andamento del generalization gap al crescere delle istanze di training.
+- [ ] Valutazione multi-metrica su dataset sbilanciato: Generare un dataset sintetico con sbilanciamento di classe 90:10, definire una baseline con `DummyClassifier`, addestrare un classificatore logistico e calcolare il report completo comprensivo di Precision, Recall, F1-Score e ROC-AUC.

@@ -48,6 +48,12 @@ Applicare questo filtro produce risultati oggettivi, spesso in contrasto con l'h
 
 ## Laboratorio 1 — Estrazione Metriche di Qualità GitHub
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 Questo laboratorio implementa uno script per automatizzare il "Filtro 4" (Salute della Community). Dato l'URL di un repository, interroga le API di GitHub per scaricare metriche reali (license, open issues, days since last commit) ignorando la metrica fallace delle stelle assolute.
 
 ```python
@@ -141,6 +147,12 @@ if __name__ == "__main__":
     # 2. Esempio di progetto teoricamente fermo (sostituire con repo reali in test)
     check_repo_health("Significant-Gravitas/AutoGPT")
 ```
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D20-tech-radar-e-scouting. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
 
 ## Laboratorio 2 — Template "Tech Radar Card"
 

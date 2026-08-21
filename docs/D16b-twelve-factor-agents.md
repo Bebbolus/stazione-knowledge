@@ -75,6 +75,12 @@ La struttura ICM implementa nativamente almeno otto dei dodici fattori. Le **car
 
 La differenza principale è che ICM raggiunge questi obiettivi **senza scrivere codice**: la struttura delle cartelle e i file Markdown sono il framework. I 12-Factor Agents forniscono il vocabolario ingegneristico per spiegare **perché** questa semplicità funziona meglio delle alternative complesse.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D16b-twelve-factor-agents. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Quando i 12-Factor Non Bastano
 
 I dodici fattori sono ottimizzati per task **convergenti**: task che hanno un obiettivo chiaro, criteri di accettazione definiti e un percorso ragionevolmente prevedibile verso la soluzione. Per task **divergenti** (brainstorming creativo, esplorazione di uno spazio di soluzioni sconosciuto, generazione artistica), il rigore deterministico può diventare una gabbia. Un agente costretto a produrre output strutturato JSON quando dovrebbe esplorare liberamente idee finirà per generare output formalmente corretto ma intellettualmente sterile.
@@ -84,6 +90,12 @@ La raccomandazione della community è pragmatica: applicare i 12-Factor ai task 
 Un altro limite emerge quando il task richiede **conoscenza conversazionale accumulata**. Il Fattore 12 (stateless reducer) impone che tutto lo stato sia esplicito e serializzabile, ma alcune interazioni umane producono sfumature di contesto (tono, preferenze implicite, storia della relazione) che sono difficili da catturare in un file JSON senza perdere informazione. In questi casi, un approccio ibrido (stato esplicito per le decisioni operative, conversazione fluida per l'interazione umana) è più realistico di un'applicazione dogmatica del principio.
 
 ## Laboratorio 1 — Il Riduttore Senza Stato
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 Questo laboratorio implementa il cuore del Fattore 12: un loop agente che tratta ogni iterazione come una funzione pura `(stato, evento) → nuovo_stato`. Lo stato è un dizionario Python serializzabile su disco; l'agente non conserva alcuna memoria implicita tra un'iterazione e l'altra.
 

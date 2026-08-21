@@ -36,6 +36,12 @@ $$\nabla_\theta J(\theta) = \mathbb{E}_{\tau \sim \pi_\theta} \left[ \sum_{t=0}^
 
 dove $\hat{A}_t = Q(s_t, a_t) - V(s_t)$ rappresenta la funzione di vantaggio (Advantage Function). La funzione di vantaggio quantifica se l'azione specifica $a_t$ sia migliore o peggiore rispetto all'azione media selezionabile nello stato $s_t$, riducendo drasticamente la varianza delle stime stocastiche del gradiente.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D13-rl-alignment. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## L'Architettura RLHF Tradizionale: Supervised Fine-Tuning, Reward Modeling e Ottimizzazione PPO con Penalty KL
 
 La metodologia standard di Reinforcement Learning from Human Feedback (RLHF), resa celebre dallo studio [InstructGPT](https://arxiv.org/abs/2203.02155) condotto da [OpenAI](https://openai.com/) (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT), si struttura in una pipeline sequenziale a tre fasi distinte: Supervised Fine-Tuning, addestramento del Reward Model e ottimizzazione tramite Proximal Policy Optimization.
@@ -88,6 +94,12 @@ La perdita DPO agisce come un meccanismo di contrasto dinamico pesato. Quando il
 
 L'impatto ingegneristico di DPO è profondo. L'infrastruttura di training richiede soltanto due modelli caricati in memoria: la policy che viene ottimizzata e la reference policy congelata (la quale può essere memorizzata con quantizzazione a 4-bit tramite [PEFT](https://huggingface.co/docs/peft) (la libreria di Hugging Face per l'adattamento efficiente dei parametri) per risparmiare memoria). Non vi sono reti Critic, non si eseguono generazioni durante l'addestramento e il processo si riduce a un efficiente calcolo vettoriale di cross-entropy implementabile tramite librerie standard come [TRL](https://huggingface.co/docs/trl) (la libreria di Hugging Face per l'allineamento di modelli linguistici tramite RLHF, DPO e PPO) su [PyTorch](https://pytorch.org/) (il framework open-source di deep learning e differenziazione automatica).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Tecniche Emergenti: Constitutional AI, RLAIF, KTO e Allineamento Senza Preferenze a Coppie
 
 L'evoluzione delle tecniche di allineamento ha sviluppato paradigmi mirati a ridurre la dipendenza dagli annotatori umani e a superare la necessità di dataset strutturati a coppie binarie.
@@ -118,6 +130,12 @@ Sul piano infrastrutturale e di convergenza, sussiste un trade-off netto tra la 
 | **Rischio Reward Hacking** | Molto alto su Reward Model statici | Moderato (legato alla qualità del dataset statico) | Basso-Moderato (vincolato all'odds-ratio locale) |
 | **Capacità di Esplorazione** | Alta (scopre nuove risposte durante i rollouts) | Limitata (ristretta ai dati di preferenza pre-esistenti) | Limitata (ristretta ai dati di training) |
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
+
 ## Riferimenti Bibliografici e Risorse Tecniche
 
 I principi matematici dei processi decisionali di Markov, dell'apprendimento per differenza temporale e dei gradienti di policy trovano la loro trattazione sistematica nel volume fondamentale *[Reinforcement Learning: An Introduction](http://incompleteideas.net/book/the-book-2nd.html)* redatto da [Richard Sutton](http://incompleteideas.net/) (il professore emerito all'Università di Alberta e distinguished research scientist di [Google DeepMind](https://deepmind.google/) considerato il padre fondatore del Reinforcement Learning moderno) e [Andrew Barto](https://people.cs.umass.edu/~barto/) (il professore emerito all'Università del Massachusetts Amherst e coautore del testo cardine sull'apprendimento per rinforzo). Per lo studio pratico delle implementazioni minimali e trasparenti degli algoritmi di deep reinforcement learning su codice sorgente leggibile senza astrazioni opache, la risorsa di riferimento è il repository open-source [CleanRL](https://github.com/vwxyzjn/cleanrl) (la libreria open-source di implementazioni modulari e single-file di algoritmi di Reinforcement Learning).
@@ -127,6 +145,12 @@ La transizione industriale verso l'allineamento dei modelli linguistici su larga
 La formulazione teorica e matematica che ha reso possibile l'eliminazione del Reward Model e del campionamento online in favore dell'ottimizzazione in forma chiusa è presentata nello studio *[Direct Preference Optimization: Your Language Model Is Secretly a Reward Model](https://arxiv.org/abs/2305.18290)*, redatto dal gruppo di ricerca della [Stanford University](https://www.stanford.edu/) (la prestigiosa università di ricerca della California, centro accademico cardine per l'informatica e l'AI). Sul fronte operativo e di sviluppo, la suite open-source [TRL](https://huggingface.co/docs/trl) (la libreria di Hugging Face per l'allineamento di modelli linguistici tramite RLHF, DPO e PPO) sviluppata all'interno dell'ecosistema di [Hugging Face](https://huggingface.co/) (la piattaforma e comunità open-source di riferimento per l'ecosistema del machine learning) costituisce lo standard de facto per l'addestramento pratico di modelli con DPO, PPO e KTO, integrandosi nativamente con [PEFT](https://huggingface.co/docs/peft) (la libreria di Hugging Face per l'adattamento efficiente dei parametri), [Transformers](https://huggingface.co/docs/transformers) (la libreria open-source per il caricamento, addestramento e inferenza di modelli linguistici) e [Datasets](https://huggingface.co/docs/datasets) (la libreria open-source per la manipolazione efficiente di dataset di machine learning). Infine, il programma didattico [AI Safety Fundamentals](https://www.aisafetyfundamentals.com/) (il programma formativo di riferimento per la sicurezza e l'allineamento dei modelli di frontiera) offre una panoramica strutturata sui fondamenti di sicurezza e allineamento tecnico.
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 ### Laboratorio 1: Risoluzione Esatta di un MDP con Value Iteration e Q-Learning in Python e NumPy
 

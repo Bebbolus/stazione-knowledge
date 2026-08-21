@@ -53,6 +53,12 @@ Un secondo aspetto critico riguarda la gestione dei flussi di output standard (`
 
 La gestione dei timeout completa il sandboxing a livello di subprocess. Quando un tool di rete si blocca a causa di socket pendenti o firewall silenti, l'harness attiva un timeout non bloccante con `asyncio.wait_for`. Alla scadenza del limite temporale, l'harness avvia un protocollo di terminazione a cascata: invia inizialmente una richiesta di chiusura controllata (`terminate()` o segnale SIGTERM), attende una finestra temporale di grazia (1.0-2.0 secondi) per consentire il rilascio delle risorse, e in caso di mancata risposta invia un segnale non intercettabile di abbattimento forzato (`kill()` o segnale SIGKILL), eliminando la generazione di processi orfani o zombie nel sistema.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D12b-ai-harness-plugin-osint. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Architettura dei Plugin Modulari Dinamici e Tipizzazione dei Contratti
 
 La scalabilità di una piattaforma OSINT esige che nuove capacità investigative possano essere integrate o aggiornate a caldo senza dover ricompilare o riavviare l'intero orchestratore agentico. L'architettura dei plugin implementa il caricamento dinamico a runtime combinando i moduli di metaprogrammazione `importlib.util` e `inspect` con il pattern Abstract Base Class (`abc.ABC`).
@@ -91,6 +97,12 @@ La connettività di rete viene configurata in modalità disconnessa (`network_mo
 
 Il ciclo di vita del container effimero segue una sequenza rigidamente deterministica: creazione con parametri di sicurezza, avvio del processo, streaming dei log con timeout rigoroso, estrazione dei codici di stato e distruzione forzata (`container.remove(force=True)`) all'interno di blocchi `finally`, garantendo che nessun container rimanga attivo sul demone host al termine dell'operazione.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Pipeline OSINT Resilienti: Rate Limiting, Fallback ed Emissione Normalizzata
 
 L'esecuzione di indagini automatizzate su sorgenti informative distribuite richiede che l'harness implementi meccanismi avanzati di autoregolazione del traffico e tolleranza ai guasti. I fornitori di dati OSINT applicano rigide politiche di rate limiting per prevenire abusi sui propri endpoint; violare queste soglie comporta il blocco temporaneo o permanente dell'indirizzo IP utilizzato dall'agente.
@@ -118,6 +130,12 @@ Nei **deployment edge e mobili** (computer portatili per analisti sul campo, tab
 
 Negli **ambienti air-gapped** (infrastrutture di sicurezza nazionale, sale operative militari o laboratori forensi confinati), il sistema opera in totale assenza di connettività verso la rete Internet pubblica. L'harness viene distribuito come pacchetto autosufficiente contenente le immagini dei container Docker caricate da archivi tarball (`docker load`), basi di dati di geolocalizzazione IP offline (archivi MaxMind MMDB), snapshot storici dei record WHOIS e database vettoriali locali basati su [SQLite](https://www.sqlite.org/). Il flusso di aggiornamento delle basi di conoscenza segue procedure controllate mediante supporti rimovibili sottoposti a scansione antivirus e verifica di firma crittografica prima dell'ingestione.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
+
 ## Trade-off e Scelte Ingegneristiche
 
 La progettazione di un AI harness per agenti OSINT impone un'attenta valutazione tra sicurezza operativa, prestazioni e manutenibilità:
@@ -140,14 +158,20 @@ Sulle piattaforme di scansione e fonti OSINT specialistiche, si rimanda a [Shoda
 
 ## Appendice Operativa: Laboratori Pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 ### Laboratorio 1 — Registro e Caricatore Dinamico di Plugin OSINT con Metaprogrammazione
 
 Il primo laboratorio implementa un'architettura modulare con contratti astratti definiti tramite `abc.ABC`, caricamento dinamico di classi da directory a runtime con `importlib.util` e generazione automatica di schemi compatibili con il Model Context Protocol e OpenAI Function Calling.
 
-1. Definire la classe base astratta `BaseOSINTPlugin` con proprietà obbligatorie e schema di validazione.
-2. Implementare un plugin concreto di risoluzione DNS asincrona `DNSLookupPlugin`.
-3. Costruire il `PluginRegistry` per la gestione delle istanze e la compilazione degli schemi JSON.
-4. Realizzare il `DynamicPluginLoader` per la scoperta automatica dei moduli su disco.
+- [ ] Definire la classe base astratta `BaseOSINTPlugin` con proprietà obbligatorie e schema di validazione.
+- [ ] Implementare un plugin concreto di risoluzione DNS asincrona `DNSLookupPlugin`.
+- [ ] Costruire il `PluginRegistry` per la gestione delle istanze e la compilazione degli schemi JSON.
+- [ ] Realizzare il `DynamicPluginLoader` per la scoperta automatica dei moduli su disco.
 
 ```python
 """
@@ -333,10 +357,10 @@ if __name__ == "__main__":
 
 Il secondo laboratorio realizza un esecutore asincrono protetto per comandi a riga di comando, garantendo l'immunità da shell injection, la gestione dei timeout con terminazione a cascata e il controllo dei limiti di memoria su stream.
 
-1. Implementare la classe `SandboxedCLIWrapper` con quote massime di byte e timeout.
-2. Realizzare la lettura non bloccante dei flussi con protezione da buffer overflow.
-3. Configurare la sequenza di terminazione SIGTERM/SIGKILL per processi bloccati.
-4. Collaudare l'esecuzione con cattura diagnostica di `stdout` e `stderr`.
+- [ ] Implementare la classe `SandboxedCLIWrapper` con quote massime di byte e timeout.
+- [ ] Realizzare la lettura non bloccante dei flussi con protezione da buffer overflow.
+- [ ] Configurare la sequenza di terminazione SIGTERM/SIGKILL per processi bloccati.
+- [ ] Collaudare l'esecuzione con cattura diagnostica di `stdout` e `stderr`.
 
 ```python
 """
@@ -493,10 +517,10 @@ if __name__ == "__main__":
 
 Il terzo laboratorio implementa un orchestratore di isolamento per container [Docker](https://www.docker.com/) in [Python](https://www.python.org/) configurato con filesystem in sola lettura, capacità Linux azzerate e quote rigide di risorse.
 
-1. Definire la struttura di configurazione dei vincoli del container.
-2. Implementare la classe `DockerToolSandbox` con rilevamento del demone e fallback simulato.
-3. Configurare i parametri di isolamento (read-only, cap_drop, user, memory limit).
-4. Eseguire comandi isolati assicurando la rimozione forzata del container al termine.
+- [ ] Definire la struttura di configurazione dei vincoli del container.
+- [ ] Implementare la classe `DockerToolSandbox` con rilevamento del demone e fallback simulato.
+- [ ] Configurare i parametri di isolamento (read-only, cap_drop, user, memory limit).
+- [ ] Eseguire comandi isolati assicurando la rimozione forzata del container al termine.
 
 ```python
 """
@@ -633,10 +657,10 @@ if __name__ == "__main__":
 
 Il quarto laboratorio orchestra una pipeline di intelligence multi-sorgente dotata di rate limiting asincrono basato su Token Bucket, retry con backoff esponenziale e jitter, gestione automatica dei fallback e calcolo dell'impronta crittografica SHA-256 per la catena di custodia.
 
-1. Implementare la classe `AsyncTokenBucket` per la regolazione non bloccante della frequenza.
-2. Definire i modelli Pydantic per la validazione e serializzazione del report normalizzato.
-3. Costruire la pipeline con gestione di retry ed escalation automatica su sorgente di fallback.
-4. Eseguire l'analisi del dominio target verificando l'integrità crittografica del report generato.
+- [ ] Implementare la classe `AsyncTokenBucket` per la regolazione non bloccante della frequenza.
+- [ ] Definire i modelli Pydantic per la validazione e serializzazione del report normalizzato.
+- [ ] Costruire la pipeline con gestione di retry ed escalation automatica su sorgente di fallback.
+- [ ] Eseguire l'analisi del dominio target verificando l'integrità crittografica del report generato.
 
 ```python
 """

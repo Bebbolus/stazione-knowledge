@@ -41,6 +41,12 @@ Per mitigare questi rischi, l'infrastruttura SOTA 2026 impone due rigidi guardra
 1. **Authorization Hardening**: I nuovi client e server MCP (specifiche di Luglio 2026) implementano l'isolamento crittografico delle origini per neutralizzare i mix-up attack OAuth.
 2. **Human-in-the-Loop Obbligatorio (HITL)**: Nessun agente deve avere permessi di esecuzione automatica (mutazione di stato distruttiva o transazionale) senza un prompt di conferma esplicito da parte dell'operatore umano nell'Harness.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D14b-guardrails-e-privacy. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## La Pipeline Completa: Dal Prompt alla Risposta
 
 Il flusso di una richiesta attraverso la pipeline di guardrails segue un percorso lineare in sei passaggi. L'utente scrive una query nell'agent harness (ad esempio [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) o [OpenWork](https://openworklabs.com/)). La query raggiunge **Rizzo-PII**, che sostituisce i dati italiani con segnaposto tipizzati e salva il dizionario di mapping. La query anonimizzata passa a **LLM Guard**, che analizza il prompt per injection, secrets e toxicity; se rileva un attacco, blocca la richiesta e restituisce un errore strutturato. La query pulita e anonimizzata raggiunge **LiteLLM**, che la instrada verso il modello appropriato (locale o cloud). La risposta del modello torna indietro attraverso gli **output scanner** di LLM Guard. Infine, la risposta sanitizzata raggiunge **Rizzo-PII** che ripristina i dati originali.
@@ -56,6 +62,12 @@ I **falsi positivi** sono un rischio concreto. Lo scanner di prompt injection di
 L'anonimizzazione reversibile di Rizzo-PII funziona correttamente solo se il modello non **altera la struttura** dei segnaposto nella risposta. Se il modello riscrive `[CF_1]` come `CF numero 1` o lo omette dalla risposta, il de-anonimizzatore non può effettuare la sostituzione inversa. Nella pratica, i modelli moderni rispettano i segnaposto nella stragrande maggioranza dei casi, ma il rischio aumenta con prompt lunghi e complessi.
 
 ## Laboratorio 1 — Anonimizzazione Reversibile con Rizzo-PII
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 Questo laboratorio dimostra il flusso completo di anonimizzazione e de-anonimizzazione di un documento italiano contenente dati sensibili.
 

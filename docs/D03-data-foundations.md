@@ -216,6 +216,12 @@ print(df_report)
 connessione.close()
 ```
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D03-data-foundations. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Formati di Archiviazione e Serializzazione: CSV vs JSONL vs Parquet
 
 La scelta del formato di serializzazione su disco determina drasticamente la velocità di I/O e l'efficienza di archiviazione nelle pipeline di intelligenza artificiale.
@@ -321,7 +327,13 @@ L'apprendimento pratico delle query relazionali e delle strategie di join è sup
 
 ## Appendice Operativa: Laboratori Pratici
 
-1. Ispezione dimensionale e benchmarking vettoriale: Creare un array NumPy bidimensionale da un milione di righe e dieci colonne, ispezionarne `shape`, `dtype` e `strides`, ed eseguire un benchmark comparativo tra una trasformazione lineare vettorizzata e un ciclo iterativo su lista Python, calcolando l'accelerazione temporale ottenuta.
-2. Pipeline di bonifica e validazione con Pandas: Caricare un dataset tabellare contenente valori nulli, duplicati di riga e formati eterogenei, applicare una pipeline di deduplicazione, normalizzazione delle stringhe e imputazione dei valori mancanti tramite mediana, e serializzare il dataset bonificato in formato Apache Parquet compresso con Snappy.
-3. Query analitiche relazionali in SQLite: Inizializzare un database SQLite in memoria, creare due tabelle relazionali collegate da chiave esterna, inserire record sintetici di telemetria ed eseguire una query complessa con `INNER JOIN`, `GROUP BY` e filtraggio `HAVING`, caricando il risultato aggregato in un DataFrame Pandas.
-4. Redazione di una Data Card standardizzata: Redigere un file di specifica JSON o Markdown conforme al formato Data Card per un dataset reale o sintetico, documentando la provenienza delle fonti, le restrizioni etiche d'uso, le limitazioni tecniche note e le caratteristiche dello schema numerico.
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
+- [ ] Ispezione dimensionale e benchmarking vettoriale: Creare un array NumPy bidimensionale da un milione di righe e dieci colonne, ispezionarne `shape`, `dtype` e `strides`, ed eseguire un benchmark comparativo tra una trasformazione lineare vettorizzata e un ciclo iterativo su lista Python, calcolando l'accelerazione temporale ottenuta.
+- [ ] Pipeline di bonifica e validazione con Pandas: Caricare un dataset tabellare contenente valori nulli, duplicati di riga e formati eterogenei, applicare una pipeline di deduplicazione, normalizzazione delle stringhe e imputazione dei valori mancanti tramite mediana, e serializzare il dataset bonificato in formato Apache Parquet compresso con Snappy.
+- [ ] Query analitiche relazionali in SQLite: Inizializzare un database SQLite in memoria, creare due tabelle relazionali collegate da chiave esterna, inserire record sintetici di telemetria ed eseguire una query complessa con `INNER JOIN`, `GROUP BY` e filtraggio `HAVING`, caricando il risultato aggregato in un DataFrame Pandas.
+- [ ] Redazione di una Data Card standardizzata: Redigere un file di specifica JSON o Markdown conforme al formato Data Card per un dataset reale o sintetico, documentando la provenienza delle fonti, le restrizioni etiche d'uso, le limitazioni tecniche note e le caratteristiche dello schema numerico.

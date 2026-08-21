@@ -95,6 +95,12 @@ $$R_{\theta, m} x = \begin{pmatrix} \cos(m\theta) & -\sin(m\theta) \\ \sin(m\the
 
 Grazie a questa rotazione, il prodotto scalare risultante $\langle R_{\theta, m} q, R_{\theta, n} k \rangle$ dipende unicamente dalla distanza relativa $(m - n)$ tra le posizioni dei due token e non dalla loro posizione assoluta, conferendo al modello eccellenti proprietà di generalizzazione su finestre di contesto estese. In alternativa a RoPE, l'approccio **ALiBi (Attention with Linear Biases)** inietta un termine di penalità lineare direttamente nella matrice dei punteggi di attenzione prima della Softmax, penalizzando il peso proporzionalmente alla distanza geometrica $|i - j|$ tra i token.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D09-transformers-llm. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Meccanica della Tokenizzazione e Gestione del Vocabolario
 
 L'interfaccia tra il flusso di testo in linguaggio naturale e l'elaborazione tensoriale interna del modello è costituita dal modulo di **tokenizzazione**. Un tokenizzatore segmenta stringhe arbitrarie di caratteri grezzi in indici discreti appartenenti a un vocabolario predefinito di cardinalità finita $|V|$.
@@ -140,6 +146,12 @@ I modelli **Encoder-Only** (come BERT e RoBERTa) utilizzano matrici di Self-Atte
 I modelli **Decoder-Only** (come le famiglie GPT, LLaMA, Mistral e Qwen) rappresentano il paradigma dominante per i moderni Large Language Model. Adottano una matrice di attenzione causale triangolare inferiore che impedisce la visione di token futuri, operando attraverso la predizione autoregressiva del token successivo (*Causal Language Modeling*, CLM). Questa topologia massimizza l'efficienza della generazione sequenziale e costituisce la base per i sistemi conversazionali, il ragionamento logico e l'esecuzione di istruzioni complesse.
 
 I modelli **Encoder-Decoder** (come T5 e BART) integrano due blocchi distinti: un encoder bidirezionale che elabora la sequenza sorgente e un decoder autoregressivo che genera la sequenza di destinazione integrando strati intermedi di *Cross-Attention*. In questo passaggio, le matrici $K$ e $V$ provengono dall'output dell'encoder, mentre la matrice $Q$ è generata dagli strati del decoder. Questa struttura eccelle nei compiti di trasformazione diretta da sequenza a sequenza, quali la traduzione automatica e la sintesi vincolata.
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
 
 ## Il Ciclo di Vita dei Large Language Model
 
@@ -221,6 +233,12 @@ Memoria = 10.737.418.240 Byte = 10,00 GiB di VRAM dedicati alla sola KV-Cache!
 
 Per mitigare questa pressione sulla memoria, le architetture moderne hanno evoluto la topologia di attenzione introducendo **Multi-Query Attention (MQA)** (che condivide una singola testa di Key e Value tra tutte le $h$ teste di Query, riducendo l'allocazione di memoria della cache di un fattore $h$) e **Grouped-Query Attention (GQA)** (la soluzione adottata da LLaMA-2/3 e Mistral, che raggruppa le teste di Query in $G$ partizioni, ciascuna servita da una singola testa di Key e Value, garantendo un risparmio di memoria fino all'87.5% senza degrado significativo della qualità generativa).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
+
 ## Algoritmi di Quantizzazione e Compressione dei Pesi
 
 Per consentire l'esecuzione di Large Language Model su workstation locali e acceleratori con limiti di VRAM, l'industria impiega tecniche di **Post-Training Quantization (PTQ)**. La quantizzazione riduce il numero di bit impiegati per rappresentare ciascun parametro di peso del modello, passando dalla precisione standard a 16-bit (FP16 o BF16, pari a 2 byte per parametro) a formati interi a 8-bit, 4-bit o inferiori.
@@ -297,6 +315,12 @@ La tecnica dello **Speculative Decoding** sfrutta il disallineamento tra la fase
 
 Successivamente, il modello principale di grandi dimensioni (*Target Model*, es. da 70B parametri) valuta tutti i $K$ token candidati simultaneamente in un unico forward pass parallelo di tipo prefill. Un algoritmo di campionamento con rifiuto (*rejection sampling*) accetta i token che rispettano la distribuzione di probabilità del modello target, correggendo il primo token divergente. Questo paradigma consente di accelerare la generazione del 150–250% preservando matematicamente l'esatta distribuzione statistica del modello target.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Controllo di Comprensione**
+> Qual è il trade-off o limite operativo principale emerso in questa parte? Aver chiari i limiti ci aiuterà a capire le soluzioni tecnologiche che presenteremo a breve.
+
+
 ## Compromessi Operativi, Vincoli Hardware e Scenari di Fallimento
 
 La progettazione di sistemi basati su Large Language Model impone l'analisi rigorosa dei compromessi ingegneristici tra latenza, throughput, sovranità dei dati e fedeltà semantica.
@@ -346,6 +370,12 @@ Per l'esecuzione locale e il deployment in produzione su hardware consumer e ser
 Per la comprensione visiva e intuitiva della dinamica dei tensori, la guida didattica [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) redatta da [Jay Alammar](https://jalammar.github.io/) (il ricercatore e divulgatore AI autore di autorevoli guide visive) e il visualizzatore tridimensionale interattivo [LLM Visualization](https://bbycroft.net/llm) offrono una rappresentazione chiara del passaggio dei dati attraverso i blocchi di attenzione. I corsi avanzati della Stanford University [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/) e il [Corso NLP di Hugging Face](https://huggingface.co/learn/nlp-course) costituiscono i percorsi accademici gratuiti più completi per approfondire la materia.
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 I laboratori seguenti forniscono implementazioni complete e riproducibili in linguaggio [Python](https://www.python.org/) per esplorare la meccanica della Self-Attention, la tokenizzazione avanzata e l'inferenza locale quantizzata.
 
@@ -667,7 +697,7 @@ if __name__ == "__main__":
 
 ### Guida alle Procedure dei Laboratori
 
-1. Esecuzione del modulo Multi-Head Attention da riga di comando: Attivare il virtual environment del progetto in `.venv`, installare i pacchetti necessari tramite `pip install torch transformers tokenizers` ed eseguire lo script del Laboratorio 1 per verificare la corrispondenza dei tensori di output e l'evoluzione della KV-Cache.
-2. Ispezione della tokenizzazione e chunking: Eseguire lo script del Laboratorio 2 per quantificare l'efficienza della tokenizzazione BPE su testi in lingua italiana e verificare la ripartizione di documenti lunghi in segmenti sovrapposti per l'ingestione in database vettoriali.
-3. Benchmarking dell'inferenza locale: Predisporre un file modello quantizzato in formato `.gguf` all'interno della cartella `models/`, configurare i parametri di offload degli strati ed eseguire il Laboratorio 3 per monitorare il tempo di risposta del primo token e il throughput di generazione in token al secondo.
-4. Elaborazione automatica di documenti OSINT: Avviare il demone locale di Ollama con `ollama run llama3`, inviare un comunicato o un report investigativo tramite lo script del Laboratorio 4 e verificare la conformità dello schema JSON estratto.
+- [ ] Esecuzione del modulo Multi-Head Attention da riga di comando: Attivare il virtual environment del progetto in `.venv`, installare i pacchetti necessari tramite `pip install torch transformers tokenizers` ed eseguire lo script del Laboratorio 1 per verificare la corrispondenza dei tensori di output e l'evoluzione della KV-Cache.
+- [ ] Ispezione della tokenizzazione e chunking: Eseguire lo script del Laboratorio 2 per quantificare l'efficienza della tokenizzazione BPE su testi in lingua italiana e verificare la ripartizione di documenti lunghi in segmenti sovrapposti per l'ingestione in database vettoriali.
+- [ ] Benchmarking dell'inferenza locale: Predisporre un file modello quantizzato in formato `.gguf` all'interno della cartella `models/`, configurare i parametri di offload degli strati ed eseguire il Laboratorio 3 per monitorare il tempo di risposta del primo token e il throughput di generazione in token al secondo.
+- [ ] Elaborazione automatica di documenti OSINT: Avviare il demone locale di Ollama con `ollama run llama3`, inviare un comunicato o un report investigativo tramite lo script del Laboratorio 4 e verificare la conformità dello schema JSON estratto.

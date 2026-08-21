@@ -98,6 +98,12 @@ $$d_{\text{mreach-}k}(a, b) = \max(\{ \text{core}_k(a), \text{core}_k(b), d(a, b
 
 dove $\text{core}_k(a)$ è la distanza di $a$ dal suo $k$-esimo vicino. Costruendo un albero di espansione minima (*Minimum Spanning Tree*) su questa metrica ed estraendo i cluster stabili tramite la metrica di persistenza della massa ($\lambda = 1/\epsilon$), HDBSCAN isola automaticamente cluster a densità variabile senza richiedere la specificazione manuale di $\epsilon$.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D07-unsupervised-learning. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Riduzione della Dimensionalità e Manifold Learning
 
 Quando la dimensionalità dei dati $d$ cresce verso decine o migliaia di colonne (come accade negli embedding generati dai Large Language Model o nelle serie temporali OSINT), i dati incorrono nella **Maledizione della Dimensionalità** (*Curse of Dimensionality*). All'aumentare delle dimensioni, il volume dello spazio cresce esponenzialmente rispetto al numero di campioni, rendendo lo spazio estremamente vuoto e causando la convergenza di tutte le distanze euclidee a valori simili ($\lim_{d \to \infty} \frac{\max ||x_i - x_j|| - \min ||x_i - x_j||}{\min ||x_i - x_j||} \to 0$).
@@ -200,6 +206,12 @@ $$\text{LOF}_k(p) = \frac{\sum_{o \in N_k(p)} \frac{\text{lrd}_k(o)}{\text{lrd}_
 
 Un valore di $\text{LOF} \approx 1$ indica che il punto possiede una densità analoga a quella dei suoi vicini (inlier omogeneo). Un valore di $\text{LOF} \gg 1$ segnala che la densità locale del punto è nettamente inferiore a quella dei suoi vicini, rivelando un'anomalia locale isolata.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Trade-off Operativi e Scelte Architetturali
 
 La selezione dell'algoritmo non supervisionato richiede un bilanciamento rigoroso tra scalabilità computazionale, sensibilità a geometrie non lineari e interpretabilità:
@@ -224,6 +236,12 @@ L'algoritmo t-SNE è formalizzato nello studio fondamentale di [Laurens van der 
 Le guide operative di riferimento per gli strumenti di calcolo in [Python](https://www.python.org/) sono la [Guida al Clustering di Scikit-Learn](https://scikit-learn.org/stable/modules/clustering.html), la documentazione del modulo gerarchico di [SciPy](https://scipy.org/) e il portale open-source della libreria [UMAP](https://github.com/lmcinnes/umap). Per l'esplorazione visiva interattiva, la testata [Distill.pub](https://distill.pub/) offre la guida di riferimento [How to Use t-SNE Effectively](https://distill.pub/2016/misread-tsne/), mentre il progetto [Explained Visually](https://setosa.io/ev/) offre una simulazione geometrica sull'estrazione della varianza in [Principal Component Analysis](https://setosa.io/ev/principal-component-analysis/).
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 I laboratori seguenti forniscono script Python completi, eseguibili e autocontenuti per testare il clustering, la riduzione dimensionale lineare e non lineare, e le architetture di anomaly detection.
 

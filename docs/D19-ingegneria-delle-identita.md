@@ -63,6 +63,12 @@ Il **CONTEXT.md** contiene l'obiettivo specifico del task in linguaggio naturale
 
 La separazione tra IDENTITY.md e CONTEXT.md è una decisione architetturale deliberata. L'identità è il **ruolo permanente** dell'agente in quella posizione della pipeline: il ricercatore resta ricercatore indipendentemente dal task. Il contesto è la **missione specifica**: oggi il ricercatore deve indagare sull'azienda X, domani sull'azienda Y. Cambia il CONTEXT.md, non l'IDENTITY.md.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D19-ingegneria-delle-identita. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Il Walk Test: La Prova di Fuoco
 
 Lo strumento [icm-architect](https://github.com/RinDig/icm-architect) di [Jake Van Clief](https://github.com/RinDig) introduce una procedura di validazione chiamata **Walk Test** che rappresenta il collaudo supremo di un workspace ICM. Il test consiste nel rilasciare nella cartella del progetto un agente **freddo** — un'istanza del modello senza alcuna memoria delle conversazioni precedenti, senza contesto implicito, senza istruzioni verbali — e verificare se riesce a orientarsi, comprendere il suo ruolo, eseguire il task e produrre un output conforme basandosi **esclusivamente** sui file Markdown presenti nella cartella.
@@ -91,7 +97,19 @@ Un'identità **sotto-vincolata** produce l'effetto opposto. Un agente con istruz
 
 Un rischio meno ovvio è la **fossilizzazione dell'identità**. Se l'IDENTITY.md viene scritto una volta e mai aggiornato, diventa progressivamente disallineato rispetto alle capacità del modello sottostante. I modelli del 2026 hanno capacità di ragionamento, output strutturato e gestione del contesto lungo che i modelli del 2024 non avevano. Un'identità scritta per un modello meno capace potrebbe contenere istruzioni ridondanti ("Ragiona passo dopo passo prima di rispondere") che con i modelli attuali producono output verboso senza migliorare la qualità.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Laboratorio 1 — Generatore di Template IDENTITY.md
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 Questo laboratorio crea un generatore automatico di file `IDENTITY.md` che produce template strutturati con tutte le sezioni necessarie, pronte per essere personalizzate.
 

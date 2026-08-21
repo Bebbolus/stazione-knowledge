@@ -55,6 +55,12 @@ Tuttavia, il pattern ReAct opera secondo una traiettoria puramente lineare e gre
 
 Parallelamente, il pattern di auto-riflessione introdotto in [Self-Refine: Iterative Refinement (Madaan et al., 2023)](https://arxiv.org/abs/2303.17651) (il paper della Carnegie Mellon University sul pattern di auto-valutazione e perfezionamento ciclico per modelli linguistici) struttura l'inferenza in un ciclo tripartito di Generazione, Critica e Perfezionamento. Il modello genera una prima bozza di risposta, valuta autonomamente la presenza di incongruenze logiche o violazioni di requisiti rispetto a criteri prefissati e applica modifiche correttive prima di presentare il risultato finale.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D12c-prompt-context-engineering. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Strutturazione del System Prompt e Condizionamento Epistemico del Ruolo
 
 All'interno delle moderne API di chat completion introdotte da [OpenAI](https://openai.com/) (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) e [Anthropic](https://www.anthropic.com/) (la società di sicurezza e ricerca AI creatrice dei modelli Claude e ideatrice del Model Context Protocol), l'architettura dei messaggi è suddivisa in ruoli semantici formali: `system` (o `developer`), `user`, `assistant` e `tool`. Il **System Prompt** funge da contratto costituzionale dell'agente, stabilendo l'identità operativa, i limiti epistemici, i criteri di sicurezza e i formati di output vincolanti che devono persistere lungo l'intera sessione.
@@ -85,6 +91,12 @@ La terza topologia è la **Memoria Riassuntiva Gerarchica (Summary Memory Buffer
 
 La quarta topologia è il paradigma **Structure-as-Context (Filesystem Context)**, in cui lo stato operativo non risiede nella cronologia della chat ma viene formalizzato in file strutturati su disco (`STATE.md`, `CONTEXT.md`, `LOG.jsonl`), consentendo all'agente di leggere e aggiornare selettivamente porzioni mirate di memoria tramite strumenti dedicati del [Model Context Protocol (MCP)](https://modelcontextprotocol.io/).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Generazione Strutturata Deterministica: Grammatiche EBNF, Outlines e Validazione Pydantic
 
 Uno dei principali colli di bottiglia nell'integrazione di agenti LLM in pipeline industriali risiede nella natura non deterministica del testo generato. Se un agente deve emettere un payload JSON per invocare un'API o popolare un database, errori comuni quali omissione di virgolette di chiusura, virgole pendenti (*trailing commas*), chiavi allucinate o l'inclusione di commenti discorsivi mandano in crash i deserializzatori standard del software ricevente.
@@ -111,6 +123,12 @@ Il concetto di **Teleprompter / Optimizer** (quali `BootstrapFewShot`, `MIPROv2`
 
 Durante la fase di compilazione, l'ottimizzatore esegue un modello docente (*teacher*) sui dati di addestramento, raccoglie le tracce di esecuzione che massimizzano la metrica di accuratezza e le inietta dinamicamente come dimostrazioni few-shot nel modello studente (*student*), producendo un artefatto compilato ottimizzato e resiliente al drift dei pesi.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
+
 ## Trade-off e Scelte Ingegneristiche
 
 La progettazione di architetture di prompt e gestione del contesto richiede l'attenta ponderazione di molteplici compromessi ingegneristici:
@@ -133,14 +151,20 @@ Sugli strumenti operativi per la tokenizzazione, generazione vincolata e validaz
 
 ## Appendice Operativa: Laboratori Pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 ### Laboratorio 1 — Loop Agentico ReAct con Scratchpad e Parsing Deterministico
 
 Il primo laboratorio implementa un loop autonomo conforme al pattern Reason+Act (ReAct) con gestione esplicita dello scratchpad sequenziale, parsing a stati finiti delle azioni e invocazione di tool operativi di intelligence.
 
-1. Costruire la classe `ReActScratchpad` per tracciare la sequenza di pensieri, azioni e osservazioni.
-2. Definire il `ToolRegistry` per la registrazione ed esecuzione controllata degli strumenti OSINT.
-3. Realizzare l'agente `ReActAgent` con parser regex per l'estrazione deterministica dei comandi.
-4. Eseguire l'indagine investigativa su un indicatore di compromissione verificando la convergenza.
+- [ ] Costruire la classe `ReActScratchpad` per tracciare la sequenza di pensieri, azioni e osservazioni.
+- [ ] Definire il `ToolRegistry` per la registrazione ed esecuzione controllata degli strumenti OSINT.
+- [ ] Realizzare l'agente `ReActAgent` con parser regex per l'estrazione deterministica dei comandi.
+- [ ] Eseguire l'indagine investigativa su un indicatore di compromissione verificando la convergenza.
 
 ```python
 """
@@ -297,10 +321,10 @@ if __name__ == "__main__":
 
 Il secondo laboratorio implementa un gestore della finestra di contesto con monitoraggio rigido del token budget e compattazione gerarchica della memoria episodica al superamento della soglia consentita.
 
-1. Definire la struttura dati `Message` con funzione di stima dei token subword.
-2. Implementare la classe `ContextWindowManager` con riserve per il prompt di sistema.
-3. Costruire la routine di compattazione che sintetizza i messaggi espulsi dalla finestra.
-4. Validare l'assemblaggio del prompt verificando il rispetto del limite massimo di token.
+- [ ] Definire la struttura dati `Message` con funzione di stima dei token subword.
+- [ ] Implementare la classe `ContextWindowManager` con riserve per il prompt di sistema.
+- [ ] Costruire la routine di compattazione che sintetizza i messaggi espulsi dalla finestra.
+- [ ] Validare l'assemblaggio del prompt verificando il rispetto del limite massimo di token.
 
 ```python
 """
@@ -420,10 +444,10 @@ if __name__ == "__main__":
 
 Il terzo laboratorio realizza una pipeline di parsing robusta che sanifica l'output testuale grezzo, applica la validazione schema tramite [Pydantic](https://docs.pydantic.dev/) e orchestra un ciclo di autocorrezione (*Self-Healing*) in caso di errori.
 
-1. Definire i modelli tipizzati Pydantic per gli indicatori di compromissione.
-2. Implementare la classe `RobustJsonExtractor` per la rimozione di code fences markdown e caratteri anomali.
-3. Costruire il parser `SelfHealingJsonParser` con gestione automatica del prompt di rettifica.
-4. Testare il recupero automatico a fronte di un output volutamente malformato.
+- [ ] Definire i modelli tipizzati Pydantic per gli indicatori di compromissione.
+- [ ] Implementare la classe `RobustJsonExtractor` per la rimozione di code fences markdown e caratteri anomali.
+- [ ] Costruire il parser `SelfHealingJsonParser` con gestione automatica del prompt di rettifica.
+- [ ] Testare il recupero automatico a fronte di un output volutamente malformato.
 
 ```python
 """
@@ -564,10 +588,10 @@ if __name__ == "__main__":
 
 Il quarto laboratorio implementa i concetti fondazionali del paradigma [DSPy](https://github.com/stanfordnlp/dspy), definendo Signature dichiarative, moduli ChainOfThought e un ottimizzatore `BootstrapFewShot` per la compilazione automatica di prompt ottimali.
 
-1. Definire la `Signature` dichiarativa con specifica dei campi di input e output.
-2. Implementare il modulo `DeclarativeChainOfThought` per la serializzazione delle istruzioni.
-3. Costruire la metrica quantitativa `SeverityMetric` per la valutazione della fedeltà.
-4. Compilare il modulo tramite `BootstrapFewShotTeleprompter` verificando l'incremento delle prestazioni.
+- [ ] Definire la `Signature` dichiarativa con specifica dei campi di input e output.
+- [ ] Implementare il modulo `DeclarativeChainOfThought` per la serializzazione delle istruzioni.
+- [ ] Costruire la metrica quantitativa `SeverityMetric` per la valutazione della fedeltà.
+- [ ] Compilare il modulo tramite `BootstrapFewShotTeleprompter` verificando l'incremento delle prestazioni.
 
 ```python
 """

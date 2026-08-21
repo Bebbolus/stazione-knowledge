@@ -46,6 +46,12 @@ Nell'ambito dei moderni modelli linguistici di grandi dimensioni, la disciplina 
   └──────────────────┘  └──────────────────┘  └──────────────────┘  └──────────────────┘
 ```
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D15-mlops-llmops. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Tracciamento degli Esperimenti e Versionamento di Modelli e Dati: MLflow Tracking e DVC
 
 La riproducibilità scientifica costituisce il requisito fondamentale per qualsiasi pipeline di machine learning. Durante la fase di sviluppo, gli sviluppatori esplorano decine di combinazioni di iperparametri, architetture neurali e sottoinsiemi di dati. Se i metadati e i pesi risultanti non vengono archiviati in modo sistematico, diventa impossibile risalire alla configurazione esatta che ha originato il modello in produzione, impedendo diagnosi di regressione o verifiche di conformità normativa.
@@ -87,6 +93,12 @@ Parallelamente, il versionamento dei dati e dei pesi voluminosi viene gestito tr
 > **Checkpoint di Ancoraggio 1: MLflow e DVC**
 > Finora abbiamo compreso che salvare un modello non basta. **DVC** versiona i grandi dataset agganciandoli a Git tramite file `.dvc` testuali, mentre **MLflow Tracking** registra in modo centralizzato iperparametri, metriche e artefatti di ogni esperimento, garantendo che ogni addestramento sia deterministicamente riproducibile.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Containerizzazione e Isolamento dell'Ambiente: Docker, Docker Compose e Configurazione Riproducibile
 
 L'incoerenza tra gli ambienti di sviluppo e di produzione rappresenta una delle principali fonti di fallimento nei sistemi di intelligenza artificiale. Differenze minime nelle versioni delle librerie C/C++ sottostanti, nei driver CUDA di [NVIDIA](https://www.nvidia.com/) o nelle configurazioni del sistema operativo possono alterare i risultati numerici o causare crash imprevisti del runtime.
@@ -96,6 +108,12 @@ La containerizzazione tramite [Docker](https://www.docker.com/) (la piattaforma 
 Per coordinare microservizi complessi in ambiente locale o su server dedicati, si impiega [Docker Compose](https://docs.docker.com/compose/) (lo strumento per definire ed eseguire ambienti multi-container tramite file di configurazione YAML). Uno stack tipico local-first integra dichiarativamente il microservizio di inferenza basato su [FastAPI](https://fastapi.tiangolo.com/), il server di telemetria [Prometheus](https://prometheus.io/), il server di tracciamento [MLflow](https://mlflow.org/) e il database relazionale di supporto [PostgreSQL](https://www.postgresql.org/), gestendo l'allocazione delle porte, i volumi persistenti e le reti bridge isolate.
 
 Quando i requisiti operativi scalano verso cluster enterprise ad alta disponibilità con replica automatica dei pod e gestione distribuita dei carichi GPU, la configurazione viene estesa a [Kubernetes](https://kubernetes.io/) (il sistema open-source di orchestrazione di container per automatizzare deployment, scalabilità e gestione di applicazioni containerizzate), sfruttando il plugin per dispositivi NVIDIA per mappare l'accelerazione hardware direttamente all'interno dei pod di calcolo.
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
 
 ## Architetture di Inferenza e Serving ad Alte Prestazioni: FastAPI, vLLM, Ollama e llama.cpp per Deployment Local-First
 
@@ -131,6 +149,12 @@ Infrastrutture enterprise su larga scala impiegano server dedicati quali [TGI](h
   Tabella delle Pagine:          ▼              ▼              ▼
   Memoria Fisica VRAM (Spazio): [ VRAM Slot 14 ][ VRAM Slot 3 ][ VRAM Slot 82 ] (Zero frammentazione!)
 ```
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Controllo di Comprensione**
+> Qual è il trade-off o limite operativo principale emerso in questa parte? Aver chiari i limiti ci aiuterà a capire le soluzioni tecnologiche che presenteremo a breve.
+
 
 ## Continuous Integration, Continuous Delivery (CI/CD) e Testing Automatizzato per Modelli AI
 
@@ -210,6 +234,12 @@ I principi cardine per la progettazione di sistemi a dati intensivi affidabili, 
 I percorsi formativi di riferimento per l'ingegneria del deployment comprendono [Made With ML](https://madewithml.com/) di Goku Mohandas, il programma [Full Stack Deep Learning](https://fullstackdeeplearning.com/) e le guide operative [Hugging Face Learn: MLOps and LLMOps](https://huggingface.co/learn/) curate da [Hugging Face](https://huggingface.co/). La documentazione tecnica ufficiale include i portali di [MLflow](https://mlflow.org/), [DVC](https://dvc.org/), [Docker](https://docs.docker.com/), [Docker Compose](https://docs.docker.com/compose/), [FastAPI](https://fastapi.tiangolo.com/), [Prometheus](https://prometheus.io/), [Evidently AI](https://www.evidentlyai.com/), [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) di [OWASP](https://owasp.org/) e il [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) dell'agenzia [NIST](https://www.nist.gov/).
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 ### Laboratorio 1: Setup di Tracciamento Esperimenti e Model Registry con MLflow e SQLite
 

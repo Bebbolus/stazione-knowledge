@@ -69,6 +69,12 @@ $$\frac{\partial L}{\partial \mathbf{x}} = \mathbf{J}_{\mathbf{y}}(\mathbf{x})^T
 
 L'algoritmo di retropropagazione (*Backpropagation*) automatizza questa regola applicando la differenziazione all'indietro (*reverse-mode automatic differentiation*), calcolando i gradienti di tutti i pesi della rete con complessità temporale proporzionale a un singolo passaggio in avanti (*forward pass*).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D04-math-stat. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Teoria della Probabilità e Inferenza Bayesiana
 
 Nei domini operativi reali, i dati e le predizioni dei modelli incorporano intrinsecamente quote di incertezza stocastica dovute a rumore di misura o incompletezza informativa.
@@ -110,6 +116,12 @@ La comprensione intuitiva e geometrica dell'algebra lineare è esposta nella ser
 Per lo studio rigoroso dell'algebra lineare applicata, il corso cardine è [18.06 Linear Algebra](https://web.mit.edu/18.06/www/) tenuto da [Gilbert Strang](https://math.mit.edu/~gs/) presso il [Massachusetts Institute of Technology (MIT)](https://web.mit.edu/). I fondamenti computazionali di machine learning e ottimizzazione per il natural language processing sono approfonditi nei programmi didattici della [Stanford University](https://www.stanford.edu/), in particolare i corsi [CS229: Machine Learning](https://cs229.stanford.edu/materials/handout.pdf) e [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/).
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 I seguenti laboratori contengono script Python autonomi ed eseguibili che implementano numericamente i costrutti teorici formalizzati nella monografia.
 

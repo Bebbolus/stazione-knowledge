@@ -33,6 +33,12 @@ L'ambiente ospite (*host runtime*) intercetta la stringa JSON prodotta dal model
 
 Prima dell'avvento di protocolli standardizzati, l'integrazione di strumenti esterni nei sistemi agentici soffriva di una grave frammentazione architetturale. Ogni fornitore di modelli linguistici, da [OpenAI](https://openai.com/) (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) ad [Anthropic](https://www.anthropic.com/) e [Google](https://about.google/) (la multinazionale tecnologica leader nei servizi Internet, ricerca algoritmica, cloud e AI), implementava convenzioni proprietarie per la dichiarazione dei parametri e la gestione dei messaggi di ritorno. Parallelamente, framework applicativi come [LangChain](https://www.langchain.com/) (il framework open-source per la costruzione di applicazioni, catene e integrazioni guidate da Large Language Model) e [LlamaIndex](https://www.llamaindex.ai/) (il framework di orchestrazione dati per connettere fonti informative personalizzate ai Large Language Model) introducevano layer di astrazione incompatibili tra loro. Questa eterogeneità generava il classico problema di complessità combinatoria $M \times N$, in cui $M$ client agentici dovevano riscrivere e mantenere $N$ adattatori dedicati per interfacciarsi con filesystem locali, database relazionali [PostgreSQL](https://www.postgresql.org/) (il sistema di gestione di database relazionale a oggetti open-source rinomato per affidabilità ed estendibilità), repository [GitHub](https://github.com/) (la piattaforma di hosting cloud per repository Git e collaborazione sullo sviluppo software) o motori OSINT.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D12-agentic-mcp. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Architettura del Model Context Protocol (MCP): Client, Host e Server
 
 Per risolvere la frammentazione delle integrazioni punto-a-punto, [Anthropic](https://www.anthropic.com/) ha introdotto il [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) (lo standard aperto creato da Anthropic per la connessione sicura tra modelli linguistici, strumenti esterni e sorgenti dati), un protocollo aperto basato sullo standard [JSON-RPC 2.0 Specification](https://www.jsonrpc.org/specification) che stabilisce un'architettura client-server universale per l'esposizione e il consumo di capacità computazionali e sorgenti informative. L'architettura MCP scompone l'ecosistema agentico in tre componenti distinte e cooperanti: l'Host di applicazione, il Client MCP e il Server MCP indipendente.
@@ -52,6 +58,12 @@ La seconda primitiva è rappresentata dalle **Resources**, oggetti di sola lettu
 La terza primitiva comprende i **Prompts**, template parametrizzati e contestualizzati memorizzati sul server che guidano il modello nell'esecuzione di compiti ricorrenti, accessibili via `prompts/list` e `prompts/get`.
 
 La quarta primitiva, denominata **Sampling**, realizza un'inversione di controllo in cui il server MCP richiede all'host l'esecuzione di un'inferenza LLM sicura (`sampling/createMessage`). Questa funzionalità consente al server di eseguire compiti analitici intermedi senza dover gestire direttamente credenziali o chiavi API private, mantenendo la centralizzazione dei costi e della sicurezza sotto la supervisione dell'Host.
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
 
 ## Meccanismi di Trasporto JSON-RPC 2.0: stdio vs Server-Sent Events (SSE)
 
@@ -73,6 +85,12 @@ Il trasporto **stdio** è progettato per server eseguiti localmente sulla stessa
 
 Il trasporto **SSE su HTTP** è concepito per scenari in cui il server MCP risiede su un'infrastruttura remota, all'interno di un container [Docker](https://www.docker.com/) (la piattaforma open-source per isolare ed eseguire applicazioni in container leggeri) o erogato come microservizio tramite framework moderni come [FastAPI](https://fastapi.tiangolo.com/) (il framework web moderno ad alte prestazioni in Python per la creazione di API REST con validazione Pydantic). La comunicazione si articola su due canali HTTP complementari: il Client stabilisce una connessione HTTP GET persistente verso l'endpoint `/sse`, attraverso la quale il server invia flussi di eventi asincroni in formato `text/event-stream`. All'apertura del canale, il server emette un evento contenente un URI con un identificatore di sessione univoco (es. `/messages?sessionId=uuid-1234`), verso cui il Client indirizza le proprie richieste JSON-RPC tramite normali richieste HTTP POST. Questo meccanismo consente di superare le limitazioni dei firewall aziendali, supporta l'autenticazione enterprise basata su token Bearer o mTLS e abilita l'orchestrazione scalabile di server MCP in cluster remoti.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Mantenimento dell'Attenzione**
+> Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.
+
+
 ## Definizione degli Schemi e Validazione con JSON Schema e Pydantic
 
 L'affidabilità di un sistema agentico dipende dalla precisione con cui gli strumenti vengono descritti al modello e dalla rigorosità con cui i parametri generati vengono convalidati prima dell'esecuzione. All'interno del protocollo MCP, ogni strumento registrato espone una proprietà `inputSchema` conforme alle specifiche JSON Schema Draft 7. La generazione manuale di questi schemi è soggetta a errori di sintassi e discrepanze di tipo; per questa ragione, nell'ecosistema [Python](https://www.python.org/) si adotta comunemente la libreria [Pydantic](https://docs.pydantic.dev/) (la libreria di riferimento per la validazione dei dati e la gestione dei tipi strutturati in Python tramite type hints) o il framework [FastMCP](https://github.com/jlowin/fastmcp) (il framework Python ad alto livello per lo sviluppo rapido e dichiarativo di server Model Context Protocol).
@@ -80,6 +98,12 @@ L'affidabilità di un sistema agentico dipende dalla precisione con cui gli stru
 Attraverso classi Pydantic fortemente tipizzate, gli sviluppatori definiscono campi, tipi primitivi, vincoli di validazione (quali espressioni regolari per indirizzi IP o range numerici per coordinate geografiche), valori di default e descrizioni semantiche dettagliate mediante l'oggetto `Field`. Il server estrae programmaticamente lo schema serializzato richiamando `model_json_schema()`, garantendo una perfetta corrispondenza tra la documentazione esposta all'LLM e i controlli eseguiti dal runtime. Quando il modello linguistico formula una chiamata di tool, il payload JSON ricevuto viene iniettato nel modello Pydantic corrispondente. Se i parametri violano i vincoli dichiarati, il validatore intercetta l'eccezione `ValidationError` e impedisce l'invocazione della logica sottostante.
 
 La gestione strutturata degli errori di validazione costituisce un pilastro essenziale per la resilienza operativa degli agenti. Anziché causare un'interruzione fatale del processo, il server MCP cattura l'errore e restituisce un messaggio JSON-RPC contrassegnato con la proprietà `isError: true`, contenente un testo esplicativo che indica con precisione il campo errato, il valore non valido e il formato atteso. L'agente incorpora questa osservazione nel proprio contesto conversazionale e, sfruttando le proprie capacità di ragionamento deduttivo, auto-corregge i parametri formulando una chiamata valida al turno successivo, realizzando un meccanismo di recupero automatico privo di interventi manuali.
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Controllo di Comprensione**
+> Qual è il trade-off o limite operativo principale emerso in questa parte? Aver chiari i limiti ci aiuterà a capire le soluzioni tecnologiche che presenteremo a breve.
+
 
 ## Cicli di Esecuzione Agentica, Pattern ReAct e Orchestrazione Autonoma
 
@@ -155,14 +179,20 @@ Sull'ecosistema di sviluppo open-source in [Python](https://www.python.org/), la
 
 ## Appendice Operativa: Laboratori Pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 ### Laboratorio 1 — Server MCP stdio con FastMCP e Validazione Pydantic
 
 Il primo laboratorio guida alla realizzazione di un server MCP completo conforme al protocollo JSON-RPC 2.0 operante sul trasporto standard input/output. Il server espone strumenti di intelligence con validazione dei parametri tramite [Pydantic](https://docs.pydantic.dev/) e gestisce le primitive di discovery e risorse.
 
-1. Definire i modelli Pydantic per la validazione rigorosa dei parametri di input.
-2. Implementare la classe del server per la gestione del protocollo e l'handshake `initialize`.
-3. Registrare i gestori operativi per i metodi `tools/list`, `tools/call`, `resources/list` e `resources/read`.
-4. Configurare il loop di ascolto su `sys.stdin` con emissione controllata su `sys.stdout`.
+- [ ] Definire i modelli Pydantic per la validazione rigorosa dei parametri di input.
+- [ ] Implementare la classe del server per la gestione del protocollo e l'handshake `initialize`.
+- [ ] Registrare i gestori operativi per i metodi `tools/list`, `tools/call`, `resources/list` e `resources/read`.
+- [ ] Configurare il loop di ascolto su `sys.stdin` con emissione controllata su `sys.stdout`.
 
 ```python
 """
@@ -428,10 +458,10 @@ if __name__ == "__main__":
 
 Il secondo laboratorio realizza un client asincrono in [Python](https://www.python.org/) basato su `asyncio.subprocess` che governa l'intero ciclo di vita della connessione con il server MCP, gestendo l'invio di frame JSON-RPC e la gestione dei timeout di risposta.
 
-1. Creare la classe client con gestione asincrona delle pipe di processo.
-2. Implementare la logica di handshake e negoziazione delle capabilities.
-3. Realizzare le funzioni di query catalogo (`list_tools`) e invocazione remota (`call_tool`).
-4. Gestire la terminazione controllata del processo server.
+- [ ] Creare la classe client con gestione asincrona delle pipe di processo.
+- [ ] Implementare la logica di handshake e negoziazione delle capabilities.
+- [ ] Realizzare le funzioni di query catalogo (`list_tools`) e invocazione remota (`call_tool`).
+- [ ] Gestire la terminazione controllata del processo server.
 
 ```python
 """
@@ -540,10 +570,10 @@ if __name__ == "__main__":
 
 Il terzo laboratorio implementa un server remoto basato su HTTP e Server-Sent Events (SSE), dimostrando la gestione delle sessioni multi-client e l'autenticazione tramite intestazione HTTP Bearer.
 
-1. Implementare il session manager per la gestione delle code asincrone.
-2. Definire l'handler HTTP per i canali `GET /sse` e `POST /message`.
-3. Integrare il controllo di autenticazione basato su token di sicurezza.
-4. Eseguire la simulazione dell'inoltro di richieste JSON-RPC.
+- [ ] Implementare il session manager per la gestione delle code asincrone.
+- [ ] Definire l'handler HTTP per i canali `GET /sse` e `POST /message`.
+- [ ] Integrare il controllo di autenticazione basato su token di sicurezza.
+- [ ] Eseguire la simulazione dell'inoltro di richieste JSON-RPC.
 
 ```python
 """
@@ -704,10 +734,10 @@ if __name__ == "__main__":
 
 Il quarto laboratorio integra l'intero ciclo agentico ReAct con dynamic tool discovery, applicazione di criteri di sicurezza a granularità fine (*Policy Guardrails*) e tracciamento forense immutabile in formato JSONL (*Audit Logging*).
 
-1. Implementare il motore di policy per la segregazione tra tool di sola lettura e azioni mutative.
-2. Costruire il logger forense immutabile con fingerprint crittografico SHA-256.
-3. Realizzare l'agente autonomo con gestione del ciclo di vita e budget di passi.
-4. Eseguire una missione dimostrativa di investigazione OSINT con verifica dei log di audit.
+- [ ] Implementare il motore di policy per la segregazione tra tool di sola lettura e azioni mutative.
+- [ ] Costruire il logger forense immutabile con fingerprint crittografico SHA-256.
+- [ ] Realizzare l'agente autonomo con gestione del ciclo di vita e budget di passi.
+- [ ] Eseguire una missione dimostrativa di investigazione OSINT con verifica dei log di audit.
 
 ```python
 """

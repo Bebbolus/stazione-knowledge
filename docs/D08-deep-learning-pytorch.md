@@ -78,6 +78,12 @@ print(f"Valore del gradiente calcolato: {x.grad.item()}")  # dy/dx = 7.0
 
 Poiché PyTorch accumula i gradienti per default mediante operazione di somma interna (`x.grad += nuovo_gradiente`) per supportare naturalmente architetture con diramazioni e gradient accumulation, è imperativo azzerare esplicitamente i gradienti all'inizio di ciascuna iterazione di addestramento invocando `optimizer.zero_grad()`. Durante le fasi di inferenza e validazione, il tracciamento del grafo computazionale deve essere disabilitato incapsulando il codice nel blocco di contesto `with torch.no_grad():`, eliminando l'allocazione del grafo e riducendo drasticamente il consumo di memoria RAM e VRAM.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D08-deep-learning-pytorch. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Architettura a Moduli: Astrazione nn.Module e Parametrizzazione
 
 Sebbene sia possibile implementare reti neurali manipolando direttamente tensori e moltiplicazioni matriciali con [NumPy](https://numpy.org/) (la libreria open-source per il calcolo scientifico e matriciale in [Python](https://www.python.org/)), la gestione manuale dello stato dei parametri e delle trasformazioni diventa rapidamente ingestibile all'aumentare della profondità architetturale. Il modulo `torch.nn` standardizza la progettazione attraverso la classe base `nn.Module`.
@@ -256,6 +262,12 @@ class LSTMClassifier(nn.Module):
 ```
 
 L'impostazione `batch_first=True` allinea la convenzione dei tensori allo standard industriale $(B, T, D)$, semplificando l'integrazione con pipeline di preprocessing e batching multi-sorgente.
+
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
 
 ## Il Ciclo di Addestramento: Forward, Loss, Backward e Ottimizzazione
 
@@ -443,9 +455,15 @@ I fondamenti teorici del calcolo differenziale e delle rappresentazioni profonde
 
 ## Appendice Operativa: Laboratori Pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 I laboratori seguenti contengono procedure sequenziali e script eseguibili in Python per testare sul campo i concetti di tensori, differenziazione automatica, classificazione tabellare con MLP, visione artificiale con CNN e modellazione sequenziale con LSTM.
 
-1. **Laboratorio 1: Manipolazione di Tensori, Strides e Autograd Scalare**  
+- [ ] **Laboratorio 1: Manipolazione di Tensori, Strides e Autograd Scalare**  
    Inizializzare un ambiente virtuale dedicato, creare uno script `lab1_tensors.py` e verificare le proprietà di allocazione e calcolo del gradiente:
    ```python
    import torch
@@ -466,7 +484,7 @@ I laboratori seguenti contengono procedure sequenziali e script eseguibili in Py
    print(f"Gradiente dLoss/dw: {w.grad}")
    ```
 
-2. **Laboratorio 2: Addestramento End-to-End di un TabularMLP con Validation Set**  
+- [ ] **Laboratorio 2: Addestramento End-to-End di un TabularMLP con Validation Set**  
    Generare un dataset sintetico non lineare di classificazione binaria, preparare `Dataset` e `DataLoader`, addestrare il modello e tracciare la discesa della perdita:
    ```python
    import torch
@@ -512,7 +530,7 @@ I laboratori seguenti contengono procedure sequenziali e script eseguibili in Py
        print(f"Epoca {epoch:02d} | Loss di Addestramento: {total_loss/len(train_set):.4f}")
    ```
 
-3. **Laboratorio 3: Classificazione di Immagini Sintetiche con SimpleCNN**  
+- [ ] **Laboratorio 3: Classificazione di Immagini Sintetiche con SimpleCNN**  
    Costruire e testare una rete convoluzionale su un batch di immagini RGB di dimensioni $32 \times 32$:
    ```python
    import torch
@@ -542,7 +560,7 @@ I laboratori seguenti contengono procedure sequenziali e script eseguibili in Py
    print(f"Dimensione output del batch di immagini: {output_logits.shape}")
    ```
 
-4. **Laboratorio 4: Modellazione Sequenziale con LSTM e Checkpoint su Disco**  
+- [ ] **Laboratorio 4: Modellazione Sequenziale con LSTM e Checkpoint su Disco**  
    Implementare un classificatore per serie temporali, eseguire il passaggio in avanti e salvare i pesi del modello su storage locale:
    ```python
    from pathlib import Path

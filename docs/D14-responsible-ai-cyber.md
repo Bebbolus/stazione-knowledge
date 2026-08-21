@@ -22,6 +22,12 @@ La minaccia del Prompt Injection Indiretto, formalizzata dal ricercatore [Kai Gr
 
 Il Data Poisoning e le backdoor neurali colpiscono invece la fase di addestramento o fine-tuning. Attraverso tecniche di *Clean-Label Poisoning*, l'attaccante inietta nel dataset campioni di testo manipolati contenenti trigger specifici (una parola rara o una sequenza sintattica) associati a un comportamento malevolo prestabilito. Durante il normale utilizzo il modello mostra un'accuratezza impeccabile sui benchmark standard, ma quando il trigger compare nel prompt di inferenza, la backdoor si attiva forzando il modello a emettere risposte compromesse o a disabilitare i filtri di sicurezza.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D14-responsible-ai-cyber. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Privacy e Protezione dei Dati: Membership Inference Attacks, Data Extraction e Meccanismi di Differential Privacy
 
 I modelli linguistici di grandi dimensioni tendono a memorizzare letteralmente sequenze rare o uniche presenti nel corpus di addestramento, inclusi numeri di previdenza sociale, numeri di carte di credito, credenziali di accesso e informazioni sanitarie protette. Gli attacchi di estrazione dati (*Training Data Extraction*) e di inferenza di appartenenza (*Membership Inference Attacks*, MIA) sfruttano la disparità statistica nella funzione di perdita e nella distribuzione di confidenza softmax tra i record visti durante l'addestramento (*members*) e i record mai osservati (*non-members*). Un attaccante che interroga il modello con un record target può dedurre con elevata confidenza statistica se tale record faceva parte del dataset di addestramento privato misurandone la perplessità anomalamente bassa.
@@ -52,6 +58,12 @@ $$EOD = TPR_{A=0} - TPR_{A=1} = \mathbb{P}(\hat{Y}=1 \mid A=0, Y=1) - \mathbb{P}
 
 Le strategie di mitigazione implementate tramite il toolkit [AI Fairness 360](https://github.com/Trusted-AI/AIF360) (il toolkit open-source di IBM Research per il rilevamento e la mitigazione dei bias discriminatori nei modelli AI) si articolano in tre stadi: pre-processing (bilanciamento dei pesi campionari con Reweighing prima del training), in-processing (ottimizzazione con vincoli avversari di debiasing nella loss function) e post-processing (ottimizzazione calibrata delle soglie decisionali per gruppo $\tau_0, \tau_1$ per soddisfare i vincoli di Equalized Odds preservando la massima accuratezza).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Framework Normativi e Compliance Internazionale: Regolamento GDPR, EU AI Act e Standard NIST AI RMF
 
 L'erogazione di sistemi intelligenti in produzione richiede la rigorosa conformità a quadri normativi internazionali vincolanti e standard tecnici di governance.
@@ -81,6 +93,12 @@ I fondamenti matematici dell'equità algoritmica e delle metriche di gruppo sono
 Sul piano legislativo europeo, i testi giuridici vincolanti comprendono il Regolamento Generale sulla Protezione dei Dati ([GDPR](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32016R0679)), le linee guida interpretative dell'[EDPB](https://www.edpb.europa.eu/) e il testo del regolamento [EU AI Act](https://artificialintelligenceact.eu/). L'implementazione pratica degli algoritmi poggia sull'ecosistema scientifico in [Python](https://www.python.org/), con l'ausilio di [NumPy](https://numpy.org/) (la libreria fondamentale per il calcolo scientifico e matriciale), [Pandas](https://pandas.pydata.org/) (la libreria per l'analisi e manipolazione di DataFrame), [Scikit-learn](https://scikit-learn.org/) (la libreria per l'apprendimento automatico) e [PyTorch](https://pytorch.org/) (il framework di deep learning). Le ricerche sulla sicurezza di frontiera e sui protocolli agentici si raccordano con gli standard pubblicati da [Anthropic](https://www.anthropic.com/), [OpenAI](https://openai.com/), [Microsoft](https://www.microsoft.com/), [MIT](https://web.mit.edu/) e [Stanford University](https://www.stanford.edu/).
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 ### Laboratorio 1: Rilevamento e Sanificazione Euristica ed Embedding-based di Prompt Injection e Jailbreak
 

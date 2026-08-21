@@ -78,6 +78,12 @@ Il framework [LightGBM](https://lightgbm.readthedocs.io/) (sviluppato da [Micros
 
 La libreria [CatBoost](https://catboost.ai/) (sviluppata da Yandex) si focalizza sulla gestione nativa e rigorosa delle variabili categoriche ad alta cardinalità tramite *Target Statistics* ordinate nel tempo, eliminando il fenomeno del *target leakage*, e costruisce alberi simmetrici (*oblivious trees*) che velocizzano drasticamente la fase di inferenza in produzione.
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D06-ml-classico. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## Interpretabilità e Ispezione del Modello (Feature Importance)
 
 Quando un modello di Machine Learning aggrega migliaia di regole decisionali distribuite su centinaia di alberi profondi, perde la trasparenza analitica immediata dei modelli lineari, trasformandosi in una complessa scatola nera. Per soddisfare i requisiti di verificabilità e conformità regolatoria nei settori ad alto impatto (come il credito, la diagnostica medica e la sicurezza), è necessario disporre di metodologie matematiche per quantificare il contributo di ogni singola variabile.
@@ -112,6 +118,12 @@ Per il deployment su larga scala e l'addestramento distribuito, le risorse uffic
 Per esplorare geometricamente come gli algoritmi partizionano lo spazio e come l'aggregazione smussa le superfici di decisione, la piattaforma didattica [MLU-Explain](https://mlu-explain.github.io/) di [Amazon](https://www.amazon.science/) mette a disposizione i simulatori interattivi [Decision Trees](https://mlu-explain.github.io/decision-tree/) e [Random Forest](https://mlu-explain.github.io/random-forest/). Inoltre, il canale divulgativo [StatQuest](https://statquest.org/) dell'informatico [Josh Starmer](https://statquest.org/) offre analisi visive dettagliate sui passaggi matematici del gradient boosting e sul calcolo dei residui.
 
 ## Appendice Operativa: Laboratori Pratici
+
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
 
 I laboratori seguenti forniscono script Python completi, eseguibili e autocontenuti per riprodurre empiricamente il comportamento dei singoli alberi, l'effetto stabilizzante del bagging e la potenza ottimizzativa del gradient boosting.
 

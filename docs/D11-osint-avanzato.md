@@ -68,6 +68,12 @@ La topologia delle reti relazionali viene analizzata applicando le metriche dell
 
 Nell'ambito dell'information warfare, l'identificazione dei comportamenti inautentici coordinati (CIB) rappresenta una priorità strategica. Le campagne di astroturfing orchestrano reti di bot ed account fittizi per amplificare artificialmente narrazioni polarizzanti, saturando gli algoritmi di raccomandazione delle piattaforme social. I pattern di coordinamento si rilevano analizzando l'invarianza temporale delle pubblicazioni (picchi anomali di messaggi identici pubblicati nello stesso secondo), l'identità lessicale dei testi diffusi e l'impiego di immagini del profilo generate sinteticamente da reti generative avversarie. L'investigatore confronta tali evidenze con i repository di monitoraggio della disinformazione documentati dal collettivo [Bellingcat](https://www.bellingcat.com/) (il collettivo internazionale di giornalisti investigativi e ricercatori pioniere nelle investigazioni OSINT) e dall'osservatorio [EUvsDisinfo](https://euvsdisinfo.eu/) (il progetto della task force East StratCom del Servizio europeo per l'azione esterna dedicato al monitoraggio della disinformazione).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Riepilogo Concettuale**
+> A questo punto abbiamo esaminato i concetti chiave di D11-osint-avanzato. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.
+
+
 ## GEOINT, IMINT e cronolocalizzazione matematica
 
 La Geospatial Intelligence (GEOINT) e l'Imagery Intelligence (IMINT) trasformano elementi visivi non strutturati in coordinate geografiche precise e riferimenti temporali certi. Quando un'immagine o una registrazione video viene diffusa senza metadati o con descrizioni manipolate, l'analista ricorre all'analisi forense dei pixel e alla trigonometria dell'ombra per determinare il luogo e l'istante esatto dello scatto.
@@ -151,6 +157,12 @@ La ricognizione infrastrutturale passiva si avvale di motori di scansione della 
 
 L'enumerazione dei sottodomini e degli host appartenenti a un'organizzazione sfrutta i log pubblici di Certificate Transparency, aggregati da servizi quali crt.sh. Quando un'autorità di certificazione emette un certificato SSL/TLS per un dominio, il record viene registrato in un log append-only immutabile; l'analisi di questi log consente di ricostruire l'intera topologia dei sottodomini aziendali, inclusi ambienti di sviluppo interni o endpoint API non indicizzati dai motori di ricerca convenzionali. L'integrazione di questi dati con il servizio di telemetria e intelligence [VirusTotal](https://www.virustotal.com/) (il servizio di analisi e aggregazione di sicurezza informatica di [Google](https://about.google/) per l'analisi forense di file e URL sospetti) permette di verificare se gli indirizzi IP e i domini emersi presentano correlazioni storiche con campioni di codice malevolo o infrastrutture di comando e controllo (C2).
 
+
+> [!NOTE]
+> **Checkpoint di Ancoraggio: Autovalutazione**
+> Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.
+
+
 ## Compromessi architetturali, limiti operativi e fallacie metodologiche
 
 La progettazione di una pipeline investigativa OSINT richiede un bilanciamento continuo tra requisiti contrastanti in termini di copertura, accuratezza, riservatezza e sostenibilità operativa. Nessuna singola metodologia è priva di compromessi strutturali.
@@ -188,6 +200,12 @@ Le linee guida per la compartimentazione delle identità digitali e la difesa da
 
 ## Appendice operativa: laboratori pratici
 
+> [!TIP]
+> **Zero-Draft Offloading (Delega dell'Inizio)**
+> Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di *revisore* e *ingegnere*, non di dattilografo.
+
+
+
 I seguenti quattro laboratori forniscono procedure operative ed implementazioni software autonome e testate in ambiente [Python](https://www.python.org/) per verificare sul campo le metodologie illustrate.
 
 ### Laboratorio 1: Pipeline di ricognizione passiva di sottodomini e superficie di rete
@@ -196,10 +214,10 @@ Questo laboratorio implementa uno script in [Python](https://www.python.org/) ch
 
 Procedura operativa:
 
-1. Configurare un ambiente virtuale [Python](https://www.python.org/) ed eseguire lo script specificando il dominio target da analizzare.
-2. Inviare una richiesta HTTP non intrusiva all'endpoint di crt.sh ed effettuare il parsing della risposta JSON.
-3. Filtrare e normalizzare i domini rilevati, rimuovendo record duplicati e caratteri wildcard.
-4. Salvare i risultati in formato JSON strutturato per la successiva correlazione con motori di scansione passiva.
+- [ ] Configurare un ambiente virtuale [Python](https://www.python.org/) ed eseguire lo script specificando il dominio target da analizzare.
+- [ ] Inviare una richiesta HTTP non intrusiva all'endpoint di crt.sh ed effettuare il parsing della risposta JSON.
+- [ ] Filtrare e normalizzare i domini rilevati, rimuovendo record duplicati e caratteri wildcard.
+- [ ] Salvare i risultati in formato JSON strutturato per la successiva correlazione con motori di scansione passiva.
 
 ```python
 import json
@@ -282,10 +300,10 @@ Questo laboratorio implementa un parser binario in [Python](https://www.python.o
 
 Procedura operativa:
 
-1. Predisporre un file immagine o un payload di byte JPEG sintetico contenente i tag EXIF e GPS IFD standard.
-2. Eseguire il parser binario che legge i byte dell'header e individua i puntatori dei blocchi TIFF.
-3. Decodificare la latitudine e la longitudine applicando la conversione aritmetica: $\text{Decimale} = \text{Gradi} + \frac{\text{Minuti}}{60} + \frac{\text{Secondi}}{3600}$.
-4. Verificare i parametri ottici della fotocamera e l'eventuale presenza di timestamp incongruenti.
+- [ ] Predisporre un file immagine o un payload di byte JPEG sintetico contenente i tag EXIF e GPS IFD standard.
+- [ ] Eseguire il parser binario che legge i byte dell'header e individua i puntatori dei blocchi TIFF.
+- [ ] Decodificare la latitudine e la longitudine applicando la conversione aritmetica: $\text{Decimale} = \text{Gradi} + \frac{\text{Minuti}}{60} + \frac{\text{Secondi}}{3600}$.
+- [ ] Verificare i parametri ottici della fotocamera e l'eventuale presenza di timestamp incongruenti.
 
 ```python
 import struct
@@ -363,10 +381,10 @@ Questo laboratorio implementa un motore matematico in [Python](https://www.pytho
 
 Procedura operativa:
 
-1. Inserire le coordinate geografiche stimate del luogo, il giorno dell'anno, l'altezza $h$ dell'oggetto e la lunghezza $L$ dell'ombra.
-2. Calcolare l'elevazione solare osservata tramite l'arcotangente: $\alpha = \arctan(h/L)$.
-3. Calcolare per ciascun minuto della giornata la posizione solare teorica impiegando le formule astronomiche di declinazione ed angolo orario.
-4. Identificare le finestre orarie (antimeridiana e pomeridiana) con il minimo scostamento rispetto all'angolo osservato.
+- [ ] Inserire le coordinate geografiche stimate del luogo, il giorno dell'anno, l'altezza $h$ dell'oggetto e la lunghezza $L$ dell'ombra.
+- [ ] Calcolare l'elevazione solare osservata tramite l'arcotangente: $\alpha = \arctan(h/L)$.
+- [ ] Calcolare per ciascun minuto della giornata la posizione solare teorica impiegando le formule astronomiche di declinazione ed angolo orario.
+- [ ] Identificare le finestre orarie (antimeridiana e pomeridiana) con il minimo scostamento rispetto all'angolo osservato.
 
 ```python
 import math
@@ -456,10 +474,10 @@ Questo laboratorio implementa un motore di analisi topologica dei grafi in [Pyth
 
 Procedura operativa:
 
-1. Definire le entità investigative emerse dalla raccolta (Account social, Indirizzi IP, Email, Numeri telefonici, Aziende di facciata).
-2. Costruire la matrice di adiacenza del grafo non orientato collegando le entità che condividono elementi comuni.
-3. Calcolare la Degree Centrality per quantificare l'esposizione diretta di ciascun nodo.
-4. Calcolare la Betweenness Centrality tramite l'algoritmo dei cammini minimi per identificare l'entità intermediaria critica (*bridge entity*).
+- [ ] Definire le entità investigative emerse dalla raccolta (Account social, Indirizzi IP, Email, Numeri telefonici, Aziende di facciata).
+- [ ] Costruire la matrice di adiacenza del grafo non orientato collegando le entità che condividono elementi comuni.
+- [ ] Calcolare la Degree Centrality per quantificare l'esposizione diretta di ciascun nodo.
+- [ ] Calcolare la Betweenness Centrality tramite l'algoritmo dei cammini minimi per identificare l'entità intermediaria critica (*bridge entity*).
 
 ```python
 from typing import Dict, List, Set, Tuple
