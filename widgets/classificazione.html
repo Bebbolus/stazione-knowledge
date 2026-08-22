@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confine di Classificazione (k-NN)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        canvas {
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin-bottom: 15px;
+            background: #f0efec;
+            padding: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        button {
+            background-color: #184f95;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #032042;
+        }
+        .radio-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6d6b67;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>Confine di Decisione:</strong> Seleziona la classe da inserire e clicca sulla mappa. Lo sfondo mostra il confine di classificazione aggiornato in tempo reale (calcolato usando i 3 vicini più prossimi, k-NN).
+    </div>
+    
+    <canvas id="plot" width="400" height="300"></canvas>
+    
+    <div class="controls">
+        <div class="radio-group">
+            <label>
+                <input type="radio" name="classSel" value="0" checked>
+                <span style="color:#184f95; font-weight:bold;">Classe Blu</span>
+            </label>
+            <label>
+                <input type="radio" name="classSel" value="1">
+                <span style="color:#d97757; font-weight:bold;">Classe Arancio</span>
+            </label>
+        </div>
+        <button id="resetBtn">Pulisci Punti</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('plot');
+    const ctx = canvas.getContext('2d');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    // Points array: {x, y, cls}
+    let points = [];
+    
+    function initDemo() {
+        points = [
+            {x: 100, y: 100, cls: 0},
+            {x: 120, y: 150, cls: 0},
+            {x: 80, y: 200, cls: 0},
+            {x: 280, y: 100, cls: 1},
+            {x: 300, y: 180, cls: 1},
+            {x: 250, y: 250, cls: 1},
+            {x: 200, y: 150, cls: 0},
+        ];
+    }
+    
+    function getMousePos(evt) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+            x: (evt.clientX - rect.left) * scaleX,
+            y: (evt.clientY - rect.top) * scaleY
+        };
+    }
+    
+    function distSq(a, b) {
+        return (a.x - b.x)**2 + (a.y - b.y)**2;
+    }
+    
+    // k-NN predict (k=3)
+    function predict(x, y) {
+        if (points.length === 0) return -1;
+        let p = {x, y};
+        let distances = points.map(pt => ({ d: distSq(pt, p), c: pt.cls }));
+        distances.sort((a, b) => a.d - b.d);
+        
+        let k = Math.min(3, distances.length);
+        let votes = [0, 0];
+        for (let i = 0; i < k; i++) {
+            votes[distances[i].c]++;
+        }
+        return votes[0] > votes[1] ? 0 : 1;
+    }
+    
+    function draw() {
+        // Draw decision background
+        const res = 10; // resolution (pixels)
+        for (let x = 0; x < canvas.width; x += res) {
+            for (let y = 0; y < canvas.height; y += res) {
+                let cls = predict(x + res/2, y + res/2);
+                if (cls === 0) {
+                    ctx.fillStyle = 'rgba(24, 79, 149, 0.15)'; // Light blue
+                } else if (cls === 1) {
+                    ctx.fillStyle = 'rgba(217, 119, 87, 0.15)'; // Light orange
+                } else {
+                    ctx.fillStyle = '#ffffff';
+                }
+                ctx.fillRect(x, y, res, res);
+            }
+        }
+        
+        // Draw points
+        for (let pt of points) {
+            ctx.beginPath();
+            ctx.arc(pt.x, pt.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = pt.cls === 0 ? '#184f95' : '#d97757';
+            ctx.fill();
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+    }
+    
+    canvas.addEventListener('mousedown', (evt) => {
+        const pos = getMousePos(evt);
+        const activeClass = parseInt(document.querySelector('input[name="classSel"]:checked').value);
+        points.push({ x: pos.x, y: pos.y, cls: activeClass });
+        draw();
+    });
+    
+    resetBtn.addEventListener('click', () => {
+        points = [];
+        draw();
+    });
+    
+    initDemo();
+    draw();
+</script>
+
+</body>
+</html>

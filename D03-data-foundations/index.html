@@ -1,0 +1,1970 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/D03-data-foundations/">
+      
+      
+        <link rel="prev" href="../D02c-gateway-e-routing-llm/">
+      
+      
+        <link rel="next" href="../D04-math-stat/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>D03 — Data foundations (NumPy, Pandas, SQL) - Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#data-foundations-numpy-pandas-sql-e-qualita-del-dato" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D03 — Data foundations (NumPy, Pandas, SQL)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../D01-workspace-llm-wiki/" class="md-tabs__link">
+          
+  
+    
+  
+  Fondamenti
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D05-ml-fondamenti/" class="md-tabs__link">
+          
+  
+    
+  
+  Operativo
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D08-deep-learning-pytorch/" class="md-tabs__link">
+          
+  
+    
+  
+  Avanzato
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D12-agentic-mcp/" class="md-tabs__link">
+          
+  
+    
+  
+  Specialistico
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Fondamenti
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Fondamenti
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first, Git, Obsidian, LLM wiki
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02-python-refresher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python refresher e software engineering essentials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02b-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02b — Virtualizzazione e Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02c-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02c — Gateway e Routing LLM (LiteLLM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    D03 — Data foundations (NumPy, Pandas, SQL)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Data foundations (NumPy, Pandas, SQL)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Indice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Indice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#il-problema-della-corruzione-del-dato-e-del-data-leakage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Il Problema della Corruzione del Dato e del Data Leakage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calcolo-tensoriale-e-allocazione-di-memoria-con-numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Calcolo Tensoriale e Allocazione di Memoria con NumPy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Calcolo Tensoriale e Allocazione di Memoria con NumPy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#larray-e-le-sue-dimensioni-shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      L'Array e le sue Dimensioni (Shape)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#esecuzione-vettorizzata-e-broadcasting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Esecuzione Vettorizzata e Broadcasting
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manipolazione-dati-tabellari-e-bonifica-qualitativa-con-pandas" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manipolazione Dati Tabellari e Bonifica Qualitativa con Pandas
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manipolazione Dati Tabellari e Bonifica Qualitativa con Pandas">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lavorare-sui-dataframe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Lavorare sui DataFrame
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bonifica-dei-dati-e-prevenzione-anomalie" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bonifica dei Dati e Prevenzione Anomalie
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fusione-relazionale-merge-e-join" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fusione Relazionale (Merge e Join)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrazione-e-pipeline-analitiche-su-database-relazionali-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estrazione e Pipeline Analitiche su Database Relazionali (SQL)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Estrazione e Pipeline Analitiche su Database Relazionali (SQL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#elaborazione-analitica-su-database-sql" class="md-nav__link">
+    <span class="md-ellipsis">
+      Elaborazione Analitica su Database (SQL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formati-di-archiviazione-e-serializzazione-csv-vs-jsonl-vs-parquet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Formati di Archiviazione e Serializzazione: CSV vs JSONL vs Parquet
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Formati di Archiviazione e Serializzazione: CSV vs JSONL vs Parquet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#archiviazione-colonnare-parquet-e-jsonl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Archiviazione Colonnare (Parquet e JSONL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trasparenza-metodologica-e-schede-dei-dataset-data-cards" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trasparenza Metodologica e Schede dei Dataset (Data Cards)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compromessi-operativi-e-scelte-architetturali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compromessi Operativi e Scelte Architetturali
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compromessi Operativi e Scelte Architetturali">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#esecuzione-in-memory-vs-scalabilita-out-of-core" class="md-nav__link">
+    <span class="md-ellipsis">
+      Esecuzione In-Memory vs Scalabilità Out-Of-Core
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formati-flessibili-jsonl-vs-formati-rigidi-ottimizzati-parquet" class="md-nav__link">
+    <span class="md-ellipsis">
+      Formati Flessibili (JSONL) vs Formati Rigidi Ottimizzati (Parquet)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riferimenti-bibliografici-e-risorse-tecniche" class="md-nav__link">
+    <span class="md-ellipsis">
+      Riferimenti Bibliografici e Risorse Tecniche
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Riferimenti Bibliografici e Risorse Tecniche">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#guide-ufficiali-e-documentazione-di-riferimento" class="md-nav__link">
+    <span class="md-ellipsis">
+      Guide Ufficiali e Documentazione di Riferimento
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#piattaforme-interattive-e-standard-di-documentazione" class="md-nav__link">
+    <span class="md-ellipsis">
+      Piattaforme Interattive e Standard di Documentazione
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendice-operativa-laboratori-pratici" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendice Operativa: Laboratori Pratici
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04-math-stat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Matematica e statistica just-in-time
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operativo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operativo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D05-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Fondamenti di Machine Learning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D06-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D06 — ML classico: alberi, ensemble, gradient boosting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D07-unsupervised-learning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Apprendimento non supervisionato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Avanzato
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Avanzato
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D08-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D09-transformers-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Transformers, LLM e inference engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D10-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — RAG, knowledge base e grafi OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — OSINT avanzato e discipline principali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11b — AI come arma e come bersaglio nell'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11c — Geopolitica e governance dell'AI per l'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Specialistico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Specialistico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — Agentic systems, MCP e automazione affidabile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12b — AI Harness e Plugin per agenti OSINT portatili
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12c — Prompt engineering e context engineering avanzati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12d — Loop engineering e graph engineering per agenti
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — RL, preference learning, alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Responsible AI, cybersecurity e governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D15-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — MLOps / LLMOps e deployment local-first
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — ICM, orchestrazione e comunicazione dei risultati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — Agent Context Platform e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — Ecosistema Interfacce e Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D20-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D21-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/D03-data-foundations.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="data-foundations-numpy-pandas-sql-e-qualita-del-dato">Data Foundations: NumPy, Pandas, SQL e Qualità del Dato<a class="headerlink" href="#data-foundations-numpy-pandas-sql-e-qualita-del-dato" title="Permanent link">&para;</a></h1>
+<p>L'<strong>ingegneria dei dati per il machine learning</strong> è la disciplina che standardizza l'ingestione, la bonifica qualitativa, la trasformazione tensoriale e la serializzazione efficiente di flussi informativi eterogenei prima dell'addestramento dei modelli predittivi. Questa architettura si impiega in pipeline di intelligenza artificiale applicata, sistemi di intelligence OSINT e piattaforme analitiche enterprise per convertire dati grezzi non strutturati in matrici numeriche omogenee prive di anomalie sistematiche. La disciplina esiste perché l'accuratezza e l'affidabilità di qualsiasi algoritmo di intelligenza artificiale dipendono rigidamente dalla purezza statistica dei dati in ingresso, dall'assoluta prevenzione del data leakage tra partizioni di training e test, e dall'adozione di strutture dati allineate con l'accelerazione hardware vettoriale.</p>
+<h2 id="il-problema-della-corruzione-del-dato-e-del-data-leakage">Il Problema della Corruzione del Dato e del Data Leakage<a class="headerlink" href="#il-problema-della-corruzione-del-dato-e-del-data-leakage" title="Permanent link">&para;</a></h2>
+<p>Nella pratica ingegneristica, i dati raccolti da sorgenti aperte, sensori di rete o registri transazionali presentano un elevato tasso di entropia: valori mancanti non casuali, formati temporali eterogenei, discrepanze di codifica dei caratteri e distribuzioni fortemente sbilanciate. L'immissione diretta di dati non validati all'interno di un modello statistico innesca il fenomeno <strong>GIGO (Garbage-In, Garbage-Out)</strong>, in cui il sistema ottimizza i propri parametri su artefatti spuri e rumore di misurazione, compromettendo la validità di qualsiasi inferenza a valle.</p>
+<p>L'anomalia più critica nei workflow di apprendimento automatico è il <strong>Data Leakage</strong> (fuga di dati), che si verifica quando informazioni appartenenti al set di test o al futuro temporale contaminano il set di addestramento prima o durante la fase di preprocessing. Un esempio tipico consiste nel calcolo di parametri statistici globali (come media e deviazione standard per la standardizzazione delle feature, o la mediana per l'imputazione dei valori nulli) sull'intero dataset prima della separazione tra train e test. Questa operazione trasmette surrettiziamente la distribuzione del test set al modello, generando metriche di accuratezza artificialmente perfette in fase di validazione ma causando un crollo catastrofico delle prestazioni non appena il sistema viene distribuito in produzione su dati reali non visti.</p>
+<p>La risposta architetturale consiste nell'ingegnerizzazione di pipeline di trasformazione a compartimenti stagni, in cui ogni manipolazione statistica viene calcolata esclusivamente sul set di training isolato ed applicata deterministicamente ai set di validazione e test.</p>
+<h2 id="calcolo-tensoriale-e-allocazione-di-memoria-con-numpy">Calcolo Tensoriale e Allocazione di Memoria con NumPy<a class="headerlink" href="#calcolo-tensoriale-e-allocazione-di-memoria-con-numpy" title="Permanent link">&para;</a></h2>
+<p>I modelli di machine learning e le architetture neurali operano esclusivamente su vettori, matrici e tensori numerici a dimensione fissa. La libreria cardine per la manipolazione di tali strutture in <a href="https://www.python.org/">Python</a> (il linguaggio di programmazione di riferimento per l'AI) è <a href="https://numpy.org/">NumPy</a> (la libreria cardine per il calcolo scientifico e la gestione efficiente di array multidimensionali in memoria).</p>
+<h3 id="larray-e-le-sue-dimensioni-shape">L'Array e le sue Dimensioni (Shape)<a class="headerlink" href="#larray-e-le-sue-dimensioni-shape" title="Permanent link">&para;</a></h3>
+<p>L'oggetto fondamentale di NumPy è l'<code>ndarray</code>, una struttura dati contigua in memoria RAM caratterizzata da un tipo di dato omogeneo (<code>dtype</code>) e da una tupla di dimensioni (<code>shape</code>). A differenza delle liste native di Python (che memorizzano puntatori sparsi a oggetti eterogenei allocati nella heap), l'<code>ndarray</code> alloca un blocco continuo di byte, consentendo l'accesso diretto alla memoria tramite il meccanismo degli <em>strides</em> (il numero di byte da attraversare per avanzare di un elemento lungo ciascun asse dimensionale). Le strutture tensoriali di NumPy costituiscono il fondamento computazionale diretto per i tensori di <a href="https://pytorch.org/">PyTorch</a> (il framework di deep learning open-source basato sul calcolo tensoriale e differenziazione automatica).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Creazione di tensori con specificazione esplicita del tipo di dato (dtype)</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">vettore_1d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.7</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mf">4.8</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">matrice_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Vettore 1D shape:"</span><span class="p">,</span> <span class="n">vettore_1d</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">"| Dtype:"</span><span class="p">,</span> <span class="n">vettore_1d</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Matrice 2D shape:"</span><span class="p">,</span> <span class="n">matrice_2d</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="s2">"| Dimensioni (ndim):"</span><span class="p">,</span> <span class="n">matrice_2d</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Memory Strides (passo in byte per asse):"</span><span class="p">,</span> <span class="n">matrice_2d</span><span class="o">.</span><span class="n">strides</span><span class="p">)</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Occupazione di memoria totale (bytes):"</span><span class="p">,</span> <span class="n">matrice_2d</span><span class="o">.</span><span class="n">nbytes</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="esecuzione-vettorizzata-e-broadcasting">Esecuzione Vettorizzata e Broadcasting<a class="headerlink" href="#esecuzione-vettorizzata-e-broadcasting" title="Permanent link">&para;</a></h3>
+<p>L'elaborazione di grandi moli di dati numerici tramite cicli iterativi in Python puro comporta un grave degrado prestazionale dovuto all'overhead dell'interprete e al continuo controllo dinamico dei tipi (<em>type dispatching</em>). NumPy elimina questo collo di bottiglia delegando le operazioni matematiche a routine scritte in C e Fortran, ottimizzate per sfruttare i registri SIMD (Single Instruction, Multiple Data) dei moderni processori. Il meccanismo del <strong>Broadcasting</strong> estende automaticamente le dimensioni di array con forme compatibili, consentendo operazioni aritmetiche tra matrici e scalari o vettori senza allocazione ridondante di memoria.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">dimensione</span> <span class="o">=</span> <span class="mi">1_000_000</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">lista_python</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">dimensione</span><span class="p">))</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">array_numpy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">dimensione</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="c1"># 1. Esecuzione con ciclo iterativo Python standard</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">risultato_loop</span> <span class="o">=</span> <span class="p">[</span><span class="n">valore</span> <span class="o">*</span> <span class="mf">2.5</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="k">for</span> <span class="n">valore</span> <span class="ow">in</span> <span class="n">lista_python</span><span class="p">]</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">tempo_loop</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># 2. Esecuzione vettorizzata NumPy con istruzioni SIMD e broadcasting</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="n">risultato_numpy</span> <span class="o">=</span> <span class="n">array_numpy</span> <span class="o">*</span> <span class="mf">2.5</span> <span class="o">+</span> <span class="mf">1.0</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">tempo_numpy</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tempo ciclo Python standard: </span><span class="si">{</span><span class="n">tempo_loop</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> s"</span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Tempo vettorizzazione NumPy:  </span><span class="si">{</span><span class="n">tempo_numpy</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> s"</span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fattore di accelerazione vettoriale: </span><span class="si">{</span><span class="n">tempo_loop</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">tempo_numpy</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">x"</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="manipolazione-dati-tabellari-e-bonifica-qualitativa-con-pandas">Manipolazione Dati Tabellari e Bonifica Qualitativa con Pandas<a class="headerlink" href="#manipolazione-dati-tabellari-e-bonifica-qualitativa-con-pandas" title="Permanent link">&para;</a></h2>
+<p>Prima della conversione in matrici numeriche pure, i dati tabellari richiedono un'elaborazione strutturata a livello di colonne, gestita primariamente tramite <a href="https://pandas.pydata.org/">Pandas</a> (la libreria open-source fondamentale in Python per la manipolazione e l'analisi di dati tabellari strutturati).</p>
+<h3 id="lavorare-sui-dataframe">Lavorare sui DataFrame<a class="headerlink" href="#lavorare-sui-dataframe" title="Permanent link">&para;</a></h3>
+<p>L'astrazione centrale di Pandas è il <code>DataFrame</code>, una struttura dati bidimensionale eterogenea indicizzata per righe e colonne. Il DataFrame consente di applicare maschere booleane, eseguire proiezioni e trasformare tipi di dato con sintassi compatta, facilitando la preparazione dei dati prima del training.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">dati_grezzi</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>    <span class="s2">"id_transazione"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1001</span><span class="p">,</span> <span class="mi">1002</span><span class="p">,</span> <span class="mi">1003</span><span class="p">,</span> <span class="mi">1004</span><span class="p">,</span> <span class="mi">1005</span><span class="p">],</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>    <span class="s2">"cliente"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Alfa Corp"</span><span class="p">,</span> <span class="s2">"Beta LLC"</span><span class="p">,</span> <span class="s2">"Gamma Spa"</span><span class="p">,</span> <span class="s2">"Alfa Corp"</span><span class="p">,</span> <span class="s2">"Delta Inc"</span><span class="p">],</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>    <span class="s2">"valore_euro"</span><span class="p">:</span> <span class="p">[</span><span class="mf">1250.0</span><span class="p">,</span> <span class="mf">450.0</span><span class="p">,</span> <span class="mf">3100.0</span><span class="p">,</span> <span class="mf">890.0</span><span class="p">,</span> <span class="mf">150.0</span><span class="p">],</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s2">"stato_approvazione"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"APPROVATO"</span><span class="p">,</span> <span class="s2">"SOSPESO"</span><span class="p">,</span> <span class="s2">"APPROVATO"</span><span class="p">,</span> <span class="s2">"RESPINTO"</span><span class="p">,</span> <span class="s2">"APPROVATO"</span><span class="p">]</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">df_transazioni</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dati_grezzi</span><span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># Filtraggio booleano e selezione per colonne</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">filtro_approvati</span> <span class="o">=</span> <span class="p">(</span><span class="n">df_transazioni</span><span class="p">[</span><span class="s2">"stato_approvazione"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"APPROVATO"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df_transazioni</span><span class="p">[</span><span class="s2">"valore_euro"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mf">1000.0</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">df_rilevanti</span> <span class="o">=</span> <span class="n">df_transazioni</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">filtro_approvati</span><span class="p">,</span> <span class="p">[</span><span class="s2">"id_transazione"</span><span class="p">,</span> <span class="s2">"cliente"</span><span class="p">,</span> <span class="s2">"valore_euro"</span><span class="p">]]</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Transazioni filtrate ad alto valore:"</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_rilevanti</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="bonifica-dei-dati-e-prevenzione-anomalie">Bonifica dei Dati e Prevenzione Anomalie<a class="headerlink" href="#bonifica-dei-dati-e-prevenzione-anomalie" title="Permanent link">&para;</a></h3>
+<p>La fase di data quality identifica e corregge sistematicamente quattro tipologie di difetti: duplicati di riga, formattazione incoerente delle stringhe categoriche, tipi di dato non allineati e valori nulli (<code>NaN</code>). L'imputazione dei valori mancanti deve seguire logiche conservative (ad esempio la mediana campionaria per distribuzioni asimmetriche con outlier) per evitare distorsioni arbitrarie della varianza originale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">dati_sporchi</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>    <span class="s2">"id_utente"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>    <span class="s2">"eta"</span><span class="p">:</span> <span class="p">[</span><span class="mf">28.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">,</span> <span class="mf">33.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">],</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="s2">"reddito"</span><span class="p">:</span> <span class="p">[</span><span class="mf">35000.0</span><span class="p">,</span> <span class="mf">62000.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">48000.0</span><span class="p">,</span> <span class="mf">95000.0</span><span class="p">,</span> <span class="mf">95000.0</span><span class="p">],</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="s2">"livello_account"</span><span class="p">:</span> <span class="p">[</span><span class="s2">" premium "</span><span class="p">,</span> <span class="s2">"BASIC"</span><span class="p">,</span> <span class="s2">"Premium"</span><span class="p">,</span> <span class="s2">" STANDARD"</span><span class="p">,</span> <span class="s2">"basic"</span><span class="p">,</span> <span class="s2">"basic"</span><span class="p">],</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="s2">"data_creazione"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"2023-01-10"</span><span class="p">,</span> <span class="s2">"2023-02-14"</span><span class="p">,</span> <span class="s2">"2022-11-01"</span><span class="p">,</span> <span class="s2">"2023-05-20"</span><span class="p">,</span> <span class="s2">"2021-09-15"</span><span class="p">,</span> <span class="s2">"2021-09-15"</span><span class="p">]</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">df_bonifica</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dati_sporchi</span><span class="p">)</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1"># 1. Deduplicazione record</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">df_bonifica</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s2">"id_utente"</span><span class="p">])</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="c1"># 2. Normalizzazione testo e stringhe categoriche</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"livello_account"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"livello_account"</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="c1"># 3. Conversione tipi di dato e parsing temporale</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"data_creazione"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"data_creazione"</span><span class="p">])</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="c1"># 4. Imputazione mirata dei valori mancanti tramite mediana</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="n">mediana_eta</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"eta"</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="n">mediana_reddito</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"reddito"</span><span class="p">]</span><span class="o">.</span><span class="n">median</span><span class="p">()</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"eta"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"eta"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">mediana_eta</span><span class="p">)</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"reddito"</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_bonifica</span><span class="p">[</span><span class="s2">"reddito"</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">mediana_reddito</span><span class="p">)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"DataFrame post-bonifica:"</span><span class="p">)</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_bonifica</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="fusione-relazionale-merge-e-join">Fusione Relazionale (Merge e Join)<a class="headerlink" href="#fusione-relazionale-merge-e-join" title="Permanent link">&para;</a></h3>
+<p>L'integrazione di sorgenti informative eterogenee richiede la combinazione relazionale di tabelle tramite chiavi primarie ed esterne. Le operazioni di <code>merge</code> (left, inner, outer join) consentono l'arricchimento contestuale dei log operativi senza perdita di integrità referenziale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">df_utenti</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>    <span class="s2">"id_utente"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>    <span class="s2">"nome_ente"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"Ministero Interno"</span><span class="p">,</span> <span class="s2">"Agenzia Dogane"</span><span class="p">,</span> <span class="s2">"Polizia Postale"</span><span class="p">]</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">})</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">df_eventi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="s2">"id_evento"</span><span class="p">:</span> <span class="p">[</span><span class="mi">101</span><span class="p">,</span> <span class="mi">102</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">104</span><span class="p">],</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="s2">"id_utente"</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>    <span class="s2">"tipo_accesso"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"LOGIN"</span><span class="p">,</span> <span class="s2">"EXPORT"</span><span class="p">,</span> <span class="s2">"QUERY"</span><span class="p">,</span> <span class="s2">"LOGIN"</span><span class="p">]</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">})</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="c1"># Left Join relazionale per arricchimento dei log di audit</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="n">df_audit</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_eventi</span><span class="p">,</span> <span class="n">df_utenti</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">"id_utente"</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">"left"</span><span class="p">)</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Audit Log con join relazionale:"</span><span class="p">)</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_audit</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="estrazione-e-pipeline-analitiche-su-database-relazionali-sql">Estrazione e Pipeline Analitiche su Database Relazionali (SQL)<a class="headerlink" href="#estrazione-e-pipeline-analitiche-su-database-relazionali-sql" title="Permanent link">&para;</a></h2>
+<p>Quando i volumi di dati superano la capacità della memoria RAM locale, il caricamento integrale in un DataFrame diventa impraticabile. In questi scenari, il preprocessing e l'aggregazione vengono delegati direttamente al motore del database relazionale tramite <a href="https://www.sqlite.org/">SQL</a> (il linguaggio standard per l'interrogazione e la manipolazione di basi di dati relazionali).</p>
+<h3 id="elaborazione-analitica-su-database-sql">Elaborazione Analitica su Database (SQL)<a class="headerlink" href="#elaborazione-analitica-su-database-sql" title="Permanent link">&para;</a></h3>
+<p>L'esecuzione di query complesse con clausole di join, raggruppamento (<code>GROUP BY</code>) e filtraggio aggregato (<code>HAVING</code>) all'interno di motori SQL relazionali come SQLite o database analitici avanzati come <a href="https://duckdb.org/">DuckDB</a> (il database relazionale analitico OLAP in-process ad altissime prestazioni per query SQL) permette di estrarre e trasferire nella memoria di Python unicamente il sottoinsieme compatto di feature necessarie per l'addestramento.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sqlite3</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">connessione</span> <span class="o">=</span> <span class="n">sqlite3</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="s2">":memory:"</span><span class="p">)</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="n">cursore</span> <span class="o">=</span> <span class="n">connessione</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># Creazione schema relazionale</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">cursore</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"""</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="s2">CREATE TABLE unita_operative (</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="s2">    id_unita INTEGER PRIMARY KEY,</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="s2">    reparto TEXT NOT NULL,</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="s2">    sede TEXT NOT NULL</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="s2">);</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="s2">"""</span><span class="p">)</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="n">cursore</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">"""</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="s2">CREATE TABLE missioni (</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="s2">    id_missione INTEGER PRIMARY KEY,</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="s2">    id_unita INTEGER NOT NULL,</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="s2">    costo_operativo REAL NOT NULL,</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="s2">    data_missione TEXT NOT NULL,</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="s2">    FOREIGN KEY (id_unita) REFERENCES unita_operative (id_unita)</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="s2">);</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="s2">"""</span><span class="p">)</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="n">unita_dati</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Cyber Threat Intel"</span><span class="p">,</span> <span class="s2">"Roma"</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"SOC Tier 2"</span><span class="p">,</span> <span class="s2">"Milano"</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Forensic Lab"</span><span class="p">,</span> <span class="s2">"Torino"</span><span class="p">)]</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="n">missioni_dati</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a>    <span class="p">(</span><span class="mi">101</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">4500.0</span><span class="p">,</span> <span class="s2">"2024-01-10"</span><span class="p">),</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a>    <span class="p">(</span><span class="mi">102</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">3200.0</span><span class="p">,</span> <span class="s2">"2024-01-15"</span><span class="p">),</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a>    <span class="p">(</span><span class="mi">103</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">8900.0</span><span class="p">,</span> <span class="s2">"2024-02-01"</span><span class="p">),</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a>    <span class="p">(</span><span class="mi">104</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">1200.0</span><span class="p">,</span> <span class="s2">"2024-02-10"</span><span class="p">)</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="p">]</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="n">cursore</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO unita_operative VALUES (?, ?, ?)"</span><span class="p">,</span> <span class="n">unita_dati</span><span class="p">)</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="n">cursore</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="s2">"INSERT INTO missioni VALUES (?, ?, ?, ?)"</span><span class="p">,</span> <span class="n">missioni_dati</span><span class="p">)</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="n">connessione</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="n">query_analitica</span> <span class="o">=</span> <span class="s2">"""</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="s2">SELECT </span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="s2">    u.reparto,</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="s2">    u.sede,</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="s2">    COUNT(m.id_missione) AS numero_missioni,</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="s2">    SUM(m.costo_operativo) AS spesa_totale,</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="s2">    AVG(m.costo_operativo) AS costo_medio</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="s2">FROM unita_operative u</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="s2">INNER JOIN missioni m ON u.id_unita = m.id_unita</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="s2">GROUP BY u.id_unita, u.reparto, u.sede</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="s2">HAVING SUM(m.costo_operativo) &gt; 2000.0</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="s2">ORDER BY spesa_totale DESC;</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="s2">"""</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a><span class="n">df_report</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="n">query_analitica</span><span class="p">,</span> <span class="n">connessione</span><span class="p">)</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a><span class="nb">print</span><span class="p">(</span><span class="n">df_report</span><span class="p">)</span>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="n">connessione</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Riepilogo Concettuale</strong>
+A questo punto abbiamo esaminato i concetti chiave di D03-data-foundations. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.</p>
+</blockquote>
+<h2 id="formati-di-archiviazione-e-serializzazione-csv-vs-jsonl-vs-parquet">Formati di Archiviazione e Serializzazione: CSV vs JSONL vs Parquet<a class="headerlink" href="#formati-di-archiviazione-e-serializzazione-csv-vs-jsonl-vs-parquet" title="Permanent link">&para;</a></h2>
+<p>La scelta del formato di serializzazione su disco determina drasticamente la velocità di I/O e l'efficienza di archiviazione nelle pipeline di intelligenza artificiale.</p>
+<h3 id="archiviazione-colonnare-parquet-e-jsonl">Archiviazione Colonnare (Parquet e JSONL)<a class="headerlink" href="#archiviazione-colonnare-parquet-e-jsonl" title="Permanent link">&para;</a></h3>
+<p>Mentre i file CSV memorizzano i dati riga per riga in formato testuale grezzo privo di metadati sui tipi di colonna, il formato binario <a href="https://parquet.apache.org/">Apache Parquet</a> (il formato di archiviazione colonnare binario compresso standard per big data e analytics), integrato con le specifiche in-memory di <a href="https://arrow.apache.org/">Apache Arrow</a> (lo standard multipiattaforma per l'archiviazione colonnare di dati in memoria) ed engine ad alte prestazioni come <a href="https://pola.rs/">Polars</a> (il motore di elaborazione dati multithread ad alte prestazioni basato su Apache Arrow), adotta una suddivisione colonnare compressa (Snappy o ZSTD). L'archiviazione per colonne consente di caricare in memoria solo le variabili selezionate (<em>column pruning</em>), riducendo il tempo di scansione del disco e tagliando lo spazio occupato fino all'80-90% rispetto ai file CSV equivalenti.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">campioni</span> <span class="o">=</span> <span class="mi">50_000</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">dataset</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    <span class="s2">"id_sessione"</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"sess_</span><span class="si">{</span><span class="n">idx</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">campioni</span><span class="p">)],</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    <span class="s2">"ip_hash"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1_000_000</span><span class="p">,</span> <span class="mi">9_999_999</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">campioni</span><span class="p">),</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    <span class="s2">"tempo_risposta_ms"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">45.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">campioni</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">),</span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    <span class="s2">"codice_stato"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">200</span><span class="p">,</span> <span class="mi">301</span><span class="p">,</span> <span class="mi">403</span><span class="p">,</span> <span class="mi">500</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">campioni</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">0.85</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">])</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="n">df_benchmark</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">cartella_temp</span><span class="p">:</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>    <span class="n">path_csv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cartella_temp</span><span class="p">,</span> <span class="s2">"log_accessi.csv"</span><span class="p">)</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>    <span class="n">path_parquet</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cartella_temp</span><span class="p">,</span> <span class="s2">"log_accessi.parquet"</span><span class="p">)</span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>    <span class="n">path_jsonl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cartella_temp</span><span class="p">,</span> <span class="s2">"log_accessi.jsonl"</span><span class="p">)</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>    <span class="c1"># Scrittura nei vari formati</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a>    <span class="n">df_benchmark</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_csv</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a>    <span class="n">df_benchmark</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="n">path_parquet</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"pyarrow"</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">"snappy"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a>    <span class="n">df_benchmark</span><span class="o">.</span><span class="n">to_json</span><span class="p">(</span><span class="n">path_jsonl</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">"records"</span><span class="p">,</span> <span class="n">lines</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>    <span class="n">dim_csv</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path_csv</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>    <span class="n">dim_jsonl</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path_jsonl</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a>    <span class="n">dim_parquet</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">path_parquet</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">)</span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dimensione file CSV:     </span><span class="si">{</span><span class="n">dim_csv</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB"</span><span class="p">)</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dimensione file JSONL:   </span><span class="si">{</span><span class="n">dim_jsonl</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB"</span><span class="p">)</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dimensione file Parquet: </span><span class="si">{</span><span class="n">dim_parquet</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> MB"</span><span class="p">)</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fattore di compressione CSV -&gt; Parquet: </span><span class="si">{</span><span class="n">dim_csv</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">dim_parquet</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">x"</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="trasparenza-metodologica-e-schede-dei-dataset-data-cards">Trasparenza Metodologica e Schede dei Dataset (Data Cards)<a class="headerlink" href="#trasparenza-metodologica-e-schede-dei-dataset-data-cards" title="Permanent link">&para;</a></h2>
+<p>La corretta validazione numerica dei dati non garantisce l'assenza di bias statistici o limiti sistematici insiti nelle modalità di campionamento.</p>
+<p>Per assicurare la verificabilità forense e la responsabilità algoritmica, ogni dataset destinato all'addestramento deve essere corredato da una scheda di documentazione standardizzata, conforme alle linee guida del <a href="https://developers.google.com/learn/pathways/data-cards-playbook">Google Data Cards Playbook</a> (il framework metodologico ideato da <a href="https://about.google/">Google</a> per la trasparenza e la documentazione sistematica dei dataset). La Data Card formalizza la provenienza delle fonti, l'intervallo temporale di acquisizione, le limitazioni note, le popolazioni sottorappresentate e i casi d'uso esplicitamente vietati.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">data_card_schema</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="s2">"metadata"</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>        <span class="s2">"dataset_name"</span><span class="p">:</span> <span class="s2">"Cyber_Threat_Events_Corpus"</span><span class="p">,</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="s2">"version"</span><span class="p">:</span> <span class="s2">"1.2.0"</span><span class="p">,</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>        <span class="s2">"maintainer"</span><span class="p">:</span> <span class="s2">"Security Operations Center Analytics Team"</span><span class="p">,</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>        <span class="s2">"license"</span><span class="p">:</span> <span class="s2">"CC-BY-4.0"</span><span class="p">,</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>        <span class="s2">"last_updated"</span><span class="p">:</span> <span class="s2">"2026-08-18"</span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>    <span class="p">},</span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>    <span class="s2">"provenance"</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>        <span class="s2">"source"</span><span class="p">:</span> <span class="s2">"Network firewall gateway logs and honeytoken telemetry"</span><span class="p">,</span>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>        <span class="s2">"collection_method"</span><span class="p">:</span> <span class="s2">"Automated ingestion via Kafka stream broker"</span><span class="p">,</span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>        <span class="s2">"time_span"</span><span class="p">:</span> <span class="s2">"2025-01-01 to 2025-12-31"</span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>    <span class="p">},</span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>    <span class="s2">"schema_definition"</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>        <span class="s2">"id_sessione"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"string"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Identificativo pseudonimizzato della sessione TCP"</span><span class="p">},</span>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>        <span class="s2">"tempo_risposta_ms"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"float32"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Latenza di risposta in millisecondi"</span><span class="p">},</span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>        <span class="s2">"codice_stato"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"int32"</span><span class="p">,</span> <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Codice HTTP di terminazione connessione"</span><span class="p">}</span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a>    <span class="p">},</span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a>    <span class="s2">"ethical_and_bias_considerations"</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a>        <span class="s2">"represented_population"</span><span class="p">:</span> <span class="s2">"Internal enterprise corporate infrastructure"</span><span class="p">,</span>
+<a id="__codelineno-7-23" name="__codelineno-7-23" href="#__codelineno-7-23"></a>        <span class="s2">"known_limitations"</span><span class="p">:</span> <span class="s2">"Under-represents UDP anomalies and encrypted micro-tunnels"</span><span class="p">,</span>
+<a id="__codelineno-7-24" name="__codelineno-7-24" href="#__codelineno-7-24"></a>        <span class="s2">"prohibited_use_cases"</span><span class="p">:</span> <span class="s2">"Automated attribution of physical identities without manual forensics"</span>
+<a id="__codelineno-7-25" name="__codelineno-7-25" href="#__codelineno-7-25"></a>    <span class="p">}</span>
+<a id="__codelineno-7-26" name="__codelineno-7-26" href="#__codelineno-7-26"></a><span class="p">}</span>
+<a id="__codelineno-7-27" name="__codelineno-7-27" href="#__codelineno-7-27"></a>
+<a id="__codelineno-7-28" name="__codelineno-7-28" href="#__codelineno-7-28"></a><span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data_card_schema</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="compromessi-operativi-e-scelte-architetturali">Compromessi Operativi e Scelte Architetturali<a class="headerlink" href="#compromessi-operativi-e-scelte-architetturali" title="Permanent link">&para;</a></h2>
+<p>La progettazione di pipeline di dati richiede bilanciamenti consapevoli tra consumo di memoria, flessibilità dello schema e throughput computazionale.</p>
+<h3 id="esecuzione-in-memory-vs-scalabilita-out-of-core">Esecuzione In-Memory vs Scalabilità Out-Of-Core<a class="headerlink" href="#esecuzione-in-memory-vs-scalabilita-out-of-core" title="Permanent link">&para;</a></h3>
+<p>L'impiego di Pandas garantisce un'eccellente velocità di manipolazione ma impone che l'intero dataset risieda nella memoria RAM con un fattore di overhead che varia tipicamente da 2x a 5x rispetto alla dimensione del file su disco. Per dataset su larga scala che eccedono le risorse di memoria fisica, l'architettura deve prevedere la transizione verso engine vettorializzati out-of-core o database colonnari in-process come DuckDB o Polars, evitando blocchi di sistema per saturazione di memoria.</p>
+<h3 id="formati-flessibili-jsonl-vs-formati-rigidi-ottimizzati-parquet">Formati Flessibili (JSONL) vs Formati Rigidi Ottimizzati (Parquet)<a class="headerlink" href="#formati-flessibili-jsonl-vs-formati-rigidi-ottimizzati-parquet" title="Permanent link">&para;</a></h3>
+<p>I formati semi-strutturati come JSONL consentono l'acquisizione flessibile di eventi con schemi mutevoli nel tempo, risultando ideali per l'ingestione da scraper web o stream Kafka. Tuttavia, non supportano compressione colonnare nativa né indicizzazione statistica dei blocchi di byte, rendendo Parquet la scelta obbligata per le fasi di archiviazione definitiva e alimentazione di modelli di machine learning su larga scala.</p>
+<h2 id="riferimenti-bibliografici-e-risorse-tecniche">Riferimenti Bibliografici e Risorse Tecniche<a class="headerlink" href="#riferimenti-bibliografici-e-risorse-tecniche" title="Permanent link">&para;</a></h2>
+<h3 id="guide-ufficiali-e-documentazione-di-riferimento">Guide Ufficiali e Documentazione di Riferimento<a class="headerlink" href="#guide-ufficiali-e-documentazione-di-riferimento" title="Permanent link">&para;</a></h3>
+<p>I dettagli implementativi sull'architettura interna degli array e sulla gestione della memoria sono consultabili nella <a href="https://numpy.org/doc/stable/">Documentazione ufficiale NumPy</a>. I pattern avanzati di pulizia e trasformazione di dati tabellari sono descritti nella <a href="https://pandas.pydata.org/docs/user_guide/index.html">Guida per l'Utente di Pandas</a>.</p>
+<h3 id="piattaforme-interattive-e-standard-di-documentazione">Piattaforme Interattive e Standard di Documentazione<a class="headerlink" href="#piattaforme-interattive-e-standard-di-documentazione" title="Permanent link">&para;</a></h3>
+<p>L'apprendimento pratico delle query relazionali e delle strategie di join è supportato dai percorsi interattivi di <a href="https://sqlbolt.com/">SQLBolt</a> (la piattaforma interattiva per l'apprendimento guidato del linguaggio SQL). Per l'approfondimento della trasparenza e della governance dei dati nell'AI, fare riferimento al <a href="https://developers.google.com/learn/pathways/data-cards-playbook">Google Data Cards Playbook</a> e alle relative pubblicazioni scientifiche rilasciate dal team di ricerca di <a href="https://research.google/">Google Research</a>.</p>
+<h2 id="appendice-operativa-laboratori-pratici">Appendice Operativa: Laboratori Pratici<a class="headerlink" href="#appendice-operativa-laboratori-pratici" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>[!TIP]
+<strong>Zero-Draft Offloading (Delega dell'Inizio)</strong>
+Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di <em>revisore</em> e <em>ingegnere</em>, non di dattilografo.</p>
+</blockquote>
+<ul>
+<li>[ ] Ispezione dimensionale e benchmarking vettoriale: Creare un array NumPy bidimensionale da un milione di righe e dieci colonne, ispezionarne <code>shape</code>, <code>dtype</code> e <code>strides</code>, ed eseguire un benchmark comparativo tra una trasformazione lineare vettorizzata e un ciclo iterativo su lista Python, calcolando l'accelerazione temporale ottenuta.</li>
+<li>[ ] Pipeline di bonifica e validazione con Pandas: Caricare un dataset tabellare contenente valori nulli, duplicati di riga e formati eterogenei, applicare una pipeline di deduplicazione, normalizzazione delle stringhe e imputazione dei valori mancanti tramite mediana, e serializzare il dataset bonificato in formato Apache Parquet compresso con Snappy.</li>
+<li>[ ] Query analitiche relazionali in SQLite: Inizializzare un database SQLite in memoria, creare due tabelle relazionali collegate da chiave esterna, inserire record sintetici di telemetria ed eseguire una query complessa con <code>INNER JOIN</code>, <code>GROUP BY</code> e filtraggio <code>HAVING</code>, caricando il risultato aggregato in un DataFrame Pandas.</li>
+<li>[ ] Redazione di una Data Card standardizzata: Redigere un file di specifica JSON o Markdown conforme al formato Data Card per un dataset reale o sintetico, documentando la provenienza delle fonti, le restrizioni etiche d'uso, le limitazioni tecniche note e le caratteristiche dello schema numerico.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+          
+          <a href="../D02c-gateway-e-routing-llm/" class="md-footer__link md-footer__link--prev" aria-label="Precedente: D02c — Gateway e Routing LLM (LiteLLM)">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Precedente
+              </span>
+              <div class="md-ellipsis">
+                D02c — Gateway e Routing LLM (LiteLLM)
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../D04-math-stat/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D04 — Matematica e statistica just-in-time">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D04 — Matematica e statistica just-in-time
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>

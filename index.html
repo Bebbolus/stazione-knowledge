@@ -1,0 +1,1695 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/">
+      
+      
+      
+        <link rel="next" href="D01-workspace-llm-wiki/">
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#percorso-didattico-e-mappa-della-knowledge-base" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href="." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="D01-workspace-llm-wiki/" class="md-tabs__link">
+          
+  
+    
+  
+  Fondamenti
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="D05-ml-fondamenti/" class="md-tabs__link">
+          
+  
+    
+  
+  Operativo
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="D08-deep-learning-pytorch/" class="md-tabs__link">
+          
+  
+    
+  
+  Avanzato
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="D12-agentic-mcp/" class="md-tabs__link">
+          
+  
+    
+  
+  Specialistico
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Indice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Indice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#architettura-dei-livelli-didattici" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architettura dei Livelli Didattici
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#catalogo-completo-delle-monografie" class="md-nav__link">
+    <span class="md-ellipsis">
+      Catalogo Completo delle Monografie
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#standard-metodologico-e-norme-redazionali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard Metodologico e Norme Redazionali
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Fondamenti
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Fondamenti
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first, Git, Obsidian, LLM wiki
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D02-python-refresher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python refresher e software engineering essentials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D02b-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02b — Virtualizzazione e Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D02c-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02c — Gateway e Routing LLM (LiteLLM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D03-data-foundations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Data foundations (NumPy, Pandas, SQL)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D04-math-stat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Matematica e statistica just-in-time
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operativo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operativo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D05-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Fondamenti di Machine Learning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D06-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D06 — ML classico: alberi, ensemble, gradient boosting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D07-unsupervised-learning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Apprendimento non supervisionato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Avanzato
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Avanzato
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D08-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D09-transformers-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Transformers, LLM e inference engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D10-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — RAG, knowledge base e grafi OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D11-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — OSINT avanzato e discipline principali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D11b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11b — AI come arma e come bersaglio nell'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D11c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11c — Geopolitica e governance dell'AI per l'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Specialistico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Specialistico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D12-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — Agentic systems, MCP e automazione affidabile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D12b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12b — AI Harness e Plugin per agenti OSINT portatili
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D12c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12c — Prompt engineering e context engineering avanzati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D12d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12d — Loop engineering e graph engineering per agenti
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D13-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — RL, preference learning, alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D14-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Responsible AI, cybersecurity e governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D14b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D15-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — MLOps / LLMOps e deployment local-first
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D16-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — ICM, orchestrazione e comunicazione dei risultati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D16b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D17-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — Agent Context Platform e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D17b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D18-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — Ecosistema Interfacce e Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D19-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D20-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="D21-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/index.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="percorso-didattico-e-mappa-della-knowledge-base">Percorso Didattico e Mappa della Knowledge Base<a class="headerlink" href="#percorso-didattico-e-mappa-della-knowledge-base" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>[!TIP]
+<strong>Versione Interattiva</strong>: Vuoi metterti alla prova? È disponibile la versione interattiva di questo percorso didattico in stile Duolingo / Axon ML con quiz, flashcard e laboratori di codice! Accedi qui: <a href="interactive/"><strong>Stazione App Interattiva</strong></a>.</p>
+</blockquote>
+<p>La <strong>Mappa del Percorso</strong> è l'indice sistematico della Stazione Knowledge Base, progettato per guidare la consultazione delle ventuno monografie tecniche dedicate all'ingegneria dell'Intelligenza Artificiale e all'OSINT avanzato. Questo documento struttura l'intero curriculum didattico all'interno del framework <a href="https://www.mkdocs.org/">MkDocs</a> (il generatore di siti statici per documentazione tecnica), categorizzando ogni modulo in base alla complessità concettuale e ai prerequisiti operativi. L'indice consente a sviluppatori, ricercatori e analisti di orientarsi rapidamente tra i principi teorici, le architetture di sistema e i laboratori applicativi, garantendo un apprendimento progressivo, verificabile e privo di frammentazione informativa.</p>
+<h2 id="architettura-dei-livelli-didattici">Architettura dei Livelli Didattici<a class="headerlink" href="#architettura-dei-livelli-didattici" title="Permanent link">&para;</a></h2>
+<p>Il programma formativo è suddiviso in quattro livelli propedeutici continui, concepiti per trasformare una conoscenza iniziale del codice in una solida padronanza delle pipeline AI end-to-end.</p>
+<p>Il livello <strong>Fondamenti</strong> stabilisce i prerequisiti metodologici e infrastrutturali indispensabili. In questo blocco iniziale si affrontano la configurazione del workspace locale con <a href="https://git-scm.com/">Git</a> (il sistema di controllo versione distribuito open-source) e <a href="https://obsidian.md/">Obsidian</a> (l'applicazione per la gestione di basi di conoscenza basata su grafi relazionali), le buone pratiche di ingegneria del software in <a href="https://www.python.org/">Python</a> (la gestione di ambienti virtuali, parsing JSONL e test automatici), la manipolazione di vettori numerici con <a href="https://numpy.org/">NumPy</a> (la libreria fondamentale per il calcolo scientifico) e <a href="https://pandas.pydata.org/">Pandas</a> (la libreria per l'analisi di dati strutturati in DataFrame), e i fondamenti matematici di algebra lineare e calcolo differenziale.</p>
+<p>Il livello <strong>Operativo</strong> applica la matematica alle tecniche classiche di machine learning e modellazione predittiva. I moduli analizzano la formulazione di problemi supervisionati, le metriche di diagnostica e validazione incrociata con <a href="https://scikit-learn.org/">scikit-learn</a> (la libreria fondamentale per l'apprendimento automatico), l'addestramento di foreste casuali e modelli di gradient boosting come <a href="https://xgboost.readthedocs.io/">XGBoost</a> (la libreria scalabile per alberi decisionali potenziati), fino agli algoritmi non supervisionati di clustering e riduzione della dimensionalità geometrica.</p>
+<p>Il livello <strong>Avanzato</strong> copre l'ecosistema del deep learning moderno e dei Large Language Model. Lo studio include la differenziazione automatica con <a href="https://pytorch.org/">PyTorch</a> (il framework di deep learning open-source), il funzionamento interno dell'architettura Transformer e della Self-Attention, i motori di inferenza ottimizzati come <a href="https://github.com/vllm-project/vllm">vLLM</a> (l'engine di inferenza ad alto throughput con PagedAttention) e <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> (l'engine di inferenza C/C++ ottimizzato per modelli quantizzati), l'architettura dei sistemi Retrieval-Augmented Generation con database vettoriali come <a href="https://qdrant.tech/">Qdrant</a> (il database vettoriale open-source per ricerca semantica e ibrida), e le metodologie di investigazione in fonti aperte (OSINT) e analisi geopolitica della tecnologia.</p>
+<p>Il livello <strong>Specialistico</strong> affronta le frontiere ingegneristiche dell'autonomia software e della messa in produzione. I moduli approfondiscono la creazione di agenti autonomi tramite il protocollo <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> di <a href="https://www.anthropic.com/">Anthropic</a> (la società di sicurezza e ricerca AI), i grafi ciclici di esecuzione con <a href="https://github.com/langchain-ai/langgraph">LangGraph</a> (la libreria di orchestrazione per architetture agentiche a grafo), le difese di sicurezza contro il prompt injection conformi agli standard di <a href="https://owasp.org/">OWASP</a> (la fondazione per la sicurezza delle applicazioni software), gli algoritmi di allineamento e preferenza (RLHF e DPO), le pipeline di tracciamento <a href="https://mlflow.org/">MLflow</a> (la piattaforma per il ciclo di vita del machine learning) e containerizzazione <a href="https://www.docker.com/">Docker</a> (la piattaforma per isolare ed eseguire applicazioni in container leggeri), fino alla sintesi strategica delle investigazioni complesse.</p>
+<h2 id="catalogo-completo-delle-monografie">Catalogo Completo delle Monografie<a class="headerlink" href="#catalogo-completo-delle-monografie" title="Permanent link">&para;</a></h2>
+<p>La tabella seguente elenca tutti i moduli formativi disponibili, specificando per ciascuno il codice identificativo, il titolo esteso, il livello di appartenenza e il collegamento diretto al documento monografico.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Codice</th>
+<th style="text-align: left;">Titolo Monografico</th>
+<th style="text-align: left;">Livello Curricolare</th>
+<th style="text-align: left;">Riferimento Documentale</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>D01</strong></td>
+<td style="text-align: left;">Architettura Workspace Local-First (Git, Obsidian, LLM)</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D01-workspace-llm-wiki/">D01-workspace-llm-wiki.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D02</strong></td>
+<td style="text-align: left;">Ingegneria del Software e Python Essentials per Pipeline AI</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D02-python-refresher/">D02-python-refresher.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D02b</strong></td>
+<td style="text-align: left;">Virtualizzazione e Container: Isolamento dell'Infrastruttura AI</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D02b-virtualizzazione-e-container/">D02b-virtualizzazione-e-container.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D02c</strong></td>
+<td style="text-align: left;">Gateway e Routing LLM: Il Controllo del Flusso API</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D02c-gateway-e-routing-llm/">D02c-gateway-e-routing-llm.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D03</strong></td>
+<td style="text-align: left;">Data Foundations: NumPy, Pandas, SQL e Qualità del Dato</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D03-data-foundations/">D03-data-foundations.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D04</strong></td>
+<td style="text-align: left;">Matematica e Statistica Just-in-Time per Machine Learning</td>
+<td style="text-align: left;">Fondamenti</td>
+<td style="text-align: left;"><a href="D04-math-stat/">D04-math-stat.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D05</strong></td>
+<td style="text-align: left;">Fondamenti di Machine Learning e Metriche Diagnostiche</td>
+<td style="text-align: left;">Operativo</td>
+<td style="text-align: left;"><a href="D05-ml-fondamenti/">D05-ml-fondamenti.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D06</strong></td>
+<td style="text-align: left;">Machine Learning Classico: Alberi Decisionali, Ensemble e Boosting</td>
+<td style="text-align: left;">Operativo</td>
+<td style="text-align: left;"><a href="D06-ml-classico/">D06-ml-classico.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D07</strong></td>
+<td style="text-align: left;">Apprendimento Non Supervisionato: Clustering e Riduzione Dimensionale</td>
+<td style="text-align: left;">Operativo</td>
+<td style="text-align: left;"><a href="D07-unsupervised-learning/">D07-unsupervised-learning.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D08</strong></td>
+<td style="text-align: left;">Deep Learning e Differenziazione Automatica con PyTorch</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D08-deep-learning-pytorch/">D08-deep-learning-pytorch.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D09</strong></td>
+<td style="text-align: left;">Architetture Transformer, Large Language Models e Inference Engineering</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D09-transformers-llm/">D09-transformers-llm.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D10</strong></td>
+<td style="text-align: left;">Retrieval-Augmented Generation (RAG), Vector Database e Grafi OSINT</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D10-rag-knowledge-osint/">D10-rag-knowledge-osint.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D11</strong></td>
+<td style="text-align: left;">Metodologie Investigative OSINT e Discipline di Intelligence</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D11-osint-avanzato/">D11-osint-avanzato.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D11b</strong></td>
+<td style="text-align: left;">Intelligenza Artificiale come Vettore Offensivo e Bersaglio OSINT</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D11b-ai-arma-bersaglio-osint/">D11b-ai-arma-bersaglio-osint.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D11c</strong></td>
+<td style="text-align: left;">Geopolitica dei Semiconduttori, Supply Chain e Governance dell'AI</td>
+<td style="text-align: left;">Avanzato</td>
+<td style="text-align: left;"><a href="D11c-geopolitica-ai-osint/">D11c-geopolitica-ai-osint.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D12</strong></td>
+<td style="text-align: left;">Sistemi Agentici Autonomi, Model Context Protocol e Tool Calling</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D12-agentic-mcp/">D12-agentic-mcp.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D12b</strong></td>
+<td style="text-align: left;">Sandboxing di AI Harness e Architetture Plugin per Agenti OSINT</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D12b-ai-harness-plugin-osint/">D12b-ai-harness-plugin-osint.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D12c</strong></td>
+<td style="text-align: left;">Ingegneria Avanzata dei Prompt e Gestione Contestuale per LLM</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D12c-prompt-context-engineering/">D12c-prompt-context-engineering.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D12d</strong></td>
+<td style="text-align: left;">Loop Engineering, Grafi di Stato Ciclici e Flussi Multi-Agente</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D12d-loop-graph-engineering/">D12d-loop-graph-engineering.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D13</strong></td>
+<td style="text-align: left;">Reinforcement Learning, Allineamento di Modelli e Ottimizzazione DPO</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D13-rl-alignment/">D13-rl-alignment.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D14</strong></td>
+<td style="text-align: left;">Sicurezza Informatica dei Sistemi LLM, Difesa OWASP e Responsible AI</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D14-responsible-ai-cyber/">D14-responsible-ai-cyber.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D14b</strong></td>
+<td style="text-align: left;">Guardrails Locali e Privacy: LLM Guard e Rizzo-PII</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D14b-guardrails-e-privacy/">D14b-guardrails-e-privacy.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D15</strong></td>
+<td style="text-align: left;">MLOps, LLMOps e Pipeline di Deployment Local-First</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D15-mlops-llmops/">D15-mlops-llmops.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D16</strong></td>
+<td style="text-align: left;">Metodologia ICM, Orchestrazione Strategica e Comunicazione Esecutiva</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D16-icm-orchestrazione/">D16-icm-orchestrazione.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D16b</strong></td>
+<td style="text-align: left;">12-Factor Agents: Progettazione di Agenti Deterministici</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D16b-twelve-factor-agents/">D16b-twelve-factor-agents.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D17</strong></td>
+<td style="text-align: left;">Agent Context Platform e Model Context Protocol (MCP)</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D17-agent-context-platform-mcp/">D17-agent-context-platform-mcp.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D17b</strong></td>
+<td style="text-align: left;">Standard Agent Plugins: Pacchettizzazione e Distribuzione Universale</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D17b-standard-agent-plugins/">D17b-standard-agent-plugins.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D18</strong></td>
+<td style="text-align: left;">Ecosistema Interfacce e Client: Il Single Pane of Glass</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D18-ecosistema-interfacce-client/">D18-ecosistema-interfacce-client.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D19</strong></td>
+<td style="text-align: left;">Ingegneria delle Identità: Contratti Comportamentali ICM</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D19-ingegneria-delle-identita/">D19-ingegneria-delle-identita.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D20</strong></td>
+<td style="text-align: left;">Tech Radar e Tool Scouting: Ingegneria della Valutazione</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D20-tech-radar-e-scouting/">D20-tech-radar-e-scouting.md</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>D21</strong></td>
+<td style="text-align: left;">Architettura SOTA Definitiva: Sintesi del Sistema</td>
+<td style="text-align: left;">Specialistico</td>
+<td style="text-align: left;"><a href="D21-architettura-sota-definitiva/">D21-architettura-sota-definitiva.md</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="standard-metodologico-e-norme-redazionali">Standard Metodologico e Norme Redazionali<a class="headerlink" href="#standard-metodologico-e-norme-redazionali" title="Permanent link">&para;</a></h2>
+<p>Tutte le monografie rispettano i principi costituzionali definiti nel <a href="https://github.com/Bebbolus/stazione-knowledge/blob/main/manifesto-didattica.md">Manifesto Didattico</a>: esposizione continua priva di elenchi puntati nella prosa teorica, contestualizzazione rigorosa di ogni entità esterna con apposizione e collegamento ipertestuale, demistificazione fisica dei flussi di dati e preservazione integrale dei laboratori pratici riproducibili.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+        
+          
+          <a href="D01-workspace-llm-wiki/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D01 — Workspace local-first, Git, Obsidian, LLM wiki">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D01 — Workspace local-first, Git, Obsidian, LLM wiki
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>

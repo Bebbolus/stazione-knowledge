@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Attention in un Transformer</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #6d6b67;
+            background: #f0efec;
+            padding: 15px;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .tokens-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        .token {
+            padding: 10px 15px;
+            font-size: 18px;
+            font-family: "JetBrains Mono", monospace, sans-serif;
+            background-color: #ffffff;
+            border: 2px solid #e1e0d9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
+        }
+        .token:hover, .token.active {
+            border-color: #184f95;
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        .attention-lines {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            background: #ffffff;
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .source-word, .target-word {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 5;
+        }
+        .source-word { text-align: right; margin-right: 150px; }
+        .target-word { text-align: left; }
+        .word-node {
+            padding: 5px 10px;
+            background: #eee;
+            border-radius: 4px;
+            font-family: "JetBrains Mono", monospace, sans-serif;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>Meccanismo di Self-Attention:</strong> Passa il mouse (o clicca) sulle parole della frase qui sotto. Vedrai come un Transformer "presta attenzione" al resto del contesto per comprendere il significato di quella specifica parola. Le sfumature di blu indicano un peso di attenzione maggiore.
+    </div>
+    
+    <div class="tokens-container" id="tokens">
+        <!-- Tokens verranno generati dal JS -->
+    </div>
+
+    <!-- Visualization matrix / arrows -->
+    <div class="attention-lines" id="attentionBox">
+        <div style="color: #898781; font-size: 14px; text-align: center; padding: 20px;" id="placeholderText">
+            Passa il mouse su una parola per visualizzare i pesi di attenzione (Q × K).
+        </div>
+    </div>
+</div>
+
+<script>
+    const tokensDiv = document.getElementById('tokens');
+    const attentionBox = document.getElementById('attentionBox');
+    const placeholderText = document.getElementById('placeholderText');
+
+    // Sentence
+    const sentence = ["Il", "robot", "legge", "il", "libro", "perché", "esso", "è", "programmato", "per", "imparare"];
+    
+    // Fake attention matrix (rows = query word, cols = key words it attends to)
+    // values sum to ~1.0 for each row.
+    const attention = [];
+    for(let i=0; i<sentence.length; i++) {
+        let row = new Array(sentence.length).fill(0.01); // base attention
+        row[i] = 0.5; // attends to itself mainly
+        
+        // Custom logical relations
+        if (sentence[i] === "robot") { row[sentence.indexOf("Il")] = 0.2; row[sentence.indexOf("legge")] = 0.2; }
+        if (sentence[i] === "legge") { row[sentence.indexOf("robot")] = 0.3; row[sentence.indexOf("libro")] = 0.3; }
+        if (sentence[i] === "libro") { row[sentence.indexOf("il")] = 0.2; row[sentence.indexOf("legge")] = 0.2; }
+        if (sentence[i] === "esso") { 
+            // "esso" heavily attends to "robot" to resolve pronoun
+            row[sentence.indexOf("robot")] = 0.6; 
+            row[i] = 0.1;
+            row[sentence.indexOf("programmato")] = 0.2;
+        }
+        if (sentence[i] === "programmato") { row[sentence.indexOf("esso")] = 0.3; row[sentence.indexOf("robot")] = 0.3; }
+        if (sentence[i] === "imparare") { row[sentence.indexOf("robot")] = 0.2; row[sentence.indexOf("programmato")] = 0.3; }
+
+        // Normalize row to sum to 1.0
+        let sum = row.reduce((a, b) => a + b, 0);
+        row = row.map(v => v / sum);
+        attention.push(row);
+    }
+
+    // Build token elements
+    const tokenEls = [];
+    sentence.forEach((word, i) => {
+        const el = document.createElement('div');
+        el.className = 'token';
+        el.innerText = word;
+        
+        // Interactions
+        el.addEventListener('mouseenter', () => showAttention(i));
+        el.addEventListener('mouseleave', () => clearAttention());
+        
+        tokensDiv.appendChild(el);
+        tokenEls.push(el);
+    });
+
+    function showAttention(queryIndex) {
+        placeholderText.style.display = 'none';
+        
+        // Highlight tokens based on attention weights
+        const weights = attention[queryIndex];
+        
+        tokenEls.forEach((el, j) => {
+            if (j === queryIndex) {
+                el.style.backgroundColor = '#184f95';
+                el.style.color = '#fff';
+                el.style.borderColor = '#184f95';
+            } else {
+                const w = weights[j];
+                // Color mapping: light blue to dark blue based on weight
+                // using rgba
+                el.style.backgroundColor = `rgba(24, 79, 149, ${w * 1.5})`; 
+                el.style.color = w > 0.3 ? '#fff' : '#20201f';
+                el.style.borderColor = `rgba(24, 79, 149, ${w * 2})`;
+            }
+        });
+
+        // Update the box below with a bar chart of weights
+        attentionBox.innerHTML = '';
+        attentionBox.style.padding = "20px";
+        attentionBox.style.alignItems = "flex-end";
+        attentionBox.style.display = "flex";
+        attentionBox.style.gap = "5px";
+        
+        sentence.forEach((word, j) => {
+            const w = weights[j];
+            const col = document.createElement('div');
+            col.style.display = "flex";
+            col.style.flexDirection = "column";
+            col.style.alignItems = "center";
+            col.style.justifyContent = "flex-end";
+            col.style.flex = "1";
+            col.style.height = "100%";
+
+            const bar = document.createElement('div');
+            bar.style.width = "100%";
+            bar.style.backgroundColor = j === queryIndex ? "#d97757" : "#184f95";
+            bar.style.height = `${w * 200}px`; // Scale max height
+            bar.style.borderRadius = "4px 4px 0 0";
+            bar.style.transition = "height 0.2s, background-color 0.2s";
+
+            const lbl = document.createElement('div');
+            lbl.innerText = word;
+            lbl.style.fontSize = "11px";
+            lbl.style.marginTop = "8px";
+            lbl.style.color = "#6d6b67";
+            lbl.style.fontFamily = '"JetBrains Mono", monospace';
+            lbl.style.transform = "rotate(-45deg)";
+            lbl.style.transformOrigin = "top left";
+            lbl.style.width = "20px";
+
+            col.appendChild(bar);
+            col.appendChild(lbl);
+            attentionBox.appendChild(col);
+        });
+    }
+
+    function clearAttention() {
+        tokenEls.forEach((el) => {
+            el.style.backgroundColor = '#ffffff';
+            el.style.color = '#20201f';
+            el.style.borderColor = '#e1e0d9';
+        });
+        
+        attentionBox.innerHTML = '';
+        attentionBox.style.alignItems = "center";
+        attentionBox.style.display = "flex";
+        attentionBox.appendChild(placeholderText);
+        placeholderText.style.display = 'block';
+    }
+
+</script>
+
+</body>
+</html>

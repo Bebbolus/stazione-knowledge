@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Means Clustering</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #184f95;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            flex: 1;
+        }
+        button:hover {
+            background-color: #032042;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6d6b67;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>K-Means Clustering:</strong> Algoritmo non supervisionato. Premi "Prossimo Passo" per vedere l'algoritmo alternare tra l'assegnazione dei punti al centroide più vicino e il ricalcolo della posizione dei centroidi.
+    </div>
+    
+    <canvas id="plot" width="500" height="350"></canvas>
+    
+    <div class="controls">
+        <button id="stepBtn">Prossimo Passo</button>
+        <button id="resetBtn">Nuovi Dati</button>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('plot');
+    const ctx = canvas.getContext('2d');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    
+    const colors = ['#184f95', '#d97757', '#3b82f6']; // Blue, Orange, Light Blue
+    
+    let points = [];
+    let centroids = [];
+    let state = 0; // 0: assign, 1: update centroids
+    
+    function init() {
+        points = [];
+        centroids = [];
+        state = 0;
+        
+        // Generate 3 clusters of points
+        for (let c = 0; c < 3; c++) {
+            let cx = Math.random() * (canvas.width - 100) + 50;
+            let cy = Math.random() * (canvas.height - 100) + 50;
+            for (let i = 0; i < 30; i++) {
+                points.push({
+                    x: cx + (Math.random() * 80 - 40),
+                    y: cy + (Math.random() * 80 - 40),
+                    cluster: -1
+                });
+            }
+        }
+        
+        // Pick 3 random points as initial centroids
+        for (let i = 0; i < 3; i++) {
+            centroids.push({
+                x: Math.random() * (canvas.width - 40) + 20,
+                y: Math.random() * (canvas.height - 40) + 20
+            });
+        }
+        draw();
+    }
+    
+    function distSq(a, b) {
+        return (a.x - b.x)**2 + (a.y - b.y)**2;
+    }
+    
+    function step() {
+        if (state === 0) {
+            // Assign points to nearest centroid
+            for (let p of points) {
+                let minDist = Infinity;
+                let minIdx = -1;
+                for (let i = 0; i < centroids.length; i++) {
+                    let d = distSq(p, centroids[i]);
+                    if (d < minDist) {
+                        minDist = d;
+                        minIdx = i;
+                    }
+                }
+                p.cluster = minIdx;
+            }
+            state = 1;
+            stepBtn.innerText = "Aggiorna Centroidi";
+        } else {
+            // Update centroids to mean of assigned points
+            let sums = [{x:0, y:0, count:0}, {x:0, y:0, count:0}, {x:0, y:0, count:0}];
+            for (let p of points) {
+                if (p.cluster !== -1) {
+                    sums[p.cluster].x += p.x;
+                    sums[p.cluster].y += p.y;
+                    sums[p.cluster].count++;
+                }
+            }
+            for (let i = 0; i < centroids.length; i++) {
+                if (sums[i].count > 0) {
+                    centroids[i].x = sums[i].x / sums[i].count;
+                    centroids[i].y = sums[i].y / sums[i].count;
+                }
+            }
+            state = 0;
+            stepBtn.innerText = "Assegna Punti";
+        }
+        draw();
+    }
+    
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw points
+        for (let p of points) {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 5, 0, 2*Math.PI);
+            ctx.fillStyle = p.cluster === -1 ? '#898781' : colors[p.cluster];
+            ctx.fill();
+        }
+        
+        // Draw centroids
+        for (let i = 0; i < centroids.length; i++) {
+            let c = centroids[i];
+            
+            // Draw cross
+            ctx.strokeStyle = '#20201f';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(c.x - 8, c.y - 8); ctx.lineTo(c.x + 8, c.y + 8);
+            ctx.moveTo(c.x + 8, c.y - 8); ctx.lineTo(c.x - 8, c.y + 8);
+            ctx.stroke();
+            
+            ctx.strokeStyle = colors[i];
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(c.x - 8, c.y - 8); ctx.lineTo(c.x + 8, c.y + 8);
+            ctx.moveTo(c.x + 8, c.y - 8); ctx.lineTo(c.x - 8, c.y + 8);
+            ctx.stroke();
+        }
+    }
+    
+    stepBtn.addEventListener('click', step);
+    resetBtn.addEventListener('click', () => {
+        init();
+        stepBtn.innerText = "Prossimo Passo";
+    });
+    
+    init();
+</script>
+
+</body>
+</html>

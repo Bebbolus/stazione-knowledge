@@ -1,0 +1,2026 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/D09-transformers-llm/">
+      
+      
+        <link rel="prev" href="../D08-deep-learning-pytorch/">
+      
+      
+        <link rel="next" href="../D10-rag-knowledge-osint/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>D09 — Transformers, LLM e inference engineering - Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architettura-dei-transformer-large-language-model-e-ingegneria-dellinferenza" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D09 — Transformers, LLM e inference engineering
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D01-workspace-llm-wiki/" class="md-tabs__link">
+          
+  
+    
+  
+  Fondamenti
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D05-ml-fondamenti/" class="md-tabs__link">
+          
+  
+    
+  
+  Operativo
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../D08-deep-learning-pytorch/" class="md-tabs__link">
+          
+  
+    
+  
+  Avanzato
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D12-agentic-mcp/" class="md-tabs__link">
+          
+  
+    
+  
+  Specialistico
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Fondamenti
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Fondamenti
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first, Git, Obsidian, LLM wiki
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02-python-refresher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python refresher e software engineering essentials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02b-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02b — Virtualizzazione e Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02c-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02c — Gateway e Routing LLM (LiteLLM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D03-data-foundations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Data foundations (NumPy, Pandas, SQL)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04-math-stat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Matematica e statistica just-in-time
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operativo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operativo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D05-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Fondamenti di Machine Learning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D06-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D06 — ML classico: alberi, ensemble, gradient boosting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D07-unsupervised-learning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Apprendimento non supervisionato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Avanzato
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Avanzato
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D08-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Transformers, LLM e inference engineering
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D10-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — RAG, knowledge base e grafi OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — OSINT avanzato e discipline principali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11b — AI come arma e come bersaglio nell'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11c — Geopolitica e governance dell'AI per l'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Specialistico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Specialistico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — Agentic systems, MCP e automazione affidabile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12b — AI Harness e Plugin per agenti OSINT portatili
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12c — Prompt engineering e context engineering avanzati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12d — Loop engineering e graph engineering per agenti
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — RL, preference learning, alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Responsible AI, cybersecurity e governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D15-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — MLOps / LLMOps e deployment local-first
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — ICM, orchestrazione e comunicazione dei risultati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — Agent Context Platform e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — Ecosistema Interfacce e Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D20-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D21-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/D09-transformers-llm.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="architettura-dei-transformer-large-language-model-e-ingegneria-dellinferenza">Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza<a class="headerlink" href="#architettura-dei-transformer-large-language-model-e-ingegneria-dellinferenza" title="Permanent link">&para;</a></h1>
+<h1 id="architettura-dei-transformer-large-language-model-e-ingegneria-dellinferenza_1">Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza<a class="headerlink" href="#architettura-dei-transformer-large-language-model-e-ingegneria-dellinferenza_1" title="Permanent link">&para;</a></h1>
+<p>Fino al 2017, il <strong>problema</strong> principale nel far leggere testi ai computer era la lentezza: le reti neurali dell'epoca (RNN e LSTM) dovevano leggere le parole rigorosamente in fila, una dopo l'altra. Questa dipendenza temporale impediva di usare la potenza di calcolo parallela delle moderne schede video (GPU). Più il testo era lungo, più il modello dimenticava le prime parole, rendendo impossibile addestrare IA su interi libri o su enormi dataset.</p>
+<p>La <strong>soluzione</strong> che ha sconvolto l'industria è stata inventata dai ricercatori di Google e DeepMind con il paper <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need (Vaswani et al., 2017)</a>. Hanno eliminato la lettura sequenziale sostituendola con un meccanismo di auto-attenzione (<em>Self-Attention</em>). In questa architettura (il <strong>Transformer</strong>), la rete guarda <em>tutte</em> le parole della frase nello stesso esatto momento. </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>graph LR
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    subgraph "RNN (Lettura Sequenziale)"
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>        R1[Parola 1] --&gt; R2[Parola 2] --&gt; R3[Parola 3] --&gt; RLento["(Lento, perde il filo)"]
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    end
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    subgraph "Transformer (Lettura Parallela su GPU)"
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        T1[Parola 1] --&gt; TAll["Tutte insieme"]
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>        T2[Parola 2] --&gt; TAll
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>        T3[Parola 3] --&gt; TAll
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    end
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    style RLento fill:#fecaca,stroke:#dc2626
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    style TAll fill:#bbf7d0,stroke:#16a34a
+</code></pre></div>
+<p>L'architettura Transformer costituisce oggi il motore computazionale primario di tutti i moderni Large Language Model (LLM), permettendo per la prima volta l'addestramento su miliardi di parole contemporaneamente e rivoluzionando i campi della generazione di codice e dell'OSINT.</p>
+<h2 id="formulazione-matematica-e-geometrica-della-self-attention">Formulazione Matematica e Geometrica della Self-Attention<a class="headerlink" href="#formulazione-matematica-e-geometrica-della-self-attention" title="Permanent link">&para;</a></h2>
+<p>Il meccanismo di Self-Attention elabora una matrice di input formata da vettori di embedding associati a ciascun token della sequenza. Data una matrice di input $X \in \mathbb{R}^{N \times d_{\text{model}}}$, dove $N$ rappresenta la lunghezza della sequenza e $d_{\text{model}}$ la dimensione dello spazio latente, il modello proietta linearmente $X$ in tre distinti spazi vettoriali mediante matrici di peso addestrabili: la matrice delle interrogazioni $W^Q \in \mathbb{R}^{d_{\text{model}} \times d_k}$, la matrice delle chiavi $W^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ e la matrice dei valori $W^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$.</p>
+<p>$$Q = X W^Q, \quad K = X W^K, \quad V = X W^V$$</p>
+<p>La proiezione genera le matrici di Query $Q \in \mathbb{R}^{N \times d_k}$, Key $K \in \mathbb{R}^{N \times d_k}$ e Value $V \in \mathbb{R}^{N \times d_v}$. Da una prospettiva geometrica, ogni riga di $Q$ funge da vettore di ricerca orientato nello spazio semantico per interrogare le caratteristiche dei token circostanti; le righe di $K$ fungono da etichette descrittive del contenuto di ciascun token; le righe di $V$ contengono l'effettivo contenuto informativo da estrarre e ricombinare linearmente per formare la nuova rappresentazione contestuale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>graph TD
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    X["Matrice di Input X&lt;br/&gt;(N x d_model)"]
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    subgraph Proiezioni Lineari
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>        WQ["W^Q"]
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>        WK["W^K"]
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>        WV["W^V"]
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    end
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    Q["Query (Q)&lt;br/&gt;(N x d_k)"]
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    K["Key (K)&lt;br/&gt;(N x d_k)"]
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    V["Value (V)&lt;br/&gt;(N x d_v)"]
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    Dot["Q · K^T&lt;br/&gt;(Matrice di Similarità)"]
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    Scale["Scaling Factor&lt;br/&gt;(/ sqrt(d_k))"]
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    Mask["Causal Masking&lt;br/&gt;(+ Maschera M)"]
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    Soft["Softmax&lt;br/&gt;(Pesi di Attenzione A)"]
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    Final["Output Contestuale Z&lt;br/&gt;(N x d_v)"]
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    X --&gt; WQ --&gt; Q
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    X --&gt; WK --&gt; K
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    X --&gt; WV --&gt; V
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    Q --&gt; Dot
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    K --&gt; Dot
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    Dot --&gt; Scale --&gt; Mask --&gt; Soft
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    Soft --&gt;|Pesi A ⊗ V| Final
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    V --&gt;|V| Final
+</code></pre></div>
+<p>La quantificazione dell'affinità semantica tra il token $i$-esimo e il token $j$-esimo avviene tramite il prodotto scalare tra il rispettivo vettore di query $q_i$ e il vettore di chiave $k_j$. Quando due vettori puntano nella medesima direzione nello spazio vettoriale, il loro prodotto scalare assume un valore elevato, segnalando una forte rilevanza contestuale. La moltiplicazione matriciale $Q K^\top$ calcola simultaneamente tutti gli $N \times N$ prodotti scalari della sequenza.</p>
+<p>All'aumentare della dimensione $d_k$, il valore atteso dei prodotti scalari cresce linearmente in magnitudo, spingendo i valori in ingresso alla funzione Softmax verso regioni a saturazione estrema dove i gradienti risultano prossimi allo zero. Per preservare la stabilità numerica e garantire gradienti robusti durante l'addestramento, il prodotto scalare viene normalizzato mediante un fattore di scala pari a $\frac{1}{\sqrt{d_k}}$. L'equazione canonica della Scaled Dot-Product Attention assume la forma:</p>
+<p>$$\text{Attention}(Q, K, V) = \text{Softmax}\left(\frac{Q K^\top}{\sqrt{d_k}} + M\right) V$$</p>
+<p>La matrice di mascheramento $M \in \mathbb{R}^{N \times N}$ è impiegata nei modelli generativi autoregressivi per preservare il principio di causalità: per ciascun elemento con indice temporale futuro ($j &gt; i$), viene assegnato un valore pari a $M_{ij} = -\infty$, azzerando rigorosamente la probabilità calcolata dalla Softmax e impedendo al token presente di accedere ad informazioni future.</p>
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: Self-Attention</p>
+  <p>Passa il mouse sopra ogni parola della frase per vedere i <strong>pesi di attenzione</strong>. Una parola (la <em>Query</em>) cerca informazioni in altre parole (le <em>Key</em>) per disambiguare il proprio significato, e "assorbe" i loro valori (<em>Value</em>). Nota come il pronome "esso" debba guardare a "robot" per essere decodificato correttamente.</p>
+  <iframe src="../widgets/attention.html" style="width: 100%; height: 500px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
+<h3 id="multi-head-attention-e-proiezioni-in-sottospazi-multipli">Multi-Head Attention e Proiezioni in Sottospazi Multipli<a class="headerlink" href="#multi-head-attention-e-proiezioni-in-sottospazi-multipli" title="Permanent link">&para;</a></h3>
+<p>Una singola operazione di attenzione tende a mediare l'informazione concentrandosi su una sola relazione dominante alla volta. Per consentire al modello di monitorare congiuntamente differenti tipologie di dipendenze linguistiche — quali relazioni sintattiche soggetto-verbo, richiami anaforici a lungo raggio o correlazioni tematiche globali — l'architettura adotta il paradigma della Multi-Head Attention (MHA).</p>
+<p>L'architettura suddivide lo spazio dimensionale $d_{\text{model}}$ in $h$ teste di attenzione indipendenti, ciascuna operante su una dimensione ridotta $d_k = d_v = d_{\text{model}} / h$. Ciascuna testa $i$-esima dispone di proiezioni lineari dedicate $W_i^Q \in \mathbb{R}^{d_{\text{model}} \times d_k}$, $W_i^K \in \mathbb{R}^{d_{\text{model}} \times d_k}$ e $W_i^V \in \mathbb{R}^{d_{\text{model}} \times d_v}$. Gli output calcolati in parallelo da ciascuna testa vengono concatenati e moltiplicati per una matrice di proiezione finale $W^O \in \mathbb{R}^{h d_v \times d_{\text{model}}}$:</p>
+<p>$$\text{MultiHead}(Q, K, V) = \text{Concat}(\text{head}_1, \dots, \text{head}_h) W^O \quad \text{dove} \quad \text{head}_i = \text{Attention}(X W_i^Q, X W_i^K, X W_i^V)$$</p>
+<p>Questa scomposizione garantisce che il costo computazionale complessivo rimanga paragonabile a quello di una singola testa a piena dimensione, arricchendo tuttavia in modo esponenziale la capacità espressiva del modello.</p>
+<h3 id="positional-encoding-dalle-funzioni-sinusoidali-a-rope-e-alibi">Positional Encoding: Dalle Funzioni Sinusoidali a RoPE e ALiBi<a class="headerlink" href="#positional-encoding-dalle-funzioni-sinusoidali-a-rope-e-alibi" title="Permanent link">&para;</a></h3>
+<p>Poiché l'operazione di Self-Attention è intrinsecamente invariante rispetto all'ordine dei token, scambiare arbitrariamente la posizione degli elementi della sequenza produrrebbe rappresentazioni identiche prive di ordinamento sintattico. L'architettura richiede pertanto l'iniezione esplicita di segnali di posizione all'interno delle rappresentazioni dei vettori di embedding.</p>
+<p>Nei primi modelli Transformer, l'ordinamento era garantito da funzioni trigonometriche fisse a frequenze scalari crescenti:</p>
+<p>$$PE_{(pos, 2i)} = \sin\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right), \quad PE_{(pos, 2i+1)} = \cos\left(\frac{pos}{10000^{2i/d_{\text{model}}}}\right)$$</p>
+<p>Nelle architetture contemporanee, la codifica sinusoidale statica è stata superata da meccanismi di posizionamento relativo e rotazionale. Il metodo d'elezione per modelli all'avanguardia come LLaMA e Mistral è il <strong>Rotary Position Embedding (RoPE)</strong>. RoPE opera applicando una matrice di rotazione complessa bidimensionale ortogonale ai vettori di Query e Key prima del calcolo del loro prodotto scalare.</p>
+<p>Dato un vettore bidimensionale $x = (x_1, x_2)$, la rotazione associata alla posizione $m$ con frequenza angolare $\theta$ è formulata come moltiplicazione matriciale nel piano complesso:</p>
+<p>$$R_{\theta, m} x = \begin{pmatrix} \cos(m\theta) &amp; -\sin(m\theta) \ \sin(m\theta) &amp; \cos(m\theta) \end{pmatrix} \begin{pmatrix} x_1 \ x_2 \end{pmatrix}$$</p>
+<p>Grazie a questa rotazione, il prodotto scalare risultante $\langle R_{\theta, m} q, R_{\theta, n} k \rangle$ dipende unicamente dalla distanza relativa $(m - n)$ tra le posizioni dei due token e non dalla loro posizione assoluta, conferendo al modello eccellenti proprietà di generalizzazione su finestre di contesto estese. In alternativa a RoPE, l'approccio <strong>ALiBi (Attention with Linear Biases)</strong> inietta un termine di penalità lineare direttamente nella matrice dei punteggi di attenzione prima della Softmax, penalizzando il peso proporzionalmente alla distanza geometrica $|i - j|$ tra i token.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Riepilogo Concettuale</strong>
+A questo punto abbiamo esaminato i concetti chiave di D09-transformers-llm. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.</p>
+</blockquote>
+<h2 id="meccanica-della-tokenizzazione-e-gestione-del-vocabolario">Meccanica della Tokenizzazione e Gestione del Vocabolario<a class="headerlink" href="#meccanica-della-tokenizzazione-e-gestione-del-vocabolario" title="Permanent link">&para;</a></h2>
+<p>L'interfaccia tra il flusso di testo in linguaggio naturale e l'elaborazione tensoriale interna del modello è costituita dal modulo di <strong>tokenizzazione</strong>. Un tokenizzatore segmenta stringhe arbitrarie di caratteri grezzi in indici discreti appartenenti a un vocabolario predefinito di cardinalità finita $|V|$.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>  Stringa Grezza: "L'ingegneria dei Transformer scala linearmente."
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>                           │
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>                           ▼  [Algoritmo Byte-level BPE / Tokenizers]
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  Segmenti Subword:  ["L'", "ingegner", "ia", " dei", " Trans", "former", " scala", " linear", "mente", "."]
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>                           │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>                           ▼  [Mappatura su Vocabolario Vocab ID]
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  Indici Tensoriali: [421, 18940, 287, 856, 3102, 14201, 7812, 12044, 492, 28723]
+</code></pre></div>
+<p>La progettazione di un algoritmo di tokenizzazione deve risolvere il compromesso tra la dimensione del vocabolario e la lunghezza della sequenza prodotta. Una tokenizzazione a livello di singola parola genererebbe un vocabolario sterminato e intrattabile, incapace di gestire neologismi, errori ortografici e forme grammaticali flesse, incorrendo costantemente nell'errore di token non riconosciuto (<em>Out-Of-Vocabulary</em>, OOV). Al contrario, una tokenizzazione a livello di singolo carattere ridurrebbe il vocabolario a pochi simboli, dilatando tuttavia a dismisura il numero di token per frase e saturando rapidamente la capacità computazionale quadratica della Self-Attention.</p>
+<p>La soluzione ingegneristica standard è la <strong>tokenizzazione a subword</strong>, basata su tre algoritmi principali. L'algoritmo <strong>Byte-Pair Encoding (BPE)</strong> parte da un vocabolario base di caratteri individuali e calcola iterativamente la frequenza statistica delle coppie di simboli adiacenti nell'intero corpus di addestramento, fondendo la coppia più frequente in una nuova unità lessicale fino al raggiungimento della dimensione del vocabolario target (tipicamente compresa tra 32.000 e 128.000 token). Nella variante Byte-level BPE, impiegata nelle famiglie GPT e LLaMA, il vocabolario base è costituito dai 256 byte elementari dello standard UTF-8, garantendo la decodifica universale di qualsiasi sequenza binaria ed eliminando alla radice il problema dei token OOV. L'algoritmo <strong>WordPiece</strong>, d'altra parte, adotta un principio simile a BPE ma guidato da un criterio probabilistico invece che puramente frequenziale: la fusione di due subword viene eseguita solo se incrementa la verosimiglianza del modello di linguaggio calcolato sul corpus di training, rappresentando lo standard per modelli come BERT. Infine, il framework <strong>SentencePiece</strong> opera in modo indipendente dal linguaggio trattando il testo grezzo come un flusso continuo di byte o caratteri Unicode, includendo esplicitamente gli spazi bianchi come metacaratteri e rimuovendo qualsiasi fase preliminare di pre-segmentazione lessicale specifica per singola lingua.</p>
+<p>L'efficienza del tokenizzatore influenza direttamente il consumo di memoria e la latenza dei Large Language Model: lingue a bassa rappresentazione statistica o testi contenenti strutture numeriche dense richiedono un numero sensibilmente maggiore di token a parità di contenuto informativo, riducendo l'effettiva capacità della finestra di contesto disponibile.</p>
+<h2 id="architetture-transformer-tassonomia-dei-modelli">Architetture Transformer: Tassonomia dei Modelli<a class="headerlink" href="#architetture-transformer-tassonomia-dei-modelli" title="Permanent link">&para;</a></h2>
+<p>La famiglia dei modelli Transformer si suddivide in tre classi architetturali distinte, ciascuna ottimizzata per specifici compiti operativi.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>┌──────────────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>│                        TASSONOMIA ARCHITETTURE TRANSFORMER                       │
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>├──────────────────────┬─────────────────────────────┬─────────────────────────────┤
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│  ENCODER-ONLY (BERT) │     DECODER-ONLY (GPT)      │   ENCODER-DECODER (T5)      │
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│ • Attenzione         │ • Attenzione Causale        │ • Encoder bidirezionale     │
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   Bidirezionale      │   Mascherata                │ • Decoder autoregressivo    │
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│ • Vede tutto il      │ • Predizione autoregressiva │ • Cross-Attention tra       │
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│   testo in parallelo │   del token successivo      │   input e output            │
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│ • Task: Embedding,   │ • Task: Generazione aperta, │ • Task: Traduzione,         │
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│   Classificazione,   │   Ragionamento, Chat,       │   Sintesi astrattiva,       │
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>│   Analisi Semantica  │   Ingegneria dei Prompt     │   Seq2Seq deterministico    │
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>└──────────────────────┴─────────────────────────────┴─────────────────────────────┘
+</code></pre></div>
+<p>I modelli <strong>Encoder-Only</strong> (come BERT e RoBERTa) utilizzano matrici di Self-Attention completamente bidirezionali, consentendo a ciascun token di accedere simultaneamente al contesto precedente e successivo. Vengono addestrati mediante compiti di <em>Masked Language Modeling</em> (MLM), in cui una percentuale dei token viene nascosta e predetta sulla base del contesto globale. Questi modelli non sono strutturati per la generazione aperta di testo, ma rappresentano lo standard industriale per la generazione di embedding densi, l'estrazione di entità nominate e la classificazione documentale.</p>
+<p>I modelli <strong>Decoder-Only</strong> (come le famiglie GPT, LLaMA, Mistral e Qwen) rappresentano il paradigma dominante per i moderni Large Language Model. Adottano una matrice di attenzione causale triangolare inferiore che impedisce la visione di token futuri, operando attraverso la predizione autoregressiva del token successivo (<em>Causal Language Modeling</em>, CLM). Questa topologia massimizza l'efficienza della generazione sequenziale e costituisce la base per i sistemi conversazionali, il ragionamento logico e l'esecuzione di istruzioni complesse.</p>
+<p>I modelli <strong>Encoder-Decoder</strong> (come T5 e BART) integrano due blocchi distinti: un encoder bidirezionale che elabora la sequenza sorgente e un decoder autoregressivo che genera la sequenza di destinazione integrando strati intermedi di <em>Cross-Attention</em>. In questo passaggio, le matrici $K$ e $V$ provengono dall'output dell'encoder, mentre la matrice $Q$ è generata dagli strati del decoder. Questa struttura eccelle nei compiti di trasformazione diretta da sequenza a sequenza, quali la traduzione automatica e la sintesi vincolata.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Autovalutazione</strong>
+Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.</p>
+</blockquote>
+<h2 id="il-ciclo-di-vita-dei-large-language-model">Il Ciclo di Vita dei Large Language Model<a class="headerlink" href="#il-ciclo-di-vita-dei-large-language-model" title="Permanent link">&para;</a></h2>
+<p>La creazione e l'adattamento di un Large Language Model si articola lungo una pipeline ingegneristica composta da fasi sequenziali con obiettivi e fabbisogni computazionali nettamente differenziati.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>┌─────────────────┐       ┌──────────────────────┐       ┌────────────────────────┐
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>│   PRE-TRAINING  │ ────► │ SUPERVISED FINE-TUNE │ ────► │  PREFERENCE ALIGNMENT  │
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│                 │       │        (SFT)         │       │      (RLHF / DPO)      │
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>└────────┬────────┘       └──────────┬───────────┘       └───────────┬────────────┘
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>         │                           │                               │
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>         ▼                           ▼                               ▼
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>  Corpora Web/Libri           Coppie Domanda/             Ranking Umano/Preferenze:
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  (Trilioni di token)         Risposta Curate             Rifiuto di risposte tossiche
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>  Loss: Cross-Entropy         Comportamento Assistente    e allineamento alle intenzioni
+</code></pre></div>
+<h3 id="pre-training-fondazionale">Pre-Training Fondazionale<a class="headerlink" href="#pre-training-fondazionale" title="Permanent link">&para;</a></h3>
+<p>Il pre-training costituisce la fase a più elevata intensità computazionale, assorbendo oltre il 95% delle risorse di calcolo complessive. Il modello viene inizializzato con pesi casuali e addestrato su corpora testuali non etichettati composti da trilioni di token eterogenei (pagine web, documentazione scientifica, enciclopedie e repository di codice sorgente).</p>
+<p>L'obiettivo matematico è la massimizzazione della log-verosimiglianza nella predizione del token successivo lungo la sequenza $x = (x_1, x_2, \dots, x_T)$:</p>
+<p>$$\mathcal{L}<em t="1">{\text{pretrain}}(\theta) = -\sum</em>; \theta)$$}^T \log P(x_t \mid x_1, x_2, \dots, x_{t-1</p>
+<p>Durante questa fase, il modello apprende le regole della sintassi, le strutture logico-argomentative e un'estesa rappresentazione della conoscenza sul mondo, comprimendola all'interno delle matrici di peso dei suoi miliardi di parametri. L'output di questa fase è denominato <em>Base Model</em> (o <em>Foundational Model</em>), non ancora specializzato nel dialogo o nel rispetto di formati vincolati.</p>
+<h3 id="supervised-fine-tuning-e-instruction-tuning">Supervised Fine-Tuning e Instruction Tuning<a class="headerlink" href="#supervised-fine-tuning-e-instruction-tuning" title="Permanent link">&para;</a></h3>
+<p>Il modello base, se interrogato con una domanda, tende per sua natura a continuare statisticamente la frase piuttosto che rispondere in modo costruttivo. Per trasformare il modello in un assistente interattivo, si esegue il <strong>Supervised Fine-Tuning (SFT)</strong> o <strong>Instruction Tuning</strong>.</p>
+<p>In questa fase, il modello viene riaddestrato su dataset curati composti da centinaia di migliaia di coppie strutturate $(I_k, R_k)$, dove $I_k$ rappresenta un'istruzione o prompt esplicito e $R_k$ rappresenta la risposta accurata e coerente redatta da revisori esperti. L'addestramento preserva la medesima funzione di costo di cross-entropy applicata tuttavia esclusivamente sui token generati nella risposta $R_k$, mascherando i token appartenenti al prompt $I_k$.</p>
+<p>Per eseguire il fine-tuning senza dover aggiornare l'intera matrice dei parametri (operazione dispendiosa che rischia di provocare oblio catastrofico), la pratica ingegneristica adotta tecniche di <strong>Parameter-Efficient Fine-Tuning (PEFT)</strong>, tra cui eccelle <strong>LoRA (Low-Rank Adaptation)</strong>. LoRA blocca i pesi originari del modello $W_0 \in \mathbb{R}^{d \times k}$ e introduce due matrici a basso rango $A \in \mathbb{R}^{r \times k}$ e $B \in \mathbb{R}^{d \times r}$ con rango $r \ll \min(d, k)$, calcolando l'aggiornamento come:</p>
+<p>$$W = W_0 + \Delta W = W_0 + \frac{\alpha}{r} (B \cdot A)$$</p>
+<p>Questa tecnica riduce il numero di parametri addestrabili di oltre il 99%, consentendo l'adattamento del modello su singole GPU commerciali.</p>
+<h3 id="allineamento-delle-preferenze-da-rlhf-a-dpo">Allineamento delle Preferenze: Da RLHF a DPO<a class="headerlink" href="#allineamento-delle-preferenze-da-rlhf-a-dpo" title="Permanent link">&para;</a></h3>
+<p>La fase conclusiva garantisce che il modello generi risposte sicure, veritiere, concise ed esenti da contenuti malevoli, allineando le distribuzioni di probabilità ai giudizi di preferenza umana.</p>
+<p>Il paradigma storico introdotto da <a href="https://openai.com/">OpenAI</a> (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) nello studio <a href="https://arxiv.org/abs/2203.02155">InstructGPT (Ouyang et al., 2022)</a> è il <strong>Reinforcement Learning from Human Feedback (RLHF)</strong>. Questo metodo prevede l'addestramento preliminare di una rete ausiliaria denominata <em>Reward Model</em> ($r_\psi(x, y)$), istruita a predire un punteggio scalare di qualità a partire da coppie di risposte graduate da utenti umani. Successivamente, la policy del modello linguistico $\pi_\theta$ viene ottimizzata mediante l'algoritmo di reinforcement learning Proximal Policy Optimization (PPO), integrando un vincolo di penalizzazione basato sulla divergenza di Kullback-Leibler ($D_{\text{KL}}(\pi_\theta \parallel \pi_{\text{SFT}})$) per evitare derive estreme rispetto alla distribuzione originaria.</p>
+<p>L'elevata complessità di RLHF — che richiede di mantenere quattro reti neurali attive simultaneamente in VRAM (modello da ottimizzare, modello di riferimento, reward model e value network del critico) — ha guidato la transizione verso il metodo <strong>Direct Preference Optimization (DPO)</strong>, formalizzato dai ricercatori della <a href="https://www.stanford.edu/">Stanford University</a> (la prestigiosa università di ricerca della California) nello studio <a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization (Rafailov et al., 2023)</a>. DPO ricava analiticamente la funzione di loss direttamente dalla distribuzione delle preferenze umane, eliminando del tutto la necessità del Reward Model e del loop di reinforcement learning:</p>
+<p>$$\mathcal{L}<em _text_ref="\text{ref">{\text{DPO}}(\theta; \pi</em>}}) = -\mathbb{E<em>{(x, y_w, y_l) \sim \mathcal{D}}\left[\log \sigma\left(\beta \log \frac{\pi</em>\theta(y_w \mid x)}{\pi_{\text{ref}}(y_w \mid x)} - \beta \log \frac{\pi_\theta(y_l \mid x)}{\pi_{\text{ref}}(y_l \mid x)}\right)\right]$$</p>
+<p>dove $y_w$ indica la risposta preferita (<em>winning</em>), $y_l$ la risposta scartata (<em>losing</em>) e $\beta$ è un iperparametro che controlla la conservazione della policy di riferimento.</p>
+<h2 id="ingegneria-dellinferenza-il-muro-della-memoria-e-la-kv-cache">Ingegneria dell'Inferenza: Il Muro della Memoria e la KV-Cache<a class="headerlink" href="#ingegneria-dellinferenza-il-muro-della-memoria-e-la-kv-cache" title="Permanent link">&para;</a></h2>
+<p>Nel ciclo di vita applicativo di un Large Language Model, l'inferenza rappresenta la voce preponderante dei costi operativi e di consumo energetico. L'esecuzione di un modello generativo autoregressivo si articola in due fasi computazionali con profili hardware diametralmente opposti.</p>
+<p>In primo luogo, la <strong>Fase di Prefill (Prompt Processing)</strong> riceve l'intera sequenza di input di lunghezza $N_{\text{in}}$ e calcola simultaneamente i tensori di attivazione per tutti i token in un unico passaggio in avanti. Questa fase è limitata dalla capacità di calcolo puro (<em>compute-bound</em>), saturando pienamente i Tensor Core della GPU grazie a operazioni di moltiplicazione matriciale ad alta intensità aritmetica. In secondo luogo, la <strong>Fase di Generazione (Token Decoding)</strong> emette un singolo token alla volta. A ogni passo iterativo, il nuovo token generato viene accodato alla sequenza e rielaborato per predire l'elemento successivo. In questa fase, la GPU deve trasferire l'intera matrice dei pesi del modello dalla memoria ad alta larghezza di banda (HBM o VRAM) alle registrazioni interne dei core di calcolo per generare un unico vettore di attivazione. Di conseguenza, la generazione è strettamente limitata dalla larghezza di banda della memoria (<em>memory-bandwidth bound</em>), con un'intensità aritmetica estremamente ridotta ($\text{FLOPs} / \text{Byte} \ll 1$).</p>
+<h3 id="meccanica-e-impronta-di-memoria-della-kv-cache">Meccanica e Impronta di Memoria della KV-Cache<a class="headerlink" href="#meccanica-e-impronta-di-memoria-della-kv-cache" title="Permanent link">&para;</a></h3>
+<p>Senza meccanismi di memorizzazione, la generazione del $t$-esimo token imporrebbe il ricalcolo completo delle proiezioni di Key e Value per tutti i $t-1$ token precedenti ad ogni singolo passo temporale, con un costo computazionale pari a $O(t^2)$.</p>
+<p>La <strong>KV-Cache</strong> risolve questa inefficienza memorizzando in VRAM i tensori di Key e Value già calcolati per tutti i token pregressi lungo ciascuno strato dell'architettura. In fase di generazione del nuovo token $x_t$, il modello calcola unicamente il vettore $q_t$ relativo al token corrente e il nuovo vettore $k_t, v_t$, che viene concatenato alla KV-Cache persistente. La complessità computazionale del singolo step si riduce così a $O(t)$.</p>
+<p>Tuttavia, l'allocazione della KV-Cache introduce un'impronta di memoria massiva che cresce linearmente con la lunghezza della finestra di contesto e il numero di richieste concorrenti elaborate. La quantità esatta di memoria VRAM richiesta dalla KV-Cache è regolata dalla formula:</p>
+<p>$$\text{Memoria KV-Cache (Byte)} = 2 \times n_{\text{layers}} \times n_{\text{heads_kv}} \times d_{\text{head}} \times \text{seq_len} \times \text{batch_size} \times \text{bytes_per_element}$$</p>
+<p>dove il fattore 2 tiene conto sia delle Key che dei Value, $n_{\text{layers}}$ rappresenta il numero di blocchi Transformer, $n_{\text{heads_kv}}$ il numero di teste di attenzione dedicate a chiavi e valori, $d_{\text{head}}$ la dimensione di ciascuna testa e $\text{bytes_per_element}$ la precisione numerica (pari a 2 byte per FP16/BF16).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Esempio di Calcolo dell'Impronta di Memoria della KV-Cache:
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Modello: LLaMA-3-70B (80 strati, 8 teste KV con GQA, d_head = 128, precisione FP16 = 2 Byte)
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Finestra di Contesto: 8.192 token
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Batch Size: 4 richieste concorrenti
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>Memoria = 2 * 80 * 8 * 128 * 8192 * 4 * 2 Byte
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>Memoria = 10.737.418.240 Byte = 10,00 GiB di VRAM dedicati alla sola KV-Cache!
+</code></pre></div>
+<p>Per mitigare questa pressione sulla memoria, le architetture moderne hanno evoluto la topologia di attenzione introducendo <strong>Multi-Query Attention (MQA)</strong> (che condivide una singola testa di Key e Value tra tutte le $h$ teste di Query, riducendo l'allocazione di memoria della cache di un fattore $h$) e <strong>Grouped-Query Attention (GQA)</strong> (la soluzione adottata da LLaMA-2/3 e Mistral, che raggruppa le teste di Query in $G$ partizioni, ciascuna servita da una singola testa di Key e Value, garantendo un risparmio di memoria fino all'87.5% senza degrado significativo della qualità generativa).</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Mantenimento dell'Attenzione</strong>
+Se avverti stanchezza o calo di attenzione, fai una breve pausa. Il checkpoint ti permette di riprendere lo studio da qui senza dover rileggere i capitoli precedenti.</p>
+</blockquote>
+<h2 id="algoritmi-di-quantizzazione-e-compressione-dei-pesi">Algoritmi di Quantizzazione e Compressione dei Pesi<a class="headerlink" href="#algoritmi-di-quantizzazione-e-compressione-dei-pesi" title="Permanent link">&para;</a></h2>
+<p>Per consentire l'esecuzione di Large Language Model su workstation locali e acceleratori con limiti di VRAM, l'industria impiega tecniche di <strong>Post-Training Quantization (PTQ)</strong>. La quantizzazione riduce il numero di bit impiegati per rappresentare ciascun parametro di peso del modello, passando dalla precisione standard a 16-bit (FP16 o BF16, pari a 2 byte per parametro) a formati interi a 8-bit, 4-bit o inferiori.</p>
+<p>La quantizzazione uniforme lineare trasforma un valore continuo a virgola mobile $w \in \mathbb{R}$ in un intero discreto $q$ mediante un fattore di scala $S \in \mathbb{R}$ e un punto di zero $Z \in \mathbb{Z}$:</p>
+<p>$$q = \text{clamp}\left(\left\lfloor \frac{w}{S} \right\rceil + Z, q_{\min}, q_{\max}\right), \quad \hat{w} = S \cdot (q - Z)$$</p>
+<h3 id="tassonomia-degli-algoritmi-di-quantizzazione">Tassonomia degli Algoritmi di Quantizzazione<a class="headerlink" href="#tassonomia-degli-algoritmi-di-quantizzazione" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>┌──────────────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>│                     ALGORITMI E METRICHE DI QUANTIZZAZIONE                       │
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>├─────────────────┬──────────────────┬─────────────────┬───────────────────────────┤
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│    ALGORITMO    │  FORMATO OUTPUT  │ TARGET HARDWARE │ CARATTERISTICA CHIAVE     │
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│ GGUF (k-quants) │ Q4_K_M, Q5_K_M   │ CPU + GPU       │ Blocchi non uniformi,     │
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│ (llama.cpp)     │ Q8_0, Q2_K       │ Apple Silicon   │ offload granulare strati  │
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>│ AWQ             │ INT4 (pesi) +    │ GPU NVIDIA      │ Protegge l'1% dei pesi    │
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>│ (Activation-AW) │ FP16 (attivaz.)  │ Tensor Core     │ critici basandosi su act. │
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>│ GPTQ            │ INT4 / INT8      │ GPU NVIDIA /    │ Risolve Hessian inverso   │
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>│                 │ per layer        │ AMD             │ minimizzando errore O(H)  │
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>├─────────────────┼──────────────────┼─────────────────┼───────────────────────────┤
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>│ BitsAndBytes    │ NF4 (NormalFloat)│ GPU (PyTorch    │ Distribuzione gaussiana,  │
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>│ (QLoRA)         │ INT8 LLM.int8()  │ Fine-tuning)    │ Double Quantization       │
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>└─────────────────┴──────────────────┴─────────────────┴───────────────────────────┘
+</code></pre></div>
+<p>Nel panorama della compressione parametrica si distinguono quattro approcci fondamentali. In primo luogo, il formato <strong>GGUF e K-Quants</strong> sviluppato da <a href="https://github.com/ggerganov">Georgi Gerganov</a> (lo sviluppatore software open-source creatore di whisper.cpp e <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>) organizza i pesi in super-blocchi con quantizzazione non uniforme. Nelle varianti ibride (come Q4_K_M o Q5_K_M), gli strati di attenzione e le proiezioni più sensibili all'errore vengono conservati a 5 o 6 bit, mentre le matrici di feed-forward meno critiche vengono compresse a 4 bit, massimizzando il rapporto qualità/memoria su CPU e GPU consumer. In secondo luogo, <strong>AWQ (Activation-aware Weight Quantization)</strong> si basa sull'evidenza empirica che non tutti i parametri hanno pari importanza: AWQ osserva le distribuzioni delle attivazioni su un piccolo dataset di calibrazione e individua l'1% dei canali salienti che presentano magnitudo elevata, proteggendoli dalla distorsione da arrotondamento e consentendo una quantizzazione a 4-bit con perdita di perplexity trascurabile. In terzo luogo, <strong>GPTQ (Generalized Post-Training Quantization)</strong> è un algoritmo di quantizzazione per strato basato su un'approssimazione del secondo ordine dell'errore di ricostruzione tramite l'inversione della matrice Hessiana $H = 2 X X^\top$, quantizzando i pesi colonna per colonna e aggiornando simultaneamente i coefficienti non ancora quantizzati per compensare l'errore introdotto. Infine, la libreria <a href="https://github.com/TimDettmers/bitsandbytes">BitsAndBytes</a> (la libreria di quantizzazione a 8-bit e 4-bit per modelli deep learning) definisce il formato teoricamente ottimale NormalFloat 4 (NF4) per pesi distribuiti normalmente con media zero e varianza unitaria, integrando la tecnica della <em>Double Quantization</em> per comprimere i fattori di scala.</p>
+<h3 id="formati-per-ecosistemi-hardware-specifici-gguf-vs-mlx">Formati per Ecosistemi Hardware Specifici: GGUF vs MLX<a class="headerlink" href="#formati-per-ecosistemi-hardware-specifici-gguf-vs-mlx" title="Permanent link">&para;</a></h3>
+<p>Nella distribuzione pratica dei modelli quantizzati, lo standard de-facto multipiattaforma è il <strong>GGUF</strong> (ottimizzato per CPU/GPU generiche tramite llama.cpp). Tuttavia, per l'architettura <em>Apple Silicon</em> (chip M1/M2/M3/M4 con memoria unificata), Apple ha rilasciato il framework open-source <strong>MLX</strong>. Scaricare un modello quantizzato specificamente in formato MLX (anziché GGUF) su un Mac massimizza l'efficienza della banda di memoria unificata (fino a 800 GB/s su M3 Max), risultando nello stato dell'arte per le performance inferenziali su hardware portatile, permettendo di generare decine di token/s su modelli da 27 o 70 miliardi di parametri alimentati a batteria.</p>
+<h2 id="motori-di-serving-e-architetture-di-esecuzione-in-produzione">Motori di Serving e Architetture di Esecuzione in Produzione<a class="headerlink" href="#motori-di-serving-e-architetture-di-esecuzione-in-produzione" title="Permanent link">&para;</a></h2>
+<p>La scelta dell'infrastruttura di erogazione e serving determina la latenza percepita, la concorrenza massima gestibile e i costi di infrastruttura.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>┌──────────────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>│                   ARCHITETTURA ENGINE DI SERVING vLLM / PAGEDATTENTION           │
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>├──────────────────────────────────────────────────────────────────────────────────┤
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>│                                                                                  │
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>│   Richieste Client ──► [Continuous Batching Scheduler]                           │
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│                              │                                                   │
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>│                              ▼                                                   │
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│   Tabella Pagine Virtuali:   [Pagina Logica 0] ──► [Blocco VRAM GPU 14]          │
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>│                              [Pagina Logica 1] ──► [Blocco VRAM GPU 89]          │
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>│                              [Pagina Logica 2] ──► [Blocco VRAM GPU 03]          │
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>│                                                                                  │
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>│   (Allocazione non contigua: zero frammentazione interna ed esterna)             │
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>│                              │                                                   │
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>│                              ▼                                                   │
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>│   Esecuzione Kernel CUDA:    [Chunked Prefill] + [Speculative Decoding Step]     │
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>│                                                                                  │
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>└──────────────────────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="vllm-e-pagedattention-per-carichi-ad-alto-throughput">vLLM e PagedAttention per Carichi ad Alto Throughput<a class="headerlink" href="#vllm-e-pagedattention-per-carichi-ad-alto-throughput" title="Permanent link">&para;</a></h3>
+<p>Nei server di inferenza tradizionali, la VRAM per la KV-Cache viene preallocata in modo contiguo per ciascuna richiesta assumendo la lunghezza massima teorica del contesto (es. 4.096 o 8.192 token). Poiché la maggior parte dei prompt reali e delle risposte generate occupa solo una frazione di tale spazio, fino all'80% della memoria GPU rimaneva inutilizzato per frammentazione interna ed esterna.</p>
+<p>L'engine <a href="https://github.com/vllm-project/vllm">vLLM</a> (l'engine open-source di inferenza LLM ad alto throughput basato sull'algoritmo di gestione della memoria PagedAttention) risolve radicalmente il problema ispirandosi al meccanismo di memoria virtuale con paginazione dei sistemi operativi. Con <strong>PagedAttention</strong>, la KV-Cache viene suddivisa in blocchi di dimensione fissa (es. 16 o 32 token) allocati dinamicamente in pagine fisiche di VRAM non contigue. Una tabella delle pagine virtuale mantiene la mappatura tra sequenza logica e locazioni fisiche.</p>
+<p>Grazie a PagedAttention, vLLM abilita il <strong>Continuous Batching</strong> (o <em>iteration-level scheduling</em>): quando una richiesta nel batch termina la propria generazione, la memoria dei suoi blocchi viene immediatamente riallocata per accogliere una nuova richiesta in ingresso senza attendere il completamento dell'intero batch, moltiplicando il throughput del sistema di 2–4 volte rispetto ai server classici.</p>
+<h3 id="llamacpp-e-linferenza-efficace-su-risorse-consumer">llama.cpp e l'Inferenza Efficace su Risorse Consumer<a class="headerlink" href="#llamacpp-e-linferenza-efficace-su-risorse-consumer" title="Permanent link">&para;</a></h3>
+<p>Per scenari locali, edge o workstation prive di cluster GPU dedicati, <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> (l'engine di inferenza in C/C++ ottimizzato per modelli quantizzati in formato GGUF su CPU e GPU consumer) rappresenta lo standard industriale. Scritto interamente in C/C++ senza dipendenze pesanti, il framework implementa kernel di moltiplicazione matriciale altamente ottimizzati tramite istruzioni vettoriali SIMD (AVX2, AVX-512 per processori x86 e NEON per architetture ARM).</p>
+<p>llama.cpp supporta il partizionamento granulare degli strati del modello (<em>layer offloading</em>): se una GPU dispone di VRAM insufficiente per ospitare l'intero modello quantizzato, una porzione di strati viene caricata sulla GPU (sfruttando backend CUDA, Metal o Vulkan) e i restanti vengono eseguiti sulla RAM di sistema tramite la CPU, massimizzando le prestazioni ottenibili su qualsiasi combinazione hardware.</p>
+<h3 id="speculative-decoding">Speculative Decoding<a class="headerlink" href="#speculative-decoding" title="Permanent link">&para;</a></h3>
+<p>La tecnica dello <strong>Speculative Decoding</strong> sfrutta il disallineamento tra la fase di prefill (compute-bound) e la fase di decode (memory-bound). Un modello compatto e ultra-rapido (denominato <em>Draft Model</em>, es. da 1B parametri) genera in modo autoregressivo una sequenza provvisoria di $K$ token candidati.</p>
+<p>Successivamente, il modello principale di grandi dimensioni (<em>Target Model</em>, es. da 70B parametri) valuta tutti i $K$ token candidati simultaneamente in un unico forward pass parallelo di tipo prefill. Un algoritmo di campionamento con rifiuto (<em>rejection sampling</em>) accetta i token che rispettano la distribuzione di probabilità del modello target, correggendo il primo token divergente. Questo paradigma consente di accelerare la generazione del 150–250% preservando matematicamente l'esatta distribuzione statistica del modello target.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Controllo di Comprensione</strong>
+Qual è il trade-off o limite operativo principale emerso in questa parte? Aver chiari i limiti ci aiuterà a capire le soluzioni tecnologiche che presenteremo a breve.</p>
+</blockquote>
+<h2 id="compromessi-operativi-vincoli-hardware-e-scenari-di-fallimento">Compromessi Operativi, Vincoli Hardware e Scenari di Fallimento<a class="headerlink" href="#compromessi-operativi-vincoli-hardware-e-scenari-di-fallimento" title="Permanent link">&para;</a></h2>
+<p>La progettazione di sistemi basati su Large Language Model impone l'analisi rigorosa dei compromessi ingegneristici tra latenza, throughput, sovranità dei dati e fedeltà semantica.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>┌──────────────────────────────────────────────────────────────────────────────────┐
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>│                    MATRICE DEI COMPROMESSI OPERATIVI: LOCALE VS CLOUD            │
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>├──────────────────────┬─────────────────────────────┬─────────────────────────────┤
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>│  DIMENSIONE ANALISI  │ MODELLI LOCALI (GGUF/vLLM)  │      API CLOUD HOSTED       │
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>│ Sovranità e Privacy  │ Totale: nessun dato lascia  │ Limitata: dati inviati      │
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>│                      │ l'infrastruttura locale     │ verso endpoint di terzi     │
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>│ Costi Operativi      │ Spesa capitale iniziale HW, │ Costo variabile operativo   │
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>│                      │ costo per token nullo       │ per milione di token        │
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>│ Latenza di Rete      │ Zero latenza di rete, vinco-│ Dipendente da latenza HTTP/ │
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>│                      │ lata dalla banda VRAM locale│ TLS e code del fornitore    │
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>├──────────────────────┼─────────────────────────────┼─────────────────────────────┤
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>│ Manutenzione e Scala │ Gestione manuale di driver, │ Nessuna gestione infra,     │
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>│                      │ VRAM, kernel e quantizzaz.  │ auto-scaling garantito      │
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>└──────────────────────┴─────────────────────────────┴─────────────────────────────┘
+</code></pre></div>
+<h3 id="metriche-prestazionali-di-inferenza">Metriche Prestazionali di Inferenza<a class="headerlink" href="#metriche-prestazionali-di-inferenza" title="Permanent link">&para;</a></h3>
+<p>La profilazione delle prestazioni di inferenza richiede l'analisi di tre metriche cardine complementari: il <strong>Time To First Token (TTFT)</strong>, che misura il tempo intercorso tra l'invio del prompt e l'emissione del primo token dominato dalla fase di prefill; l'<strong>Inter-Token Latency (ITL)</strong> (o Time Per Output Token), che quantifica il tempo necessario per emettere ciascun token successivo al primo durante la fase di decode ed è regolato in via quasi esclusiva dalla larghezza di banda della memoria VRAM; il <strong>Throughput Globale</strong>, che esprime il numero complessivo di token generati al secondo aggregati su tutti gli utenti contemporanei, massimizzato da scheduler a continuous batching come vLLM.</p>
+<h3 id="scenari-di-fallimento-e-limiti-intrinseci">Scenari di Fallimento e Limiti Intrinseci<a class="headerlink" href="#scenari-di-fallimento-e-limiti-intrinseci" title="Permanent link">&para;</a></h3>
+<p>L'impiego dei Large Language Model evidenzia diverse vulnerabilità strutturali. Le <strong>allucinazioni fattuali</strong> derivano dal fatto che gli LLM sono generatori probabilistici ottimizzati sulla plausibilità statistica della sequenza e non database relazionali deterministici: se interrogati su fatti rari o estranei al corpus di pre-training, generano affermazioni false con elevata confidenza linguistica, richiedendo l'integrazione di architetture di Retrieval-Augmented Generation (approfondite in <a href="../D10-rag-knowledge-osint/">D10</a>). Il <strong>degrado nel lungo contesto (<em>Lost in the Middle</em>)</strong> comporta che all'aumentare della sequenza verso i limiti della finestra di contesto (es. oltre 32.000 token), l'accuratezza di estrazione delle informazioni situate nella parte mediana del prompt decada esponenzialmente. Infine, la <strong>suscettibilità al prompt injection</strong> dovuta all'assenza di separazione formale tra istruzioni di sistema e dati utente non fidati espone i modelli ad attacchi di manipolazione semantica (trattati in <a href="../D14-responsible-ai-cyber/">D14</a>).</p>
+<h2 id="riferimenti-bibliografici-e-risorse-tecniche">Riferimenti Bibliografici e Risorse Tecniche<a class="headerlink" href="#riferimenti-bibliografici-e-risorse-tecniche" title="Permanent link">&para;</a></h2>
+<h3 id="articoli-scientifici-fondamentali">Articoli Scientifici Fondamentali<a class="headerlink" href="#articoli-scientifici-fondamentali" title="Permanent link">&para;</a></h3>
+<p>L'architettura Transformer e le sue evoluzioni sono state formalizzate in una serie di pubblicazioni cardine della letteratura sull'apprendimento automatico. Lo studio pionieristico <a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need (Vaswani et al., 2017)</a> descrive la prima architettura basata interamente sulla Self-Attention scalata. Le dinamiche di allineamento e ottimizzazione delle preferenze umane sono state introdotte da <a href="https://openai.com/">OpenAI</a> (la società di ricerca e sviluppo sull'intelligenza artificiale creatrice dei modelli GPT e ChatGPT) nell'articolo <a href="https://arxiv.org/abs/2203.02155">InstructGPT (Ouyang et al., 2022)</a> e perfezionate dal laboratorio di intelligenza artificiale della <a href="https://www.stanford.edu/">Stanford University</a> (la prestigiosa università di ricerca californiana) nella pubblicazione <a href="https://arxiv.org/abs/2305.18290">Direct Preference Optimization (Rafailov et al., 2023)</a>.</p>
+<p>L'ottimizzazione dei carichi computazionali durante l'inferenza è documentata nello studio sulla generazione parallela speculativa <a href="https://arxiv.org/abs/2304.11336">Speculative Decoding (Leviathan et al., 2023)</a> condotto da <a href="https://about.google/">Google</a> e nell'articolo su PagedAttention e vLLM <a href="https://arxiv.org/abs/2309.06180">Efficient Memory Management for Large Language Model Serving with PagedAttention (Kwon et al., 2023)</a> sviluppato presso la <a href="https://www.stanford.edu/">Stanford University</a>.</p>
+<h3 id="framework-strumenti-open-source-e-didattica-visiva">Framework, Strumenti Open-Source e Didattica Visiva<a class="headerlink" href="#framework-strumenti-open-source-e-didattica-visiva" title="Permanent link">&para;</a></h3>
+<p>L'ecosistema di sviluppo per modelli linguistici fa perno sulla suite open-source curata da <a href="https://huggingface.co/">Hugging Face</a> (la piattaforma e comunità open-source leader per modelli di intelligenza artificiale) tramite la libreria <a href="https://huggingface.co/docs/transformers">Hugging Face Transformers</a> (la libreria open-source per modelli di linguaggio e visione), affiancata dalla libreria di tokenizzazione <a href="https://huggingface.co/docs/tokenizers">Hugging Face Tokenizers</a>, dallo strumento di gestione dataset <a href="https://huggingface.co/docs/datasets">Hugging Face Datasets</a> e dal modulo per il calcolo distribuito <a href="https://huggingface.co/docs/accelerate">Hugging Face Accelerate</a>. L'adattamento efficiente dei parametri è gestito tramite la libreria <a href="https://huggingface.co/docs/peft">PEFT</a> e il framework di allineamento <a href="https://huggingface.co/docs/trl">TRL</a>.</p>
+<p>Per l'esecuzione locale e il deployment in produzione su hardware consumer e server, i riferimenti d'elezione sono il motore di inferenza C++ <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> creato da <a href="https://github.com/ggerganov">Georgi Gerganov</a>, l'infrastruttura di gestione locale semplificata <a href="https://ollama.com/">Ollama</a> (lo strumento open-source multipiattaforma per scaricare ed eseguire LLM in locale), il server di serving ad alto throughput <a href="https://github.com/vllm-project/vllm">vLLM</a> e il server enterprise di NVIDIA <a href="https://github.com/NVIDIA/TensorRT-LLM">TensorRT-LLM</a> (la libreria open-source di NVIDIA per l'ottimizzazione e inferenza ultra-rapida di modelli LLM).</p>
+<p>Per la comprensione visiva e intuitiva della dinamica dei tensori, la guida didattica <a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer</a> redatta da <a href="https://jalammar.github.io/">Jay Alammar</a> (il ricercatore e divulgatore AI autore di autorevoli guide visive) e il visualizzatore tridimensionale interattivo <a href="https://bbycroft.net/llm">LLM Visualization</a> offrono una rappresentazione chiara del passaggio dei dati attraverso i blocchi di attenzione. I corsi avanzati della Stanford University <a href="https://web.stanford.edu/class/cs224n/">CS224N: Natural Language Processing with Deep Learning</a> e il <a href="https://huggingface.co/learn/nlp-course">Corso NLP di Hugging Face</a> costituiscono i percorsi accademici gratuiti più completi per approfondire la materia.</p>
+<h2 id="appendice-operativa-laboratori-pratici">Appendice Operativa: Laboratori Pratici<a class="headerlink" href="#appendice-operativa-laboratori-pratici" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>[!TIP]
+<strong>Zero-Draft Offloading (Delega dell'Inizio)</strong>
+Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di <em>revisore</em> e <em>ingegnere</em>, non di dattilografo.</p>
+</blockquote>
+<p>I laboratori seguenti forniscono implementazioni complete e riproducibili in linguaggio <a href="https://www.python.org/">Python</a> per esplorare la meccanica della Self-Attention, la tokenizzazione avanzata e l'inferenza locale quantizzata.</p>
+<h3 id="laboratorio-1-implementazione-da-zero-di-multi-head-attention-con-causal-masking-e-kv-cache">Laboratorio 1: Implementazione da Zero di Multi-Head Attention con Causal Masking e KV-Cache<a class="headerlink" href="#laboratorio-1-implementazione-da-zero-di-multi-head-attention-con-causal-masking-e-kv-cache" title="Permanent link">&para;</a></h3>
+<p>Questo laboratorio implementa un modulo completo di Multi-Head Attention autoregressivo in <a href="https://pytorch.org/">PyTorch</a> (il framework open-source di deep learning e calcolo tensoriale accelerato su GPU), dimostrando sia la fase di forward pass completo sia la fase di generazione incrementale passo-passo supportata da KV-Cache.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="k">class</span><span class="w"> </span><span class="nc">CausalMultiHeadAttentionWithKVCache</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="w">    </span><span class="sd">"""</span>
+<a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="sd">    Modulo di Multi-Head Attention causale con supporto esplicito</span>
+<a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="sd">    alla KV-Cache per generazione autoregressiva incrementale.</span>
+<a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="sd">    """</span>
+<a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n_heads</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+<a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a>        <span class="k">assert</span> <span class="n">d_model</span> <span class="o">%</span> <span class="n">n_heads</span> <span class="o">==</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">"d_model deve essere divisibile per n_heads"</span>
+<a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>
+<a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span> <span class="o">=</span> <span class="n">d_model</span>
+<a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span> <span class="o">=</span> <span class="n">n_heads</span>
+<a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span> <span class="o">=</span> <span class="n">d_model</span> <span class="o">//</span> <span class="n">n_heads</span>
+<a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a>
+<a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a>        <span class="c1"># Proiezioni lineari per Query, Key, Value e Output</span>
+<a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">w_q</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">w_k</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">w_v</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-9-24" name="__codelineno-9-24" href="#__codelineno-9-24"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">w_o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">d_model</span><span class="p">,</span> <span class="n">d_model</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-9-25" name="__codelineno-9-25" href="#__codelineno-9-25"></a>
+<a id="__codelineno-9-26" name="__codelineno-9-26" href="#__codelineno-9-26"></a>    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span>
+<a id="__codelineno-9-27" name="__codelineno-9-27" href="#__codelineno-9-27"></a>        <span class="bp">self</span><span class="p">,</span> 
+<a id="__codelineno-9-28" name="__codelineno-9-28" href="#__codelineno-9-28"></a>        <span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> 
+<a id="__codelineno-9-29" name="__codelineno-9-29" href="#__codelineno-9-29"></a>        <span class="n">kv_cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-9-30" name="__codelineno-9-30" href="#__codelineno-9-30"></a>        <span class="n">use_causal_mask</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<a id="__codelineno-9-31" name="__codelineno-9-31" href="#__codelineno-9-31"></a>    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]]:</span>
+<a id="__codelineno-9-32" name="__codelineno-9-32" href="#__codelineno-9-32"></a><span class="w">        </span><span class="sd">"""</span>
+<a id="__codelineno-9-33" name="__codelineno-9-33" href="#__codelineno-9-33"></a><span class="sd">        Argomenti:</span>
+<a id="__codelineno-9-34" name="__codelineno-9-34" href="#__codelineno-9-34"></a><span class="sd">            x: Tensore di input di forma (Batch, SeqLen, d_model)</span>
+<a id="__codelineno-9-35" name="__codelineno-9-35" href="#__codelineno-9-35"></a><span class="sd">            kv_cache: Tupla opzionale (past_keys, past_values) con forma (Batch, n_heads, PastLen, d_k)</span>
+<a id="__codelineno-9-36" name="__codelineno-9-36" href="#__codelineno-9-36"></a><span class="sd">            use_causal_mask: Se True, applica la maschera triangolare superiore causale</span>
+<a id="__codelineno-9-37" name="__codelineno-9-37" href="#__codelineno-9-37"></a>
+<a id="__codelineno-9-38" name="__codelineno-9-38" href="#__codelineno-9-38"></a><span class="sd">        Ritorna:</span>
+<a id="__codelineno-9-39" name="__codelineno-9-39" href="#__codelineno-9-39"></a><span class="sd">            output: Tensore proiettato di forma (Batch, SeqLen, d_model)</span>
+<a id="__codelineno-9-40" name="__codelineno-9-40" href="#__codelineno-9-40"></a><span class="sd">            new_kv_cache: Nuova tupla (keys, values) aggiornata per i passi successivi</span>
+<a id="__codelineno-9-41" name="__codelineno-9-41" href="#__codelineno-9-41"></a><span class="sd">        """</span>
+<a id="__codelineno-9-42" name="__codelineno-9-42" href="#__codelineno-9-42"></a>        <span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+<a id="__codelineno-9-43" name="__codelineno-9-43" href="#__codelineno-9-43"></a>
+<a id="__codelineno-9-44" name="__codelineno-9-44" href="#__codelineno-9-44"></a>        <span class="c1"># 1. Proiezioni lineari e rimodellamento tensoriale in (Batch, n_heads, SeqLen, d_k)</span>
+<a id="__codelineno-9-45" name="__codelineno-9-45" href="#__codelineno-9-45"></a>        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_q</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-46" name="__codelineno-9-46" href="#__codelineno-9-46"></a>        <span class="n">k</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_k</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-47" name="__codelineno-9-47" href="#__codelineno-9-47"></a>        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_v</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_heads</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-48" name="__codelineno-9-48" href="#__codelineno-9-48"></a>
+<a id="__codelineno-9-49" name="__codelineno-9-49" href="#__codelineno-9-49"></a>        <span class="c1"># 2. Gestione della KV-Cache per generazione incrementale</span>
+<a id="__codelineno-9-50" name="__codelineno-9-50" href="#__codelineno-9-50"></a>        <span class="k">if</span> <span class="n">kv_cache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-9-51" name="__codelineno-9-51" href="#__codelineno-9-51"></a>            <span class="n">past_k</span><span class="p">,</span> <span class="n">past_v</span> <span class="o">=</span> <span class="n">kv_cache</span>
+<a id="__codelineno-9-52" name="__codelineno-9-52" href="#__codelineno-9-52"></a>            <span class="n">k</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">past_k</span><span class="p">,</span> <span class="n">k</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-53" name="__codelineno-9-53" href="#__codelineno-9-53"></a>            <span class="n">v</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">([</span><span class="n">past_v</span><span class="p">,</span> <span class="n">v</span><span class="p">],</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-54" name="__codelineno-9-54" href="#__codelineno-9-54"></a>
+<a id="__codelineno-9-55" name="__codelineno-9-55" href="#__codelineno-9-55"></a>        <span class="n">current_kv_cache</span> <span class="o">=</span> <span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+<a id="__codelineno-9-56" name="__codelineno-9-56" href="#__codelineno-9-56"></a>        <span class="n">total_k_len</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<a id="__codelineno-9-57" name="__codelineno-9-57" href="#__codelineno-9-57"></a>
+<a id="__codelineno-9-58" name="__codelineno-9-58" href="#__codelineno-9-58"></a>        <span class="c1"># 3. Calcolo dei punteggi di attenzione: (Q · K^T) / sqrt(d_k)</span>
+<a id="__codelineno-9-59" name="__codelineno-9-59" href="#__codelineno-9-59"></a>        <span class="n">scores</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">d_k</span><span class="p">)</span>
+<a id="__codelineno-9-60" name="__codelineno-9-60" href="#__codelineno-9-60"></a>
+<a id="__codelineno-9-61" name="__codelineno-9-61" href="#__codelineno-9-61"></a>        <span class="c1"># 4. Applicazione della maschera causale se richiesta (solo durante il prefill o senza cache)</span>
+<a id="__codelineno-9-62" name="__codelineno-9-62" href="#__codelineno-9-62"></a>        <span class="k">if</span> <span class="n">use_causal_mask</span> <span class="ow">and</span> <span class="n">seq_len</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-9-63" name="__codelineno-9-63" href="#__codelineno-9-63"></a>            <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">triu</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">seq_len</span><span class="p">,</span> <span class="n">total_k_len</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"-inf"</span><span class="p">),</span> <span class="n">device</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">),</span> <span class="n">diagonal</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-9-64" name="__codelineno-9-64" href="#__codelineno-9-64"></a>            <span class="n">scores</span> <span class="o">=</span> <span class="n">scores</span> <span class="o">+</span> <span class="n">mask</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<a id="__codelineno-9-65" name="__codelineno-9-65" href="#__codelineno-9-65"></a>
+<a id="__codelineno-9-66" name="__codelineno-9-66" href="#__codelineno-9-66"></a>        <span class="c1"># 5. Normalizzazione Softmax e moltiplicazione per la matrice dei Valori</span>
+<a id="__codelineno-9-67" name="__codelineno-9-67" href="#__codelineno-9-67"></a>        <span class="n">attn_weights</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+<a id="__codelineno-9-68" name="__codelineno-9-68" href="#__codelineno-9-68"></a>        <span class="n">context</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">attn_weights</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>  <span class="c1"># (Batch, n_heads, SeqLen, d_k)</span>
+<a id="__codelineno-9-69" name="__codelineno-9-69" href="#__codelineno-9-69"></a>
+<a id="__codelineno-9-70" name="__codelineno-9-70" href="#__codelineno-9-70"></a>        <span class="c1"># 6. Concatenazione delle teste e proiezione lineare finale</span>
+<a id="__codelineno-9-71" name="__codelineno-9-71" href="#__codelineno-9-71"></a>        <span class="n">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">contiguous</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">seq_len</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">d_model</span><span class="p">)</span>
+<a id="__codelineno-9-72" name="__codelineno-9-72" href="#__codelineno-9-72"></a>        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">w_o</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+<a id="__codelineno-9-73" name="__codelineno-9-73" href="#__codelineno-9-73"></a>
+<a id="__codelineno-9-74" name="__codelineno-9-74" href="#__codelineno-9-74"></a>        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">current_kv_cache</span>
+<a id="__codelineno-9-75" name="__codelineno-9-75" href="#__codelineno-9-75"></a>
+<a id="__codelineno-9-76" name="__codelineno-9-76" href="#__codelineno-9-76"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-9-77" name="__codelineno-9-77" href="#__codelineno-9-77"></a>    <span class="c1"># Test di verifica numerica e coerenza tra forward parallelo e generazione con KV-Cache</span>
+<a id="__codelineno-9-78" name="__codelineno-9-78" href="#__codelineno-9-78"></a>    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-9-79" name="__codelineno-9-79" href="#__codelineno-9-79"></a>    <span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">4</span>
+<a id="__codelineno-9-80" name="__codelineno-9-80" href="#__codelineno-9-80"></a>    <span class="n">mha</span> <span class="o">=</span> <span class="n">CausalMultiHeadAttentionWithKVCache</span><span class="p">(</span><span class="n">d_model</span><span class="o">=</span><span class="n">D</span><span class="p">,</span> <span class="n">n_heads</span><span class="o">=</span><span class="n">H</span><span class="p">)</span>
+<a id="__codelineno-9-81" name="__codelineno-9-81" href="#__codelineno-9-81"></a>    <span class="n">x_prompt</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+<a id="__codelineno-9-82" name="__codelineno-9-82" href="#__codelineno-9-82"></a>
+<a id="__codelineno-9-83" name="__codelineno-9-83" href="#__codelineno-9-83"></a>    <span class="c1"># 1. Forward pass completo (Prefill parallelo)</span>
+<a id="__codelineno-9-84" name="__codelineno-9-84" href="#__codelineno-9-84"></a>    <span class="n">out_parallel</span><span class="p">,</span> <span class="n">cache_prompt</span> <span class="o">=</span> <span class="n">mha</span><span class="p">(</span><span class="n">x_prompt</span><span class="p">,</span> <span class="n">use_causal_mask</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-9-85" name="__codelineno-9-85" href="#__codelineno-9-85"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Forma output prefill parallelo: </span><span class="si">{</span><span class="n">out_parallel</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-9-86" name="__codelineno-9-86" href="#__codelineno-9-86"></a>
+<a id="__codelineno-9-87" name="__codelineno-9-87" href="#__codelineno-9-87"></a>    <span class="c1"># 2. Generazione del token successivo (Decode con KV-Cache)</span>
+<a id="__codelineno-9-88" name="__codelineno-9-88" href="#__codelineno-9-88"></a>    <span class="n">x_new_token</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+<a id="__codelineno-9-89" name="__codelineno-9-89" href="#__codelineno-9-89"></a>    <span class="n">out_next_token</span><span class="p">,</span> <span class="n">updated_cache</span> <span class="o">=</span> <span class="n">mha</span><span class="p">(</span><span class="n">x_new_token</span><span class="p">,</span> <span class="n">kv_cache</span><span class="o">=</span><span class="n">cache_prompt</span><span class="p">,</span> <span class="n">use_causal_mask</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<a id="__codelineno-9-90" name="__codelineno-9-90" href="#__codelineno-9-90"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Forma output step generativo con cache: </span><span class="si">{</span><span class="n">out_next_token</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-9-91" name="__codelineno-9-91" href="#__codelineno-9-91"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dimensione aggiornata della chiave in cache: </span><span class="si">{</span><span class="n">updated_cache</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-2-analisi-della-tokenizzazione-subword-bpe-e-profilazione-della-finestra-di-contesto">Laboratorio 2: Analisi della Tokenizzazione Subword BPE e Profilazione della Finestra di Contesto<a class="headerlink" href="#laboratorio-2-analisi-della-tokenizzazione-subword-bpe-e-profilazione-della-finestra-di-contesto" title="Permanent link">&para;</a></h3>
+<p>Questo laboratorio esplora la segmentazione del testo tramite algoritmi Byte-level BPE impiegando la libreria <a href="https://huggingface.co/docs/tokenizers">Hugging Face Tokenizers</a> e <a href="https://huggingface.co/docs/transformers">Hugging Face Transformers</a>, analizzando le differenze di fertilità tra lingue e implementando una funzione di chunking con sovrapposizione (<em>sliding window</em>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutoTokenizer</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">analizza_tokenizzazione</span><span class="p">(</span><span class="n">testo</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">nome_modello</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"gpt2"</span><span class="p">):</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="sd">"""</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="sd">    Esegue l'ispezione della sequenza di token, dei rispettivi ID e dei byte sottostanti.</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="sd">    """</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">nome_modello</span><span class="p">)</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">(</span><span class="n">testo</span><span class="p">,</span> <span class="n">return_offsets_mapping</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>    <span class="n">token_ids</span> <span class="o">=</span> <span class="n">encoded</span><span class="p">[</span><span class="s2">"input_ids"</span><span class="p">]</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>    <span class="n">tokens</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">convert_ids_to_tokens</span><span class="p">(</span><span class="n">token_ids</span><span class="p">)</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"--- Analisi con Tokenizzatore: </span><span class="si">{</span><span class="n">nome_modello</span><span class="si">}</span><span class="s2"> ---"</span><span class="p">)</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Lunghezza testo (caratteri): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">testo</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Numero di token generati: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">token_ids</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Rapporto caratteri/token (fertilità): </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">testo</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nb">len</span><span class="p">(</span><span class="n">token_ids</span><span class="p">))</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Mappatura Subword -&gt; Token ID:"</span><span class="p">)</span>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a>    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tid</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">tokens</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">token_ids</span><span class="p">[:</span><span class="mi">10</span><span class="p">])):</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  [</span><span class="si">{</span><span class="n">idx</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">] ID: </span><span class="si">{</span><span class="n">tid</span><span class="si">:</span><span class="s2">&lt;6</span><span class="si">}</span><span class="s2"> | Token: </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a>    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  ... (</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">tokens</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">10</span><span class="si">}</span><span class="s2"> token rimanenti omessi per brevità)"</span><span class="p">)</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a>    <span class="nb">print</span><span class="p">()</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="k">def</span><span class="w"> </span><span class="nf">chunking_finestra_scorrevole</span><span class="p">(</span><span class="n">testo</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">overlap_tokens</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">nome_modello</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"gpt2"</span><span class="p">):</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="sd">"""</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="sd">    Divide un testo esteso in chunk di dimensione vincolata con overlap per non perdere contesto.</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="sd">    """</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">nome_modello</span><span class="p">)</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a>    <span class="n">token_ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">testo</span><span class="p">)</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a>    <span class="n">step</span> <span class="o">=</span> <span class="n">max_tokens</span> <span class="o">-</span> <span class="n">overlap_tokens</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a>    <span class="n">chunks</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a>    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">token_ids</span><span class="p">),</span> <span class="n">step</span><span class="p">):</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a>        <span class="n">chunk_ids</span> <span class="o">=</span> <span class="n">token_ids</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">max_tokens</span><span class="p">]</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a>        <span class="n">chunk_text</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">chunk_ids</span><span class="p">,</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a>        <span class="n">chunks</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>            <span class="s2">"chunk_index"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">),</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a>            <span class="s2">"start_token"</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a>            <span class="s2">"end_token"</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_ids</span><span class="p">),</span>
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a>            <span class="s2">"token_count"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk_ids</span><span class="p">),</span>
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a>            <span class="s2">"text"</span><span class="p">:</span> <span class="n">chunk_text</span>
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a>        <span class="p">})</span>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a>        <span class="k">if</span> <span class="n">i</span> <span class="o">+</span> <span class="n">max_tokens</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">token_ids</span><span class="p">):</span>
+<a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a>            <span class="k">break</span>
+<a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a>
+<a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>    <span class="k">return</span> <span class="n">chunks</span>
+<a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a>
+<a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a>    <span class="n">frase_it</span> <span class="o">=</span> <span class="s2">"L'architettura Transformer risolve le dipendenze semantiche tramite matrici di attenzione."</span>
+<a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a>    <span class="n">analizza_tokenizzazione</span><span class="p">(</span><span class="n">frase_it</span><span class="p">,</span> <span class="n">nome_modello</span><span class="o">=</span><span class="s2">"gpt2"</span><span class="p">)</span>
+<a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a>
+<a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a>    <span class="n">documento</span> <span class="o">=</span> <span class="s2">"I modelli linguistici autoregressivi operano predicendo il token successivo. "</span> <span class="o">*</span> <span class="mi">30</span>
+<a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a>    <span class="n">chunks</span> <span class="o">=</span> <span class="n">chunking_finestra_scorrevole</span><span class="p">(</span><span class="n">documento</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">overlap_tokens</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Documento suddiviso in </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">chunks</span><span class="p">)</span><span class="si">}</span><span class="s2"> chunk con sliding window."</span><span class="p">)</span>
+<a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Esempio chunk 0: </span><span class="si">{</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">chunks</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="w"> </span><span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="w"> </span><span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-3-inferenza-locale-quantizzata-ad-alte-prestazioni-con-llama-cpp-python">Laboratorio 3: Inferenza Locale Quantizzata ad Alte Prestazioni con llama-cpp-python<a class="headerlink" href="#laboratorio-3-inferenza-locale-quantizzata-ad-alte-prestazioni-con-llama-cpp-python" title="Permanent link">&para;</a></h3>
+<p>Questo script illustra come eseguire inferenza locale deterministica su modelli in formato GGUF quantizzato utilizzando l'interfaccia <a href="https://www.python.org/">Python</a> di <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a> (<code>llama-cpp-python</code>), misurando la latenza Time-To-First-Token (TTFT) e la velocità di generazione.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Generator</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="k">def</span><span class="w"> </span><span class="nf">esegui_inferenza_quantizzata</span><span class="p">(</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>    <span class="n">model_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>    <span class="n">prompt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a>    <span class="n">max_tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>    <span class="n">temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>    <span class="n">top_p</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>    <span class="n">n_gpu_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="p">):</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">    </span><span class="sd">"""</span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="sd">    Esegue inferenza su un file GGUF locale con offload su GPU e misurazione di latenza.</span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="sd">    Richiede: pip install llama-cpp-python</span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a><span class="sd">    """</span>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a>        <span class="kn">from</span><span class="w"> </span><span class="nn">llama_cpp</span><span class="w"> </span><span class="kn">import</span> <span class="n">Llama</span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a>    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"[ERRORE] La libreria 'llama-cpp-python' non è installata nel virtual environment."</span><span class="p">)</span>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Installala eseguendo: pip install llama-cpp-python"</span><span class="p">)</span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a>        <span class="k">return</span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Caricamento modello quantizzato da: </span><span class="si">{</span><span class="n">model_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Configurazione: n_gpu_layers=</span><span class="si">{</span><span class="n">n_gpu_layers</span><span class="si">}</span><span class="s2"> (tutti gli strati su GPU se supportato)"</span><span class="p">)</span>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a>    <span class="n">llm</span> <span class="o">=</span> <span class="n">Llama</span><span class="p">(</span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a>        <span class="n">model_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">,</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a>        <span class="n">n_gpu_layers</span><span class="o">=</span><span class="n">n_gpu_layers</span><span class="p">,</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a>        <span class="n">n_ctx</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a>        <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a>    <span class="p">)</span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">--- Avvio Generazione Risposta ---"</span><span class="p">)</span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a>    <span class="n">first_token_time</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a>    <span class="n">token_count</span> <span class="o">=</span> <span class="mi">0</span>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a>    <span class="n">stream</span> <span class="o">=</span> <span class="n">llm</span><span class="p">(</span>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>        <span class="n">prompt</span><span class="o">=</span><span class="n">prompt</span><span class="p">,</span>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a>        <span class="n">max_tokens</span><span class="o">=</span><span class="n">max_tokens</span><span class="p">,</span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a>        <span class="n">temperature</span><span class="o">=</span><span class="n">temperature</span><span class="p">,</span>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a>        <span class="n">top_p</span><span class="o">=</span><span class="n">top_p</span><span class="p">,</span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a>        <span class="n">stream</span><span class="o">=</span><span class="kc">True</span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a>    <span class="p">)</span>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>    <span class="n">output_testo</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a>    <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">stream</span><span class="p">:</span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a>        <span class="k">if</span> <span class="n">first_token_time</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a>            <span class="n">first_token_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a>        <span class="n">testo_chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="s2">"choices"</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">"text"</span><span class="p">]</span>
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>        <span class="n">output_testo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">testo_chunk</span><span class="p">)</span>
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a>        <span class="nb">print</span><span class="p">(</span><span class="n">testo_chunk</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">flush</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a>        <span class="n">token_count</span> <span class="o">+=</span> <span class="mi">1</span>
+<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a>
+<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a>    <span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n\n</span><span class="s2">--- Metriche di Prestazione ---"</span><span class="p">)</span>
+<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a>    <span class="k">if</span> <span class="n">first_token_time</span><span class="p">:</span>
+<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a>        <span class="n">ttft</span> <span class="o">=</span> <span class="p">(</span><span class="n">first_token_time</span> <span class="o">-</span> <span class="n">start_time</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a>        <span class="n">total_generation_time</span> <span class="o">=</span> <span class="n">end_time</span> <span class="o">-</span> <span class="n">first_token_time</span>
+<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a>        <span class="n">tps</span> <span class="o">=</span> <span class="n">token_count</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="n">total_generation_time</span><span class="p">)</span>
+<a id="__codelineno-11-61" name="__codelineno-11-61" href="#__codelineno-11-61"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Time to First Token (TTFT): </span><span class="si">{</span><span class="n">ttft</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> ms"</span><span class="p">)</span>
+<a id="__codelineno-11-62" name="__codelineno-11-62" href="#__codelineno-11-62"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Token totali generati: </span><span class="si">{</span><span class="n">token_count</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-11-63" name="__codelineno-11-63" href="#__codelineno-11-63"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Velocità di generazione (Decode): </span><span class="si">{</span><span class="n">tps</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> token/s"</span><span class="p">)</span>
+<a id="__codelineno-11-64" name="__codelineno-11-64" href="#__codelineno-11-64"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-11-65" name="__codelineno-11-65" href="#__codelineno-11-65"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Nessun token generato."</span><span class="p">)</span>
+<a id="__codelineno-11-66" name="__codelineno-11-66" href="#__codelineno-11-66"></a>
+<a id="__codelineno-11-67" name="__codelineno-11-67" href="#__codelineno-11-67"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-11-68" name="__codelineno-11-68" href="#__codelineno-11-68"></a>    <span class="n">prompt_test</span> <span class="o">=</span> <span class="s2">"&lt;|im_start|&gt;system</span><span class="se">\n</span><span class="s2">Sei un analista esperto di cybersecurity e intelligenza artificiale.&lt;|im_end|&gt;</span><span class="se">\n</span><span class="s2">&lt;|im_start|&gt;user</span><span class="se">\n</span><span class="s2">Spiega in sintesi il vantaggio della quantizzazione k-quants in llama.cpp.&lt;|im_end|&gt;</span><span class="se">\n</span><span class="s2">&lt;|im_start|&gt;assistant</span><span class="se">\n</span><span class="s2">"</span>
+<a id="__codelineno-11-69" name="__codelineno-11-69" href="#__codelineno-11-69"></a>    <span class="c1"># Sostituire con il percorso del file GGUF presente nel sistema</span>
+<a id="__codelineno-11-70" name="__codelineno-11-70" href="#__codelineno-11-70"></a>    <span class="n">mock_model_path</span> <span class="o">=</span> <span class="s2">"models/llama-3-8b-instruct.Q4_K_M.gguf"</span>
+<a id="__codelineno-11-71" name="__codelineno-11-71" href="#__codelineno-11-71"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[DEMO] Script di esecuzione locale per modelli GGUF con llama.cpp: </span><span class="si">{</span><span class="n">mock_model_path</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-4-pipeline-osint-di-analisi-documentale-ed-estrazione-di-entita-strutturate-con-modelli-locali">Laboratorio 4: Pipeline OSINT di Analisi Documentale ed Estrazione di Entità Strutturate con Modelli Locali<a class="headerlink" href="#laboratorio-4-pipeline-osint-di-analisi-documentale-ed-estrazione-di-entita-strutturate-con-modelli-locali" title="Permanent link">&para;</a></h3>
+<p>Questo laboratorio dimostra l'integrazione di un modello linguistico locale in una pipeline di analisi intelligence, interrogando l'endpoint REST locale di <a href="https://ollama.com/">Ollama</a> per estrarre entità e relazioni in formato JSON validato schema-first.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">urllib.request</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">urllib.error</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Any</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">estrai_entita_intelligence_ollama</span><span class="p">(</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">testo_sorgente</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> 
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="n">modello</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"llama3"</span><span class="p">,</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"http://localhost:11434/api/generate"</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="sd">"""</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="sd">    Invia un documento grezzo a un'istanza locale di Ollama richiedendo</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="sd">    l'estrazione rigorosa di indicatori OSINT in formato JSON conforme.</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="sd">    """</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>    <span class="n">system_prompt</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a>        <span class="s2">"Sei un sistema automatico di Information Extraction per intelligence OSINT. "</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>        <span class="s2">"Analizza il testo fornito ed estrai esclusivamente un oggetto JSON valido con la seguente struttura:</span><span class="se">\n</span><span class="s2">"</span>
+<a id="__codelineno-12-18" name="__codelineno-12-18" href="#__codelineno-12-18"></a>        <span class="s2">"{</span><span class="se">\n</span><span class="s2">"</span>
+<a id="__codelineno-12-19" name="__codelineno-12-19" href="#__codelineno-12-19"></a>        <span class="s1">'  "persone": ["nome completo"],</span><span class="se">\n</span><span class="s1">'</span>
+<a id="__codelineno-12-20" name="__codelineno-12-20" href="#__codelineno-12-20"></a>        <span class="s1">'  "organizzazioni": ["nome ente"],</span><span class="se">\n</span><span class="s1">'</span>
+<a id="__codelineno-12-21" name="__codelineno-12-21" href="#__codelineno-12-21"></a>        <span class="s1">'  "infrastrutture_digitali": ["domini", "indirizzi IP", "software"],</span><span class="se">\n</span><span class="s1">'</span>
+<a id="__codelineno-12-22" name="__codelineno-12-22" href="#__codelineno-12-22"></a>        <span class="s1">'  "vettori_minaccia": ["tipologia attacco o attività sospetta"]</span><span class="se">\n</span><span class="s1">'</span>
+<a id="__codelineno-12-23" name="__codelineno-12-23" href="#__codelineno-12-23"></a>        <span class="s2">"}</span><span class="se">\n</span><span class="s2">"</span>
+<a id="__codelineno-12-24" name="__codelineno-12-24" href="#__codelineno-12-24"></a>        <span class="s2">"Non includere alcun commento, testo introduttivo o blocchi markdown prima o dopo il JSON."</span>
+<a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a>    <span class="p">)</span>
+<a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a>
+<a id="__codelineno-12-27" name="__codelineno-12-27" href="#__codelineno-12-27"></a>    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-12-28" name="__codelineno-12-28" href="#__codelineno-12-28"></a>        <span class="s2">"model"</span><span class="p">:</span> <span class="n">modello</span><span class="p">,</span>
+<a id="__codelineno-12-29" name="__codelineno-12-29" href="#__codelineno-12-29"></a>        <span class="s2">"system"</span><span class="p">:</span> <span class="n">system_prompt</span><span class="p">,</span>
+<a id="__codelineno-12-30" name="__codelineno-12-30" href="#__codelineno-12-30"></a>        <span class="s2">"prompt"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Documento da analizzare:</span><span class="se">\n\"\"\"\n</span><span class="si">{</span><span class="n">testo_sorgente</span><span class="si">}</span><span class="se">\n\"\"\"</span><span class="s2">"</span><span class="p">,</span>
+<a id="__codelineno-12-31" name="__codelineno-12-31" href="#__codelineno-12-31"></a>        <span class="s2">"stream"</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-12-32" name="__codelineno-12-32" href="#__codelineno-12-32"></a>        <span class="s2">"format"</span><span class="p">:</span> <span class="s2">"json"</span><span class="p">,</span>
+<a id="__codelineno-12-33" name="__codelineno-12-33" href="#__codelineno-12-33"></a>        <span class="s2">"options"</span><span class="p">:</span> <span class="p">{</span>
+<a id="__codelineno-12-34" name="__codelineno-12-34" href="#__codelineno-12-34"></a>            <span class="s2">"temperature"</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+<a id="__codelineno-12-35" name="__codelineno-12-35" href="#__codelineno-12-35"></a>            <span class="s2">"num_predict"</span><span class="p">:</span> <span class="mi">512</span>
+<a id="__codelineno-12-36" name="__codelineno-12-36" href="#__codelineno-12-36"></a>        <span class="p">}</span>
+<a id="__codelineno-12-37" name="__codelineno-12-37" href="#__codelineno-12-37"></a>    <span class="p">}</span>
+<a id="__codelineno-12-38" name="__codelineno-12-38" href="#__codelineno-12-38"></a>
+<a id="__codelineno-12-39" name="__codelineno-12-39" href="#__codelineno-12-39"></a>    <span class="n">req_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+<a id="__codelineno-12-40" name="__codelineno-12-40" href="#__codelineno-12-40"></a>    <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span>
+<a id="__codelineno-12-41" name="__codelineno-12-41" href="#__codelineno-12-41"></a>        <span class="n">endpoint</span><span class="p">,</span> 
+<a id="__codelineno-12-42" name="__codelineno-12-42" href="#__codelineno-12-42"></a>        <span class="n">data</span><span class="o">=</span><span class="n">req_data</span><span class="p">,</span> 
+<a id="__codelineno-12-43" name="__codelineno-12-43" href="#__codelineno-12-43"></a>        <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span><span class="p">}</span>
+<a id="__codelineno-12-44" name="__codelineno-12-44" href="#__codelineno-12-44"></a>    <span class="p">)</span>
+<a id="__codelineno-12-45" name="__codelineno-12-45" href="#__codelineno-12-45"></a>
+<a id="__codelineno-12-46" name="__codelineno-12-46" href="#__codelineno-12-46"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-12-47" name="__codelineno-12-47" href="#__codelineno-12-47"></a>        <span class="k">with</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+<a id="__codelineno-12-48" name="__codelineno-12-48" href="#__codelineno-12-48"></a>            <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">))</span>
+<a id="__codelineno-12-49" name="__codelineno-12-49" href="#__codelineno-12-49"></a>            <span class="n">raw_response</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"response"</span><span class="p">,</span> <span class="s2">"</span><span class="si">{}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-12-50" name="__codelineno-12-50" href="#__codelineno-12-50"></a>            <span class="n">parsed_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">raw_response</span><span class="p">)</span>
+<a id="__codelineno-12-51" name="__codelineno-12-51" href="#__codelineno-12-51"></a>            <span class="k">return</span> <span class="n">parsed_json</span>
+<a id="__codelineno-12-52" name="__codelineno-12-52" href="#__codelineno-12-52"></a>    <span class="k">except</span> <span class="n">urllib</span><span class="o">.</span><span class="n">error</span><span class="o">.</span><span class="n">URLError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-12-53" name="__codelineno-12-53" href="#__codelineno-12-53"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[AVVISO] Impossibile connettersi all'endpoint Ollama (</span><span class="si">{</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-12-54" name="__codelineno-12-54" href="#__codelineno-12-54"></a>        <span class="nb">print</span><span class="p">(</span><span class="s2">"Verifica che Ollama sia in esecuzione localmente ('ollama serve')."</span><span class="p">)</span>
+<a id="__codelineno-12-55" name="__codelineno-12-55" href="#__codelineno-12-55"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"errore"</span><span class="p">:</span> <span class="s2">"endpoint_non_raggiungibile"</span><span class="p">}</span>
+<a id="__codelineno-12-56" name="__codelineno-12-56" href="#__codelineno-12-56"></a>    <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-12-57" name="__codelineno-12-57" href="#__codelineno-12-57"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[ERRORE] Il modello non ha restituito un JSON valido: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-12-58" name="__codelineno-12-58" href="#__codelineno-12-58"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"errore"</span><span class="p">:</span> <span class="s2">"json_non_valido"</span><span class="p">}</span>
+<a id="__codelineno-12-59" name="__codelineno-12-59" href="#__codelineno-12-59"></a>
+<a id="__codelineno-12-60" name="__codelineno-12-60" href="#__codelineno-12-60"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-12-61" name="__codelineno-12-61" href="#__codelineno-12-61"></a>    <span class="n">report_osint</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-12-62" name="__codelineno-12-62" href="#__codelineno-12-62"></a>        <span class="s2">"Il gruppo APT28 ha condotto una campagna di spear-phishing contro il Ministero degli Esteri "</span>
+<a id="__codelineno-12-63" name="__codelineno-12-63" href="#__codelineno-12-63"></a>        <span class="s2">"utilizzando il dominio malevolo mail-update-auth.com e indirizzi IP attestati sulla subnet "</span>
+<a id="__codelineno-12-64" name="__codelineno-12-64" href="#__codelineno-12-64"></a>        <span class="s2">"198.51.100.45. Gli analisti hanno identificato l'uso del malware Zebrocy per l'esfiltrazione."</span>
+<a id="__codelineno-12-65" name="__codelineno-12-65" href="#__codelineno-12-65"></a>    <span class="p">)</span>
+<a id="__codelineno-12-66" name="__codelineno-12-66" href="#__codelineno-12-66"></a>
+<a id="__codelineno-12-67" name="__codelineno-12-67" href="#__codelineno-12-67"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Invio testo alla pipeline di estrazione OSINT..."</span><span class="p">)</span>
+<a id="__codelineno-12-68" name="__codelineno-12-68" href="#__codelineno-12-68"></a>    <span class="n">risultato</span> <span class="o">=</span> <span class="n">estrai_entita_intelligence_ollama</span><span class="p">(</span><span class="n">report_osint</span><span class="p">)</span>
+<a id="__codelineno-12-69" name="__codelineno-12-69" href="#__codelineno-12-69"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Risultato strutturato estratto:"</span><span class="p">)</span>
+<a id="__codelineno-12-70" name="__codelineno-12-70" href="#__codelineno-12-70"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">risultato</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+</code></pre></div>
+<h3 id="guida-alle-procedure-dei-laboratori">Guida alle Procedure dei Laboratori<a class="headerlink" href="#guida-alle-procedure-dei-laboratori" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Esecuzione del modulo Multi-Head Attention da riga di comando: Attivare il virtual environment del progetto in <code>.venv</code>, installare i pacchetti necessari tramite <code>pip install torch transformers tokenizers</code> ed eseguire lo script del Laboratorio 1 per verificare la corrispondenza dei tensori di output e l'evoluzione della KV-Cache.</li>
+<li>[ ] Ispezione della tokenizzazione e chunking: Eseguire lo script del Laboratorio 2 per quantificare l'efficienza della tokenizzazione BPE su testi in lingua italiana e verificare la ripartizione di documenti lunghi in segmenti sovrapposti per l'ingestione in database vettoriali.</li>
+<li>[ ] Benchmarking dell'inferenza locale: Predisporre un file modello quantizzato in formato <code>.gguf</code> all'interno della cartella <code>models/</code>, configurare i parametri di offload degli strati ed eseguire il Laboratorio 3 per monitorare il tempo di risposta del primo token e il throughput di generazione in token al secondo.</li>
+<li>[ ] Elaborazione automatica di documenti OSINT: Avviare il demone locale di Ollama con <code>ollama run llama3</code>, inviare un comunicato o un report investigativo tramite lo script del Laboratorio 4 e verificare la conformità dello schema JSON estratto.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+          
+          <a href="../D08-deep-learning-pytorch/" class="md-footer__link md-footer__link--prev" aria-label="Precedente: D08 — Deep Learning e PyTorch">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Precedente
+              </span>
+              <div class="md-ellipsis">
+                D08 — Deep Learning e PyTorch
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../D10-rag-knowledge-osint/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D10 — RAG, knowledge base e grafi OSINT">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D10 — RAG, knowledge base e grafi OSINT
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>

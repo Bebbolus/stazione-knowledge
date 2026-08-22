@@ -1,0 +1,2042 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/D02-python-refresher/">
+      
+      
+        <link rel="prev" href="../D01-workspace-llm-wiki/">
+      
+      
+        <link rel="next" href="../D02b-virtualizzazione-e-container/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>D02 — Python refresher e software engineering essentials - Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ingegneria-del-software-e-python-essentials-per-pipeline-ai" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D02 — Python refresher e software engineering essentials
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../D01-workspace-llm-wiki/" class="md-tabs__link">
+          
+  
+    
+  
+  Fondamenti
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D05-ml-fondamenti/" class="md-tabs__link">
+          
+  
+    
+  
+  Operativo
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D08-deep-learning-pytorch/" class="md-tabs__link">
+          
+  
+    
+  
+  Avanzato
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D12-agentic-mcp/" class="md-tabs__link">
+          
+  
+    
+  
+  Specialistico
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Fondamenti
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Fondamenti
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first, Git, Obsidian, LLM wiki
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    D02 — Python refresher e software engineering essentials
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python refresher e software engineering essentials
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Indice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Indice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#il-problema-dello-script-monolitico-e-dei-notebook-sperimentali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Il Problema dello Script Monolitico e dei Notebook Sperimentali
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architettura-del-progetto-e-layout-standard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architettura del Progetto e Layout Standard
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#isolamento-delle-dipendenze-e-ambienti-virtuali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isolamento delle Dipendenze e Ambienti Virtuali
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Isolamento delle Dipendenze e Ambienti Virtuali">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#creazione-e-attivazione-dellambiente-virtuale" class="md-nav__link">
+    <span class="md-ellipsis">
+      Creazione e Attivazione dell'Ambiente Virtuale
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#congelamento-e-dichiarazione-delle-dipendenze" class="md-nav__link">
+    <span class="md-ellipsis">
+      Congelamento e Dichiarazione delle Dipendenze
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#manipolazione-del-file-system-e-flussi-dati-json-vs-jsonl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manipolazione del File System e Flussi Dati (JSON vs JSONL)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Manipolazione del File System e Flussi Dati (JSON vs JSONL)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#navigazione-portabile-dei-percorsi-con-pathlib" class="md-nav__link">
+    <span class="md-ellipsis">
+      Navigazione Portabile dei Percorsi con Pathlib
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streaming-ad-alta-efficienza-con-formato-jsonl" class="md-nav__link">
+    <span class="md-ellipsis">
+      Streaming ad Alta Efficienza con Formato JSONL
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#logging-strutturato-e-gestione-robusta-delle-eccezioni" class="md-nav__link">
+    <span class="md-ellipsis">
+      Logging Strutturato e Gestione Robusta delle Eccezioni
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Logging Strutturato e Gestione Robusta delle Eccezioni">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#configurazione-del-logging-multi-destinazione" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configurazione del Logging Multi-Destinazione
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracciamento-e-rilancio-controllato-delle-eccezioni" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tracciamento e Rilancio Controllato delle Eccezioni
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gestione-delle-configurazioni-e-protezione-dei-segreti" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gestione delle Configurazioni e Protezione dei Segreti
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Gestione delle Configurazioni e Protezione dei Segreti">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#separazione-dei-parametri-in-file-yaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Separazione dei Parametri in File YAML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#acquisizione-sicura-di-chiavi-api-da-variabili-dambiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Acquisizione Sicura di Chiavi API da Variabili d'Ambiente
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#client-http-resilienti-e-pattern-di-rete" class="md-nav__link">
+    <span class="md-ellipsis">
+      Client HTTP Resilienti e Pattern di Rete
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Client HTTP Resilienti e Pattern di Rete">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wrapper-modulare-per-chiamate-sincrone-con-requests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wrapper Modulare per Chiamate Sincrone con Requests
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#collaudo-automatizzato-con-pytest-e-interfacce-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      Collaudo Automatizzato con pytest e Interfacce CLI
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Collaudo Automatizzato con pytest e Interfacce CLI">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#scrittura-ed-esecuzione-di-test-unitari" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scrittura ed Esecuzione di Test Unitari
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#costruzione-di-interfacce-da-linea-di-comando-con-argparse" class="md-nav__link">
+    <span class="md-ellipsis">
+      Costruzione di Interfacce da Linea di Comando con Argparse
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#concorrenza-asincrona-con-asyncio-e-httpx" class="md-nav__link">
+    <span class="md-ellipsis">
+      Concorrenza Asincrona con Asyncio e HTTPX
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compromessi-operativi-e-analisi-dei-limiti" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compromessi Operativi e Analisi dei Limiti
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Compromessi Operativi e Analisi dei Limiti">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#complessita-del-paradigma-asincrono-vs-semplicita-sincrona" class="md-nav__link">
+    <span class="md-ellipsis">
+      Complessità del Paradigma Asincrono vs Semplicità Sincrona
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#overhead-di-archiviazione-dei-log-e-gestione-della-memoria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overhead di Archiviazione dei Log e Gestione della Memoria
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riferimenti-bibliografici-e-risorse-tecniche" class="md-nav__link">
+    <span class="md-ellipsis">
+      Riferimenti Bibliografici e Risorse Tecniche
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Riferimenti Bibliografici e Risorse Tecniche">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#standard-di-linguaggio-e-guide-ufficiali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Standard di Linguaggio e Guide Ufficiali
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-avanzato-e-percorsi-di-formazione-specialistica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing Avanzato e Percorsi di Formazione Specialistica
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendice-operativa-laboratori-pratici" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendice Operativa: Laboratori Pratici
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02b-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02b — Virtualizzazione e Container
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02c-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02c — Gateway e Routing LLM (LiteLLM)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D03-data-foundations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Data foundations (NumPy, Pandas, SQL)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04-math-stat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Matematica e statistica just-in-time
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operativo
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operativo
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D05-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Fondamenti di Machine Learning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D06-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D06 — ML classico: alberi, ensemble, gradient boosting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D07-unsupervised-learning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Apprendimento non supervisionato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Avanzato
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Avanzato
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D08-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D09-transformers-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Transformers, LLM e inference engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D10-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — RAG, knowledge base e grafi OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — OSINT avanzato e discipline principali
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11b — AI come arma e come bersaglio nell'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11c — Geopolitica e governance dell'AI per l'OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Specialistico
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Specialistico
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — Agentic systems, MCP e automazione affidabile
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12b — AI Harness e Plugin per agenti OSINT portatili
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12c — Prompt engineering e context engineering avanzati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12d — Loop engineering e graph engineering per agenti
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — RL, preference learning, alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Responsible AI, cybersecurity e governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D15-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — MLOps / LLMOps e deployment local-first
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — ICM, orchestrazione e comunicazione dei risultati
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — Agent Context Platform e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — Ecosistema Interfacce e Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D20-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D21-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/D02-python-refresher.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="ingegneria-del-software-e-python-essentials-per-pipeline-ai">Ingegneria del Software e Python Essentials per Pipeline AI<a class="headerlink" href="#ingegneria-del-software-e-python-essentials-per-pipeline-ai" title="Permanent link">&para;</a></h1>
+<p>L'<strong>ingegneria del software in Python per l'intelligenza artificiale</strong> è la disciplina che applica pattern di progettazione modulari, isolamento degli ambienti, gestione robusta dell'I/O e testing automatizzato allo sviluppo di pipeline di machine learning e strumenti di analisi OSINT. Questa metodologia si adotta in contesti operativi e di ricerca per trasformare prototipi sperimentali in servizi software affidabili, manutenibili e facilmente integrabili in architetture agentiche. La disciplina esiste perché la resilienza di un sistema AI non dipende unicamente dalla complessità algoritmica dei modelli, ma dalla robustezza dell'infrastruttura di codice sottostante, dalla riproducibilità deterministica delle dipendenze e dalla protezione rigorosa delle chiavi crittografiche.</p>
+<blockquote>
+<p>[!TIP] Spiegato Semplice: Perché usare "Python" e i "Moduli"?
+Immagina Python come una gigantesca scatola di costruzioni LEGO. Invece di dover creare ogni singolo mattoncino da zero, puoi scaricare scatole piene di pezzi speciali già fatti da altri (i famosi "Pacchetti"). </p>
+<p>"Ingegneria del Software" significa semplicemente costruire astronavi LEGO usando tanti moduli separati. Se si rompe l'ala (uno script), sostituisci solo quell'ala, senza dover buttare via l'intera astronave (il codice monolitico)! E i "Test" sono come un collaudo di sicurezza: prima di far volare la navicella, un mini-robot controlla in automatico che tutti i pezzi siano attaccati bene.</p>
+</blockquote>
+<h2 id="il-problema-dello-script-monolitico-e-dei-notebook-sperimentali">Il Problema dello Script Monolitico e dei Notebook Sperimentali<a class="headerlink" href="#il-problema-dello-script-monolitico-e-dei-notebook-sperimentali" title="Permanent link">&para;</a></h2>
+<p>Nelle fasi esplorative di analisi dati e prototipazione di modelli AI, è comune concentrare l'intera logica computazionale all'interno di singoli script monolitici o di notebook interattivi come <a href="https://jupyter.org/">Jupyter</a>. Sebbene questo approccio consenta una validazione immediata delle ipotesi, si rivela fragile e inadeguato quando il codice deve essere eseguito in modo non presidiato, integrato in pipeline di Continuous Integration o scalato su grandi volumi di dati.</p>
+<blockquote>
+<p>[!TIP]
+<strong>💡 L'Importanza Pratica di Jupyter</strong>
+Anche se la messa in produzione richiede script modulari, <strong>Jupyter Notebook</strong> (o il suo equivalente cloud Google Colab) resta lo standard industriale per la sperimentazione esplorativa (<em>Exploratory Data Analysis</em>), la prototipazione rapida e la visualizzazione interattiva dei dati. È uno strumento formidabile ed essenziale da conoscere per testare velocemente nuove idee e visualizzare grafici prima di cristallizzare il codice in moduli Python definitivi.</p>
+</blockquote>
+<p>I notebook interattivi memorizzano lo stato globale delle variabili in memoria volatile in modo dipendente dall'ordine cronologico con cui l'utente esegue le celle. L'esecuzione non sequenziale genera inconsistenze silenti e comportamenti non riproducibili, mentre il loro formato JSON interno rende complessa la revisione del codice e la risoluzione dei conflitti su sistemi di controllo versione come <a href="https://git-scm.com/">Git</a> (il sistema di controllo versione distribuito open-source). Parallelamente, gli script monolitici che incorporano credenziali API cablate nel sorgente (<em>hardcoding</em>) o percorsi assoluti violano le buone pratiche di sicurezza e collassano sistematicamente in presenza di latenze di rete anomale o errori temporanei del server.</p>
+<p>La soluzione ingegneristica consiste nell'adottare un'architettura modulare a pacchetti, isolare le librerie mediante ambienti virtuali dedicati, esternalizzare le configurazioni parametriche in variabili d'ambiente protette e strutturare suite di test automatici con <a href="https://docs.pytest.org/">pytest</a> (il framework di testing per il linguaggio Python) per garantire la non-regressione a ogni ciclo di rilascio.</p>
+<h2 id="architettura-del-progetto-e-layout-standard">Architettura del Progetto e Layout Standard<a class="headerlink" href="#architettura-del-progetto-e-layout-standard" title="Permanent link">&para;</a></h2>
+<p>Una struttura di directory standardizzata garantisce la netta separazione delle responsabilità tra logica di business, configurazioni, test ed emissione dei log operativi.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>my-project/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── src/
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   └── my_project/
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│       ├── __init__.py
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>│       ├── config.py
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│       ├── api_client.py
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>│       ├── main.py
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│       └── utils.py
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├── tests/
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── __init__.py
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   └── test_api_client.py
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── config/
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│   └── settings.example.yaml
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── logs/
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   └── app.log
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>├── .env.example
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├── requirements.txt
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>└── README.md
+</code></pre></div>
+<p>La directory <code>src/</code> racchiude esclusivamente i moduli sorgente del pacchetto applicativo, isolandoli dalla suite di collaudo collocata in <code>tests/</code>. Le configurazioni parametriche e i file di template per le variabili d'ambiente risiedono in <code>config/</code> e <code>.env.example</code>, mentre la cartella <code>logs/</code> raccoglie le tracce diagnostiche generate a runtime. L'entry point applicativo è definito in <code>main.py</code>, orchestrando i moduli specializzati senza generare dipendenze circolari.</p>
+<h2 id="isolamento-delle-dipendenze-e-ambienti-virtuali">Isolamento delle Dipendenze e Ambienti Virtuali<a class="headerlink" href="#isolamento-delle-dipendenze-e-ambienti-virtuali" title="Permanent link">&para;</a></h2>
+<p>L'installazione globale di pacchetti <a href="https://www.python.org/">Python</a> (il linguaggio di programmazione di riferimento per l'AI) sul sistema operativo genera conflitti di versione insanabili (<em>dependency hell</em>) tra librerie condivise da progetti differenti. L'isolamento mediante ambienti virtuali assicura l'indipendenza e la perfetta riproducibilità di ciascun ambiente di esecuzione.</p>
+<h3 id="creazione-e-attivazione-dellambiente-virtuale">Creazione e Attivazione dell'Ambiente Virtuale<a class="headerlink" href="#creazione-e-attivazione-dellambiente-virtuale" title="Permanent link">&para;</a></h3>
+<p>Il modulo standard <code>venv</code> consente di creare una sandbox isolata contenente una copia dedicata dell'interprete Python e dell'albero dei pacchetti <code>site-packages</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Creazione dell'ambiente virtuale dedicato</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Attivazione dell'ambiente su sistemi macOS e Linux</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Attivazione dell'ambiente su sistemi Windows PowerShell</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>.<span class="se">\.</span>venv<span class="se">\S</span>cripts<span class="se">\A</span>ctivate.ps1
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Aggiornamento del package manager e installazione delle dipendenze essenziali</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>pip<span class="w"> </span>install<span class="w"> </span>-U<span class="w"> </span>pip
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>pip<span class="w"> </span>install<span class="w"> </span>requests<span class="w"> </span>pytest<span class="w"> </span>httpx<span class="w"> </span>pyyaml
+</code></pre></div>
+<h3 id="congelamento-e-dichiarazione-delle-dipendenze">Congelamento e Dichiarazione delle Dipendenze<a class="headerlink" href="#congelamento-e-dichiarazione-delle-dipendenze" title="Permanent link">&para;</a></h3>
+<p>Le dipendenze del progetto vengono tracciate in modo deterministico all'interno di <code>requirements.txt</code>. Questo file garantisce che altri sviluppatori, runner di Continuous Integration o agenti automatici possano riprodurre fedelmente l'esatto ambiente software con un unico comando di ripristino (<code>pip install -r requirements.txt</code>).</p>
+<h2 id="manipolazione-del-file-system-e-flussi-dati-json-vs-jsonl">Manipolazione del File System e Flussi Dati (JSON vs JSONL)<a class="headerlink" href="#manipolazione-del-file-system-e-flussi-dati-json-vs-jsonl" title="Permanent link">&para;</a></h2>
+<p>L'elaborazione di dati non strutturati, log di rete e dataset di training richiede costrutti solidi e portabili per l'accesso ai file su disco.</p>
+<h3 id="navigazione-portabile-dei-percorsi-con-pathlib">Navigazione Portabile dei Percorsi con Pathlib<a class="headerlink" href="#navigazione-portabile-dei-percorsi-con-pathlib" title="Permanent link">&para;</a></h3>
+<p>L'impiego del modulo nativo <code>pathlib</code> sostituisce la fragile concatenazione manuale di stringhe con oggetti <code>Path</code> polimorfi, garantendo la compatibilità cross-platform tra separatori di percorso Windows (<code>\</code>) e POSIX (<code>/</code>).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Navigazione e scansione iterativa di file JSON in una directory</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">data_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">data_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="k">for</span> <span class="n">json_file</span> <span class="ow">in</span> <span class="n">data_dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.json"</span><span class="p">):</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Rilevato file: </span><span class="si">{</span><span class="n">json_file</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1"># Lettura e scrittura atomica di file di testo</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">notes_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"notes"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"example.md"</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">notes_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="n">text_content</span> <span class="o">=</span> <span class="n">notes_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">if</span> <span class="n">notes_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"Intestazione iniziale.</span><span class="se">\n</span><span class="s2">"</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">notes_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text_content</span> <span class="o">+</span> <span class="s2">"Nuovo paragrafo di aggiornamento.</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="streaming-ad-alta-efficienza-con-formato-jsonl">Streaming ad Alta Efficienza con Formato JSONL<a class="headerlink" href="#streaming-ad-alta-efficienza-con-formato-jsonl" title="Permanent link">&para;</a></h3>
+<p>I file JSON convenzionali richiedono il parsing dell'intero albero gerarchico in memoria RAM prima di consentire l'accesso al primo elemento, provocando saturazione di memoria (<em>Out-Of-Memory</em>) in presenza di dataset massivi. Il formato <strong>JSON Lines (JSONL)</strong> risolve questo collo di bottiglia strutturando il file come sequenza di oggetti JSON indipendenti, ciascuno delimitato da un carattere di nuova riga (<code>\n</code>). Ciò consente l'elaborazione in streaming riga per riga con consumo costante di memoria ($O(1)$ rispetto alla dimensione del file).</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">log_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"logs"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"events.jsonl"</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">log_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Scrittura append-only di eventi strutturati</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">event</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"inference_request"</span><span class="p">,</span> <span class="s2">"model"</span><span class="p">:</span> <span class="s2">"llama-3"</span><span class="p">,</span> <span class="s2">"status"</span><span class="p">:</span> <span class="s2">"completed"</span><span class="p">,</span> <span class="s2">"latency_ms"</span><span class="p">:</span> <span class="mi">142</span><span class="p">}</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="k">with</span> <span class="n">log_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"a"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># Lettura in streaming riga per riga</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="k">with</span> <span class="n">log_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>        <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>            <span class="n">events</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">))</span>
+</code></pre></div>
+<h2 id="logging-strutturato-e-gestione-robusta-delle-eccezioni">Logging Strutturato e Gestione Robusta delle Eccezioni<a class="headerlink" href="#logging-strutturato-e-gestione-robusta-delle-eccezioni" title="Permanent link">&para;</a></h2>
+<p>L'utilizzo di istruzioni <code>print()</code> per il debug è un anti-pattern critico nei sistemi software: non fornisce timestamp, non supporta livelli di severità e non consente l'indirizzamento parallelo verso file di log e stream di console.</p>
+<h3 id="configurazione-del-logging-multi-destinazione">Configurazione del Logging Multi-Destinazione<a class="headerlink" href="#configurazione-del-logging-multi-destinazione" title="Permanent link">&para;</a></h3>
+<p>Il modulo nativo <code>logging</code> consente di configurare formati uniformi e handler multipli per registrare simultaneamente gli eventi operativi sia su file persistente che su console standard.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="n">log_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">"logs"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"app.log"</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="n">log_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>    <span class="nb">format</span><span class="o">=</span><span class="s2">"</span><span class="si">%(asctime)s</span><span class="s2"> [</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">"</span><span class="p">,</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>        <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="n">log_file</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">),</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>        <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(),</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>    <span class="p">],</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">)</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"my_project"</span><span class="p">)</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Sistema inizializzato con successo."</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="tracciamento-e-rilancio-controllato-delle-eccezioni">Tracciamento e Rilancio Controllato delle Eccezioni<a class="headerlink" href="#tracciamento-e-rilancio-controllato-delle-eccezioni" title="Permanent link">&para;</a></h3>
+<p>Il soffocamento cieco degli errori tramite blocchi <code>except: pass</code> nasconde anomalie critiche e corrompe lo stato applicativo. Le eccezioni devono essere intercettate in modo granulare e registrate con traccia di stack completa mediante <code>logger.exception()</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">execute_pipeline</span><span class="p">(</span><span class="n">payload</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>        <span class="c1"># Simulazione chiamata operativa</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>        <span class="k">if</span> <span class="ow">not</span> <span class="n">payload</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"target"</span><span class="p">):</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Il campo 'target' è obbligatorio nel payload."</span><span class="p">)</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="k">return</span> <span class="p">{</span><span class="s2">"status"</span><span class="p">:</span> <span class="s2">"success"</span><span class="p">,</span> <span class="s2">"result"</span><span class="p">:</span> <span class="n">payload</span><span class="p">[</span><span class="s2">"target"</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()}</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">"Fallimento critico durante l'esecuzione della pipeline: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>        <span class="k">raise</span>
+</code></pre></div>
+<h2 id="gestione-delle-configurazioni-e-protezione-dei-segreti">Gestione delle Configurazioni e Protezione dei Segreti<a class="headerlink" href="#gestione-delle-configurazioni-e-protezione-dei-segreti" title="Permanent link">&para;</a></h2>
+<p>I parametri operativi variabili e i segreti crittografici non devono mai essere cablati (<em>hardcoded</em>) nel codice sorgente.</p>
+<h3 id="separazione-dei-parametri-in-file-yaml">Separazione dei Parametri in File YAML<a class="headerlink" href="#separazione-dei-parametri-in-file-yaml" title="Permanent link">&para;</a></h3>
+<p>I parametri non sensibili, come URL base, valori di timeout e livelli di logging, vengono formalizzati in file di configurazione strutturati in formato YAML.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># config/settings.example.yaml</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">api</span><span class="p">:</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">  </span><span class="nt">base_url</span><span class="p">:</span><span class="w"> </span><span class="s">"https://api.example.com"</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">max_retries</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nt">logging</span><span class="p">:</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">level</span><span class="p">:</span><span class="w"> </span><span class="s">"INFO"</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">  </span><span class="nt">format</span><span class="p">:</span><span class="w"> </span><span class="s">"json"</span>
+</code></pre></div>
+<h3 id="acquisizione-sicura-di-chiavi-api-da-variabili-dambiente">Acquisizione Sicura di Chiavi API da Variabili d'Ambiente<a class="headerlink" href="#acquisizione-sicura-di-chiavi-api-da-variabili-dambiente" title="Permanent link">&para;</a></h3>
+<p>I token di autenticazione e le credenziali di accesso vengono iniettati a runtime tramite variabili d'ambiente di sistema o file <code>.env</code> locali esclusi dal versionamento Git.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">API_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"SERVICE_API_KEY"</span><span class="p">)</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="k">if</span> <span class="ow">not</span> <span class="n">API_KEY</span><span class="p">:</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">"La variabile SERVICE_API_KEY non è impostata. Verificare il file .env o l'ambiente locale."</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Riepilogo Concettuale</strong>
+A questo punto abbiamo esaminato i concetti chiave di D02-python-refresher. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.</p>
+</blockquote>
+<h2 id="client-http-resilienti-e-pattern-di-rete">Client HTTP Resilienti e Pattern di Rete<a class="headerlink" href="#client-http-resilienti-e-pattern-di-rete" title="Permanent link">&para;</a></h2>
+<p>Le interazioni con endpoint esterni, API di modelli linguistici e servizi OSINT richiedono client HTTP robusti in grado di gestire latenze variabili, disconnessioni temporanee ed errori di stato.</p>
+<h3 id="wrapper-modulare-per-chiamate-sincrone-con-requests">Wrapper Modulare per Chiamate Sincrone con Requests<a class="headerlink" href="#wrapper-modulare-per-chiamate-sincrone-con-requests" title="Permanent link">&para;</a></h3>
+<p>L'utilizzo della libreria <a href="https://requests.readthedocs.io/">Requests</a> (il client HTTP sincrono per Python) richiede l'impostazione tassativa del parametro di timeout e la verifica esplicita dei codici di stato di risposta tramite <code>raise_for_status()</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">"my_project.api_client"</span><span class="p">)</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="n">BASE_URL</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"API_BASE_URL"</span><span class="p">,</span> <span class="s2">"https://httpbin.org"</span><span class="p">)</span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">fetch_resource</span><span class="p">(</span><span class="n">endpoint</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">BASE_URL</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">endpoint</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">'/'</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">"Inoltro richiesta GET verso: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>    <span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a>    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">"Errore di rete durante la richiesta a </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a>        <span class="k">raise</span>
+</code></pre></div>
+<h2 id="collaudo-automatizzato-con-pytest-e-interfacce-cli">Collaudo Automatizzato con pytest e Interfacce CLI<a class="headerlink" href="#collaudo-automatizzato-con-pytest-e-interfacce-cli" title="Permanent link">&para;</a></h2>
+<p>La verifica automatica del codice e l'esposizione di parametri da riga di comando costituiscono i pilastri dell'automazione ingegneristica.</p>
+<h3 id="scrittura-ed-esecuzione-di-test-unitari">Scrittura ed Esecuzione di Test Unitari<a class="headerlink" href="#scrittura-ed-esecuzione-di-test-unitari" title="Permanent link">&para;</a></h3>
+<p>Il framework <a href="https://docs.pytest.org/">pytest</a> individua ed esegue automaticamente i test definiti nella cartella <code>tests/</code>, verificando funzioni pure e moduli isolati mediante asserzioni native.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># src/my_project/math_utils.py</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_batch_offset</span><span class="p">(</span><span class="n">batch_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="k">if</span> <span class="n">batch_index</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">batch_size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Parametri di batch non validi."</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>    <span class="k">return</span> <span class="n">batch_index</span> <span class="o">*</span> <span class="n">batch_size</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># tests/test_math_utils.py</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">my_project.math_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">calculate_batch_offset</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_calculate_batch_offset_standard</span><span class="p">():</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a>    <span class="k">assert</span> <span class="n">calculate_batch_offset</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span> <span class="o">==</span> <span class="mi">100</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="k">def</span><span class="w"> </span><span class="nf">test_calculate_batch_offset_invalid</span><span class="p">():</span>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a>    <span class="k">with</span> <span class="n">pytest</span><span class="o">.</span><span class="n">raises</span><span class="p">(</span><span class="ne">ValueError</span><span class="p">):</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>        <span class="n">calculate_batch_offset</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+</code></pre></div>
+<p>L'esecuzione dell'intera suite di collaudo dal terminale restituisce il resoconto analitico dello stato di conformità:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Esecuzione della suite di test in modalità sintetica</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>pytest<span class="w"> </span>-q
+</code></pre></div>
+<h3 id="costruzione-di-interfacce-da-linea-di-comando-con-argparse">Costruzione di Interfacce da Linea di Comando con Argparse<a class="headerlink" href="#costruzione-di-interfacce-da-linea-di-comando-con-argparse" title="Permanent link">&para;</a></h3>
+<p>L'esposizione di comandi CLI tramite il modulo nativo <code>argparse</code> consente a utenti umani, pipeline di orchestrazione e agenti software di parametrizzare l'esecuzione dello script.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># src/my_project/main.py</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="k">def</span><span class="w"> </span><span class="nf">build_parser</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">:</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"Strumento CLI per pipeline AI Stazione"</span><span class="p">)</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--input"</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Percorso del file dati di input"</span><span class="p">)</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">"--mode"</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="p">[</span><span class="s2">"inspect"</span><span class="p">,</span> <span class="s2">"process"</span><span class="p">],</span> <span class="n">default</span><span class="o">=</span><span class="s2">"inspect"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Modalità operativa"</span><span class="p">)</span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>    <span class="k">return</span> <span class="n">parser</span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>    <span class="n">parser</span> <span class="o">=</span> <span class="n">build_parser</span><span class="p">()</span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a>    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Esecuzione avviata in modalità '</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2">' sul target: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">input</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-12-15" name="__codelineno-12-15" href="#__codelineno-12-15"></a>
+<a id="__codelineno-12-16" name="__codelineno-12-16" href="#__codelineno-12-16"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-12-17" name="__codelineno-12-17" href="#__codelineno-12-17"></a>    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Esecuzione del modulo principale tramite CLI</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>python<span class="w"> </span>-m<span class="w"> </span>my_project.main<span class="w"> </span>--input<span class="w"> </span>data/source.json<span class="w"> </span>--mode<span class="w"> </span>process
+</code></pre></div>
+<h2 id="concorrenza-asincrona-con-asyncio-e-httpx">Concorrenza Asincrona con Asyncio e HTTPX<a class="headerlink" href="#concorrenza-asincrona-con-asyncio-e-httpx" title="Permanent link">&para;</a></h2>
+<p>Nelle pipeline OSINT ad alta intensità di I/O o nell'interrogazione parallela di molteplici modelli linguistici, il modello sincrono genera inefficienze e blocchi nell'attesa delle risposte di rete. La libreria <a href="https://www.python-httpx.org/">HTTPX</a> (il client HTTP avanzato per Python con supporto asincrono e HTTP/2) integrata con <code>asyncio</code> abilita l'elaborazione concorrente non bloccante.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_async</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>    <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a>    <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main_async</span><span class="p">():</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a>    <span class="n">endpoints</span> <span class="o">=</span> <span class="p">[</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>        <span class="s2">"https://httpbin.org/get?id=1"</span><span class="p">,</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a>        <span class="s2">"https://httpbin.org/get?id=2"</span><span class="p">,</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>        <span class="s2">"https://httpbin.org/get?id=3"</span><span class="p">,</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a>    <span class="p">]</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a>        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[</span><span class="n">fetch_async</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span> <span class="k">for</span> <span class="n">url</span> <span class="ow">in</span> <span class="n">endpoints</span><span class="p">]</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a>        <span class="n">results</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Completate con successo </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> richieste concorrenti."</span><span class="p">)</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a>    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main_async</span><span class="p">())</span>
+</code></pre></div>
+<h2 id="compromessi-operativi-e-analisi-dei-limiti">Compromessi Operativi e Analisi dei Limiti<a class="headerlink" href="#compromessi-operativi-e-analisi-dei-limiti" title="Permanent link">&para;</a></h2>
+<p>L'adozione delle pratiche ingegneristiche in Python impone scelte ponderate in termini di complessità e risorse computazionali.</p>
+<h3 id="complessita-del-paradigma-asincrono-vs-semplicita-sincrona">Complessità del Paradigma Asincrono vs Semplicità Sincrona<a class="headerlink" href="#complessita-del-paradigma-asincrono-vs-semplicita-sincrona" title="Permanent link">&para;</a></h3>
+<p>Il codice asincrono basato su <code>asyncio</code> aumenta la densità logica e rende più complessa la diagnosi degli errori rispetto al codice sincrono sequenziale. L'asincronismo offre vantaggi tangibili unicamente per operazioni limitate dalla velocità di rete o disco (I/O-bound), mentre per carichi di lavoro ad alta intensità di calcolo (CPU-bound, come trasformazioni matematiche massive su matrici) non introduce benefici velocistici a causa del Global Interpreter Lock (GIL) di Python, richiedendo invece librerie C-backed come <a href="https://numpy.org/">NumPy</a> (la libreria per il calcolo scientifico vettorializzato) o l'uso di multiprocessing.</p>
+<h3 id="overhead-di-archiviazione-dei-log-e-gestione-della-memoria">Overhead di Archiviazione dei Log e Gestione della Memoria<a class="headerlink" href="#overhead-di-archiviazione-dei-log-e-gestione-della-memoria" title="Permanent link">&para;</a></h3>
+<p>La registrazione prolungata di log strutturati su file JSONL produce file di grandi dimensioni che possono saturare lo spazio disco se non accompagnati da policy di rotazione (<em>log rotation</em>). Inoltre, l'elaborazione di flussi JSONL ad altissima frequenza richiede buffer di scrittura dedicati per evitare frammentazione delle operazioni di I/O sul disco.</p>
+<h2 id="riferimenti-bibliografici-e-risorse-tecniche">Riferimenti Bibliografici e Risorse Tecniche<a class="headerlink" href="#riferimenti-bibliografici-e-risorse-tecniche" title="Permanent link">&para;</a></h2>
+<h3 id="standard-di-linguaggio-e-guide-ufficiali">Standard di Linguaggio e Guide Ufficiali<a class="headerlink" href="#standard-di-linguaggio-e-guide-ufficiali" title="Permanent link">&para;</a></h3>
+<p>La specifica della sintassi di base e dei tipi di dato nativi è documentata nel tutorial ufficiale <a href="https://docs.python.org/3/tutorial/index.html">The Python Tutorial</a> (la guida autorevole curata dalla <a href="https://www.python.org/psf-landing/">Python Software Foundation</a>). Le convenzioni di stile e architettura di progetto sono approfondite nel testo open-source <a href="https://docs.python-guide.org/">The Hitchhiker's Guide to Python</a> (il manuale di riferimento sulle best practice di packaging e organizzazione del codice).</p>
+<h3 id="testing-avanzato-e-percorsi-di-formazione-specialistica">Testing Avanzato e Percorsi di Formazione Specialistica<a class="headerlink" href="#testing-avanzato-e-percorsi-di-formazione-specialistica" title="Permanent link">&para;</a></h3>
+<p>Per approfondire l'architettura dei test con fixture e mocking, la documentazione ufficiale di <a href="https://docs.pytest.org/">pytest</a> fornisce linee guida complete per suite di collaudo industriali. La piattaforma indipendente <a href="https://realpython.com/">Real Python</a> (il portale di formazione tecnica per programmatori Python) offre percorsi tematici dedicati all'ingegneria del software, alla concorrenza asincrona e alla costruzione di strumenti CLI nei suoi <a href="https://realpython.com/learning-paths/">Learning Paths</a>.</p>
+<h2 id="appendice-operativa-laboratori-pratici">Appendice Operativa: Laboratori Pratici<a class="headerlink" href="#appendice-operativa-laboratori-pratici" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>[!TIP]
+<strong>Zero-Draft Offloading (Delega dell'Inizio)</strong>
+Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di <em>revisore</em> e <em>ingegnere</em>, non di dattilografo.</p>
+</blockquote>
+<ul>
+<li>[ ] Configurazione dell'ambiente e logging strutturato: Creare la cartella di lavoro <code>stazione-python-lab/</code>, inizializzare l'ambiente virtuale con <code>python -m venv .venv</code>, attivarlo e configurare <code>main.py</code> per registrare messaggi informativi e di errore sia su standard output sia su file persistente <code>logs/app.log</code>.</li>
+<li>[ ] Elaborazione di dataset in formato JSONL: Scrivere uno script che genera dieci dizionari di test e li scrive in modalità append all'interno di <code>logs/events.jsonl</code>. Realizzare una seconda funzione che esegue lo streaming del file riga per riga, deserializza gli oggetti con <code>json.loads()</code> e calcola il conteggio aggregato degli eventi per tipologia.</li>
+<li>[ ] Client API resiliente con variabili d'ambiente: Implementare il modulo <code>src/my_project/api_client.py</code> con una funzione che acquisisce l'endpoint da configurazione YAML e la chiave di autorizzazione dalla variabile d'ambiente <code>SERVICE_API_KEY</code>, eseguendo una richiesta GET con timeout e gestione delle eccezioni di rete.</li>
+<li>[ ] Costruzione di interfaccia CLI e suite di test: Esporre i comandi di ispezione ed elaborazione tramite <code>argparse</code> all'interno di <code>main.py</code>. Creare la cartella <code>tests/</code>, implementare il test unitario per una funzione di utilità matematica e validare l'intera suite eseguendo <code>pytest -q</code>.</li>
+</ul>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+          
+          <a href="../D01-workspace-llm-wiki/" class="md-footer__link md-footer__link--prev" aria-label="Precedente: D01 — Workspace local-first, Git, Obsidian, LLM wiki">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Precedente
+              </span>
+              <div class="md-ellipsis">
+                D01 — Workspace local-first, Git, Obsidian, LLM wiki
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../D02b-virtualizzazione-e-container/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D02b — Virtualizzazione e Container">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D02b — Virtualizzazione e Container
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
