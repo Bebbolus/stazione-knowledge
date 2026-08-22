@@ -1,7 +1,9 @@
 ---
 aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale, Architettura Workspace Local-First]
-video_url: "https://www.youtube.com/watch?v=hwP7WQkmrx8"
-lab_url: "https://git-school.github.io/visualizing-git/"
+resources:
+  - title: "Learn Git Branching (Simulatore Visuale)"
+    url: "https://learngitbranching.js.org/"
+    type: "lab"
 ---
 # Architettura Workspace Local-First (Git, Obsidian, LLM)
 

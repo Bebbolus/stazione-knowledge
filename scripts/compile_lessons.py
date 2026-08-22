@@ -10,16 +10,14 @@ def parse_markdown_file(filepath):
     # Parse Frontmatter
     frontmatter = {}
     aliases = []
-    video_url = None
-    lab_url = None
+    resources = []
     frontmatter_match = re.match(r'^---\s*\n(.*?)\n---\s*\n', content, re.DOTALL)
     body_content = content
     if frontmatter_match:
         try:
             frontmatter = yaml.safe_load(frontmatter_match.group(1))
             aliases = frontmatter.get('aliases', [])
-            video_url = frontmatter.get('video_url', None)
-            lab_url = frontmatter.get('lab_url', None)
+            resources = frontmatter.get('resources', [])
         except Exception as e:
             print(f"Error parsing frontmatter in {filepath}: {e}")
         body_content = content[frontmatter_match.end():]
@@ -95,10 +93,8 @@ def parse_markdown_file(filepath):
         "entities": entities,
         "labs": labs
     }
-    if video_url:
-        result["video_url"] = video_url
-    if lab_url:
-        result["lab_url"] = lab_url
+    if resources:
+        result["resources"] = resources
         
     return result
 
