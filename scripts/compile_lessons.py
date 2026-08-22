@@ -27,11 +27,12 @@ def parse_markdown_file(filepath):
         title = h1_match.group(1).strip()
         body_content = body_content[h1_match.end():]
 
-    # First paragraph (Inverted Pyramid)
-    paragraphs = [p.strip() for p in body_content.split('\n\n') if p.strip()]
-    inverted_pyramid = ""
-    if paragraphs:
-        inverted_pyramid = paragraphs[0]
+    # First paragraph (Inverted Pyramid) -> Now takes all content before the first H2
+    first_h2_match = re.search(r'^##\s+', body_content, re.MULTILINE)
+    if first_h2_match:
+        inverted_pyramid = body_content[:first_h2_match.start()].strip()
+    else:
+        inverted_pyramid = body_content.strip()
 
     # Extract all entities: [Name](URL) (description in Italian)
     # Regex details: [Name](URL) (description)
