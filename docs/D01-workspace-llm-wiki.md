@@ -3,9 +3,15 @@ aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale, 
 ---
 # Architettura Workspace Local-First (Git, Obsidian, LLM)
 
+![Workspace Locale e Sicuro](assets/local_workspace.jpg)
+
 Quando prendiamo appunti o salviamo documenti aziendali, di solito utilizziamo app nel cloud come [Notion](https://www.notion.so/) (app per note aziendali) o [Evernote](https://evernote.com/) (piattaforma commerciale di appunti). Il **problema** è che questi sistemi intrappolano i nostri dati nei loro server (*lock-in*). Se un giorno vogliamo che un'Intelligenza Artificiale o uno script legga migliaia dei nostri documenti per aiutarci a fare ricerca, i sistemi cloud ci bloccano con limiti di velocità, costi imprevisti o, peggio, inviano i nostri dati sensibili ai server di terze parti violando la nostra privacy.
 
 La **soluzione** a questo problema è l'**architettura workspace local-first**: un modello in cui tutti i tuoi documenti risiedono fisicamente sul disco del tuo computer come semplici file di testo (Markdown). Per non perdere nulla e avere lo storico, li sincronizziamo con [Git](https://git-scm.com/) (il sistema di controllo versione usato dai programmatori). In questo modo, riprendiamo il controllo totale dei nostri dati privati. Possiamo collegarci istantaneamente i nostri script in [Python](https://www.python.org/) (il linguaggio principale per l'AI) e farli leggere ad Agenti AI locali in totale sicurezza e senza aver bisogno di internet.
+
+> [!TIP]
+> **💡 Curiosità: Sapevi che Git è nato per disperazione in soli 10 giorni?**
+> Nel 2005, la comunità che sviluppava Linux perse improvvisamente l'accesso gratuito al sistema che usava per salvare il codice. Disperato e arrabbiato, Linus Torvalds si chiuse in casa e scrisse la prima versione di Git in appena 10 giorni. Oggi è il motore di tutto il codice del pianeta terra!
 
 ```text
 Workspace-Local-First/ # Il tuo computer, non il server di altri!
@@ -79,6 +85,16 @@ L'articolo pionieristico [A Personal Git Repo as a Knowledge Base Wiki](https://
 Per interfacciare modelli linguistici locali e vault di documenti Markdown, il progetto open-source [LLM-Wikid](https://github.com/shannhk/llm-wikid) (un motore di sincronizzazione e indicizzazione di vault Markdown per modelli generativi) e la guida [LLM-KB — Knowledge Base per Modelli Linguistici](https://ocholuo.github.io/posts/LLM-KnowledgeBase-Obsidian/) descrivono l'architettura tecnica per combinare consultazione umana e arricchimento semantico automatico.
 
 I fondamenti matematici e computazionali per l'elaborazione del linguaggio naturale e l'addestramento dei modelli sono liberamente accessibili attraverso i programmi della [Stanford University](https://www.stanford.edu/) (il prestigioso ateneo di ricerca californiano), in particolare il corso [CS229: Machine Learning](https://cs229.stanford.edu/) (disponibile con [videolezioni aperte](https://online.stanford.edu/courses/cs229-machine-learning)) e il corso [CS224N: Natural Language Processing with Deep Learning](https://web.stanford.edu/class/cs224n/).
+
+## I Comandi Magici di Git (Per non perdere mai un file)
+
+Prima di fare gli esercizi interattivi, devi conoscere i 5 comandi essenziali di Git. Pensali come una macchina del tempo per i tuoi documenti:
+
+1. `git init`: Accende la macchina del tempo. Dice al computer di iniziare a sorvegliare questa cartella.
+2. `git add .`: Mette tutti i file sulla rampa di lancio (prepara i file modificati).
+3. `git commit -m "Messaggio"`: Scatta la foto! Salva definitivamente lo stato dei file con un nome (il messaggio).
+4. `git remote add origin https://...`: Collega la tua cartella sul computer a un server cloud su Internet (es. GitHub) per fare un backup.
+5. `git push -u origin main`: Lancia la navicella! Invia la foto dei tuoi file sul cloud.
 
 ## Appendice Operativa: Laboratori Pratici
 
