@@ -13,14 +13,6 @@ La **soluzione** a questo problema è l'**architettura workspace local-first**: 
 > **💡 Curiosità: Sapevi che Git è nato per disperazione in soli 10 giorni?**
 > Nel 2005, la comunità che sviluppava Linux perse improvvisamente l'accesso gratuito al sistema che usava per salvare il codice. Disperato e arrabbiato, Linus Torvalds si chiuse in casa e scrisse la prima versione di Git in appena 10 giorni. Oggi è il motore di tutto il codice del pianeta terra!
 
-```text
-Workspace-Local-First/ # Il tuo computer, non il server di altri!
-├── Stazione/ # La cartella principale dei tuoi progetti
-├── stazione-knowledge/ # I documenti pubblici sincronizzati con GitHub
-├── private/ # I tuoi appunti privati, irraggiungibili da internet
-└── inbox/ # PDF e documenti grezzi da studiare
-```
-
 ## Il File System come Sorgente di Verità
 
 Per abbandonare il cloud, riposizioniamo il file system del nostro computer come unica sorgente di verità (*single source of truth*). Adottando file di testo standard con estensione `.md`, versionati mediante Git per preservare lo storico immutabile delle modifiche, e impiegando [Obsidian](https://obsidian.md/) (l'ambiente per appunti basato su grafi visivi) come interfaccia, otteniamo un ecosistema robusto, trasparente e immediatamente indicizzabile da agenti software autonomi.
