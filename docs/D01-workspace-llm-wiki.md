@@ -21,6 +21,9 @@ Quando prendiamo appunti o salviamo documenti aziendali, di solito utilizziamo a
 
 La **soluzione** a questo problema è l'**architettura workspace local-first**: un modello in cui tutti i tuoi documenti risiedono fisicamente sul disco del tuo computer come semplici file di testo (Markdown). Per non perdere nulla e avere lo storico, li sincronizziamo con [Git](https://git-scm.com/) (il sistema di controllo versione usato dai programmatori). In questo modo, riprendiamo il controllo totale dei nostri dati privati. Possiamo collegarci istantaneamente i nostri script in [Python](https://www.python.org/) (il linguaggio principale per l'AI) e farli leggere ad Agenti AI locali in totale sicurezza e senza aver bisogno di internet.
 
+> [!TIP] Spiegato Semplice: Cos'è davvero "Git"?
+> Hai presente quando, in un videogioco, affronti un boss difficilissimo e salvi la partita un secondo prima di entrare nella stanza? Se muori, non devi ricominciare da capo, ma "ricarichi" il salvataggio. **Git** è esattamente questo, ma per i tuoi file. Ti permette di "salvare la partita" del tuo lavoro. Se per sbaglio cancelli tutto, puoi tornare indietro nel tempo! Incredibile, vero?
+
 > [!TIP]
 > **💡 Curiosità: Sapevi che Git è nato per disperazione in soli 10 giorni?**
 > Nel 2005, la comunità che sviluppava Linux perse improvvisamente l'accesso gratuito al sistema che usava per salvare il codice. Disperato e arrabbiato, Linus Torvalds si chiuse in casa e scrisse la prima versione di Git in appena 10 giorni. Oggi è il motore di tutto il codice del pianeta terra!

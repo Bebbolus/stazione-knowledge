@@ -20,6 +20,11 @@ resources:
 
 L'**ingegneria del software in Python per l'intelligenza artificiale** è la disciplina che applica pattern di progettazione modulari, isolamento degli ambienti, gestione robusta dell'I/O e testing automatizzato allo sviluppo di pipeline di machine learning e strumenti di analisi OSINT. Questa metodologia si adotta in contesti operativi e di ricerca per trasformare prototipi sperimentali in servizi software affidabili, manutenibili e facilmente integrabili in architetture agentiche. La disciplina esiste perché la resilienza di un sistema AI non dipende unicamente dalla complessità algoritmica dei modelli, ma dalla robustezza dell'infrastruttura di codice sottostante, dalla riproducibilità deterministica delle dipendenze e dalla protezione rigorosa delle chiavi crittografiche.
 
+> [!TIP] Spiegato Semplice: Perché usare "Python" e i "Moduli"?
+> Immagina Python come una gigantesca scatola di costruzioni LEGO. Invece di dover creare ogni singolo mattoncino da zero, puoi scaricare scatole piene di pezzi speciali già fatti da altri (i famosi "Pacchetti"). 
+> 
+> "Ingegneria del Software" significa semplicemente costruire astronavi LEGO usando tanti moduli separati. Se si rompe l'ala (uno script), sostituisci solo quell'ala, senza dover buttare via l'intera astronave (il codice monolitico)! E i "Test" sono come un collaudo di sicurezza: prima di far volare la navicella, un mini-robot controlla in automatico che tutti i pezzi siano attaccati bene.
+
 ## Il Problema dello Script Monolitico e dei Notebook Sperimentali
 
 Nelle fasi esplorative di analisi dati e prototipazione di modelli AI, è comune concentrare l'intera logica computazionale all'interno di singoli script monolitici o di notebook interattivi come [Jupyter](https://jupyter.org/). Sebbene questo approccio consenta una validazione immediata delle ipotesi, si rivela fragile e inadeguato quando il codice deve essere eseguito in modo non presidiato, integrato in pipeline di Continuous Integration o scalato su grandi volumi di dati.
