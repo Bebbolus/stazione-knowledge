@@ -51,9 +51,10 @@ my-project/
 ├── config/
 │   └── settings.example.yaml
 ├── logs/
-│   ├── .env.example
-│   ├── requirements.txt
-│   └── README.md
+│   └── app.log
+├── .env.example
+├── requirements.txt
+└── README.md
 ```
 
 La directory `src/` racchiude esclusivamente i moduli sorgente del pacchetto applicativo, isolandoli dalla suite di collaudo collocata in `tests/`. Le configurazioni parametriche e i file di template per le variabili d'ambiente risiedono in `config/` e `.env.example`, mentre la cartella `logs/` raccoglie le tracce diagnostiche generate a runtime. L'entry point applicativo è definito in `main.py`, orchestrando i moduli specializzati senza generare dipendenze circolari.
