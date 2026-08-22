@@ -1,5 +1,7 @@
 ---
 aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale, Architettura Workspace Local-First]
+video_url: "https://www.youtube.com/watch?v=hwP7WQkmrx8"
+lab_url: "https://git-school.github.io/visualizing-git/"
 ---
 # Architettura Workspace Local-First (Git, Obsidian, LLM)
 
@@ -36,11 +38,11 @@ Stazione/
 
 La configurazione richiede di clonare il repository pubblico `stazione-knowledge` all'interno della cartella radice `Stazione/`, creando parallelamente e allo stesso livello le cartelle `private/` e `inbox/`. Poiché questi ultimi due rami risiedono fisicamente all'esterno del repository tracciato, le normali operazioni di commit e push verso [GitHub](https://github.com/) (la piattaforma cloud di hosting per repository Git) non comportano alcun rischio di divulgazione accidentale di appunti riservati, log di esecuzione o credenziali d'accesso.
 
-### Obsidian come Motore di Navigazione e Visualizzazione a Grafo
+## Obsidian come Motore di Navigazione e Visualizzazione a Grafo
 
 L'apertura del vault di **Obsidian** deve puntare alla directory radice `Stazione/` e non alla sola sottocartella del repository. Questa scelta consente all'applicazione di indicizzare simultaneamente i documenti definitivi in `stazione-knowledge/docs/` e le note provvisorie in `private/notes/`, rendendo possibile la navigazione ipertestuale e la creazione di collegamenti bidirezionali tramite collegamenti wiki interni senza alterare la struttura dei file sottostanti.
 
-### Il Flusso di Elaborazione delle Informazioni
+## Il Flusso di Elaborazione delle Informazioni
 
 La trasformazione di materiale grezzo in conoscenza strutturata segue un ciclo di vita lineare articolato in quattro fasi sequenziali e rigorosamente compartimentate. Nella prima fase di acquisizione, i documenti esterni, gli articoli tecnici in formato PDF e i file grezzi vengono depositati direttamente all'interno della cartella `inbox/` per preservare l'integrità del dato originario senza alterazioni.
 
