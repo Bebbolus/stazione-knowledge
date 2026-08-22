@@ -3,21 +3,38 @@ aliases: [Single Pane of Glass, SPoG, Ecosistema Interfacce, Agent Harness, Clie
 ---
 # Ecosistema Interfacce e Client: Il Single Pane of Glass
 
-L'industria converge verso il paradigma del **Single Pane of Glass (SPoG)**, un hub centralizzato che separa radicalmente il motore logico dell'agente dall'interfaccia utente e dall'editor. In questa architettura, l'analista interagisce con una singola applicazione (come **DeepSeek Harness (dsh)** o **OpenWork**) che funge da orchestratore.
+Quando si lavora con le AI, il **problema** più grande è la frammentazione cognitiva (il *Context Switching*). Solitamente, un utente deve aprire [Obsidian](https://obsidian.md/) per gli appunti, saltare su una scheda web (come ChatGPT) per fare una domanda copiando e incollando il testo, spostarsi sul terminale per eseguire lo script generato, e infine tornare all'editor. Questo salto continuo tra app diverse affatica il cervello, e impedisce all'AI di vedere tutto il contesto, poiché lo "stato" (file, codice, log) è disperso e inaccessibile all'agente cloud.
+
+La **soluzione** dell'industria è il paradigma **Single Pane of Glass (SPoG)** (Singolo Pannello di Controllo). Invece di fare copia-incolla verso il cloud, portiamo il motore dell'agente direttamente nel nostro ambiente locale tramite un "Client AI" (chiamato *Agent Harness*). Attraverso un'unica interfaccia (es. **DeepSeek Harness** o **OpenWork**) che funge da orchestratore, l'agente può leggere il disco, navigare il terminale e conversare con te, tutto in un solo hub centralizzato.
+
+```text
++-----------------------------------------------------------------------------------------+
+|                  ARCHITETTURA SINGLE PANE OF GLASS (SPoG)                               |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ File System Locale ] ──┐                                                             |
+|                           │      +-------------------------------------------+          |
+|  [ Terminale / Shell  ] ──┼───►  |  AGENT HARNESS (Il Singolo Pannello)      |          |
+|                           │      |  (Visualizza Log, Esegue Code, Chat AI)   |          |
+|  [ Web Browser        ] ──┘      +-------------------------------------------+          |
+|                                                                                         |
++-----------------------------------------------------------------------------------------+
+```
 
 **DeepSeek Harness (dsh)**, in particolare, rappresenta lo stato dell'arte dell'iper-componibilità. Basato sul motore a plugin **Cordis**, non è un agente pre-confezionato ma una vera e propria infrastruttura in cui ogni componente (l'adattatore LLM, la sandbox di esecuzione, il registro dei tool, l'interfaccia e il loop decisionale) è un pacchetto npm intercambiabile. Questa natura componibile garantisce lo Zero Model Lock-in, permettendo di cablare modelli cloud o locali senza sforzo.
 
 Un'innovazione critica di `dsh` è la **Trajectory View**: ogni singola operazione, pensiero o chiamata a tool generata dal modello viene salvata in un log di sessione immutabile. Questo log permette all'operatore di eseguire *replay*, ispezionare, forzare o creare *fork* di intere sessioni passate, risolvendo definitivamente il problema dell'opacità decisionale degli agenti AI. L'agente non è più una "scatola nera" che genera file, ma un processo di cui l'Harness espone ogni singolo passaggio esecutivo.
 
-## Il Problema: Context Switching e Dispersione dello Stato
-
-Nel flusso di lavoro pre-SPoG, un analista o uno sviluppatore operava in un regime di continua frammentazione cognitiva. Apriva [Obsidian](https://obsidian.md/) per leggere gli appunti, saltava a una scheda del browser web (es. ChatGPT o Claude) per formulare una richiesta copiando e incollando il testo, si spostava sul terminale per eseguire lo script generato, e infine tornava all'editor per salvare i risultati. Questo continuo **context switching** (il salto tra interfacce diverse) genera un grave attrito operativo e impedisce l'automazione fluida, poiché nessun singolo software ha accesso completo allo stato globale del progetto.
-
-In questo scenario, lo "stato" (i file, le variabili d'ambiente, i log di esecuzione) è disperso. L'agente web cloud non "vede" il disco locale, il terminale non ha memoria semantica delle ricerche precedenti e l'editor non può eseguire codice autonomamente. Per superare questi limiti, i team tentavano di integrare plugin isolati in ciascun software, ricreando un ecosistema rigido in cui l'aggiornamento di un componente rompeva l'interoperabilità con gli altri. 
-
-Il paradigma SPoG risolve questo problema spostando il centro di gravità: non si portano i frammenti di codice nell'interfaccia di chat, ma si porta il motore agentico (tramite l'Harness) direttamente nell'ambiente in cui risiedono i dati e il codice (file system locale o terminale), rendendolo l'unico hub per l'orchestrazione, l'ispezione e la visualizzazione.
-
 ## Le Tre Categorie di Agent Harness
+
+Oltre agli Harness orientati al codice, l'ecosistema comprende anche le GUI (Interfacce Grafiche) per l'utente finale che semplificano l'orchestrazione locale.
+
+### Interfacce Grafiche (GUI) Desktop: LM Studio
+Mentre framework come Ollama o llama.cpp operano tipicamente da linea di comando o come servizi headless, **LM Studio** rappresenta lo standard de-facto per le GUI desktop nello sviluppo local-first. Permette di:
+- **Scaricare modelli con un click** esplorando l'hub di HuggingFace.
+- **Selezionare visivamente le quantizzazioni** (es. capire istantaneamente se un Q4 o un Q5 entra nella RAM del proprio sistema).
+- **Avviare un server API OpenAI-compatibile** (es. su localhost:1234) per esporre il modello in rete locale affinché altri Agent Harness (come OpenCode o DeepSeek Harness) possano interrogarlo senza accorgersi che il modello gira in locale anziché in cloud.
+
 
 Il panorama delle interfacce si articola in tre macro-categorie, ciascuna ottimizzata per specifici ruoli operativi e livelli di astrazione.
 

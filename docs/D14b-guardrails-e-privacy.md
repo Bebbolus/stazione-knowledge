@@ -3,15 +3,25 @@ aliases: [Guardrails AI, Privacy Pipeline, LLM Guard, Rizzo-PII, GDPR LLM, Promp
 ---
 # Guardrails Locali e Privacy: LLM Guard e Rizzo-PII
 
-I **guardrails locali** sono una pipeline di software open-source che si posiziona tra l'agent harness (il client che interagisce con l'utente) e il gateway LLM (il router che smista le chiamate verso i modelli), con il compito di **bloccare le prompt injection** in ingresso e **anonimizzare i dati personali** in uscita prima che raggiungano le API cloud. Nell'architettura della postazione di lavoro SOTA 2026, questa pipeline è composta da due componenti complementari: [LLM Guard](https://github.com/protectai/llm-guard) (il framework di sicurezza open-source creato da [ProtectAI](https://protectai.com/), l'azienda specializzata nella protezione dei sistemi di machine learning) per la difesa contro le injection e la sanitizzazione dell'input/output, e [Rizzo-PII](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B) (il modello NER open-source sviluppato da [Rizzo AI Academy](https://github.com/rizzoaiacademy), disponibile su [HuggingFace](https://huggingface.co/)) per l'anonimizzazione specifica dei formati identificativi italiani (Codice Fiscale, Partita IVA, IBAN e dati catastali).
+Quando analizziamo documenti legali o investigativi con le Intelligenze Artificiali in cloud, affrontiamo due **problemi** critici. Il primo è la **Privacy (GDPR)**: inviando al cloud testi con Codici Fiscali, Partite IVA o indagini penali, i nostri dati sensibili o quelli dei nostri clienti lasciano il nostro controllo. Il secondo è la **Sicurezza (Prompt Injection)**: un agente autonomo che legge una pagina web hackerata potrebbe ricevere l'ordine nascosto di cancellare i nostri file o rivelare i nostri segreti.
 
-## Il Problema: Dati Sensibili che Escono dalla Rete
+La **soluzione** architetturale è inserire una pipeline di **guardrails locali** (firewall per AI) direttamente nel nostro computer, posizionata prima del gateway LLM. Questi filtri analizzano e bloccano le iniezioni malevole prima che colpiscano il modello, e utilizzano tool come [LLM Guard](https://github.com/protectai/llm-guard) (firewall open-source di ProtectAI) e [Rizzo-PII](https://huggingface.co/rizzoaiacademy/rizzo-pii-0.3B) (modello NER specializzato nell'anonimizzazione dei dati italiani) per censurare o criptare i dati personali prima che viaggino su internet.
 
-Ogni volta che un agente AI invia una query a un modello cloud (anche attraverso API gratuite gestite da [LiteLLM](https://github.com/BerriAI/litellm) (il gateway open-source per il routing multi-provider)), il contenuto di quella query **attraversa Internet**. Per un professionista italiano — un avvocato che analizza un contratto, un commercialista che elabora una dichiarazione, un analista OSINT che compila un dossier investigativo — questo significa che Codici Fiscali, Partite IVA, IBAN, nomi di indagati e dati catastali finiscono sui server del provider LLM.
+```text
++---------------------+        +-------------------------+       +-------------------+
+|  1. AGENTE/UTENTE   |  ───►  |  2. GUARDRAIL LOCALE    | ───►  | 3. CLOUD/LLM      |
+|  "Riassumi il PDF   |        |  (Scudo Anti-Injection) |       | "Riassumi il PDF  |
+|   di Mario Rossi,   |        |  (Rizzo-PII anonimizza) |       |  di [NOME_1],     |
+|   CF: RSSMRA..."    |  ◄───  |  (De-anonimizzazione)   | ◄───  |  CF: [CF_1]..."   |
++---------------------+        +-------------------------+       +-------------------+
+```
 
-Il [GDPR](https://gdpr-info.eu/) (il Regolamento Generale sulla Protezione dei Dati dell'Unione Europea) non proibisce l'uso di API cloud, ma impone che i dati personali siano trattati con **base giuridica**, **minimizzazione** e **adeguate misure di sicurezza**. Nella pratica, il modo più sicuro per rispettare questi requisiti senza rinunciare ai modelli cloud è **anonimizzare i dati prima che lascino la rete locale** e de-anonimizzarli dopo che la risposta è tornata.
+## Modelli Locali "Uncensored" e Abliteration
 
-Il secondo problema è la **prompt injection indiretta**. Un agente che legge documenti esterni (pagine web, email, file PDF) è vulnerabile ad attacchi in cui il documento contiene istruzioni nascoste progettate per manipolare il comportamento dell'agente. La [OWASP Foundation](https://owasp.org/) (l'organizzazione non-profit che definisce gli standard globali di sicurezza delle applicazioni software) ha inserito la prompt injection al primo posto nella sua classifica [OWASP Top 10 for LLM Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/), classificandola come il rischio più critico dei sistemi basati su Large Language Model.
+L'uso di modelli cloud impone l'accettazione di filtri etici centralizzati ("guardrails" del provider) che spesso portano a falsi positivi (es. il modello si rifiuta di analizzare un exploit informatico o di riassumere indagini penali vere per policy di sicurezza). Nello sviluppo local-first, emerge l'uso di varianti di modelli:
+- **Uncensored**: Modelli (come le versioni di Dolphin o custom fine-tune) addestrati specificamente per non rifiutare alcun prompt, eseguendo compiti "borderline" essenziali per cybersecurity, pen-testing o analisi di intelligence.
+- **Abliterated**: Si riferisce all'*Orthogonalization Ablation*, una tecnica matematica sofisticata in cui il "vettore del rifiuto" (la direzione nello spazio latente responsabile dell'attivazione dei blocchi etici) viene geometricamente isolato e cancellato dai pesi del modello. I modelli *Abliterated* mantengono l'intelligenza nativa del modello base intatta, ma rimuovono chirurgicamente il meccanismo di censura.
+Gestire modelli Uncensored o Abliterated richiede grande disciplina e rende strumenti come LLM Guard ancora più critici, poiché il modello non si autoproteggerà da task malevoli.
 
 ## LLM Guard: Lo Scudo contro le Injection
 

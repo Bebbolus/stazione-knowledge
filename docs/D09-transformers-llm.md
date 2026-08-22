@@ -3,15 +3,26 @@ aliases: [D09, Transformers, LLM, Large Language Models, Self-Attention, Ingegne
 ---
 # Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza
 
-L'**architettura Transformer** è una topologia di rete neurale fondata integralmente sul meccanismo di auto-attenzione (*Self-Attention*), concepita per elaborare sequenze di dati catturando dipendenze e correlazioni contestuali a lungo raggio in parallelo. Questa architettura costituisce il motore computazionale primario di tutti i moderni Large Language Model (LLM), trovando applicazione critica nell'elaborazione del linguaggio naturale, nella generazione e sintesi di codice sorgente, nell'analisi documentale complessa e nei sistemi di intelligenza artificiale per l'intelligence delle fonti aperte (OSINT). L'architettura nasce per superare il vincolo intrinsecamente sequenziale e il degrado del gradiente tipici delle reti neurali ricorrenti, consentendo la parallelizzazione massiva dei carichi di addestramento su cluster di GPU e scalando l'efficienza predittiva su corpora testuali composti da miliardi di token.
+# Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza
 
-## I Limiti della Ricorrenza e la Genesi dell'Attenzione
+Fino al 2017, il **problema** principale nel far leggere testi ai computer era la lentezza: le reti neurali dell'epoca (RNN e LSTM) dovevano leggere le parole rigorosamente in fila, una dopo l'altra. Questa dipendenza temporale impediva di usare la potenza di calcolo parallela delle moderne schede video (GPU). Più il testo era lungo, più il modello dimenticava le prime parole, rendendo impossibile addestrare IA su interi libri o su enormi dataset.
 
-Prima dell'avvento dei Transformer, l'elaborazione di sequenze temporali e testuali nel campo del deep learning era dominata dalle reti neurali ricorrenti (RNN) e dalle loro varianti a porte, quali le reti Long Short-Term Memory (LSTM) e le Gated Recurrent Unit (GRU). Sebbene tali strutture fossero concepite per mantenere uno stato nascosto persistente lungo la sequenza, il loro funzionamento implicava una dipendenza temporale strettamente sequenziale: il calcolo dello stato nascosto al passo temporale corrente dipendeva in modo indissolubile dal completamento dello stato calcolato al passo precedente.
+La **soluzione** che ha sconvolto l'industria è stata inventata dai ricercatori di Google e DeepMind con il paper [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762). Hanno eliminato la lettura sequenziale sostituendola con un meccanismo di auto-attenzione (*Self-Attention*). In questa architettura (il **Transformer**), la rete guarda *tutte* le parole della frase nello stesso esatto momento. 
 
-Questa dipendenza lineare impediva la parallelizzazione computazionale durante la fase di propagazione in avanti e di retropropagazione del gradiente, limitando fortemente lo sfruttamento dei core di calcolo delle GPU moderne e rendendo proibitivo l'addestramento su dataset di dimensioni massive. Inoltre, lungo sequenze composte da centinaia o migliaia di passi, il flusso di informazione andava incontro al fenomeno del gradiente evanescente o esplosivo, provocando una rapida perdita del contesto semantico iniziale e riducendo drasticamente la capacità del modello di correlare concetti distanti nel testo.
+```text
++-----------------------------------------------------------------------------------------+
+|                  IL PARADOSSO RISOLTO: DA SEQUENZIALE A PARALLELO                       |
++-----------------------------------------------------------------------------------------+
+|                                                                                         |
+|  [ RNN (Vecchio) ] : Parola 1 ──► Parola 2 ──► Parola 3 ──► (Lento, perde il filo)      |
+|                                                                                         |
+|  [ Transformer ]   : Parola 1 ──┐                                                       |
+|                      Parola 2 ──┼──►  (Tutte insieme, calcolo parallelo su GPU)         |
+|                      Parola 3 ──┘                                                       |
++-----------------------------------------------------------------------------------------+
+```
 
-La svolta teorica e architetturale è avvenuta con la pubblicazione dello studio fondamentale [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762) da parte dei ricercatori di [Google](https://about.google/) (la multinazionale tecnologica leader nei servizi Internet, calcolo distribuito e ricerca fondamentale nell'AI) e [Google DeepMind](https://deepmind.google/) (la divisione di ricerca sull'intelligenza artificiale di Google pioniera del deep learning). Il lavoro ha dimostrato come fosse possibile eliminare completamente ogni componente ricorrente o convoluzionale, affidando la modellazione delle relazioni tra token a meccanismi di attenzione diretta *all-to-all*, capaci di collegare istantaneamente qualsiasi coppia di elementi della sequenza con complessità di percorso costante pari a un singolo passaggio di calcolo.
+L'architettura Transformer costituisce oggi il motore computazionale primario di tutti i moderni Large Language Model (LLM), permettendo per la prima volta l'addestramento su miliardi di parole contemporaneamente e rivoluzionando i campi della generazione di codice e dell'OSINT.
 
 ## Formulazione Matematica e Geometrica della Self-Attention
 
@@ -270,6 +281,10 @@ $$q = \text{clamp}\left(\left\lfloor \frac{w}{S} \right\rceil + Z, q_{\min}, q_{
 ```
 
 Nel panorama della compressione parametrica si distinguono quattro approcci fondamentali. In primo luogo, il formato **GGUF e K-Quants** sviluppato da [Georgi Gerganov](https://github.com/ggerganov) (lo sviluppatore software open-source creatore di whisper.cpp e [llama.cpp](https://github.com/ggerganov/llama.cpp)) organizza i pesi in super-blocchi con quantizzazione non uniforme. Nelle varianti ibride (come Q4_K_M o Q5_K_M), gli strati di attenzione e le proiezioni più sensibili all'errore vengono conservati a 5 o 6 bit, mentre le matrici di feed-forward meno critiche vengono compresse a 4 bit, massimizzando il rapporto qualità/memoria su CPU e GPU consumer. In secondo luogo, **AWQ (Activation-aware Weight Quantization)** si basa sull'evidenza empirica che non tutti i parametri hanno pari importanza: AWQ osserva le distribuzioni delle attivazioni su un piccolo dataset di calibrazione e individua l'1% dei canali salienti che presentano magnitudo elevata, proteggendoli dalla distorsione da arrotondamento e consentendo una quantizzazione a 4-bit con perdita di perplexity trascurabile. In terzo luogo, **GPTQ (Generalized Post-Training Quantization)** è un algoritmo di quantizzazione per strato basato su un'approssimazione del secondo ordine dell'errore di ricostruzione tramite l'inversione della matrice Hessiana $H = 2 X X^\top$, quantizzando i pesi colonna per colonna e aggiornando simultaneamente i coefficienti non ancora quantizzati per compensare l'errore introdotto. Infine, la libreria [BitsAndBytes](https://github.com/TimDettmers/bitsandbytes) (la libreria di quantizzazione a 8-bit e 4-bit per modelli deep learning) definisce il formato teoricamente ottimale NormalFloat 4 (NF4) per pesi distribuiti normalmente con media zero e varianza unitaria, integrando la tecnica della *Double Quantization* per comprimere i fattori di scala.
+
+### Formati per Ecosistemi Hardware Specifici: GGUF vs MLX
+
+Nella distribuzione pratica dei modelli quantizzati, lo standard de-facto multipiattaforma è il **GGUF** (ottimizzato per CPU/GPU generiche tramite llama.cpp). Tuttavia, per l'architettura *Apple Silicon* (chip M1/M2/M3/M4 con memoria unificata), Apple ha rilasciato il framework open-source **MLX**. Scaricare un modello quantizzato specificamente in formato MLX (anziché GGUF) su un Mac massimizza l'efficienza della banda di memoria unificata (fino a 800 GB/s su M3 Max), risultando nello stato dell'arte per le performance inferenziali su hardware portatile, permettendo di generare decine di token/s su modelli da 27 o 70 miliardi di parametri alimentati a batteria.
 
 ## Motori di Serving e Architetture di Esecuzione in Produzione
 
