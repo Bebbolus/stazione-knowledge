@@ -17,6 +17,14 @@ resources:
 
 L'**apprendimento automatico classico** è la disciplina computazionale che ottimizza algoritmi predittivi direttamente da collezioni di dati empirici, identificando funzioni matematiche di mappatura senza richiedere la codifica manuale di regole deterministiche. Questa metodologia costituisce il nucleo operativo per compiti di classificazione binaria e multiclasse, stima quantitativa di grandezze continue e individuazione di pattern comportamentali in contesti industriali e di intelligence OSINT. La formalizzazione di un workflow rigoroso tramite [Scikit-learn](https://scikit-learn.org/) (la libreria open-source fondamentale in [Python](https://www.python.org/) per il machine learning classico, classificazione, regressione e validazione) garantisce l'isolamento metodologico delle fasi di addestramento e collaudo, prevenendo distorsioni da memorizzazione acritica e validando la capacità di generalizzazione statistica del sistema prima del rilascio in produzione.
 
+> [!TIP] Spiegato Semplice: Apprendimento e "Discesa del Gradiente"
+> Immagina che l'Intelligenza Artificiale sia un giocatore bendato di **Minigolf**. Si trova su una montagna e deve fare buca nel punto più basso della valle (il punto in cui "sbaglia di meno"). 
+> Il giocatore "tasta" il terreno col piede per capire dove c'è la discesa (*calcolo del gradiente*). Poi deve decidere con quanta forza colpire la pallina (*Learning Rate*). 
+> - Se colpisce piano: ci mette mille anni ad arrivare in buca.
+> - Se colpisce troppo forte: la pallina schizza sulla montagna opposta e vola via (*Gradient Explosion*).
+>
+> 🕹️ **Mettiti alla Prova!** Nelle prossime slide, affronterai questo esatto concetto nel mini-gioco "Descent Minigolf"!
+
 ## Il Paradosso della Memorizzazione e il Rischio di Overfitting
 
 Nella progettazione di sistemi di intelligenza artificiale, l'errore metodologico più frequente consiste nel valutare l'efficacia di un modello impiegando i medesimi dati utilizzati per l'ottimizzazione dei parametri. Un modello ad elevata capacità espressiva (come un albero decisionale profondo o una rete complessa) può raggiungere un'accuratezza perfetta sul campione di addestramento semplicemente memorizzando le oscillazioni casuali e il rumore di misura del dataset, senza estrarre alcuna autentica regolarità della funzione generatrice sottostante.
