@@ -27,17 +27,20 @@ Fino al 2017, il **problema** principale nel far leggere testi ai computer era l
 
 La **soluzione** che ha sconvolto l'industria è stata inventata dai ricercatori di Google e DeepMind con il paper [Attention Is All You Need (Vaswani et al., 2017)](https://arxiv.org/abs/1706.03762). Hanno eliminato la lettura sequenziale sostituendola con un meccanismo di auto-attenzione (*Self-Attention*). In questa architettura (il **Transformer**), la rete guarda *tutte* le parole della frase nello stesso esatto momento. 
 
-```text
-+-----------------------------------------------------------------------------------------+
-|                  IL PARADOSSO RISOLTO: DA SEQUENZIALE A PARALLELO                       |
-+-----------------------------------------------------------------------------------------+
-|                                                                                         |
-|  [ RNN (Vecchio) ] : Parola 1 ──► Parola 2 ──► Parola 3 ──► (Lento, perde il filo)      |
-|                                                                                         |
-|  [ Transformer ]   : Parola 1 ──┐                                                       |
-|                      Parola 2 ──┼──►  (Tutte insieme, calcolo parallelo su GPU)         |
-|                      Parola 3 ──┘                                                       |
-+-----------------------------------------------------------------------------------------+
+```mermaid
+graph LR
+    subgraph "RNN (Lettura Sequenziale)"
+        R1[Parola 1] --> R2[Parola 2] --> R3[Parola 3] --> RLento["(Lento, perde il filo)"]
+    end
+    
+    subgraph "Transformer (Lettura Parallela su GPU)"
+        T1[Parola 1] --> TAll["Tutte insieme"]
+        T2[Parola 2] --> TAll
+        T3[Parola 3] --> TAll
+    end
+    
+    style RLento fill:#fecaca,stroke:#dc2626
+    style TAll fill:#bbf7d0,stroke:#16a34a
 ```
 
 L'architettura Transformer costituisce oggi il motore computazionale primario di tutti i moderni Large Language Model (LLM), permettendo per la prima volta l'addestramento su miliardi di parole contemporaneamente e rivoluzionando i campi della generazione di codice e dell'OSINT.
@@ -50,38 +53,38 @@ $$Q = X W^Q, \quad K = X W^K, \quad V = X W^V$$
 
 La proiezione genera le matrici di Query $Q \in \mathbb{R}^{N \times d_k}$, Key $K \in \mathbb{R}^{N \times d_k}$ e Value $V \in \mathbb{R}^{N \times d_v}$. Da una prospettiva geometrica, ogni riga di $Q$ funge da vettore di ricerca orientato nello spazio semantico per interrogare le caratteristiche dei token circostanti; le righe di $K$ fungono da etichette descrittive del contenuto di ciascun token; le righe di $V$ contengono l'effettivo contenuto informativo da estrarre e ricombinare linearmente per formare la nuova rappresentazione contestuale.
 
-```
-                    ┌────────────────────────┐
-                    │ Matrice di Input X     │  (N x d_model)
-                    └───────────┬────────────┘
-         ┌──────────────────────┼──────────────────────┐
-         ▼                      ▼                      ▼
-    ┌─────────┐            ┌─────────┐            ┌─────────┐
-    │   W^Q   │            │   W^K   │            │   W^V   │  (Proiezioni lineari)
-    └────┬────┘            └────┬────┘            └────┬────┘
-         ▼                      ▼                      ▼
-   Query (Q)               Key (K)                Value (V)
-   (N x d_k)               (N x d_k)              (N x d_v)
-         │                      │                      │
-         └──────────► ⊗ ◄───────┘                      │
-                      │  (Q · K^T)                     │
-                      ▼                                │
-             Matrice di Similarità                     │
-                      │                                │
-                      ▼  (/ sqrt(d_k))                 │
-              Scaling Factor                           │
-                      │                                │
-                      ▼  (+ Maschera M)                │
-             Causal Masking                            │
-                      │                                │
-                      ▼                                │
-                   Softmax                             │
-                      │  (Pesi di Attenzione A)        │
-                      └──────────────► ⊗ ◄─────────────┘
-                                       │
-                                       ▼
-                             Output Contestuale Z
-                                  (N x d_v)
+```mermaid
+graph TD
+    X["Matrice di Input X<br/>(N x d_model)"]
+    
+    subgraph Proiezioni Lineari
+        WQ["W^Q"]
+        WK["W^K"]
+        WV["W^V"]
+    end
+    
+    Q["Query (Q)<br/>(N x d_k)"]
+    K["Key (K)<br/>(N x d_k)"]
+    V["Value (V)<br/>(N x d_v)"]
+    
+    Dot["Q · K^T<br/>(Matrice di Similarità)"]
+    Scale["Scaling Factor<br/>(/ sqrt(d_k))"]
+    Mask["Causal Masking<br/>(+ Maschera M)"]
+    Soft["Softmax<br/>(Pesi di Attenzione A)"]
+    
+    Final["Output Contestuale Z<br/>(N x d_v)"]
+
+    X --> WQ --> Q
+    X --> WK --> K
+    X --> WV --> V
+    
+    Q --> Dot
+    K --> Dot
+    
+    Dot --> Scale --> Mask --> Soft
+    
+    Soft -->|Pesi A ⊗ V| Final
+    V -->|V| Final
 ```
 
 La quantificazione dell'affinità semantica tra il token $i$-esimo e il token $j$-esimo avviene tramite il prodotto scalare tra il rispettivo vettore di query $q_i$ e il vettore di chiave $k_j$. Quando due vettori puntano nella medesima direzione nello spazio vettoriale, il loro prodotto scalare assume un valore elevato, segnalando una forte rilevanza contestuale. La moltiplicazione matriciale $Q K^\top$ calcola simultaneamente tutti gli $N \times N$ prodotti scalari della sequenza.
