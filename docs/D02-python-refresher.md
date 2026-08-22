@@ -22,7 +22,11 @@ L'**ingegneria del software in Python per l'intelligenza artificiale** è la dis
 
 ## Il Problema dello Script Monolitico e dei Notebook Sperimentali
 
-Nelle fasi esplorative di analisi dati e prototipazione di modelli AI, è comune concentrare l'intera logica computazionale all'interno di singoli script monolitici o di notebook interattivi come Jupyter. Sebbene questo approccio consenta una validazione immediata delle ipotesi, si rivela fragile e inadeguato quando il codice deve essere eseguito in modo non presidiato, integrato in pipeline di Continuous Integration o scalato su grandi volumi di dati.
+Nelle fasi esplorative di analisi dati e prototipazione di modelli AI, è comune concentrare l'intera logica computazionale all'interno di singoli script monolitici o di notebook interattivi come [Jupyter](https://jupyter.org/). Sebbene questo approccio consenta una validazione immediata delle ipotesi, si rivela fragile e inadeguato quando il codice deve essere eseguito in modo non presidiato, integrato in pipeline di Continuous Integration o scalato su grandi volumi di dati.
+
+> [!TIP]
+> **💡 L'Importanza Pratica di Jupyter**
+> Anche se la messa in produzione richiede script modulari, **Jupyter Notebook** (o il suo equivalente cloud Google Colab) resta lo standard industriale per la sperimentazione esplorativa (*Exploratory Data Analysis*), la prototipazione rapida e la visualizzazione interattiva dei dati. È uno strumento formidabile ed essenziale da conoscere per testare velocemente nuove idee e visualizzare grafici prima di cristallizzare il codice in moduli Python definitivi.
 
 I notebook interattivi memorizzano lo stato globale delle variabili in memoria volatile in modo dipendente dall'ordine cronologico con cui l'utente esegue le celle. L'esecuzione non sequenziale genera inconsistenze silenti e comportamenti non riproducibili, mentre il loro formato JSON interno rende complessa la revisione del codice e la risoluzione dei conflitti su sistemi di controllo versione come [Git](https://git-scm.com/) (il sistema di controllo versione distribuito open-source). Parallelamente, gli script monolitici che incorporano credenziali API cablate nel sorgente (*hardcoding*) o percorsi assoluti violano le buone pratiche di sicurezza e collassano sistematicamente in presenza di latenze di rete anomale o errori temporanei del server.
 

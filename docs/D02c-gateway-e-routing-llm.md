@@ -13,7 +13,7 @@ resources:
 ---
 # Gateway e Routing LLM: Il Controllo del Flusso API
 
-Il **Gateway LLM** è un'infrastruttura middleware (un server proxy) che si posiziona tra le applicazioni client (gli agenti AI, i notebook Jupyter, i frontend chat) e i provider dei modelli linguistici (come OpenAI, Anthropic, Google o server locali). L'implementazione open-source di riferimento è [LiteLLM](https://github.com/BerriAI/litellm) (il router proxy sviluppato da BerriAI), che traduce automaticamente le chiamate API scritte per uno specifico formato (tipicamente lo standard OpenAI) nel formato richiesto dal provider di destinazione. Il gateway esiste perché collegare direttamente gli script applicativi alle singole API cloud crea debito tecnico insostenibile, vincola l'infrastruttura a un singolo fornitore (vendor lock-in) ed espone l'utente a interruzioni di servizio non mitigate.
+Il **Gateway LLM** è un'infrastruttura middleware (un server proxy) che si posiziona tra le applicazioni client (gli agenti AI, i notebook [Jupyter](https://jupyter.org/), i frontend chat) e i provider dei modelli linguistici (come OpenAI, Anthropic, Google o server locali). L'implementazione open-source di riferimento è [LiteLLM](https://github.com/BerriAI/litellm) (il router proxy sviluppato da BerriAI), che traduce automaticamente le chiamate API scritte per uno specifico formato (tipicamente lo standard OpenAI) nel formato richiesto dal provider di destinazione. Il gateway esiste perché collegare direttamente gli script applicativi alle singole API cloud crea debito tecnico insostenibile, vincola l'infrastruttura a un singolo fornitore (vendor lock-in) ed espone l'utente a interruzioni di servizio non mitigate.
 
 ## Il Problema: Frammentazione API e Vendor Lock-in
 
