@@ -1,5 +1,17 @@
 ---
-aliases: [D04, Matematica ML, Algebra Lineare, Statistica AI, Calcolo Differenziale]
+aliases:
+- D04
+- Matematica ML
+- Algebra Lineare
+- Statistica AI
+- Calcolo Differenziale
+resources:
+- title: Essence of Linear Algebra (3Blue1Brown)
+  url: https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab
+  type: video
+- title: 'StatQuest: Statistics Fundamentals'
+  url: https://statquest.org/video-index/
+  type: video
 ---
 # Matematica e Statistica Just-in-Time per Machine Learning
 

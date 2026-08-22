@@ -1,5 +1,15 @@
 ---
-aliases: [LLM Gateway, Routing LLM, LiteLLM, BYOK, Proxy LLM, Gestione Costi AI]
+aliases:
+- LLM Gateway
+- Routing LLM
+- LiteLLM
+- BYOK
+- Proxy LLM
+- Gestione Costi AI
+resources:
+- title: LiteLLM Official Documentation
+  url: https://docs.litellm.ai/
+  type: ref
 ---
 # Gateway e Routing LLM: Il Controllo del Flusso API
 

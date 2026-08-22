@@ -1,5 +1,20 @@
 ---
-aliases: [D10, RAG, Retrieval Augmented Generation, Knowledge Base, Vector DB, Grafi OSINT, Neo4j, GraphRAG]
+aliases:
+- D10
+- RAG
+- Retrieval Augmented Generation
+- Knowledge Base
+- Vector DB
+- Grafi OSINT
+- Neo4j
+- GraphRAG
+resources:
+- title: LangChain Documentation
+  url: https://python.langchain.com/docs/get_started/introduction
+  type: ref
+- title: OSINT Framework
+  url: https://osintframework.com/
+  type: ref
 ---
 # Retrieval-Augmented Generation, Database Vettoriali e Knowledge Graph per l'Intelligence OSINT
 

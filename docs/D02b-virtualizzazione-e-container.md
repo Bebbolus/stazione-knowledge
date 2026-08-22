@@ -1,5 +1,18 @@
 ---
-aliases: [Virtualizzazione, Container, Docker, Isolamento, Sandboxing, Macchine Virtuali]
+aliases:
+- Virtualizzazione
+- Container
+- Docker
+- Isolamento
+- Sandboxing
+- Macchine Virtuali
+resources:
+- title: Docker in 100 Seconds
+  url: https://www.youtube.com/watch?v=Gjnup-PuquQ
+  type: video
+- title: Play with Docker (Simulatore)
+  url: https://labs.play-with-docker.com/
+  type: lab
 ---
 # Virtualizzazione e Container: Isolamento dell'Infrastruttura AI
 

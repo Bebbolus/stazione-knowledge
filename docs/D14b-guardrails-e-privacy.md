@@ -1,5 +1,16 @@
 ---
-aliases: [Guardrails AI, Privacy Pipeline, LLM Guard, Rizzo-PII, GDPR LLM, Prompt Injection Defense, Anonimizzazione Dati]
+aliases:
+- Guardrails AI
+- Privacy Pipeline
+- LLM Guard
+- Rizzo-PII
+- GDPR LLM
+- Prompt Injection Defense
+- Anonimizzazione Dati
+resources:
+- title: Llama Guard (Meta)
+  url: https://ai.meta.com/research/publications/llama-guard-safeguarding-llms/
+  type: ref
 ---
 # Guardrails Locali e Privacy: LLM Guard e Rizzo-PII
 

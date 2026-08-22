@@ -1,5 +1,20 @@
 ---
-aliases: [Single Pane of Glass, SPoG, Ecosistema Interfacce, Agent Harness, Client AI, DeepSeek Harness, OpenWork, Goose]
+aliases:
+- Single Pane of Glass
+- SPoG
+- Ecosistema Interfacce
+- Agent Harness
+- Client AI
+- DeepSeek Harness
+- OpenWork
+- Goose
+resources:
+- title: LM Studio
+  url: https://lmstudio.ai/
+  type: lab
+- title: Gradio Documentation
+  url: https://www.gradio.app/docs/
+  type: ref
 ---
 # Ecosistema Interfacce e Client: Il Single Pane of Glass
 

@@ -1,7 +1,21 @@
 ---
-aliases: [D12, MCP, Model Context Protocol, Agentic Systems, Tool Calling, Sistemi Agentici, Server MCP, FastMCP]
+aliases:
+- D12
+- MCP
+- Model Context Protocol
+- Agentic Systems
+- Tool Calling
+- Sistemi Agentici
+- Server MCP
+- FastMCP
+resources:
+- title: OpenAI Prompt Engineering Guide
+  url: https://platform.openai.com/docs/guides/prompt-engineering
+  type: ref
+- title: PromptingGuide.ai
+  url: https://www.promptingguide.ai/
+  type: ref
 ---
-
 # Sistemi Agentici, Model Context Protocol (MCP) e Automazione Autonoma
 
 Un **sistema agentico** è un'architettura computazionale basata su Large Language Model in grado di eseguire cicli iterativi di percezione, pianificazione e azione nel mondo digitale, mentre il **Model Context Protocol (MCP)** rappresenta lo standard aperto di comunicazione ideato da [Anthropic](https://www.anthropic.com/) (la società di sicurezza e ricerca AI creatrice dei modelli Claude e ideatrice del Model Context Protocol) basato su JSON-RPC 2.0 per disaccoppiare e standardizzare l'accesso dei modelli a strumenti, risorse documentali e template di prompt esterni. Questa tecnologia trova applicazione nell'automazione di flussi complessi di intelligence su fonti aperte ([D11](D11-osint-avanzato.md)), nell'interrogazione sicura di basi di dati relazionali e knowledge graph ([D10](D10-rag-knowledge-osint.md)) e nell'esecuzione controllata di script e microservizi senza dover riscrivere integrazioni proprietarie punto-a-punto. L'architettura agentica e l'MCP esistono per superare il collo di bottiglia della passività conversazionale dei modelli linguistici e risolvere il problema combinatorio dell'integrazione $M \times N$ tra client LLM e sorgenti informative, garantendo al contempo isolamento dei processi, negoziazione dinamica dei permessi e tracciabilità forense delle azioni eseguite.

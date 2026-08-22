@@ -1,9 +1,17 @@
 ---
-aliases: [D01, Workspace LLM, Personal Knowledge Base Git, Second Brain Locale, Architettura Workspace Local-First]
+aliases:
+- D01
+- Workspace LLM
+- Personal Knowledge Base Git
+- Second Brain Locale
+- Architettura Workspace Local-First
 resources:
-  - title: "Learn Git Branching (Simulatore Visuale)"
-    url: "https://learngitbranching.js.org/"
-    type: "lab"
+- title: Learn Git Branching (Simulatore Visuale)
+  url: https://learngitbranching.js.org/
+  type: lab
+- title: Obsidian Official Help
+  url: https://help.obsidian.md/
+  type: ref
 ---
 # Architettura Workspace Local-First (Git, Obsidian, LLM)
 

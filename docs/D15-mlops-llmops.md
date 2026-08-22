@@ -1,7 +1,18 @@
 ---
-aliases: [D15, MLOps, LLMOps, Model Serving, Local Deployment, MLflow, Docker, Model Monitoring]
+aliases:
+- D15
+- MLOps
+- LLMOps
+- Model Serving
+- Local Deployment
+- MLflow
+- Docker
+- Model Monitoring
+resources:
+- title: MLflow Documentation
+  url: https://mlflow.org/docs/latest/index.html
+  type: ref
 ---
-
 # MLOps, LLMOps e Ingegneria del Deployment Local-First
 
 Quando uno scienziato dei dati crea un modello di Intelligenza Artificiale funzionante sul proprio computer (magari in un Jupyter Notebook), sorge un **problema** enorme: come trasformare quel prototipo in un servizio software vero, capace di gestire migliaia di utenti, senza che si rompa o diventi obsoleto in poche settimane? A differenza del software normale, i modelli AI "marciscono" (*data drift*) quando il mondo reale cambia, e il codice dell'algoritmo rappresenta solo una minima frazione del sistema totale. 

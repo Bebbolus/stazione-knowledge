@@ -1,7 +1,16 @@
 ---
-aliases: [D14, Responsible AI, AI Cybersecurity, OWASP LLM, AI Governance, AI Safety]
+aliases:
+- D14
+- Responsible AI
+- AI Cybersecurity
+- OWASP LLM
+- AI Governance
+- AI Safety
+resources:
+- title: OWASP Top 10 for LLMs
+  url: https://owasp.org/www-project-top-10-for-large-language-model-applications/
+  type: ref
 ---
-
 # Responsible AI, Cybersecurity dei Modelli Linguistici e Governance Algoritmica
 
 La **Responsible AI** e la **cybersecurity dei modelli linguistici** costituiscono l'insieme integrato di metodologie formali, difese crittografiche, metriche statistiche di equità e vincoli normativi volti a garantire che i sistemi di intelligenza artificiale operino in modo sicuro, privato, imparziale e conforme ai diritti fondamentali. Questa disciplina trova applicazione critica nell'erogazione di modelli fondazionali in ambienti enterprise, nella protezione di pipeline di Retrieval-Augmented Generation ([D10](D10-rag-knowledge-osint.md)) contro attacchi avversari, nella sanificazione dei dati sensibili ai sensi del [GDPR](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32016R0679) (il regolamento generale europeo sulla protezione e il trattamento dei dati personali) e nella conformità alle classi di rischio introdotte dall'[EU AI Act](https://artificialintelligenceact.eu/) (il regolamento dell'Unione Europea per la governance e la classificazione del rischio dei sistemi di intelligenza artificiale). Il paradigma esiste per prevenire il dirottamento ostile delle capacità generative, scongiurare l'estrazione illecita di informazioni confidenziali dai pesi sinaptici, quantificare ed eliminare le disparità algoritmiche discriminatorie e tradurre gli standard del [NIST](https://www.nist.gov/) (l'agenzia governativa statunitense per la standardizzazione tecnica) in architetture software resilienti e verificabili.

@@ -1,5 +1,17 @@
 ---
-aliases: [D07, Apprendimento Non Supervisionato, Clustering, Riduzione Dimensionale, PCA, t-SNE, UMAP, Anomaly Detection]
+aliases:
+- D07
+- Apprendimento Non Supervisionato
+- Clustering
+- Riduzione Dimensionale
+- PCA
+- t-SNE
+- UMAP
+- Anomaly Detection
+resources:
+- title: K-Means Clustering Visualizer
+  url: https://www.naftaliharris.com/blog/visualizing-k-means-clustering/
+  type: lab
 ---
 # Apprendimento Non Supervisionato (Clustering, Riduzione Dimensionale e Anomaly Detection)
 

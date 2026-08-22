@@ -1,7 +1,17 @@
 ---
-aliases: [D16, Interpretable Context Methodology, ICM, Intelligence Synthesis, Executive Reporting, Orchestrazione Decisionale, Sintesi Informativa]
+aliases:
+- D16
+- Interpretable Context Methodology
+- ICM
+- Intelligence Synthesis
+- Executive Reporting
+- Orchestrazione Decisionale
+- Sintesi Informativa
+resources:
+- title: Model Context Protocol (MCP) Official Docs
+  url: https://modelcontextprotocol.io/
+  type: ref
 ---
-
 # Interpretable Context Methodology, Sintesi Informativa e Comunicazione Decisionale
 
 L'**Interpretable Context Methodology (ICM)** è una metodologia architetturale e operativa per l'orchestrazione di flussi analitici complessi. Rifiuta il paradigma caotico degli sciami multi-agente (multi-agent swarms) in favore del **Single-Agent Sequential Handoff**, impiegando il file system locale come spazio di memoria trasparente, strutturato e ispezionabile, combinato con principi formali di sintesi gerarchica delle informazioni e comunicazione decisionale top-down. Questa metodologia si applica nelle indagini di intelligence su fonti aperte ([D11](D11-osint-avanzato.md)), nella redazione di executive briefing e memorandum strategici per stakeholder di alto livello, nella gestione di incidenti di cybersecurity e nella formalizzazione di pipeline decisionali automatizzate che integrano modelli linguistici e strumenti operativi tramite protocolli aperti ([D12](D12-agentic-mcp.md)). L'architettura ICM e la sintesi informativa rigorosa nascono per superare il sovraccarico cognitivo (*information overload*), la frammentazione contestuale e l'opacità dei processi decisionali guidati da intelligenza artificiale, trasformando reperti eterogenei e dati probabilistici in catene logiche deterministiche, verificabili e immediatamente azionabili per i decisori.

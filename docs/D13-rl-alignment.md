@@ -1,7 +1,17 @@
 ---
-aliases: [D13, Reinforcement Learning, Alignment, RLHF, DPO, PPO, Preference Learning]
+aliases:
+- D13
+- Reinforcement Learning
+- Alignment
+- RLHF
+- DPO
+- PPO
+- Preference Learning
+resources:
+- title: Illustrating RLHF (HuggingFace Blog)
+  url: https://huggingface.co/blog/rlhf
+  type: ref
 ---
-
 # Reinforcement Learning, Preference Optimization e Allineamento dei Modelli Linguistici
 
 L'allineamento dei modelli linguistici rappresenta l'insieme delle metodologie matematiche, computazionali e di ottimizzazione mirate a orientare lo spazio di generazione probabilistica di una rete neurale verso obiettivi di utilità, fedeltà fattuale e sicurezza determinati dall'essere umano. Questa disciplina trova applicazione fondamentale nella post-elaborazione di modelli di frontiera, assistenti conversazionali, sistemi agentici autonomi e pipeline di intelligence OSINT ad alta affidabilità in cui il comportamento del modello deve rimanere rigoroso, controllabile e privo di derive allucinatorie. La necessità dell'allineamento nasce dal limite strutturale del pre-addestramento auto-regressivo: la pura massimizzazione della verosimiglianza statistica sul prossimo token premia la mera imitazione della distribuzione linguistica del web, riflettendo bias, errori logici, contenuti dannosi e strategie persuasive ingannevoli che rendono indispensabile un secondo stadio di ottimizzazione guidato da funzioni di preferenza e ricompensa esplicite.

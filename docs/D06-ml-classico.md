@@ -1,5 +1,15 @@
 ---
-aliases: [D06, Alberi Decisionali, Random Forest, XGBoost, Gradient Boosting, Machine Learning Tabellare]
+aliases:
+- D06
+- Alberi Decisionali
+- Random Forest
+- XGBoost
+- Gradient Boosting
+- Machine Learning Tabellare
+resources:
+- title: Scikit-Learn Tutorials
+  url: https://scikit-learn.org/stable/tutorial/index.html
+  type: ref
 ---
 # Machine Learning Classico (Alberi, Random Forest e XGBoost)
 

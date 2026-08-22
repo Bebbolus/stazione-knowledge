@@ -1,5 +1,20 @@
 ---
-aliases: [D02, Python Refresher, Software Engineering Python, Python per AI, Ingegneria del Software Python]
+aliases:
+- D02
+- Python Refresher
+- Software Engineering Python
+- Python per AI
+- Ingegneria del Software Python
+resources:
+- title: 'Corey Schafer: Python OOP Tutorial'
+  url: https://www.youtube.com/watch?v=ZDa-Z5JzLYM
+  type: video
+- title: Real Python Learning Paths
+  url: https://realpython.com/learning-paths/
+  type: ref
+- title: Pytest Official Docs
+  url: https://docs.pytest.org/
+  type: ref
 ---
 # Ingegneria del Software e Python Essentials per Pipeline AI
 

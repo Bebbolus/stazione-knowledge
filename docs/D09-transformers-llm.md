@@ -1,5 +1,23 @@
 ---
-aliases: [D09, Transformers, LLM, Large Language Models, Self-Attention, Ingegneria dell'Inferenza, llama.cpp, vLLM]
+aliases:
+- D09
+- Transformers
+- LLM
+- Large Language Models
+- Self-Attention
+- Ingegneria dell'Inferenza
+- llama.cpp
+- vLLM
+resources:
+- title: 'Let''s build GPT: from scratch (Andrej Karpathy)'
+  url: https://www.youtube.com/watch?v=kCc8FmEb1nY
+  type: video
+- title: Attention in transformers (3Blue1Brown)
+  url: https://www.youtube.com/watch?v=eMlx5fFNoYc
+  type: video
+- title: Transformer Explainer (Interattivo 3D)
+  url: https://poloclub.github.io/transformer-explainer/
+  type: lab
 ---
 # Architettura dei Transformer, Large Language Model e Ingegneria dell'Inferenza
 

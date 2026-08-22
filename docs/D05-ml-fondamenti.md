@@ -1,5 +1,17 @@
 ---
-aliases: [D05, ML Fondamenti, Machine Learning Classico, Scikit-Learn, Workflow ML]
+aliases:
+- D05
+- ML Fondamenti
+- Machine Learning Classico
+- Scikit-Learn
+- Workflow ML
+resources:
+- title: Teachable Machine (Google)
+  url: https://teachablemachine.withgoogle.com/
+  type: lab
+- title: 'Stanford CS229: Machine Learning'
+  url: https://cs229.stanford.edu/
+  type: video
 ---
 # Fondamenti di Machine Learning e Metriche Diagnostiche
 

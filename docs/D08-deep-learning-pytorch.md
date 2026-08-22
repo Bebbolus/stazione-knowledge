@@ -1,5 +1,18 @@
 ---
-aliases: [D08, Deep Learning e PyTorch, Reti Neurali Profonde, Autograd, Tensors, PyTorch Essentials]
+aliases:
+- D08
+- Deep Learning e PyTorch
+- Reti Neurali Profonde
+- Autograd
+- Tensors
+- PyTorch Essentials
+resources:
+- title: TensorFlow Playground (Rete Neurale nel Browser)
+  url: https://playground.tensorflow.org/
+  type: lab
+- title: But what is a neural network? (3Blue1Brown)
+  url: https://www.youtube.com/watch?v=aircAruvnKk
+  type: video
 ---
 # Deep Learning e PyTorch: Dai Tensori al Calcolo Differenziale e Reti Profonde
 

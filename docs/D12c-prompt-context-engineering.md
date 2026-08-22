@@ -1,7 +1,18 @@
 ---
-aliases: [D12c, Prompt Engineering, Context Engineering, Chain-of-Thought, ReAct, Tree of Thoughts, Structured Outputs, DSPy]
+aliases:
+- D12c
+- Prompt Engineering
+- Context Engineering
+- Chain-of-Thought
+- ReAct
+- Tree of Thoughts
+- Structured Outputs
+- DSPy
+resources:
+- title: Anthropic Claude Prompt Engineering
+  url: https://docs.anthropic.com/claude/docs/prompt-engineering
+  type: ref
 ---
-
 # Prompt Engineering, Gestione del Contesto e Generazione Guidata nei Sistemi Agentici
 
 Quando chiediamo a un Large Language Model di risolvere un problema o completare un incarico in autonomia, il **problema** principale è la sua natura intrinsecamente caotica e probabilistica. Un LLM è, fondamentalmente, un "oracolo" che cerca solo di indovinare la parola successiva più probabile: basta un'istruzione ambigua, un contesto troppo lungo o una minima variazione nelle parole usate per farlo deragliare in allucinazioni fattuali, fargli dimenticare le regole del compito o fargli produrre un output formattato male. 

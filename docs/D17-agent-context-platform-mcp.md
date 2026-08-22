@@ -1,5 +1,15 @@
 ---
-aliases: [Agent Context Platform, Model Context Protocol, MCP, Separazione dei Domini, Architettura Plugin, Strumenti Agentici]
+aliases:
+- Agent Context Platform
+- Model Context Protocol
+- MCP
+- Separazione dei Domini
+- Architettura Plugin
+- Strumenti Agentici
+resources:
+- title: Anthropic Desktop App (Claude with MCP)
+  url: https://claude.ai/download
+  type: ref
 ---
 # Agent Context Platform e Model Context Protocol (MCP)
 

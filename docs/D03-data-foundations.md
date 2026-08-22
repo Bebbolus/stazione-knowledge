@@ -1,5 +1,21 @@
 ---
-aliases: [D03, Data Foundations, Data Engineering ML, NumPy Pandas SQL, Data Quality, Ingegneria dei Dati]
+aliases:
+- D03
+- Data Foundations
+- Data Engineering ML
+- NumPy Pandas SQL
+- Data Quality
+- Ingegneria dei Dati
+resources:
+- title: SQLBolt (Esercizi SQL Interattivi)
+  url: https://sqlbolt.com/
+  type: lab
+- title: Google Data Cards Playbook
+  url: https://developers.google.com/learn/pathways/data-cards-playbook
+  type: ref
+- title: Pandas Documentation
+  url: https://pandas.pydata.org/docs/
+  type: ref
 ---
 # Data Foundations: NumPy, Pandas, SQL e Qualità del Dato
 
