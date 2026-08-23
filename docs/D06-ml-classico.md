@@ -19,21 +19,33 @@ Il Machine Learning applicato ai dati tabellari strutturati è dominato dalla fa
 
 I modelli lineari tradizionali, come la regressione lineare e la regressione logistica, tentano di separare le classi o stimare i valori continui proiettando un singolo iperpiano nello spazio euclideo. Quando le relazioni tra variabili predittive e target presentano forti non-linearità, discontinuità o interazioni complesse (ad esempio soglie condizionali in cui una feature è rilevante solo se un'altra assume un intervallo specifico), un iperpiano rigido fallisce inevitabilmente, incorrendo in un grave errore di underfitting (alto bias).
 
-### Partizionamento Ortogonale dello Spazio (Decision Tree)
+### Partizionamento Ortogonale (Alberi Decisionali)
 
-Per catturare frontiere di decisione arbitrarie senza imporre ipotesi parametriche globali, l'**Albero Decisionale** (`DecisionTreeClassifier` e `DecisionTreeRegressor` in [Scikit-learn](https://scikit-learn.org/)) adotta una strategia di partizionamento ricorsivo dello spazio (*recursive binary splitting*). L'algoritmo analizza l'intero dataset alla radice e seleziona in modo ingordo (*greedy*) la feature $j$ e la soglia di taglio $t$ che massimizzano la purezza dei due sottoinsiemi generati, tagliando lo spazio con un iperpiano ortogonale all'asse della variabile selezionata.
+Immagina di dover indovinare l'animale a cui sto pensando facendo solo domande a risposta "Sì o No". 
+- La prima domanda potrebbe essere: "Ha le piume?". 
+Se rispondi Sì, tagliamo via tutti i mammiferi e i rettili. 
+- La seconda domanda potrebbe essere: "Sa volare?".
+Se rispondi No, potremmo aver indovinato: è un Pinguino!
 
-Nei problemi di classificazione con $C$ classi, l'omogeneità di un nodo viene quantificata tramite la **Gini Impurity** ($I_G$) oppure l'**Entropia di Shannon** ($H$):
+Questo è esattamente il modo in cui "ragiona" un **Albero Decisionale**. Invece di usare un'unica linea retta per dividere i dati (come farebbe un modello lineare), l'albero fa una serie di "domande a cascata" sulle caratteristiche dei dati, dividendo il problema in pezzettini sempre più piccoli finché non è sicuro della risposta.
+
+> [!INTERACTIVE] WIDGET: Il Gioco dell'Indovina Chi (Decision Tree)
+> *Visualizzazione Dinamica:* Un mini-gioco in cui l'utente deve indovinare un target (es. un tipo di veicolo) trascinando delle "carte domanda" (es. "Ha 4 ruote?", "Pesa più di 1 tonnellata?") per costruire l'albero. Sulla destra, i punti dati (palline) cadono nell'albero e vengono smistati nei secchi corretti in tempo reale.
+
+### Come sceglie la domanda migliore? (L'Impurità di Gini)
+
+Come fa l'albero a sapere che chiedere "Ha le piume?" è meglio di chiedere "Ha il becco giallo?" all'inizio?
+Il computer cerca la domanda che "ripulisce" meglio i gruppi. Se una domanda divide perfettamente gli uccelli dai cani, il risultato è molto "puro". Se una domanda lascia ancora uccelli e cani mischiati a caso, il risultato è "impuro" (caotico).
+
+La formula matematica per calcolare quanto è caotico un gruppo (la sua **Gini Impurity**, o $I_G$) è questa:
 
 $$I_G(p) = 1 - \sum_{i=1}^C p_i^2$$
 
-$$H(p) = -\sum_{i=1}^C p_i \log_2(p_i)$$
-
-dove $p_i$ rappresenta la proporzione di campioni appartenenti alla classe $i$ nel nodo corrente. L'algoritmo valuta ogni possibile split calcolando l'**Information Gain** (riduzione dell'impurità):
-
-$$\Delta I = I(D_{\text{padre}}) - \left( \frac{|D_L|}{|D|} I(D_L) + \frac{|D_R|}{|D|} I(D_R) \right)$$
-
-Il processo si ripete ricorsivamente su ciascun sotto-nodo finché non viene soddisfatto un criterio di arresto (come il raggiungimento della purezza totale o una profondità massima prefissata). Nei compiti di regressione, il criterio di partizionamento sostituisce l'impurità con la minimizzazione dell'errore quadratico medio (MSE) rispetto alla media locale del nodo.
+Spiegata a parole:
+- Prendi il totale (1, ovvero il 100%).
+- $p_i$ è la percentuale di ogni "tipo" (es. 40% cani, 60% uccelli).
+- Sottrai le percentuali al quadrato. Se hai un gruppo puro (100% cani), farai $1 - 1^2 = 0$. Il caos è zero! Se il gruppo è 50/50, il caos è più alto.
+L'algoritmo fa un milione di prove al secondo e sceglie sempre la domanda che abbassa di più questo valore di caos.
 
 ## Il Rischio di Memorizzazione del Rumore e la Risposta Ensembling
 
