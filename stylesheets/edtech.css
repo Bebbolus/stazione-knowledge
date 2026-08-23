@@ -1,0 +1,69 @@
+/* 
+  EdTech Custom CSS (ADHD-Friendly)
+  Obiettivo: Ridurre il carico cognitivo, ammorbidire le interfacce, aumentare la leggibilità.
+*/
+
+/* 1. Tipografia: Respiro per la mente */
+.md-typeset p, 
+.md-typeset ul li, 
+.md-typeset ol li {
+  font-size: 1.05rem; /* ~16.8px o poco più grandi dipendentemente dal base */
+  line-height: 1.75;
+  margin-bottom: 1.5em; /* Più spazio tra i blocchi */
+}
+
+/* 2. Eccezione vitale: Protezione ASCII Art e blocchi di codice */
+.md-typeset pre,
+.md-typeset pre code,
+.md-typeset code {
+  font-size: 0.85em; /* Mantenere compatto */
+  line-height: 1.4 !important; /* Forza interlinea stretta per non spaccare le ASCII */
+  font-family: var(--md-code-font-family), "JetBrains Mono", monospace;
+}
+
+/* 3. Estetica Soft: Stile Two Dots (Bordi Arrotondati) */
+.md-typeset img,
+.md-typeset .md-video,
+.md-typeset iframe {
+  border-radius: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 16px !important;
+  border-width: 0px 0px 0px 6px !important; /* Tieni solo il bordo sinistro più spesso per enfasi */
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Arrotondiamo i blocchi di codice */
+.md-typeset pre {
+  border-radius: 12px;
+}
+
+/* 4. Tab più "bottonosi" (Touch-friendly per mobile) */
+.md-typeset .tabbed-labels {
+  display: flex;
+  gap: 8px;
+}
+
+.md-typeset .tabbed-labels > label {
+  border-radius: 20px;
+  padding: 8px 16px;
+  background-color: var(--md-default-bg-color--light);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  transition: all 0.2s ease;
+}
+
+.md-typeset .tabbed-labels > label:hover {
+  background-color: var(--md-accent-fg-color--transparent);
+}
+
+.md-typeset input[type=radio]:checked + label {
+  background-color: var(--md-primary-fg-color);
+  color: var(--md-primary-bg-color) !important;
+  border-color: var(--md-primary-fg-color);
+  font-weight: bold;
+}

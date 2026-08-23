@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regressione Lineare Interattiva</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            cursor: crosshair;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #184f95;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #032042;
+        }
+        .stats {
+            background: #f0efec;
+            padding: 10px 15px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            box-sizing: border-box;
+            font-family: "JetBrains Mono", monospace, sans-serif;
+            font-size: 14px;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6d6b67;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>Clicca sull'area bianca</strong> per aggiungere punti dati. La retta di regressione si aggiornerà automaticamente per minimizzare l'errore.
+    </div>
+    
+    <canvas id="plot" width="500" height="400"></canvas>
+    
+    <div class="controls">
+        <button id="clearBtn">Pulisci Punti</button>
+        <button id="demoBtn">Genera Demo</button>
+    </div>
+    
+    <div class="stats" id="statsPanel">
+        <div><strong>Equazione:</strong> y = <span id="eqM">0.00</span>x + <span id="eqQ">0.00</span></div>
+        <div><strong>Errore Quadratico Medio (MSE):</strong> <span id="mse">0.00</span></div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('plot');
+    const ctx = canvas.getContext('2d');
+    const clearBtn = document.getElementById('clearBtn');
+    const demoBtn = document.getElementById('demoBtn');
+    const eqM = document.getElementById('eqM');
+    const eqQ = document.getElementById('eqQ');
+    const mseDisplay = document.getElementById('mse');
+
+    let points = [];
+    const padding = 20;
+
+    // Convert coordinates
+    function getMousePos(evt) {
+        const rect = canvas.getBoundingClientRect();
+        // Scale to handle responsive canvas
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+        return {
+            x: (evt.clientX - rect.left) * scaleX,
+            y: canvas.height - ((evt.clientY - rect.top) * scaleY) // Invert Y axis
+        };
+    }
+
+    // Math calculation for Linear Regression (Ordinary Least Squares)
+    function calculateRegression() {
+        if (points.length < 2) return null;
+
+        let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+        const n = points.length;
+
+        for (let i = 0; i < n; i++) {
+            sumX += points[i].x;
+            sumY += points[i].y;
+            sumXY += points[i].x * points[i].y;
+            sumXX += points[i].x * points[i].x;
+        }
+
+        const denominator = (n * sumXX - sumX * sumX);
+        if (denominator === 0) return { m: 0, q: sumY / n, mse: 0 }; // Vertical line edge case
+
+        const m = (n * sumXY - sumX * sumY) / denominator;
+        const q = (sumY - m * sumX) / n;
+
+        // Calculate MSE
+        let mse = 0;
+        for (let i = 0; i < n; i++) {
+            const predictedY = m * points[i].x + q;
+            mse += Math.pow(points[i].y - predictedY, 2);
+        }
+        mse = mse / n;
+
+        return { m, q, mse };
+    }
+
+    function draw() {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw grid
+        ctx.strokeStyle = '#f0efec';
+        ctx.lineWidth = 1;
+        for (let i = 0; i <= canvas.width; i += 50) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        }
+        for (let i = 0; i <= canvas.height; i += 50) {
+            ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(canvas.width, i); ctx.stroke();
+        }
+
+        // Regression line
+        const reg = calculateRegression();
+        if (reg) {
+            ctx.strokeStyle = '#d97757'; // Highlight color
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            // x = 0
+            const y1 = reg.q;
+            // x = max width
+            const y2 = reg.m * canvas.width + reg.q;
+
+            ctx.moveTo(0, canvas.height - y1);
+            ctx.lineTo(canvas.width, canvas.height - y2);
+            ctx.stroke();
+
+            // Draw error lines (residuals)
+            ctx.strokeStyle = 'rgba(217, 119, 87, 0.3)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            for (let p of points) {
+                const predictedY = reg.m * p.x + reg.q;
+                ctx.beginPath();
+                ctx.moveTo(p.x, canvas.height - p.y);
+                ctx.lineTo(p.x, canvas.height - predictedY);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]);
+
+            // Update stats
+            eqM.innerText = reg.m.toFixed(2);
+            eqQ.innerText = reg.q.toFixed(2);
+            mseDisplay.innerText = reg.mse.toFixed(0);
+        } else {
+            eqM.innerText = "0.00";
+            eqQ.innerText = "0.00";
+            mseDisplay.innerText = "0.00";
+        }
+
+        // Draw points
+        ctx.fillStyle = '#184f95';
+        for (let p of points) {
+            ctx.beginPath();
+            ctx.arc(p.x, canvas.height - p.y, 6, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+    }
+
+    // Interaction
+    canvas.addEventListener('mousedown', function(evt) {
+        const pos = getMousePos(evt);
+        points.push(pos);
+        draw();
+    });
+
+    clearBtn.addEventListener('click', () => {
+        points = [];
+        draw();
+    });
+
+    demoBtn.addEventListener('click', () => {
+        points = [];
+        // Generate linear data with some noise
+        for(let i = 50; i < canvas.width - 50; i += 40) {
+            points.push({
+                x: i + (Math.random() * 30 - 15),
+                y: (i * 0.6 + 50) + (Math.random() * 80 - 40)
+            });
+        }
+        draw();
+    });
+
+    // Initial draw
+    draw();
+</script>
+
+</body>
+</html>

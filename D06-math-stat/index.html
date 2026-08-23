@@ -1,0 +1,1833 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/D06-math-stat/">
+      
+      
+        <link rel="prev" href="../D05-data-foundations/">
+      
+      
+        <link rel="next" href="../D07-ml-fondamenti/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>D06 — Matematica e Statistica - Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/edtech.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#matematica-e-statistica-just-in-time-per-machine-learning" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D06 — Matematica e Statistica
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D00-manifesto/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 1 (L'Officina)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../D05-data-foundations/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 2 (Il Cervello)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D12-rag-knowledge-osint/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 3 (Il Risveglio)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 1 (L'Officina)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 1 (L'Officina)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D00-manifesto/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D00 — Il Manifesto
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first e CLI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02-python-refresher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python Refresher
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D03-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Virtualizzazione e Container (Docker)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04-progetto-stazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Il Progetto Stazione (Prologo)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04b-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04b — Gateway e Routing LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 2 (Il Cervello)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 2 (Il Cervello)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D05-data-foundations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Data Foundations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    D06 — Matematica e Statistica
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    D06 — Matematica e Statistica
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Indice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Indice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#la-necessita-del-modello-geometrico-e-differenziale" class="md-nav__link">
+    <span class="md-ellipsis">
+      La Necessità del Modello Geometrico e Differenziale
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algebra-lineare-e-spazi-latenti" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algebra Lineare e Spazi Latenti
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algebra Lineare e Spazi Latenti">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#vettori-trasformazioni-affini-e-similarita-geometrica" class="md-nav__link">
+    <span class="md-ellipsis">
+      Vettori, Trasformazioni Affini e Similarità Geometrica
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autovettori-decomposizione-spettrale-e-svd" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autovettori, Decomposizione Spettrale e SVD
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#calcolo-differenziale-multivariato-e-propagazione-dellerrore" class="md-nav__link">
+    <span class="md-ellipsis">
+      Calcolo Differenziale Multivariato e Propagazione dell'Errore
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Calcolo Differenziale Multivariato e Propagazione dell'Errore">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#il-gradiente-e-lottimizzazione-con-discesa-del-gradiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Il Gradiente e l'Ottimizzazione con Discesa del Gradiente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#la-regola-della-catena-e-la-retropropagazione-backpropagation" class="md-nav__link">
+    <span class="md-ellipsis">
+      La Regola della Catena e la Retropropagazione (Backpropagation)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#teoria-della-probabilita-e-inferenza-bayesiana" class="md-nav__link">
+    <span class="md-ellipsis">
+      Teoria della Probabilità e Inferenza Bayesiana
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Teoria della Probabilità e Inferenza Bayesiana">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#variabili-aleatorie-momenti-statistici-e-regole-operative" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variabili Aleatorie, Momenti Statistici e Regole Operative
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#aggiornamento-della-conoscenza-con-il-teorema-di-bayes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Aggiornamento della Conoscenza con il Teorema di Bayes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trade-off-e-limiti-nella-statistica-inferenziale-il-compromesso-biasvarianza" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trade-off e Limiti nella Statistica Inferenziale: Il Compromesso Bias/Varianza
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riferimenti-bibliografici-e-risorse-tecniche" class="md-nav__link">
+    <span class="md-ellipsis">
+      Riferimenti Bibliografici e Risorse Tecniche
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Riferimenti Bibliografici e Risorse Tecniche">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#risorse-didattiche-visive-e-interattive" class="md-nav__link">
+    <span class="md-ellipsis">
+      Risorse Didattiche Visive e Interattive
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#corsi-accademici-e-trattati-fondamentali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Corsi Accademici e Trattati Fondamentali
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendice-operativa-laboratori-pratici" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendice Operativa: Laboratori Pratici
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendice Operativa: Laboratori Pratici">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-1-trasformazioni-affini-e-similarita-coseno-in-numpy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 1: Trasformazioni Affini e Similarità Coseno in NumPy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-2-ciclo-di-ottimizzazione-con-discesa-del-gradiente" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 2: Ciclo di Ottimizzazione con Discesa del Gradiente
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-3-simulazione-monte-carlo-e-legge-dei-grandi-numeri" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 3: Simulazione Monte Carlo e Legge dei Grandi Numeri
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-4-diagnostica-empirica-del-compromesso-biasvarianza" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 4: Diagnostica Empirica del Compromesso Bias/Varianza
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D07-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Fondamenti di ML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D08-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — ML Classico
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D09-unsupervised-learning/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Unsupervised Learning
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D10-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11-transformers-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — Transformers e LLMs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 3 (Il Risveglio)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 3 (Il Risveglio)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — RAG e OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — OSINT Avanzato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13b — AI come Arma e Bersaglio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13c — Geopolitica e AI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Agentic Systems e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — AI Harness e Plugin
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14c — Prompt & Context Engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14d — Loop & Graph Engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D15-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — RL e Alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — Responsible AI e Cyber
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — MLOps e LLMOps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — ICM e Orchestrazione
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Agent Context Platform (MCP)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D20-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Ecosistema Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D21-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D22-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D22 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D23-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D23 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/D06-math-stat.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="matematica-e-statistica-just-in-time-per-machine-learning">Matematica e Statistica Just-in-Time per Machine Learning<a class="headerlink" href="#matematica-e-statistica-just-in-time-per-machine-learning" title="Permanent link">&para;</a></h1>
+<p>I <strong>fondamenti matematici e statistici per il machine learning</strong> costituiscono l'impalcatura formale necessaria per modellare spazi vettoriali multidimensionali, ottimizzare parametri numerici continui e quantificare l'incertezza probabilistica nei sistemi di intelligenza artificiale. Questa strumentazione teorica si applica direttamente nella progettazione di architetture neurali, nell'analisi degli spazi latenti di embedding per compiti OSINT e nella convergenza numerica degli algoritmi di ottimizzazione. La formulazione analitica esiste per demistificare il funzionamento interno degli algoritmi di apprendimento, consentendo all'ingegnere di diagnosticare instabilità di convergenza, calibrare iperparametri critici ed evitare il collasso generalizzativo causato da overfitting o underfitting.</p>
+<h2 id="la-necessita-del-modello-geometrico-e-differenziale">La Necessità del Modello Geometrico e Differenziale<a class="headerlink" href="#la-necessita-del-modello-geometrico-e-differenziale" title="Permanent link">&para;</a></h2>
+<p>Nell'ingegneria del software classica, la logica computazionale viene espressa mediante istruzioni deterministiche, condizioni booleane e ramificazioni discrete. Al contrario, i sistemi di apprendimento automatico non eseguono regole cablate, ma trasformano tensori numerici ad alta dimensionalità attraverso successioni di proiezioni geometriche, minimizzando funzioni di perdita differenziabili lungo superfici di costo continue.</p>
+<p>La gestione di un modello come una scatola nera impenetrabile preclude qualsiasi possibilità di debugging rigoroso in produzione. Quando la metrica di perdita (<em>Loss</em>) diverge bruscamente, quando i gradienti collassano a zero (<em>vanishing gradient</em>) o quando le predizioni su dati reali mostrano degradazione sistematica, la diagnosi richiede la comprensione delle proprietà spettrali delle matrici di trasformazione, della dinamica di discesa lungo il gradiente e della decomposizione tra bias e varianza statistica.</p>
+<p>L'approccio <em>just-in-time</em> formalizza i concetti matematici indispensabili senza astrazioni superflue: l'algebra lineare per la trasformazione e compressione dello spazio delle feature, il calcolo differenziale multivariato per la retropropagazione dell'errore, e la teoria della probabilità per la stima bayesiana dell'incertezza.</p>
+<h2 id="algebra-lineare-e-spazi-latenti">Algebra Lineare e Spazi Latenti<a class="headerlink" href="#algebra-lineare-e-spazi-latenti" title="Permanent link">&para;</a></h2>
+<p>La quasi totalità delle operazioni computazionali all'interno di Large Language Model e reti neurali profonde con <a href="https://pytorch.org/">PyTorch</a> (il framework di deep learning open-source sviluppato da <a href="https://ai.meta.com/">Meta AI</a> e dalla Linux Foundation) si riconduce a manipolazioni di algebra lineare vettorializzate tramite <a href="https://numpy.org/">NumPy</a> (la libreria cardine in <a href="https://www.python.org/">Python</a> per l'elaborazione numerica vettoriale e matriciale).</p>
+<h3 id="vettori-trasformazioni-affini-e-similarita-geometrica">Vettori, Trasformazioni Affini e Similarità Geometrica<a class="headerlink" href="#vettori-trasformazioni-affini-e-similarita-geometrica" title="Permanent link">&para;</a></h3>
+<p>I dati grezzi (testi, tracce di rete, serie temporali) vengono mappati in vettori densi $\mathbf{x} \in \mathbb{R}^d$ all'interno di uno spazio vettoriale a $d$ dimensioni. La separazione di classi o l'estrazione di pattern informativi richiede la distorsione geometrica controllata di tale spazio tramite proiezioni lineari e traslazioni.</p>
+<p>L'operazione cardine di un generico layer denso neurale è la <strong>trasformazione affine</strong>:</p>
+<p>$$\mathbf{y} = \mathbf{W}\mathbf{x} + \mathbf{b}$$</p>
+<p>dove $\mathbf{x} \in \mathbb{R}^d$ rappresenta il vettore di feature in input, $\mathbf{W} \in \mathbb{R}^{m \times d}$ è la matrice dei pesi sinaptici che esegue rotazioni e riscalamenti nello spazio, $\mathbf{b} \in \mathbb{R}^m$ è il vettore di bias che trasla l'origine della frontiera decisionale, e $\mathbf{y} \in \mathbb{R}^m$ è il vettore risultante proiettato nello spazio di output.</p>
+<p>Negli spazi latenti di embedding impiegati per il Retrieval-Augmented Generation e l'analisi semantica OSINT, la vicinanza concettuale tra due vettori $\mathbf{u}, \mathbf{v} \in \mathbb{R}^d$ viene quantificata mediante il prodotto interno e la <strong>similarità coseno</strong>:</p>
+<p>$$\langle \mathbf{u}, \mathbf{v} \rangle = \mathbf{u}^T \mathbf{v} = \sum_{i=1}^d u_i v_i = |\mathbf{u}|_2 |\mathbf{v}|_2 \cos \theta \implies \text{CosineSimilarity}(\mathbf{u}, \mathbf{v}) = \frac{\mathbf{u}^T \mathbf{v}}{|\mathbf{u}|_2 |\mathbf{v}|_2}$$</p>
+<p>La normalizzazione per la norma euclidea $|\mathbf{u}|_2 = \sqrt{\sum u_i^2}$ rende la misura invariante rispetto alla magnitudo del vettore, isolando unicamente l'allineamento direzionale nello spazio multidimensionale.</p>
+<h3 id="autovettori-decomposizione-spettrale-e-svd">Autovettori, Decomposizione Spettrale e SVD<a class="headerlink" href="#autovettori-decomposizione-spettrale-e-svd" title="Permanent link">&para;</a></h3>
+<p>Ogni matrice quadrata $\mathbf{A} \in \mathbb{R}^{d \times d}$ possiede direzioni invarianti dette <strong>autovettori</strong> $\mathbf{v}$, lungo le quali l'azione della trasformazione si riduce a una pura moltiplicazione scalare per l'<strong>autovalore</strong> associato $\lambda$:</p>
+<p>$$\mathbf{A}\mathbf{v} = \lambda \mathbf{v}$$</p>
+<p>Questa proprietà geometrica costituisce il fondamento della riduzione dimensionale lineare (Principal Component Analysis) e della decomposizione ai valori singolari (<strong>Singular Value Decomposition</strong>, SVD):</p>
+<p>$$\mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T$$</p>
+<p>dove $\mathbf{U}$ e $\mathbf{V}$ sono matrici ortogonali i cui vettori colonna rappresentano le basi degli spazi di partenza e arrivo, mentre $\mathbf{\Sigma}$ è una matrice diagonale contenente i valori singolari decrescenti. La SVD consente di comprimere matrici di dati ad alta dimensionalità conservando la massima quota di informazione e varianza con il minimo ingombro in memoria RAM.</p>
+<h2 id="calcolo-differenziale-multivariato-e-propagazione-dellerrore">Calcolo Differenziale Multivariato e Propagazione dell'Errore<a class="headerlink" href="#calcolo-differenziale-multivariato-e-propagazione-dellerrore" title="Permanent link">&para;</a></h2>
+<p>L'apprendimento automatico formula l'addestramento come un problema di ottimizzazione continua, consistente nell'individuare la configurazione dei parametri $\theta$ che minimizza una funzione scalare di costo o perdita $L(\theta)$.</p>
+<h3 id="il-gradiente-e-lottimizzazione-con-discesa-del-gradiente">Il Gradiente e l'Ottimizzazione con Discesa del Gradiente<a class="headerlink" href="#il-gradiente-e-lottimizzazione-con-discesa-del-gradiente" title="Permanent link">&para;</a></h3>
+<p>Per funzioni a più variabili, la direzione di massima crescita istantanea è descritta dal vettore <strong>gradiente</strong> $\nabla_\theta L(\theta)$, contenente le derivate parziali del primo ordine rispetto a ciascun parametro:</p>
+<p>$$\nabla_\theta L(\theta) = \begin{bmatrix} \frac{\partial L}{\partial \theta_1}, &amp; \frac{\partial L}{\partial \theta_2}, &amp; \dots, &amp; \frac{\partial L}{\partial \theta_p} \end{bmatrix}^T$$</p>
+<p>L'algoritmo di <strong>Discesa del Gradiente</strong> (<em>Gradient Descent</em>) aggiorna iterativamente i pesi del modello muovendosi in direzione opposta al gradiente, applicando un fattore di scala detto <strong>learning rate</strong> ($\eta \in \mathbb{R}^+$):</p>
+<p>$$\theta^{(t+1)} = \theta^{(t)} - \eta \nabla_\theta L(\theta^{(t)})$$</p>
+<p>La scelta del tasso di apprendimento $\eta$ governa la stabilità della convergenza: valori eccessivamente elevati causano oscillazioni e divergenza numerica, mentre valori eccessivamente ridotti comportano tempi di calcolo proibitivi o intrappolamento in punti di sella sub-ottimali.</p>
+<h3 id="la-regola-della-catena-e-la-retropropagazione-backpropagation">La Regola della Catena e la Retropropagazione (Backpropagation)<a class="headerlink" href="#la-regola-della-catena-e-la-retropropagazione-backpropagation" title="Permanent link">&para;</a></h3>
+<p>Nelle architetture neurali multistrato, l'output finale è il risultato di funzioni composte annidate: $\hat{\mathbf{y}} = f_L(f_{L-1}(\dots f_1(\mathbf{x})))$. Il calcolo del gradiente della perdita rispetto ai parametri dei primi strati impiega la <strong>Regola della Catena multivariata</strong> (<em>Multivariate Chain Rule</em>), formalizzata mediante il prodotto con la matrice Jacobiana:</p>
+<p>$$\frac{\partial L}{\partial \mathbf{x}} = \mathbf{J}<em _mathbf_y="\mathbf{y">{\mathbf{y}}(\mathbf{x})^T \frac{\partial L}{\partial \mathbf{y}}, \quad \text{con } \mathbf{J}</em>$$}}(\mathbf{x})_{ij} = \frac{\partial y_i}{\partial x_j</p>
+<p>L'algoritmo di retropropagazione (<em>Backpropagation</em>) automatizza questa regola applicando la differenziazione all'indietro (<em>reverse-mode automatic differentiation</em>), calcolando i gradienti di tutti i pesi della rete con complessità temporale proporzionale a un singolo passaggio in avanti (<em>forward pass</em>).</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Riepilogo Concettuale</strong>
+A questo punto abbiamo esaminato i concetti chiave di D04-math-stat. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.</p>
+</blockquote>
+<h2 id="teoria-della-probabilita-e-inferenza-bayesiana">Teoria della Probabilità e Inferenza Bayesiana<a class="headerlink" href="#teoria-della-probabilita-e-inferenza-bayesiana" title="Permanent link">&para;</a></h2>
+<p>Nei domini operativi reali, i dati e le predizioni dei modelli incorporano intrinsecamente quote di incertezza stocastica dovute a rumore di misura o incompletezza informativa.</p>
+<h3 id="variabili-aleatorie-momenti-statistici-e-regole-operative">Variabili Aleatorie, Momenti Statistici e Regole Operative<a class="headerlink" href="#variabili-aleatorie-momenti-statistici-e-regole-operative" title="Permanent link">&para;</a></h3>
+<p>Una variabile aleatoria modella formalmente i possibili esiti numerici di un fenomeno non deterministico. Le proprietà centrali della sua distribuzione sono descritte dal <strong>valore atteso</strong> $\mathbb{E}[X] = \int x p(x) dx$ (la tendenza centrale) e dalla <strong>varianza</strong> $\text{Var}(X) = \mathbb{E}[(X - \mathbb{E}[X])^2]$ (la dispersione attorno al valore centrale).</p>
+<p>Le regole fondamentali del calcolo probabilistico impongono che per eventi disgiunti le probabilità si sommino ($P(A \cup B) = P(A) + P(B)$), mentre per eventi indipendenti si moltiplichino ($P(A \cap B) = P(A)P(B)$).</p>
+<h3 id="aggiornamento-della-conoscenza-con-il-teorema-di-bayes">Aggiornamento della Conoscenza con il Teorema di Bayes<a class="headerlink" href="#aggiornamento-della-conoscenza-con-il-teorema-di-bayes" title="Permanent link">&para;</a></h3>
+<p>Nei sistemi di filtraggio, classificazione del testo e diagnostica delle minacce, l'incorporazione di nuove evidenze osservate $B$ modifica la distribuzione di probabilità a priori dell'ipotesi $A$ secondo il <strong>Teorema di Bayes</strong>:</p>
+<p>$$P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)} = \frac{P(B \mid A) P(A)}{\sum_{j} P(B \mid A_j) P(A_j)}$$</p>
+<p>Il termine $P(A)$ rappresenta la convinzione iniziale (<em>Prior</em>), $P(B \mid A)$ descrive la verosimiglianza dell'evidenza dato il modello (<em>Likelihood</em>), $P(B)$ è la costante di normalizzazione marginale, e $P(A \mid B)$ quantifica la probabilità aggiornata alla luce delle evidenze (<em>Posterior</em>).</p>
+<h2 id="trade-off-e-limiti-nella-statistica-inferenziale-il-compromesso-biasvarianza">Trade-off e Limiti nella Statistica Inferenziale: Il Compromesso Bias/Varianza<a class="headerlink" href="#trade-off-e-limiti-nella-statistica-inferenziale-il-compromesso-biasvarianza" title="Permanent link">&para;</a></h2>
+<p>L'obiettivo dell'apprendimento automatico consiste nell'addestrare un modello $\hat{f}(x)$ su un campione finito di osservazioni $\mathcal{D}$ garantendo che le predizioni generalizzino accuratamente sull'intera popolazione sottostante non osservata.</p>
+<p>L'errore quadratico atteso di generalizzazione su un'istanza $x$ si decompone analiticamente in tre componenti indipendenti:</p>
+<p>$$\mathbb{E}<em _text_Bias="\text{Bias">{\mathcal{D}} \left[ \left( y - \hat{f}(x; \mathcal{D}) \right)^2 \right] = \underbrace{\left( f(x) - \mathbb{E}[\hat{f}(x)] \right)^2}</em>}^2} + \underbrace{\mathbb{E}\left[ \left( \hat{f}(x) - \mathbb{E}[\hat{f}(x)] \right)^2 \right]<em>{\text{Varianza}} + \underbrace{\sigma</em>\epsilon^2}_{\text{Rumore Irriducibile}}$$</p>
+<p>Il termine <strong>Bias</strong> misura l'errore sistematico derivante da ipotesi algoritmiche eccessivamente rigide o semplificate che non catturano la vera complessità dei dati (<em>Underfitting</em>). Il termine <strong>Varianza</strong> quantifica la sensibilità del modello alle fluttuazioni casuali dello specifico campione di training, portando il sistema a memorizzare il rumore statistico anziché la funzione generatrice sottostante (<em>Overfitting</em>). Il <strong>Rumore Irriducibile</strong> $\sigma_\epsilon^2$ rappresenta la varianza intrinseca del sistema di misura, non eliminabile da alcun modello.</p>
+<p>L'ingegneria del machine learning con <a href="https://scikit-learn.org/">Scikit-learn</a> (la libreria open-source standard per il machine learning classico in Python) consiste nell'individuare la complessità architetturale ottimale che minimizza simultaneamente bias e varianza.</p>
+<h2 id="riferimenti-bibliografici-e-risorse-tecniche">Riferimenti Bibliografici e Risorse Tecniche<a class="headerlink" href="#riferimenti-bibliografici-e-risorse-tecniche" title="Permanent link">&para;</a></h2>
+<h3 id="risorse-didattiche-visive-e-interattive">Risorse Didattiche Visive e Interattive<a class="headerlink" href="#risorse-didattiche-visive-e-interattive" title="Permanent link">&para;</a></h3>
+<p>La comprensione intuitiva e geometrica dell'algebra lineare è esposta nella serie didattica <a href="https://essence-of-linear-algebra.vercel.app/">Essence of Linear Algebra</a> ideata dal canale <a href="https://www.3blue1brown.com/">3Blue1Brown</a> del divulgatore matematico <a href="https://www.3blue1brown.com/">Grant Sanderson</a>. Le dinamiche probabilistiche e le simulazioni interattive nel browser sono consultabili sul portale accademico <a href="https://seeing-theory.brown.edu/basic-probability/index.html">Seeing Theory</a> della <a href="https://www.brown.edu/">Brown University</a> e attraverso i moduli interattivi di <a href="https://setosa.io/ev/markov-chains/">Explained Visually</a>. I percorsi formativi per la statistica descrittiva e inferenziale sono disponibili sulla piattaforma <a href="https://www.khanacademy.org/math/statistics-probability">Khan Academy</a>.</p>
+<h3 id="corsi-accademici-e-trattati-fondamentali">Corsi Accademici e Trattati Fondamentali<a class="headerlink" href="#corsi-accademici-e-trattati-fondamentali" title="Permanent link">&para;</a></h3>
+<p>Per lo studio rigoroso dell'algebra lineare applicata, il corso cardine è <a href="https://web.mit.edu/18.06/www/">18.06 Linear Algebra</a> tenuto da <a href="https://math.mit.edu/~gs/">Gilbert Strang</a> presso il <a href="https://web.mit.edu/">Massachusetts Institute of Technology (MIT)</a>. I fondamenti computazionali di machine learning e ottimizzazione per il natural language processing sono approfonditi nei programmi didattici della <a href="https://www.stanford.edu/">Stanford University</a>, in particolare i corsi <a href="https://cs229.stanford.edu/materials/handout.pdf">CS229: Machine Learning</a> e <a href="https://web.stanford.edu/class/cs224n/">CS224N: Natural Language Processing with Deep Learning</a>.</p>
+<h2 id="appendice-operativa-laboratori-pratici">Appendice Operativa: Laboratori Pratici<a class="headerlink" href="#appendice-operativa-laboratori-pratici" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>[!TIP]
+<strong>Zero-Draft Offloading (Delega dell'Inizio)</strong>
+Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di <em>revisore</em> e <em>ingegnere</em>, non di dattilografo.</p>
+</blockquote>
+<p>I seguenti laboratori contengono script Python autonomi ed eseguibili che implementano numericamente i costrutti teorici formalizzati nella monografia.</p>
+<h3 id="laboratorio-1-trasformazioni-affini-e-similarita-coseno-in-numpy">Laboratorio 1: Trasformazioni Affini e Similarità Coseno in NumPy<a class="headerlink" href="#laboratorio-1-trasformazioni-affini-e-similarita-coseno-in-numpy" title="Permanent link">&para;</a></h3>
+<p>Questo script implementa la moltiplicazione matriciale per un layer denso e calcola la similarità coseno tra vettori di embedding multidimensionali.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># Definizione del vettore di feature e della matrice dei pesi di un layer lineare</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="p">[</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">],</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="p">[</span><span class="mf">0.7</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># Calcolo trasformazione affine: y = Wx + b</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">W</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">b</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Vettore di input x (shape 3,):"</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Vettore di output y (shape 4,):"</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="c1"># Calcolo della similarita coseno tra due vettori di embedding</span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="n">u</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="n">v</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="n">similarita_coseno</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Similarita Coseno tra u e v: </span><span class="si">{</span><span class="n">similarita_coseno</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-2-ciclo-di-ottimizzazione-con-discesa-del-gradiente">Laboratorio 2: Ciclo di Ottimizzazione con Discesa del Gradiente<a class="headerlink" href="#laboratorio-2-ciclo-di-ottimizzazione-con-discesa-del-gradiente" title="Permanent link">&para;</a></h3>
+<p>Questo script implementa l'algoritmo di Gradient Descent con controllo esplicito della convergenza numerica e monitoraggio della perdita.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">loss_obiettivo</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="k">return</span> <span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mf">1.5</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">def</span><span class="w"> </span><span class="nf">calcola_gradiente</span><span class="p">(</span><span class="n">theta</span><span class="p">):</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="k">return</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="mf">4.0</span><span class="p">)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">theta</span> <span class="o">=</span> <span class="mf">0.0</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.15</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">tolleranza</span> <span class="o">=</span> <span class="mf">1e-6</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">max_iterazioni</span> <span class="o">=</span> <span class="mi">50</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Stato iniziale: theta = </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Loss = </span><span class="si">{</span><span class="n">loss_obiettivo</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="k">for</span> <span class="n">iterazione</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">max_iterazioni</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>    <span class="n">grad</span> <span class="o">=</span> <span class="n">calcola_gradiente</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">theta_aggiornato</span> <span class="o">=</span> <span class="n">theta</span> <span class="o">-</span> <span class="p">(</span><span class="n">learning_rate</span> <span class="o">*</span> <span class="n">grad</span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="n">loss_corrente</span> <span class="o">=</span> <span class="n">loss_obiettivo</span><span class="p">(</span><span class="n">theta_aggiornato</span><span class="p">)</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">theta_aggiornato</span> <span class="o">-</span> <span class="n">theta</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">tolleranza</span><span class="p">:</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Convergenza raggiunta all'iterazione </span><span class="si">{</span><span class="n">iterazione</span><span class="si">}</span><span class="s2">: theta = </span><span class="si">{</span><span class="n">theta_aggiornato</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">, Loss = </span><span class="si">{</span><span class="n">loss_corrente</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>        <span class="k">break</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>    <span class="n">theta</span> <span class="o">=</span> <span class="n">theta_aggiornato</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>    <span class="k">if</span> <span class="n">iterazione</span> <span class="o">%</span> <span class="mi">5</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Iterazione </span><span class="si">{</span><span class="n">iterazione</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2">: theta = </span><span class="si">{</span><span class="n">theta</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, gradiente = </span><span class="si">{</span><span class="n">grad</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">, Loss = </span><span class="si">{</span><span class="n">loss_corrente</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-3-simulazione-monte-carlo-e-legge-dei-grandi-numeri">Laboratorio 3: Simulazione Monte Carlo e Legge dei Grandi Numeri<a class="headerlink" href="#laboratorio-3-simulazione-monte-carlo-e-legge-dei-grandi-numeri" title="Permanent link">&para;</a></h3>
+<p>Questo script dimostra empiricamente la convergenza statistica della media campionaria verso la probabilità teorica al crescere della dimensione del campione.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Dimostrazione empirica della convergenza probabilistica (Legge dei Grandi Numeri)</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">volumi_campione</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1_000</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">,</span> <span class="mi">100_000</span><span class="p">,</span> <span class="mi">1_000_000</span><span class="p">]</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">probabilita_teorica</span> <span class="o">=</span> <span class="mf">0.70</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'Dimensione Campione (N)'</span><span class="si">:</span><span class="s2">&gt;25</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">'Probabilita Stimata'</span><span class="si">:</span><span class="s2">&gt;20</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="s1">'Errore Assoluto'</span><span class="si">:</span><span class="s2">&gt;18</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="mi">69</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">volumi_campione</span><span class="p">:</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">estrazioni</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">probabilita_teorica</span><span class="p">,</span> <span class="n">probabilita_teorica</span><span class="p">])</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">media_empirica</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">estrazioni</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">errore_assoluto</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">media_empirica</span> <span class="o">-</span> <span class="n">probabilita_teorica</span><span class="p">)</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">n</span><span class="si">:</span><span class="s2">&gt;25,d</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">media_empirica</span><span class="si">:</span><span class="s2">&gt;20.6f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">errore_assoluto</span><span class="si">:</span><span class="s2">&gt;18.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-4-diagnostica-empirica-del-compromesso-biasvarianza">Laboratorio 4: Diagnostica Empirica del Compromesso Bias/Varianza<a class="headerlink" href="#laboratorio-4-diagnostica-empirica-del-compromesso-biasvarianza" title="Permanent link">&para;</a></h3>
+<p>Questo script fitta modelli polinomiali di grado crescente per quantificare e confrontare l'errore di addestramento e di test nei regimi di underfitting e overfitting.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_pipeline</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">PolynomialFeatures</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LinearRegression</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_squared_error</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># Generazione dati sintetici non lineari con rumore stocastico: y = sin(2*pi*x) + epsilon</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">x_campioni</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">50</span><span class="p">))</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">y_reale</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">x_campioni</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span> <span class="o">=</span> <span class="n">x_campioni</span><span class="p">[:</span><span class="mi">25</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">x_campioni</span><span class="p">[</span><span class="mi">25</span><span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">y_reale</span><span class="p">[:</span><span class="mi">25</span><span class="p">],</span> <span class="n">y_reale</span><span class="p">[</span><span class="mi">25</span><span class="p">:]</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="n">gradi_polinomio</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="k">for</span> <span class="n">grado</span> <span class="ow">in</span> <span class="n">gradi_polinomio</span><span class="p">:</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>    <span class="n">modello</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">PolynomialFeatures</span><span class="p">(</span><span class="n">degree</span><span class="o">=</span><span class="n">grado</span><span class="p">),</span> <span class="n">LinearRegression</span><span class="p">())</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>    <span class="n">modello</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a>    <span class="n">pred_train</span> <span class="o">=</span> <span class="n">modello</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_train</span><span class="p">)</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a>    <span class="n">pred_test</span> <span class="o">=</span> <span class="n">modello</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_test</span><span class="p">)</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>    <span class="n">mse_train</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">pred_train</span><span class="p">)</span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a>    <span class="n">mse_test</span> <span class="o">=</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred_test</span><span class="p">)</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a>    <span class="k">if</span> <span class="n">grado</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a>        <span class="n">diagnostica</span> <span class="o">=</span> <span class="s2">"Underfitting marcato (Alto Bias)"</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>    <span class="k">elif</span> <span class="n">grado</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a>        <span class="n">diagnostica</span> <span class="o">=</span> <span class="s2">"Compromesso ottimale (Generalizzazione)"</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>        <span class="n">diagnostica</span> <span class="o">=</span> <span class="s2">"Overfitting severo (Alta Varianza)"</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Grado </span><span class="si">{</span><span class="n">grado</span><span class="si">:</span><span class="s2">2d</span><span class="si">}</span><span class="s2"> | MSE Training: </span><span class="si">{</span><span class="n">mse_train</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | MSE Test: </span><span class="si">{</span><span class="n">mse_test</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">diagnostica</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+          
+          <a href="../D05-data-foundations/" class="md-footer__link md-footer__link--prev" aria-label="Precedente: D05 — Data Foundations">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Precedente
+              </span>
+              <div class="md-ellipsis">
+                D05 — Data Foundations
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../D07-ml-fondamenti/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D07 — Fondamenti di ML">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D07 — Fondamenti di ML
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>

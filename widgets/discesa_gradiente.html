@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discesa del Gradiente</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #fcfcfb;
+            color: #20201f;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        canvas {
+            background-color: #ffffff;
+            border: 1px solid #e1e0d9;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin-bottom: 15px;
+            gap: 10px;
+            background: #f0efec;
+            padding: 15px;
+            border-radius: 8px;
+            box-sizing: border-box;
+        }
+        .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        button {
+            background-color: #184f95;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            flex: 1;
+            margin: 0 5px;
+        }
+        button:hover {
+            background-color: #032042;
+        }
+        input[type=range] {
+            width: 150px;
+        }
+        .instructions {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 14px;
+            color: #6d6b67;
+        }
+        .stats {
+            font-family: "JetBrains Mono", monospace, sans-serif;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="instructions">
+        <strong>Discesa del Gradiente:</strong> Clicca sulla curva per posizionare il parametro iniziale, poi clicca "Fai un passo" per aggiornare il peso muovendoti verso il minimo della funzione di Loss.
+    </div>
+    
+    <canvas id="plot" width="500" height="300"></canvas>
+    
+    <div class="controls">
+        <div class="row stats">
+            <span><strong>Peso (w): </strong><span id="weightVal">0.00</span></span>
+            <span><strong>Gradiente: </strong><span id="gradVal">0.00</span></span>
+        </div>
+        <div class="row">
+            <label for="lrSlider">Learning Rate (α): <span id="lrVal">0.1</span></label>
+            <input type="range" id="lrSlider" min="0.01" max="0.9" step="0.01" value="0.1">
+        </div>
+        <div class="row">
+            <button id="stepBtn">Fai un passo (Update)</button>
+            <button id="resetBtn">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('plot');
+    const ctx = canvas.getContext('2d');
+    const stepBtn = document.getElementById('stepBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const lrSlider = document.getElementById('lrSlider');
+    const lrValDisplay = document.getElementById('lrVal');
+    const weightVal = document.getElementById('weightVal');
+    const gradVal = document.getElementById('gradVal');
+
+    // Funzione di loss: L(w) = w^2
+    // Gradiente: dL/dw = 2w
+    
+    let w = 8; // peso iniziale
+    let lr = parseFloat(lrSlider.value);
+    
+    const scaleX = 25; // pixel per unit of w
+    const scaleY = 3;  // pixel per unit of L
+    const offsetX = canvas.width / 2;
+    const offsetY = canvas.height - 20;
+
+    function loss(x) { return x * x; }
+    function grad(x) { return 2 * x; }
+
+    function getMousePos(evt) {
+        const rect = canvas.getBoundingClientRect();
+        const scale = canvas.width / rect.width;
+        return {
+            x: (evt.clientX - rect.left) * scale,
+            y: (evt.clientY - rect.top) * scale
+        };
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw axes
+        ctx.strokeStyle = '#e1e0d9';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(0, offsetY); ctx.lineTo(canvas.width, offsetY); // X axis
+        ctx.moveTo(offsetX, 0); ctx.lineTo(offsetX, canvas.height); // Y axis
+        ctx.stroke();
+
+        // Draw curve L(w) = w^2
+        ctx.strokeStyle = '#6d6b67';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        for (let x = -10; x <= 10; x += 0.1) {
+            const px = offsetX + x * scaleX;
+            const py = offsetY - loss(x) * scaleY;
+            if (x === -10) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+
+        // Draw current point
+        const px = offsetX + w * scaleX;
+        const py = offsetY - loss(w) * scaleY;
+        
+        // Draw tangent (gradient)
+        const g = grad(w);
+        // tangent line: y - loss(w) = g * (x - w)  => y = g * (x - w) + loss(w)
+        ctx.strokeStyle = 'rgba(217, 119, 87, 0.5)';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        const tx1 = w - 2;
+        const ty1 = g * (tx1 - w) + loss(w);
+        const tx2 = w + 2;
+        const ty2 = g * (tx2 - w) + loss(w);
+        ctx.moveTo(offsetX + tx1 * scaleX, offsetY - ty1 * scaleY);
+        ctx.lineTo(offsetX + tx2 * scaleX, offsetY - ty2 * scaleY);
+        ctx.stroke();
+
+        // Draw ball
+        ctx.fillStyle = '#d97757';
+        ctx.beginPath();
+        ctx.arc(px, py, 8, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Update stats
+        weightVal.innerText = w.toFixed(2);
+        gradVal.innerText = g.toFixed(2);
+    }
+
+    // Interactions
+    lrSlider.addEventListener('input', (e) => {
+        lr = parseFloat(e.target.value);
+        lrValDisplay.innerText = lr.toFixed(2);
+    });
+
+    stepBtn.addEventListener('click', () => {
+        const g = grad(w);
+        w = w - lr * g; // L'AGGIORNAMENTO DEL PESO!
+        draw();
+    });
+
+    resetBtn.addEventListener('click', () => {
+        w = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 4 + 4); // random tra +/- 4 e 8
+        draw();
+    });
+
+    canvas.addEventListener('mousedown', (evt) => {
+        const pos = getMousePos(evt);
+        // Map pixel back to w
+        w = (pos.x - offsetX) / scaleX;
+        // clamp
+        if (w > 10) w = 10;
+        if (w < -10) w = -10;
+        draw();
+    });
+
+    // Initial random state
+    resetBtn.click();
+</script>
+
+</body>
+</html>

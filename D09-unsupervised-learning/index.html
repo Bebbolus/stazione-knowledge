@@ -1,0 +1,2151 @@
+
+<!doctype html>
+<html lang="it" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Knowledge base personale per diventare osinter del futuro">
+      
+      
+      
+        <link rel="canonical" href="https://bebbolus.github.io/stazione-knowledge/D09-unsupervised-learning/">
+      
+      
+        <link rel="prev" href="../D08-ml-classico/">
+      
+      
+        <link rel="next" href="../D10-deep-learning-pytorch/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>D09 — Unsupervised Learning - Stazione — Percorso OSINT & AI</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/edtech.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#apprendimento-non-supervisionato-clustering-riduzione-dimensionale-e-anomaly-detection" class="md-skip">
+          Vai al contenuto
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Intestazione">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-header__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Stazione — Percorso OSINT & AI
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              D09 — Unsupervised Learning
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema scuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passa al tema scuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passa al tema chiaro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passa al tema chiaro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Cerca" placeholder="Cerca" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Cerca">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Cancella" aria-label="Cancella" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inizializza la ricerca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D00-manifesto/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 1 (L'Officina)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../D05-data-foundations/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 2 (Il Cervello)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../D12-rag-knowledge-osint/" class="md-tabs__link">
+          
+  
+    
+  
+  Mondo 3 (Il Risveglio)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigazione" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Stazione — Percorso OSINT &amp; AI" class="md-nav__button md-logo" aria-label="Stazione — Percorso OSINT & AI" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Stazione — Percorso OSINT & AI
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Bebbolus/stazione-knowledge" title="Apri repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Bebbolus/stazione-knowledge
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 1 (L'Officina)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 1 (L'Officina)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D00-manifesto/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D00 — Il Manifesto
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D01-workspace-llm-wiki/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D01 — Workspace local-first e CLI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D02-python-refresher/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D02 — Python Refresher
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D03-virtualizzazione-e-container/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D03 — Virtualizzazione e Container (Docker)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04-progetto-stazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04 — Il Progetto Stazione (Prologo)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D04b-gateway-e-routing-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D04b — Gateway e Routing LLM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 2 (Il Cervello)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 2 (Il Cervello)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D05-data-foundations/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D05 — Data Foundations
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D06-math-stat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D06 — Matematica e Statistica
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D07-ml-fondamenti/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D07 — Fondamenti di ML
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D08-ml-classico/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D08 — ML Classico
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    D09 — Unsupervised Learning
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    D09 — Unsupervised Learning
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Indice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Indice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#il-paradosso-dellassenza-di-ground-truth" class="md-nav__link">
+    <span class="md-ellipsis">
+      Il Paradosso dell'Assenza di Ground Truth
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#algoritmi-di-clustering-partizionamento-gerarchie-e-densita" class="md-nav__link">
+    <span class="md-ellipsis">
+      Algoritmi di Clustering: Partizionamento, Gerarchie e Densità
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Algoritmi di Clustering: Partizionamento, Gerarchie e Densità">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#k-means-e-la-partizione-dello-spazio-di-voronoi" class="md-nav__link">
+    <span class="md-ellipsis">
+      K-Means e la Partizione dello Spazio di Voronoi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clustering-gerarchico-agglomerazione-bottom-up-e-dendrogrammi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clustering Gerarchico: Agglomerazione Bottom-Up e Dendrogrammi
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clustering-basato-su-densita-dbscan-e-hdbscan" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clustering Basato su Densità: DBSCAN e HDBSCAN
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riduzione-della-dimensionalita-e-manifold-learning" class="md-nav__link">
+    <span class="md-ellipsis">
+      Riduzione della Dimensionalità e Manifold Learning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Riduzione della Dimensionalità e Manifold Learning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#la-maledizione-della-dimensionalita-e-la-proiezione-lineare-pca" class="md-nav__link">
+    <span class="md-ellipsis">
+      La Maledizione della Dimensionalità e la Proiezione Lineare (PCA)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manifold-learning-non-lineare-t-sne-e-umap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Manifold Learning Non Lineare: t-SNE e UMAP
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#anomaly-detection-e-rilevamento-di-outlier" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anomaly Detection e Rilevamento di Outlier
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Anomaly Detection e Rilevamento di Outlier">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isolamento-spaziale-e-lunghezza-del-cammino-isolation-forest" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isolamento Spaziale e Lunghezza del Cammino (Isolation Forest)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#iperpiani-di-supporto-non-lineari-one-class-svm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Iperpiani di Supporto Non Lineari (One-Class SVM)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deviazione-della-densita-locale-local-outlier-factor-lof" class="md-nav__link">
+    <span class="md-ellipsis">
+      Deviazione della Densità Locale (Local Outlier Factor - LOF)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#trade-off-operativi-e-scelte-architetturali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Trade-off Operativi e Scelte Architetturali
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#riferimenti-bibliografici-e-risorse-tecniche" class="md-nav__link">
+    <span class="md-ellipsis">
+      Riferimenti Bibliografici e Risorse Tecniche
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Riferimenti Bibliografici e Risorse Tecniche">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testi-accademici-e-dispense-teoriche" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testi Accademici e Dispense Teoriche
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#paper-scientifici-fondamentali" class="md-nav__link">
+    <span class="md-ellipsis">
+      Paper Scientifici Fondamentali
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentazione-software-e-strumenti-interattivi" class="md-nav__link">
+    <span class="md-ellipsis">
+      Documentazione Software e Strumenti Interattivi
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#appendice-operativa-laboratori-pratici" class="md-nav__link">
+    <span class="md-ellipsis">
+      Appendice Operativa: Laboratori Pratici
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Appendice Operativa: Laboratori Pratici">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-1-clustering-k-means-curva-a-gomito-e-silhouette-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 1: Clustering K-Means, Curva a Gomito e Silhouette Analysis
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-2-clustering-gerarchico-agglomerativo-e-calcolo-cofenofenetico" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 2: Clustering Gerarchico Agglomerativo e Calcolo Cofenofenetico
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-3-riduzione-dimensionale-comparata-pca-t-sne-e-umap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 3: Riduzione Dimensionale Comparata (PCA, t-SNE e UMAP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laboratorio-4-pipeline-multi-algoritmica-di-anomaly-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Laboratorio 4: Pipeline Multi-Algoritmica di Anomaly Detection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D10-deep-learning-pytorch/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D10 — Deep Learning e PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D11-transformers-llm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D11 — Transformers e LLMs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mondo 3 (Il Risveglio)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Mondo 3 (Il Risveglio)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D12-rag-knowledge-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D12 — RAG e OSINT
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13-osint-avanzato/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13 — OSINT Avanzato
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13b-ai-arma-bersaglio-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13b — AI come Arma e Bersaglio
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D13c-geopolitica-ai-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D13c — Geopolitica e AI
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14-agentic-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14 — Agentic Systems e MCP
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14b-ai-harness-plugin-osint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14b — AI Harness e Plugin
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14c-prompt-context-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14c — Prompt & Context Engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D14d-loop-graph-engineering/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D14d — Loop & Graph Engineering
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D15-rl-alignment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D15 — RL e Alignment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16-responsible-ai-cyber/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16 — Responsible AI e Cyber
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D16b-guardrails-e-privacy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D16b — Guardrails Locali e Privacy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D17-mlops-llmops/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D17 — MLOps e LLMOps
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18-icm-orchestrazione/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18 — ICM e Orchestrazione
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D18b-twelve-factor-agents/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D18b — 12-Factor Agents
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19-agent-context-platform-mcp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19 — Agent Context Platform (MCP)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D19b-standard-agent-plugins/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D19b — Standard Agent Plugins
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D20-ecosistema-interfacce-client/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D20 — Ecosistema Client SPoG
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D21-ingegneria-delle-identita/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D21 — Ingegneria delle Identità ICM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D22-tech-radar-e-scouting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D22 — Tech Radar e Scouting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../D23-architettura-sota-definitiva/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    D23 — Architettura SOTA Definitiva
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/Bebbolus/stazione-knowledge/edit/main/docs/D09-unsupervised-learning.md" title="Modifica" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="apprendimento-non-supervisionato-clustering-riduzione-dimensionale-e-anomaly-detection">Apprendimento Non Supervisionato (Clustering, Riduzione Dimensionale e Anomaly Detection)<a class="headerlink" href="#apprendimento-non-supervisionato-clustering-riduzione-dimensionale-e-anomaly-detection" title="Permanent link">&para;</a></h1>
+<p>L'apprendimento non supervisionato (Unsupervised Learning) è il paradigma del machine learning in cui i modelli estraggono pattern latenti, regolarità geometriche e densità probabilistiche da matrici di dati prive di etichette target o segnali di supervisione esterni. Trova applicazione critica nell'analisi esplorativa di dataset multidimensionali, nella segmentazione comportamentale degli utenti, nella visualizzazione topologica di embedding semantici per l'intelligence OSINT e nell'identificazione di intrusioni informatiche o frodi mediante anomaly detection. Esiste per superare la barriera fondamentale del costo e dell'impossibilità pratica dell'annotazione manuale dei dati, permettendo ai sistemi computazionali di organizzare autonomamente la complessità informativa e di comprimere lo spazio delle feature preservandone la struttura geometrica essenziale.</p>
+<h2 id="il-paradosso-dellassenza-di-ground-truth">Il Paradosso dell'Assenza di Ground Truth<a class="headerlink" href="#il-paradosso-dellassenza-di-ground-truth" title="Permanent link">&para;</a></h2>
+<p>Immagina di entrare in una stanza piena di migliaia di mattoncini Lego sparsi alla rinfusa sul pavimento, senza la scatola originale, senza il libretto di istruzioni e senza nessuno che ti dica cosa devi costruire. 
+Nel <strong>Machine Learning Supervisionato</strong>, hai un maestro al tuo fianco che ti dice subito: <em>"Questo pezzo è una finestra, quello è un tetto"</em>. Nell'<strong>Apprendimento Non Supervisionato (Unsupervised Learning)</strong>, sei completamente da solo: devi osservare la forma, i colori e le dimensioni dei mattoncini e trovare un senso da te, raggruppando quelli simili o scartando i pezzi rotti.</p>
+<p>Matematicamente, il sistema riceve una matrice di osservazioni senza etichette predefinite:</p>
+<p>$$X \in \mathbb{R}^{n \times d}$$</p>
+<p>Spiegata a parole:
+- $n$: è il numero totale di mattoncini Lego sparsi sul pavimento (i campioni o osservazioni).
+- $d$: è il numero di caratteristiche misurate per ogni mattoncino (es. lunghezza, larghezza, peso, colore).
+- L'assenza di un vettore target $y$ (il libretto delle risposte) significa che non esiste un errore esatto da correggere: il modello deve scommettere su un'ipotesi geometrica (es. raggruppare per vicinanza, per densità di folla o per allineamento visivo).</p>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Lo Smistatore di Mattoncini Lego (Ground Truth vs Unsupervised)
+<em>Visualizzazione Dinamica:</em> Un'arena interattiva dove l'utente può attivare la modalità "Con Maestro" (Supervisionato: i punti si colorano subito con la loro etichetta $y$) o "Senza Maestro" (Non Supervisionato: i punti sono grigi e l'utente sperimenta come raggrupparli variando criteri di forma e colore, osservando l'assenza di un punteggio d'errore assoluto).</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>========================================================================================
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>           TASSONOMIA ARCHITETTURALE DELL'UNSUPERVISED LEARNING
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>========================================================================================
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a> [Matrice di Dati X (n × d)]
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>       │
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>       ├──► 1. CLUSTERING (Partizionamento dello Spazio)
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>       │      ├─ Centroidi &amp; Voronoi: K-Means (Lloyd, K-Means++)
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>       │      ├─ Gerarchie Agglomerative: Ward, Complete, Average Linkage, Dendrogrammi
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>       │      └─ Basati su Densità: DBSCAN (Core/Border/Noise), HDBSCAN
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>       │
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>       ├──► 2. RIDUZIONE DIMENSIONALE (Compressione &amp; Manifold Learning)
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>       │      ├─ Lineare: PCA (Covarianza, Eigendecomposition, SVD, Scree Plot)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>       │      └─ Non-Lineare: t-SNE (Student-t, Divergenza KL), UMAP (Fuzzy Simplicial Sets)
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>       │
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>       └──► 3. ANOMALY DETECTION (Isolamento &amp; Stima di Densità)
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>              ├─ Partizionamento Casuale: Isolation Forest (Profondità del Cammino)
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>              ├─ Iperpiani di Supporto: One-Class SVM (Kernel RBF nel RKHS)
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>              └─ Densità Relativa Locale: Local Outlier Factor (LOF)
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>========================================================================================
+</code></pre></div>
+<h2 id="algoritmi-di-clustering-partizionamento-gerarchie-e-densita">Algoritmi di Clustering: Partizionamento, Gerarchie e Densità<a class="headerlink" href="#algoritmi-di-clustering-partizionamento-gerarchie-e-densita" title="Permanent link">&para;</a></h2>
+<p>Il clustering organizza un insieme di punti non etichettati in sottoinsiemi omogenei (<em>cluster</em>), massimizzando la similarità intra-cluster e minimizzando la similarità inter-cluster secondo una metrica di distanza formale.</p>
+<h3 id="k-means-e-la-partizione-dello-spazio-di-voronoi">K-Means e la Partizione dello Spazio di Voronoi<a class="headerlink" href="#k-means-e-la-partizione-dello-spazio-di-voronoi" title="Permanent link">&para;</a></h3>
+<p>Immagina di essere il manager di una catena di pizzerie da asporto e di dover aprire $K$ nuovi locali in una grande città per consegnare le pizze il più in fretta possibile a tutte le case.
+All'inizio pianti $K$ bandierine a caso sulla mappa della città. L'algoritmo <strong>K-Means</strong> procede con due mosse a ripetizione come una danza:
+1. <strong>Assegnazione (I clienti scelgono la pizzeria):</strong> Ogni famiglia della città ordina dalla pizzeria più vicina a casa sua, tracciando i confini dei quartieri di consegna (le celle di Voronoi).
+2. <strong>Aggiornamento (I locali si spostano al centro):</strong> Ciascun pizzaiolo guarda la mappa di tutte le famiglie che hanno ordinato da lui e sposta fisicamente il suo locale esattamente al baricentro (il centro geometrico) dei suoi clienti per far fare meno strada ai fattorini.
+I clienti si riassegnano alle nuove posizioni, i locali si rispostano, e il ciclo si ripete finché le pizzerie trovano la posizione perfetta e smettono di muoversi.</p>
+<p>Le formule matematiche formalizzano queste due fasi:</p>
+<ol>
+<li><strong>Fase di Assegnazione:</strong>
+   $$c^{(i)} = \arg\min_{k} ||x_i - \mu_k||^2$$</li>
+<li>$x_i$: la posizione della casa dell'utente $i$.</li>
+<li>$\mu_k$: la posizione della pizzeria (centroide) $k$.</li>
+<li>
+<p>$c^{(i)}$: l'etichetta della pizzeria più vicina assegnata al cliente $i$.</p>
+</li>
+<li>
+<p><strong>Fase di Aggiornamento (Media del quartiere):</strong>
+   $$\mu_k = \frac{1}{|S_k|} \sum_{x_i \in S_k} x_i$$</p>
+</li>
+<li>$|S_k|$: il numero totale di clienti nel quartiere della pizzeria $k$.</li>
+<li>
+<p>$\sum x_i$: la somma delle posizioni di tutti i clienti del gruppo, divisa per il loro numero (la media aritmetica delle coordinate).</p>
+</li>
+<li>
+<p><strong>La fatica totale di consegna (Inerzia o WCSS):</strong>
+   $$\text{WCSS} = \sum_{k=1}^K \sum_{x_i \in S_k} ||x_i - \mu_k||^2$$</p>
+</li>
+<li>
+<p>$\text{WCSS}$ (<em>Within-Cluster Sum of Squares</em>): la somma della "strada al quadrato" percorsa da tutti i fattorini per servire tutti i rispettivi clienti. L'obiettivo dell'algoritmo è minimizzare questa fatica complessiva.</p>
+</li>
+<li>
+<p><strong>Inizializzazione furba (K-Means++):</strong>
+   Per evitare che le $K$ pizzerie partano tutte nello stesso isolato per pura sfortuna iniziale, <strong>K-Means++</strong> piazza la prima pizzeria a caso e le successive con una probabilità proporzionale al quadrato della distanza $D(x)$ dalla pizzeria più vicina già esistente:
+   $$P(x) = \frac{D(x)^2}{\sum_{x' \in X} D(x')^2}$$
+   In questo modo, le nuove pizzerie vengono "sparate" fin dall'inizio nei quartieri più sguarniti e lontani.</p>
+</li>
+</ol>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: La Battaglia delle Pizzerie (K-Means &amp; Voronoi Simulator)
+<em>Visualizzazione Dinamica:</em> Una mappa 2D dove l'utente posiziona $K$ pizzerie cliccando sullo schermo. Premendo "Step", i confini colorati dei quartieri (Voronoi) si ridisegnano in tempo reale e i centroidi scivolano dolcemente verso il baricentro dei punti. Include un cursore per testare l'avvio casuale vs K-Means++ e vedere come cambia l'inerzia finale WCSS.</p>
+</blockquote>
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: K-Means Clustering</p>
+  <p>Premi "Prossimo Passo" per vedere l'algoritmo in azione: prima assegna ogni punto al centroide (X) più vicino, poi sposta i centroidi al centro esatto dei punti appena assegnati. Il ciclo si ripete fino a trovare l'equilibrio.</p>
+  <iframe src="../widgets/kmeans.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
+<h4 id="quante-pizzerie-aprire-il-metodo-a-gomito-e-il-silhouette-score">Quante pizzerie aprire? Il Metodo a Gomito e il Silhouette Score<a class="headerlink" href="#quante-pizzerie-aprire-il-metodo-a-gomito-e-il-silhouette-score" title="Permanent link">&para;</a></h4>
+<p>Più pizzerie apri, meno strada fanno i fattorini; ma aprire 100 pizzerie per 100 clienti non ha senso (la fatica WCSS sarebbe zero, ma il costo assurdo).
+- <strong>Metodo a Gomito (Elbow Method):</strong> Tracciando la fatica WCSS al variare di $K$, si cerca il punto in cui la curva "fa un gomito": aggiungere un'altra pizzeria dopo quel punto riduce la fatica in modo trascurabile.
+- <strong>Silhouette Score ($s(i)$):</strong> Misura quanto è soddisfatto il singolo cliente della sua pizzeria:
+  $$s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}, \quad s(i) \in [-1, 1]$$
+  - $a(i)$: distanza media del cliente $i$ dai vicini del suo stesso quartiere (quanto si trova bene nel suo gruppo).
+  - $b(i)$: distanza media del cliente $i$ dai clienti della pizzeria rivale più vicina (quanto è distante dal gruppo concorrente).
+  - Se $s(i) \approx +1$: il cliente è felicissimo, vicinissimo alla sua pizzeria e lontano dai rivali.
+  - Se $s(i) \approx 0$: il cliente è sul confine esatto tra due quartieri.
+  - Se $s(i) &lt; 0$: il cliente è stato assegnato alla pizzeria sbagliata ed è più vicino a quella rivale!</p>
+<h3 id="clustering-gerarchico-agglomerazione-bottom-up-e-dendrogrammi">Clustering Gerarchico: Agglomerazione Bottom-Up e Dendrogrammi<a class="headerlink" href="#clustering-gerarchico-agglomerazione-bottom-up-e-dendrogrammi" title="Permanent link">&para;</a></h3>
+<p>Pensa a come si formano i gruppi di amici durante il primo mese di scuola superiore.
+Il primo giorno, ogni singolo studente è un'isola a sé (un gruppo da una sola persona). Dopo pochi giorni, i due compagni di banco più affini si uniscono in una coppietta inseparabile. Poi, due coppiette che amano gli stessi videogiochi o sport si fondono in una comitiva da 4. Man mano che passano le settimane, le comitive continuano a fondersi tra loro fino a formare un unico grande pullman di classe. Questo approccio "dal basso verso l'alto" è il <strong>Clustering Gerarchico Agglomerativo</strong>.</p>
+<p>Come decidono due gruppi $A$ e $B$ se vale la pena fondersi? Ci sono diverse regole matematiche (<strong>Criteri di Linkage</strong>):
+1. <strong>Ward Linkage (Minima confusione):</strong>
+   $$\Delta \text{ESS}<em A_="A," B="B" _in="\in" x="x" y="y">{AB} = \frac{|A||B|}{|A| + |B|} ||\mu_A - \mu_B||^2$$
+   - $|A|$ e $|B|$: il numero di studenti nei due gruppi.
+   - $||\mu_A - \mu_B||^2$: la distanza tra i "centri di interesse" (baricentri) dei due gruppi.
+   - Traduzione: unisce i due gruppi che fanno aumentare il meno possibile il disordine (varianza) complessivo.
+2. <strong>Complete Linkage (Regola dei più distanti):</strong> $d(A, B) = \max</em> ||x - y||$. Due gruppi si fondono solo se anche i due membri più antipatici o distanti tra loro sono comunque vicini. Crea gruppi compatti ma è sensibile a persone isolate.
+3. <strong>Single Linkage (Regola del singolo contatto):</strong> $d(A, B) = \min_{x \in A, y \in B} ||x - y||$. Basta che due persone dei rispettivi gruppi siano vicine per unire tutti (rischia l'effetto "trenino infinito" o <em>chaining</em>).
+4. <strong>Average Linkage (Armonia media):</strong> $d(A, B) = \frac{1}{|A||B|} \sum_{x \in A} \sum_{y \in B} ||x - y||$. Misura la media di simpatia tra tutte le coppie possibili tra i due gruppi.</p>
+<h4 id="lalbero-genealogico-dendrogramma-e-la-fedelta-cofenofenetica">L'Albero Genealogico (Dendrogramma) e la Fedeltà Cofenofenetica<a class="headerlink" href="#lalbero-genealogico-dendrogramma-e-la-fedelta-cofenofenetica" title="Permanent link">&para;</a></h4>
+<p>L'intera sequenza di unioni viene disegnata in un <strong>Dendrogramma</strong>, un albero genealogico rovesciato la cui altezza verticale indica la distanza a cui è avvenuta la fusione. Tagliando l'albero con una linea orizzontale a una determinata quota, scegli esattamente quanti gruppi ottenere.</p>
+<p>La fedeltà con cui l'albero rispetta le distanze reali senza distorcerle si misura con il <strong>Coefficiente di Correlazione Cofenofenetica</strong> ($c$):</p>
+<p>$$c = \frac{\sum_{i &lt; j} (d_{ij} - \bar{d})(t_{ij} - \bar{t})}{\sqrt{\sum_{i &lt; j} (d_{ij} - \bar{d})^2 \sum_{i &lt; j} (t_{ij} - \bar{t})^2}}$$</p>
+<ul>
+<li>$d_{ij}$: la distanza reale tra gli studenti $i$ e $j$ nello spazio originale.</li>
+<li>$t_{ij}$: l'altezza del ramo nel dendrogramma in cui $i$ e $j$ si sono uniti per la prima volta.</li>
+<li>Se $c &gt; 0.8$, l'albero rappresenta fedelmente le distanze originali senza imbrogliare.</li>
+</ul>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: L'Albero delle Amicizie (Dendrogram Builder)
+<em>Visualizzazione Dinamica:</em> Un pannello sdoppiato: a sinistra i punti nello spazio 2D, a destra il dendrogramma che cresce passo dopo passo. L'utente muove un cursore a ghigliottina orizzontale (livello di taglio dell'albero) per vedere istantaneamente come i cluster si colorano e si separano nello spazio a sinistra in tempo reale.</p>
+</blockquote>
+<h3 id="clustering-basato-su-densita-dbscan-e-hdbscan">Clustering Basato su Densità: DBSCAN e HDBSCAN<a class="headerlink" href="#clustering-basato-su-densita-dbscan-e-hdbscan" title="Permanent link">&para;</a></h3>
+<p>Immagina un concerto rock o una festa in discoteca all'aperto.
+Ci sono capannelli densi di centinaia di persone che ballano pigiate al centro della pista, persone ai margini che chiacchierano a contatto con il gruppo, e tizi solitari dispersi nell'oscurità del parcheggio o vicino alle transenne.
+Algoritmi come K-Means cercano solo cerchi o sfere perfette e fallirebbero se la pista da ballo avesse la forma di una mezzaluna o di una spirale. <strong>DBSCAN</strong> invece segue semplicemente la folla: dove c'è tanta gente ammassata, c'è un gruppo; chi è solo nel buio viene scartato come "rumore".</p>
+<p>DBSCAN usa due parametri chiave: $\epsilon$ (<em>epsilon</em>, il raggio delle braccia aperte) e $min_samples$ (il numero minimo di persone per formare un capannello).
+Ogni punto $p$ analizza il suo intorno sferico di raggio $\epsilon$:</p>
+<p>$$N_\epsilon(p) = {q \in X \mid ||p - q|| \le \epsilon}$$</p>
+<p>L'algoritmo classifica ogni persona in tre categorie:
+- <strong>Core Point (Cuore della pista):</strong> Se nel raggio $\epsilon$ ci sono almeno $min_samples$ persone ($|N_\epsilon(p)| \ge min_samples$). È il motore che genera il gruppo.
+- <strong>Border Point (Bordo pista):</strong> Ha meno di $min_samples$ amici attorno a sé, ma tocca almeno un Core Point. Viene aggregato al gruppo.
+- <strong>Noise Point (Intruso isolato / Rumore):</strong> Non tocca nessun Core Point ed è isolato nel buio. Viene contrassegnato con l'etichetta $-1$ (anomalia o rumore).</p>
+<p>Un cluster nasce collegando tutti i punti uniti da una catena continua di Core Point a distanza inferiore a $\epsilon$ (<em>density-connected</em>).</p>
+<h4 id="levoluzione-con-hdbscan-piste-a-densita-variabile">L'Evoluzione con HDBSCAN (Piste a densità variabile)<a class="headerlink" href="#levoluzione-con-hdbscan-piste-a-densita-variabile" title="Permanent link">&para;</a></h4>
+<p>Se in un festival hai sia un tendone techno stipato come una scatola di sardine sia un'area relax rilassata con persone più distanziate, un unico raggio $\epsilon$ globale fallirà. <strong>HDBSCAN</strong> supera questo limite esplorando tutti i possibili valori di $\epsilon$ e trasformando lo spazio tramite la <strong>Distanza di Raggiungibilità Mutua</strong>:</p>
+<p>$$d_{\text{mreach-}k}(a, b) = \max({ \text{core}_k(a), \text{core}_k(b), d(a, b) })$$</p>
+<ul>
+<li>$\text{core}_k(a)$: lo spazio che serve al punto $a$ per trovare i suoi $k$ vicini più stretti.</li>
+<li>Se uno dei due punti si trova in una zona isolata, la distanza mutua "si allarga" artificialmente, impedendo al rumore di fondere per errore cluster a densità diverse.</li>
+</ul>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Il Radar della Discoteca (DBSCAN &amp; HDBSCAN Density Playground)
+<em>Visualizzazione Dinamica:</em> Un generatore di forme complesse (cluster a mezzaluna intrecciate, spirali e ciambelle con rumore casuale). L'utente muove gli slider $\epsilon$ e $min_samples$ vedendo i punti illuminarsi in tempo reale di verde (Core), giallo (Border) o grigio fumo (Noise/Outlier).</p>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Riepilogo Concettuale</strong>
+A questo punto abbiamo esaminato i concetti chiave di D07-unsupervised-learning. Assicurati di aver compreso la struttura logico-matematica e i trade-off discussi finora prima di proseguire con la sezione successiva.</p>
+</blockquote>
+<h2 id="riduzione-della-dimensionalita-e-manifold-learning">Riduzione della Dimensionalità e Manifold Learning<a class="headerlink" href="#riduzione-della-dimensionalita-e-manifold-learning" title="Permanent link">&para;</a></h2>
+<p>Quando la dimensionalità dei dati $d$ cresce verso decine o migliaia di colonne (come accade negli embedding generati dai Large Language Model o nelle serie temporali OSINT), i dati incorrono nella <strong>Maledizione della Dimensionalità</strong> (<em>Curse of Dimensionality</em>). All'aumentare delle dimensioni, il volume dello spazio cresce esponenzialmente rispetto al numero di campioni, rendendo lo spazio estremamente vuoto e causando la convergenza di tutte le distanze euclidee a valori simili ($\lim_{d \to \infty} \frac{\max ||x_i - x_j|| - \min ||x_i - x_j||}{\min ||x_i - x_j||} \to 0$).</p>
+<p>La riduzione della dimensionalità trasforma la matrice originale $X \in \mathbb{R}^{n \times d}$ in una matrice a bassa dimensione $Z \in \mathbb{R}^{n \times k}$ (con $k \ll d$), eliminando le correlazioni spurie, accelerando l'addestramento dei modelli a valle e consentendo la visualizzazione bidimensionale o tridimensionale.</p>
+<h3 id="la-maledizione-della-dimensionalita-e-la-proiezione-lineare-pca">La Maledizione della Dimensionalità e la Proiezione Lineare (PCA)<a class="headerlink" href="#la-maledizione-della-dimensionalita-e-la-proiezione-lineare-pca" title="Permanent link">&para;</a></h3>
+<p>Immagina di dover fotografare una scultura 3D complessa (ad esempio una bicicletta da corsa o una teiera con manico e beccuccio) per proiettarla su un foglio di carta piatto 2D (come un'ombra cinese su una parete).
+Se punti la torcia da un'angolazione sfortunata (es. dall'alto), l'ombra sembrerà solo una sagoma confusa e perderai sia le ruote che il manubrio.
+La <strong>PCA</strong> (<em>Principal Component Analysis</em>) è come un fotografo professionista che gira attorno alla scultura e cerca l'inquadratura perfetta da cui l'ombra risulta il più larga, estesa e dettagliata possibile (massima varianza), catturando quasi tutta l'informazione 3D su un piano 2D.</p>
+<p>La matematica della PCA si sviluppa in passaggi lineari precisi:</p>
+<ol>
+<li><strong>Centrare i dati:</strong> Si porta il baricentro della scultura al centro degli assi: $\tilde{X} = X - \mu_X \in \mathbb{R}^{n \times d}$.</li>
+<li><strong>Matrice di Covarianza (Come variano insieme le coordinate):</strong>
+   $$\Sigma = \frac{1}{n-1} \tilde{X}^T \tilde{X} \in \mathbb{R}^{d \times d}$$
+   Misura se al crescere di una caratteristica (es. altezza) cresce anche un'altra (es. peso).</li>
+<li><strong>Autovettori e Autovalori (Direzione dello scatto e Nitidezza):</strong>
+   $$\Sigma v_k = \lambda_k v_k$$</li>
+<li>$v_k$ (<strong>Autovettore / Componente Principale</strong>): è l'asse della fotocamera (la direzione di massima estensione dell'ombra).</li>
+<li>$\lambda_k$ (<strong>Autovalore</strong>): misura quanti dettagli e quanta varianza vengono catturati lungo quella direzione.</li>
+<li><strong>Varianza Spiegata ($\text{EVR}_k$):</strong>
+   $$\text{EVR}<em j="1">k = \frac{\lambda_k}{\sum</em>$$
+   Indica la percentuale esatta di dettagli della scultura 3D conservata dalla $k$-esima foto.}^d \lambda_j</li>
+</ol>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Il Gioco delle Ombre Cinesi (PCA 3D to 2D Projector)
+<em>Visualizzazione Dinamica:</em> Una nuvola di punti 3D a forma di ellissoide allungato inclinata nello spazio. L'utente ruota una linea (asse di proiezione) tramite un controller interattivo e osserva l'ombra proiettata: quando l'asse si allinea con l'autovettore principale $v_1$, l'ombra si espande al massimo e il contatore della varianza spiegata raggiunge il 100%.</p>
+</blockquote>
+<div class="admonition abstract">
+  <p class="admonition-title">Animazione Interattiva: PCA e Varianza Catturata</p>
+  <p>Uso della PCA intuitivo: muovi lo slider per ruotare l'asse di proiezione. L'obiettivo della PCA è trovare l'angolo che <strong>massimizza la varianza catturata</strong> (cioè i punti rossi proiettati sono più sparpagliati possibile lungo la linea). Premi il bottone per vedere l'algoritmo agganciare matematicamente l'autovettore principale!</p>
+  <iframe src="../widgets/pca.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
+</div>
+
+<p>Tracciando la varianza spiegata cumulativa in funzione del numero di componenti mediante uno <strong>Scree Plot</strong>, è possibile stabilire la dimensionalità intrinseca minima $k$ necessaria a conservare una quota prefissata di varianza totale (tipicamente il 90% o il 95%).</p>
+<h3 id="manifold-learning-non-lineare-t-sne-e-umap">Manifold Learning Non Lineare: t-SNE e UMAP<a class="headerlink" href="#manifold-learning-non-lineare-t-sne-e-umap" title="Permanent link">&para;</a></h3>
+<p>Immagina di avere una sciarpa di lana arrotolata stretta a spirale su se stessa (come un dolce <em>Swiss Roll</em> o una girella), con disegnati sopra dei piccoli simboli.
+Se provi a usare la PCA, è come schiacciare la girella con un ferro da stiro: i lembi di stoffa che si trovano su strati diversi della spirale vengono premuti l'uno contro l'altro, facendo sembrare vicini dei disegni che in realtà erano lontanissimi!
+<strong>t-SNE</strong> e <strong>UMAP</strong> sono invece come srotolare delicatamente la sciarpa su un grande tavolo elastico fatto di molle: collegano ogni punto ai suoi vicini più stretti. Se due punti erano vicini sulla stoffa, le molle li tengono vicini anche sul tavolo 2D; se erano lontani, li lasciano allontanare liberamente senza schiacciarli.</p>
+<h4 id="lalgoritmo-t-sne-molle-e-probabilita">L'Algoritmo t-SNE (Molle e Probabilità)<a class="headerlink" href="#lalgoritmo-t-sne-molle-e-probabilita" title="Permanent link">&para;</a></h4>
+<ol>
+<li><strong>Nel mondo ad alta dimensione (Gaussiana dei vicini):</strong>
+   La probabilità che il punto $x_i$ scelga $x_j$ come amico vicino segue una campana Gaussiana:
+   $$p_{j|i} = \frac{\exp\left(-\frac{||x_i - x_j||^2}{2\sigma_i^2}\right)}{\sum_{k \neq i} \exp\left(-\frac{||x_i - x_k||^2}{2\sigma_i^2}\right)}, \quad p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}$$</li>
+<li>$p_{ij}$: quanto è forte l'amicizia tra $i$ e $j$ nello spazio complesso.</li>
+<li>$\sigma_i$: l'ampiezza della campana (regolata dalla <strong>Perplexity</strong>, ossia quanti vicini considerare).</li>
+<li><strong>Sulla mappa 2D piatta (La t di Student contro l'ammassamento):</strong>
+   $$q_{ij} = \frac{(1 + ||y_i - y_j||^2)^{-1}}{\sum_{k} \sum_{l \neq k} (1 + ||y_k - y_l||^2)^{-1}}$$</li>
+<li>$q_{ij}$: la probabilità di vicinanza tra i punti proiettati $y_i$ e $y_j$ sul foglio 2D.</li>
+<li>La distribuzione <strong>t di Student con 1 grado di libertà</strong> (Cauchy) ha code larghe e risolve il <strong>Crowding Problem</strong>: consente ai gruppi moderatamente lontani di allontanarsi sui bordi della mappa senza schiacciarsi tutti al centro.</li>
+<li><strong>Ottimizzazione (Rilassare le molle con Divergenza KL):</strong>
+   $$KL(P \parallel Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}$$
+   Misura la tensione totale delle molle: il computer sposta i punti sul foglio finché la mappa $Q$ rispecchia al meglio le amicizie $P$.</li>
+</ol>
+<h4 id="levoluzione-con-umap-topologia-e-velocita">L'Evoluzione con UMAP (Topologia e Velocità)<a class="headerlink" href="#levoluzione-con-umap-topologia-e-velocita" title="Permanent link">&para;</a></h4>
+<p>Mentre t-SNE pensa quasi solo ai vicini microscopici, <strong>UMAP</strong> modella la geometria globale tramite la topologia (insiemi simpliciali sfumati) e minimizza la Cross-Entropia per Insiemi Fuzzy:</p>
+<p>$$L_{\text{UMAP}} = \sum_{i \neq j} \left( \mu_{ij} \log \frac{\mu_{ij}}{\nu_{ij}} + (1 - \mu_{ij}) \log \frac{1 - \mu_{ij}}{1 - \nu_{ij}} \right)$$</p>
+<ul>
+<li>$\mu_{ij}$ e $\nu_{ij}$: le probabilità fuzzy di connessione nello spazio originale e proiettato.</li>
+<li>Il primo termine attrae gli amici vicini; il secondo $(1 - \mu_{ij})$ respinge i gruppi lontani, preservando sia i piccoli dettagli locali sia le distanze globali tra macro-cluster, con una velocità computazionale nettamente superiore ($\mathcal{O}(n^{1.14})$ contro $\mathcal{O}(n^2)$ di t-SNE).</li>
+</ul>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Lo Srotolatore Elastico di Swiss Roll (t-SNE vs UMAP Simulator)
+<em>Visualizzazione Dinamica:</em> Un modello 3D interattivo dello Swiss Roll che viene proiettato in tempo reale in 2D. L'utente sceglie l'algoritmo (PCA vs t-SNE vs UMAP) e regola lo slider di "Perplexity/N-Neighbors", vedendo la spirale 3D srotolarsi dolcemente in una striscia piana senza sovrapposizioni.</p>
+</blockquote>
+<h2 id="anomaly-detection-e-rilevamento-di-outlier">Anomaly Detection e Rilevamento di Outlier<a class="headerlink" href="#anomaly-detection-e-rilevamento-di-outlier" title="Permanent link">&para;</a></h2>
+<p>L'Anomaly Detection (o Outlier Detection) si occupa di identificare osservazioni anomale la cui firma statistica o geometrica devia in modo marcato dalla distribuzione di normalità sottostante. In contesti operativi come il monitoraggio di infrastrutture server, l'analisi forense OSINT o la prevenzione di intrusioni informatiche, gli eventi anomali costituiscono meno dell'1% del volume totale, rendendo impraticabile la classificazione supervisionata a causa della grave scarsità di esempi patologici noti.</p>
+<h3 id="isolamento-spaziale-e-lunghezza-del-cammino-isolation-forest">Isolamento Spaziale e Lunghezza del Cammino (Isolation Forest)<a class="headerlink" href="#isolamento-spaziale-e-lunghezza-del-cammino-isolation-forest" title="Permanent link">&para;</a></h3>
+<p>Immagina una piazza affollatissima durante una festa di paese: centinaia di persone sono tutte ammassate davanti al palco a ballare, mentre un singolo tizio solitario se ne sta sperduto in cima a una collina a 500 metri di distanza.
+Se inizi a tirare delle linee rette a caso con una corda per dividere la mappa in due parti (come un colpo di spada laser):
+- Per isolare il tizio solitario sulla collina basterà <strong>un solo taglio casuale</strong> ben piazzato.
+- Per isolare una persona specifica stipata in mezzo alla calca davanti al palco, dovrai tirare <strong>decine e decine di tagli millimetrici</strong>!
+Questo è il principio di <strong>Isolation Forest</strong>: le anomalie sono rare e diverse dalla massa, quindi si isolano con pochissimi tagli casuali.</p>
+<p>L'algoritmo costruisce una foresta di alberi binari di isolamento (<em>iTree</em>), scegliendo a ogni nodo una caratteristica a caso $q$ e tagliandola con una soglia casuale $p$.</p>
+<p>Le formule quantificano la rarità del punto:</p>
+<ol>
+<li><strong>Lunghezza del cammino $h(x)$:</strong> il numero di tagli (archi dell'albero) necessari a isolare il punto $x$ in una foglia singola.</li>
+<li><strong>Profondità media attesa di un albero $c(n)$:</strong>
+   $$c(n) = 2 \left( \ln(n - 1) + 0.5772156649 \right) - \frac{2(n - 1)}{n}$$
+   È il numero "normale" di tagli previsti per isolare un elemento generico in mezzo a una folla di $n$ campioni.</li>
+<li><strong>Punteggio di Anomalia ($s(x, n)$):</strong>
+   $$s(x, n) = 2^{-\frac{E(h(x))}{c(n)}}$$</li>
+<li>$E(h(x))$: la media dei tagli necessari per isolare $x$ in tutta la foresta di alberi.</li>
+<li>Se $E(h(x)) \ll c(n)$ (bastano pochissimi tagli): l'esponente si avvicina a 0 e $s(x, n) \to 2^0 = 1 \implies$ <strong>Anomalia accertata!</strong></li>
+<li>Se $E(h(x)) \approx c(n)$ (servono tagli nella media): $s(x, n) \approx 0.5 \implies$ <strong>Punto normale.</strong></li>
+<li>Se $E(h(x)) \gg c(n)$ (servono tantissimi tagli): $s(x, n) \to 0 \implies$ <strong>Inlier nel cuore della folla.</strong></li>
+</ol>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Il Tagliatore di Spazio (Isolation Forest 2D Slicer)
+<em>Visualizzazione Dinamica:</em> Uno spazio 2D con un gruppo denso di punti al centro e 3 punti anomali isolati. L'utente preme "Taglia Casuale": compaiono linee di partizionamento. Un contatore mostra come i punti isolati vengano recintati in appena 1-2 tagli, mentre i punti al centro rimangono raggruppati anche dopo decine di divisioni.</p>
+</blockquote>
+<h3 id="iperpiani-di-supporto-non-lineari-one-class-svm">Iperpiani di Supporto Non Lineari (One-Class SVM)<a class="headerlink" href="#iperpiani-di-supporto-non-lineari-one-class-svm" title="Permanent link">&para;</a></h3>
+<p>Immagina un recinto di sicurezza con un campo di forza invisibile costruito attorno a un gregge di pecore in una vallata.
+Il guardiano non ha mai visto cosa sia un lupo, una volpe o un ladro; conosce solo l'aspetto e la posizione abituale delle sue pecore.
+La <strong>One-Class SVM</strong> prende la mappa del prato e, tramite una formula speciale (il Kernel), la solleva verso l'alto nello spazio 3D come un telo elastico. Lì costruisce una cupola protettiva aderente attorno a tutte le pecore, lasciando fuori l'origine del mondo. Se un nuovo animale atterra al di fuori della cupola, scatta subito l'allarme!</p>
+<p>Le formule matematiche definiscono la forma della cupola:</p>
+<ol>
+<li><strong>Kernel RBF (Il sollevatore di dimensioni):</strong>
+   $$K(x, y) = \exp(-\gamma ||x - y||^2)$$</li>
+<li>Proietta i dati in uno spazio a dimensioni infinite dove è facile avvolgere i punti normali.</li>
+<li>$\gamma$ (<em>gamma</em>): regola quanto la cupola deve essere aderente e attillata attorno ai punti normali.</li>
+<li><strong>Il parametro di tolleranza $\nu$ ($\nu \in (0, 1]$):</strong></li>
+<li>Regola la percentuale di pecore un po' distratte che accettiamo di lasciare fuori dalla cupola durante l'addestramento (la quota massima di falsi allarmi / outlier ammessi).</li>
+</ol>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: La Cupola Protettiva (One-Class SVM Frontier Tuning)
+<em>Visualizzazione Dinamica:</em> Un piano 2D con punti normali e outlier sparsi. L'utente muove gli slider $\gamma$ e $\nu$ osservando la frontiera di decisione colorarsi in tempo reale: con $\gamma$ basso la frontiera è morbida e circolare, con $\gamma$ alto si trasforma in isole sagomate strettamente attorno a ogni singolo gruppo di punti.</p>
+</blockquote>
+<h3 id="deviazione-della-densita-locale-local-outlier-factor-lof">Deviazione della Densità Locale (Local Outlier Factor - LOF)<a class="headerlink" href="#deviazione-della-densita-locale-local-outlier-factor-lof" title="Permanent link">&para;</a></h3>
+<p>Immagina di confrontare lo stile di vita di due persone:
+- <strong>Marco</strong> vive in un grattacielo nel centro di New York: sul suo pianerottolo ci sono 10 appartamenti in 20 metri. Se una persona si piazza da sola in un corridoio vuoto a 30 metri da tutti, a New York è una cosa insolita e sospetta!
+- <strong>Sara</strong> vive in una fattoria isolata nella campagna toscana: la casa del suo vicino più prossimo è a 300 metri. Per lei, avere un vicino a 300 metri è la perfetta e tranquilla normalità.
+Un algoritmo rigido guarderebbe solo la distanza in metri e direbbe che Sara è un'anomalia perché è lontana da tutti. <strong>LOF</strong> (<em>Local Outlier Factor</em>) invece valuta il contesto locale: confronta la densità di una persona con la densità tipica dei suoi vicini diretti!</p>
+<p>Le formule calcolano la densità relativa:</p>
+<ol>
+<li><strong>Distanza di Raggiungibilità ($\text{reach-dist}_k(p, o)$):</strong>
+   $$\text{reach-dist}_k(p, o) = \max({ k\text{-distance}(o), d(p, o) })$$</li>
+<li>La distanza tra te ($p$) e il tuo vicino ($o$), che non può mai essere inferiore al raggio abituale del suo quartiere ($k\text{-distance}$).</li>
+<li><strong>Densità di Raggiungibilità Locale ($\text{lrd}_k(p)$):</strong>
+   $$\text{lrd}<em N_k_p_="N_k(p)" _in="\in" o="o">k(p) = \left[ \frac{\sum</em>$$} \text{reach-dist}_k(p, o)}{|N_k(p)|} \right]^{-1</li>
+<li>Misura quanto sei pigiato rispetto ai tuoi $k$ vicini (l'inverso dello spazio vitale medio).</li>
+<li><strong>Punteggio LOF Finale (Il confronto con il vicinato):</strong>
+   $$\text{LOF}<em N_k_p_="N_k(p)" _in="\in" o="o">k(p) = \frac{\sum</em>$$} \frac{\text{lrd}_k(o)}{\text{lrd}_k(p)}}{|N_k(p)|</li>
+<li>È la media del rapporto tra la densità dei tuoi vicini e la tua densità.</li>
+<li>Se $\text{LOF} \approx 1$: la tua densità è identica a quella dei tuoi vicini (sia che siate tutti stipati a New York, sia che siate tutti sparsi in campagna). Sei un <strong>normale inlier</strong>.</li>
+<li>Se $\text{LOF} \gg 1$: i tuoi vicini sono pigiatissimi in un grattacielo ma tu sei isolato lontano da loro. Sei un <strong>outlier locale!</strong></li>
+</ol>
+<blockquote>
+<p>[!INTERACTIVE] WIDGET: Il Radar Metropolitano vs Campagna (LOF Density Inspector)
+<em>Visualizzazione Dinamica:</em> Un piano con due gruppi: un cluster ultra-denso (New York) e un cluster rado e allargato (Campagna). Cliccando su qualsiasi punto, compare un radar che disegna le distanze dai $k$ vicini e calcola all'istante il punteggio $\text{LOF}$, mostrando visivamente perché un punto a distanza $D$ è un'anomalia a New York ma normale in Campagna.</p>
+<p>[!NOTE]
+<strong>Checkpoint di Ancoraggio: Autovalutazione</strong>
+Riesci a mappare mentalmente i passaggi chiave appena descritti? Un buon test è provare a spiegare a un collega junior il meccanismo fondamentale analizzato in questa sezione.</p>
+</blockquote>
+<h2 id="trade-off-operativi-e-scelte-architetturali">Trade-off Operativi e Scelte Architetturali<a class="headerlink" href="#trade-off-operativi-e-scelte-architetturali" title="Permanent link">&para;</a></h2>
+<p>La selezione dell'algoritmo non supervisionato richiede un bilanciamento rigoroso tra scalabilità computazionale, sensibilità a geometrie non lineari e interpretabilità:</p>
+<p>Nel dominio del clustering, K-Means offre la massima velocità ($\mathcal{O}(n K d)$ per iterazione) ed è ideale per segmentazioni grossolane o compressione tramite quantizzazione vettoriale, ma presuppone cluster convessi e richiede la conoscenza a priori di $K$. DBSCAN e HDBSCAN superano ogni vincolo di forma e isolano automaticamente il rumore, ma presentano costi computazionali superiori ($\mathcal{O}(n \log n)$ con indicizzazione spaziale k-d tree, $\mathcal{O}(n^2)$ nel caso peggiore) e necessitano di calibrazione delle distanze in alta dimensione.</p>
+<p>Nella riduzione dimensionale, la PCA è deterministica, computazionalmente istantanea e matematicamente invertibile ($X_{\text{approx}} = Z V^T$), rendendosi indispensabile per il pre-processing e la rimozione della collinearità nei modelli supervisionati. Al contrario, t-SNE e UMAP sono trasformazioni non lineari e stocastiche prive di matrice di proiezione inversa esplicita: il loro scopo primario è l'esplorazione qualitativa e la visualizzazione semantica delle varietà topologiche, non la costruzione di feature stabili per pipeline predittive di produzione.</p>
+<p>Nell'anomaly detection, Isolation Forest è la scelta d'elezione per dataset industriali massivi e spazi ad alta dimensione grazie alla sua scalabilità $\mathcal{O}(n \log n)$ e all'immunità allo scaling delle feature. LOF è superiore quando i dati contengono sottopopolazioni a densità eterogenea, mentre One-Class SVM garantisce frontiere di supporto non lineari eccellenti in presenza di dataset compatti e ben normalizzati.</p>
+<h2 id="riferimenti-bibliografici-e-risorse-tecniche">Riferimenti Bibliografici e Risorse Tecniche<a class="headerlink" href="#riferimenti-bibliografici-e-risorse-tecniche" title="Permanent link">&para;</a></h2>
+<p>Per approfondire i fondamenti matematici e le implementazioni degli algoritmi non supervisionati, la letteratura accademica e i portali didattici offrono riferimenti essenziali.</p>
+<h3 id="testi-accademici-e-dispense-teoriche">Testi Accademici e Dispense Teoriche<a class="headerlink" href="#testi-accademici-e-dispense-teoriche" title="Permanent link">&para;</a></h3>
+<p>Il manuale teorico fondamentale per la formalizzazione matematica del clustering, della PCA e dei modelli di mistura è <a href="https://hastie.su.domains/ElemStatLearn/">The Elements of Statistical Learning</a> (redatto dai docenti della <a href="https://www.stanford.edu/">Stanford University</a> <a href="https://hastie.su.domains/">Trevor Hastie</a>, <a href="https://tibshirani.su.domains/">Robert Tibshirani</a> e <a href="https://hastie.su.domains/">Jerome Friedman</a>). Per un percorso didattico rigoroso sulle dimostrazioni analitiche degli algoritmi di clustering e scomposizione matriciale, si consultino le lecture notes del celebre corso <a href="https://cs229.stanford.edu/">CS229: Machine Learning</a> della <a href="https://www.stanford.edu/">Stanford University</a>.</p>
+<h3 id="paper-scientifici-fondamentali">Paper Scientifici Fondamentali<a class="headerlink" href="#paper-scientifici-fondamentali" title="Permanent link">&para;</a></h3>
+<p>L'algoritmo t-SNE è formalizzato nello studio fondamentale di <a href="https://lvdmaaten.github.io/">Laurens van der Maaten</a> e <a href="https://www.cs.toronto.edu/~hinton/">Geoffrey Hinton</a> intitolato <em>Visualizing Data using t-SNE</em> (Journal of Machine Learning Research, 2008). I fondamenti topologici di UMAP sono esposti nel paper di <a href="https://github.com/lmcinnes">Leland McInnes</a>, John Healy e James Melville intitolato <em>UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction</em> (arXiv, 2018). L'algoritmo Isolation Forest è descritto nel paper di <a href="https://scholar.google.com/">Fei Tony Liu</a>, Kai Ming Ting e Zhi-Hua Zhou, <em>Isolation Forest</em> (IEEE ICDM, 2008).</p>
+<h3 id="documentazione-software-e-strumenti-interattivi">Documentazione Software e Strumenti Interattivi<a class="headerlink" href="#documentazione-software-e-strumenti-interattivi" title="Permanent link">&para;</a></h3>
+<p>Le guide operative di riferimento per gli strumenti di calcolo in <a href="https://www.python.org/">Python</a> sono la <a href="https://scikit-learn.org/stable/modules/clustering.html">Guida al Clustering di Scikit-Learn</a>, la documentazione del modulo gerarchico di <a href="https://scipy.org/">SciPy</a> e il portale open-source della libreria <a href="https://github.com/lmcinnes/umap">UMAP</a>. Per l'esplorazione visiva interattiva, la testata <a href="https://distill.pub/">Distill.pub</a> offre la guida di riferimento <a href="https://distill.pub/2016/misread-tsne/">How to Use t-SNE Effectively</a>, mentre il progetto <a href="https://setosa.io/ev/">Explained Visually</a> offre una simulazione geometrica sull'estrazione della varianza in <a href="https://setosa.io/ev/principal-component-analysis/">Principal Component Analysis</a>.</p>
+<h2 id="appendice-operativa-laboratori-pratici">Appendice Operativa: Laboratori Pratici<a class="headerlink" href="#appendice-operativa-laboratori-pratici" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>[!TIP]
+<strong>Zero-Draft Offloading (Delega dell'Inizio)</strong>
+Per abbattere la "Task Initiation Paralysis", non scrivere mai questo codice da zero. Usa un agente AI (es. DeepSeek Harness) o un LLM per farti generare lo scheletro iniziale dei file, passandogli come prompt i requisiti tecnici indicati sotto. Il tuo lavoro deve essere quello di <em>revisore</em> e <em>ingegnere</em>, non di dattilografo.</p>
+</blockquote>
+<p>I laboratori seguenti forniscono script Python completi, eseguibili e autocontenuti per testare il clustering, la riduzione dimensionale lineare e non lineare, e le architetture di anomaly detection.</p>
+<h3 id="laboratorio-1-clustering-k-means-curva-a-gomito-e-silhouette-analysis">Laboratorio 1: Clustering K-Means, Curva a Gomito e Silhouette Analysis<a class="headerlink" href="#laboratorio-1-clustering-k-means-curva-a-gomito-e-silhouette-analysis" title="Permanent link">&para;</a></h3>
+<p>Questo script genera dati sintetici multivariati, esegue una scansione sistematica su diversi valori di $K$, calcola l'inerzia WCSS e il coefficiente di Silhouette per identificare la partizione ottimale dello spazio vettoriale.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_blobs</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">KMeans</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">silhouette_score</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># 1. Generazione di un dataset multivariato a 5 cluster</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">X_raw</span><span class="p">,</span> <span class="n">y_true</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="n">n_samples</span><span class="o">=</span><span class="mi">1500</span><span class="p">,</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    <span class="n">n_features</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">centers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">cluster_std</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># 2. Standardizzazione delle feature (fondamentale per K-Means)</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="n">X</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_raw</span><span class="p">)</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="c1"># 3. Scansione sistematica per la Curva a Gomito e Silhouette Score</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="n">k_values</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="n">inertia_scores</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="n">silhouette_scores</span> <span class="o">=</span> <span class="p">[]</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Valutazione quantitativa delle partizioni K-Means:"</span><span class="p">)</span>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">k_values</span><span class="p">:</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    <span class="n">kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">k</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">"k-means++"</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    <span class="n">labels</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>    <span class="n">inertia</span> <span class="o">=</span> <span class="n">kmeans</span><span class="o">.</span><span class="n">inertia_</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>    <span class="n">sil_score</span> <span class="o">=</span> <span class="n">silhouette_score</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>    <span class="n">inertia_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">inertia</span><span class="p">)</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>    <span class="n">silhouette_scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sil_score</span><span class="p">)</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  K=</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> | WCSS (Inerzia): </span><span class="si">{</span><span class="n">inertia</span><span class="si">:</span><span class="s2">8.2f</span><span class="si">}</span><span class="s2"> | Silhouette Score: </span><span class="si">{</span><span class="n">sil_score</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="c1"># 4. Individuazione automatica del K ottimale tramite massimo Silhouette</span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="n">best_k</span> <span class="o">=</span> <span class="n">k_values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">silhouette_scores</span><span class="p">))]</span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Numero ottimale di cluster identificato (max Silhouette): K = </span><span class="si">{</span><span class="n">best_k</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>
+<a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a><span class="c1"># 5. Addestramento del modello finale ottimizzato</span>
+<a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a><span class="n">optimal_kmeans</span> <span class="o">=</span> <span class="n">KMeans</span><span class="p">(</span><span class="n">n_clusters</span><span class="o">=</span><span class="n">best_k</span><span class="p">,</span> <span class="n">init</span><span class="o">=</span><span class="s2">"k-means++"</span><span class="p">,</span> <span class="n">n_init</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a><span class="n">optimal_labels</span> <span class="o">=</span> <span class="n">optimal_kmeans</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dimensioni dei cluster assegnati: </span><span class="si">{</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">optimal_labels</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-2-clustering-gerarchico-agglomerativo-e-calcolo-cofenofenetico">Laboratorio 2: Clustering Gerarchico Agglomerativo e Calcolo Cofenofenetico<a class="headerlink" href="#laboratorio-2-clustering-gerarchico-agglomerativo-e-calcolo-cofenofenetico" title="Permanent link">&para;</a></h3>
+<p>Questo script esegue il clustering gerarchico agglomerativo con criteri di linkage multipli (Ward, Complete, Average), calcola il coefficiente di correlazione cofenofenetica per misurare la distorsione metrica e costruisce la matrice di linkage con <a href="https://scipy.org/">SciPy</a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_blobs</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">pdist</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">scipy.cluster.hierarchy</span><span class="w"> </span><span class="kn">import</span> <span class="n">linkage</span><span class="p">,</span> <span class="n">cophenet</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># 1. Generazione di dati raggruppati</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">X</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">cluster_std</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1"># 2. Calcolo della matrice delle distanze pairwise euclidee</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">pairwise_dist</span> <span class="o">=</span> <span class="n">pdist</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># 3. Valutazione comparativa dei criteri di linkage</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">linkage_methods</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"ward"</span><span class="p">,</span> <span class="s2">"complete"</span><span class="p">,</span> <span class="s2">"average"</span><span class="p">,</span> <span class="s2">"single"</span><span class="p">]</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Analisi della Fedelta' Gerarchica (Correlazione Cofenofenetica):"</span><span class="p">)</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">linkage_methods</span><span class="p">:</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>    <span class="n">Z</span> <span class="o">=</span> <span class="n">linkage</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">metric</span><span class="o">=</span><span class="s2">"euclidean"</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>    <span class="n">c_coeff</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cophenet</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">pairwise_dist</span><span class="p">)</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Metodo Linkage: </span><span class="si">{</span><span class="n">method</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> | Indice Cofenofenetico: </span><span class="si">{</span><span class="n">c_coeff</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="c1"># 4. Estrazione della struttura ad albero con metodo Ward</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="n">Z_ward</span> <span class="o">=</span> <span class="n">linkage</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">"ward"</span><span class="p">)</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Matrice di Linkage Ward calcolata con successo: </span><span class="si">{</span><span class="n">Z_ward</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> iterazioni di fusione."</span><span class="p">)</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Ultime 3 fusioni al vertice dell'albero (distanze di unione):"</span><span class="p">)</span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Z_ward</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:],</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>    <span class="n">cluster_a</span><span class="p">,</span> <span class="n">cluster_b</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="n">n_elem</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">step</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">step</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  Fusione </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: Cluster </span><span class="si">{</span><span class="n">cluster_a</span><span class="si">}</span><span class="s2"> + Cluster </span><span class="si">{</span><span class="n">cluster_b</span><span class="si">}</span><span class="s2"> a distanza </span><span class="si">{</span><span class="n">dist</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">n_elem</span><span class="si">}</span><span class="s2"> campioni)"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-3-riduzione-dimensionale-comparata-pca-t-sne-e-umap">Laboratorio 3: Riduzione Dimensionale Comparata (PCA, t-SNE e UMAP)<a class="headerlink" href="#laboratorio-3-riduzione-dimensionale-comparata-pca-t-sne-e-umap" title="Permanent link">&para;</a></h3>
+<p>Questo script confronta la decomposizione lineare PCA rispetto agli algoritmi di manifold learning t-SNE e UMAP su un dataset ad alta dimensione, calcolando l'Explained Variance Ratio e proiettando le varietà topologiche in 2D.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_digits</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">StandardScaler</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">PCA</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.manifold</span><span class="w"> </span><span class="kn">import</span> <span class="n">TSNE</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># 1. Caricamento del dataset ad alta dimensione (8x8 immagini = 64 feature)</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">digits</span> <span class="o">=</span> <span class="n">load_digits</span><span class="p">()</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">X_raw</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">data</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="n">y</span> <span class="o">=</span> <span class="n">digits</span><span class="o">.</span><span class="n">target</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="n">scaler</span> <span class="o">=</span> <span class="n">StandardScaler</span><span class="p">()</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">X</span> <span class="o">=</span> <span class="n">scaler</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X_raw</span><span class="p">)</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="c1"># 2. Decomposizione lineare tramite PCA</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="n">pca</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="n">X_pca</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="n">evr</span> <span class="o">=</span> <span class="n">pca</span><span class="o">.</span><span class="n">explained_variance_ratio_</span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="n">cum_evr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">evr</span><span class="p">)</span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Analisi PCA (Explained Variance Ratio per le prime 10 componenti):"</span><span class="p">)</span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">ratio</span><span class="p">,</span> <span class="n">cum</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">evr</span><span class="p">,</span> <span class="n">cum_evr</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  PC</span><span class="si">{</span><span class="n">i</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">: Varianza spiegata = </span><span class="si">{</span><span class="n">ratio</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">5.2f</span><span class="si">}</span><span class="s2">% | Cumulativa = </span><span class="si">{</span><span class="n">cum</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">100</span><span class="si">:</span><span class="s2">5.2f</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="c1"># 3. Manifold Learning Non Lineare tramite t-SNE</span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="n">tsne</span> <span class="o">=</span> <span class="n">TSNE</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">perplexity</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="n">X_tsne</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">t-SNE completato: Divergenza KL finale = </span><span class="si">{</span><span class="n">tsne</span><span class="o">.</span><span class="n">kl_divergence_</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="c1"># 4. Verifica di UMAP (se installato nell'ambiente)</span>
+<a id="__codelineno-3-31" name="__codelineno-3-31" href="#__codelineno-3-31"></a><span class="k">try</span><span class="p">:</span>
+<a id="__codelineno-3-32" name="__codelineno-3-32" href="#__codelineno-3-32"></a>    <span class="kn">import</span><span class="w"> </span><span class="nn">umap</span>
+<a id="__codelineno-3-33" name="__codelineno-3-33" href="#__codelineno-3-33"></a>    <span class="n">reducer</span> <span class="o">=</span> <span class="n">umap</span><span class="o">.</span><span class="n">UMAP</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">min_dist</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-3-34" name="__codelineno-3-34" href="#__codelineno-3-34"></a>    <span class="n">X_umap</span> <span class="o">=</span> <span class="n">reducer</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-3-35" name="__codelineno-3-35" href="#__codelineno-3-35"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"UMAP completato con successo: coordinate proiettate shape ="</span><span class="p">,</span> <span class="n">X_umap</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<a id="__codelineno-3-36" name="__codelineno-3-36" href="#__codelineno-3-36"></a><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<a id="__codelineno-3-37" name="__codelineno-3-37" href="#__codelineno-3-37"></a>    <span class="nb">print</span><span class="p">(</span><span class="s2">"Nota: Libreria 'umap-learn' non installata nell'ambiente corrente. Salto calcolo UMAP."</span><span class="p">)</span>
+<a id="__codelineno-3-38" name="__codelineno-3-38" href="#__codelineno-3-38"></a>
+<a id="__codelineno-3-39" name="__codelineno-3-39" href="#__codelineno-3-39"></a><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Proiezioni completate con successo su </span><span class="si">{</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2"> osservazioni."</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="laboratorio-4-pipeline-multi-algoritmica-di-anomaly-detection">Laboratorio 4: Pipeline Multi-Algoritmica di Anomaly Detection<a class="headerlink" href="#laboratorio-4-pipeline-multi-algoritmica-di-anomaly-detection" title="Permanent link">&para;</a></h3>
+<p>Questo script implementa un benchmark di rilevamento delle anomalie confrontando Isolation Forest, Local Outlier Factor (LOF) e One-Class SVM su un dataset contaminato da campioni patologici artificiali.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_blobs</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.ensemble</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsolationForest</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.neighbors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LocalOutlierFactor</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.svm</span><span class="w"> </span><span class="kn">import</span> <span class="n">OneClassSVM</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="n">classification_report</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># 1. Generazione di dati normali (95%) e iniezione di outlier (5%)</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="n">n_inliers</span> <span class="o">=</span> <span class="mi">950</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="n">n_outliers</span> <span class="o">=</span> <span class="mi">50</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="n">contamination_rate</span> <span class="o">=</span> <span class="n">n_outliers</span> <span class="o">/</span> <span class="p">(</span><span class="n">n_inliers</span> <span class="o">+</span> <span class="n">n_outliers</span><span class="p">)</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="n">X_inliers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">make_blobs</span><span class="p">(</span><span class="n">n_samples</span><span class="o">=</span><span class="n">n_inliers</span><span class="p">,</span> <span class="n">n_features</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">centers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">cluster_std</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="n">rng</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">RandomState</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="n">X_outliers</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n_outliers</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">X_inliers</span><span class="p">,</span> <span class="n">X_outliers</span><span class="p">])</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="c1"># Target reale: 1 per inlier, -1 per outlier</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="n">y_true</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">n_inliers</span> <span class="o">+</span> <span class="n">n_outliers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="n">y_true</span><span class="p">[</span><span class="n">n_inliers</span><span class="p">:]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="c1"># 2. Modello 1: Isolation Forest</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="n">iso_forest</span> <span class="o">=</span> <span class="n">IsolationForest</span><span class="p">(</span><span class="n">contamination</span><span class="o">=</span><span class="n">contamination_rate</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="n">y_pred_if</span> <span class="o">=</span> <span class="n">iso_forest</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a>
+<a id="__codelineno-4-26" name="__codelineno-4-26" href="#__codelineno-4-26"></a><span class="c1"># 3. Modello 2: Local Outlier Factor (LOF)</span>
+<a id="__codelineno-4-27" name="__codelineno-4-27" href="#__codelineno-4-27"></a><span class="n">lof</span> <span class="o">=</span> <span class="n">LocalOutlierFactor</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">contamination</span><span class="o">=</span><span class="n">contamination_rate</span><span class="p">)</span>
+<a id="__codelineno-4-28" name="__codelineno-4-28" href="#__codelineno-4-28"></a><span class="n">y_pred_lof</span> <span class="o">=</span> <span class="n">lof</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-4-29" name="__codelineno-4-29" href="#__codelineno-4-29"></a>
+<a id="__codelineno-4-30" name="__codelineno-4-30" href="#__codelineno-4-30"></a><span class="c1"># 4. Modello 3: One-Class SVM con kernel RBF</span>
+<a id="__codelineno-4-31" name="__codelineno-4-31" href="#__codelineno-4-31"></a><span class="n">oc_svm</span> <span class="o">=</span> <span class="n">OneClassSVM</span><span class="p">(</span><span class="n">nu</span><span class="o">=</span><span class="n">contamination_rate</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">"rbf"</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+<a id="__codelineno-4-32" name="__codelineno-4-32" href="#__codelineno-4-32"></a><span class="n">y_pred_svm</span> <span class="o">=</span> <span class="n">oc_svm</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<a id="__codelineno-4-33" name="__codelineno-4-33" href="#__codelineno-4-33"></a>
+<a id="__codelineno-4-34" name="__codelineno-4-34" href="#__codelineno-4-34"></a><span class="c1"># 5. Valutazione e confronto delle metriche di precisione sugli outlier (-1)</span>
+<a id="__codelineno-4-35" name="__codelineno-4-35" href="#__codelineno-4-35"></a><span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+<a id="__codelineno-4-36" name="__codelineno-4-36" href="#__codelineno-4-36"></a>    <span class="s2">"Isolation Forest"</span><span class="p">:</span> <span class="n">y_pred_if</span><span class="p">,</span>
+<a id="__codelineno-4-37" name="__codelineno-4-37" href="#__codelineno-4-37"></a>    <span class="s2">"Local Outlier Factor"</span><span class="p">:</span> <span class="n">y_pred_lof</span><span class="p">,</span>
+<a id="__codelineno-4-38" name="__codelineno-4-38" href="#__codelineno-4-38"></a>    <span class="s2">"One-Class SVM"</span><span class="p">:</span> <span class="n">y_pred_svm</span>
+<a id="__codelineno-4-39" name="__codelineno-4-39" href="#__codelineno-4-39"></a><span class="p">}</span>
+<a id="__codelineno-4-40" name="__codelineno-4-40" href="#__codelineno-4-40"></a>
+<a id="__codelineno-4-41" name="__codelineno-4-41" href="#__codelineno-4-41"></a><span class="nb">print</span><span class="p">(</span><span class="s2">"Confronto Prestazioni nel Rilevamento delle Anomalie (Classe Outlier = -1):"</span><span class="p">)</span>
+<a id="__codelineno-4-42" name="__codelineno-4-42" href="#__codelineno-4-42"></a><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">preds</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+<a id="__codelineno-4-43" name="__codelineno-4-43" href="#__codelineno-4-43"></a>    <span class="n">tp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">preds</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<a id="__codelineno-4-44" name="__codelineno-4-44" href="#__codelineno-4-44"></a>    <span class="n">fp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">preds</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+<a id="__codelineno-4-45" name="__codelineno-4-45" href="#__codelineno-4-45"></a>    <span class="n">fn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_true</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">preds</span> <span class="o">==</span> <span class="mi">1</span><span class="p">))</span>
+<a id="__codelineno-4-46" name="__codelineno-4-46" href="#__codelineno-4-46"></a>    <span class="n">precision</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fp</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+<a id="__codelineno-4-47" name="__codelineno-4-47" href="#__codelineno-4-47"></a>    <span class="n">recall</span> <span class="o">=</span> <span class="n">tp</span> <span class="o">/</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">tp</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+<a id="__codelineno-4-48" name="__codelineno-4-48" href="#__codelineno-4-48"></a>    <span class="n">f1</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">precision</span> <span class="o">*</span> <span class="n">recall</span> <span class="o">/</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">precision</span> <span class="o">+</span> <span class="n">recall</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+<a id="__codelineno-4-49" name="__codelineno-4-49" href="#__codelineno-4-49"></a>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2"> | Precision: </span><span class="si">{</span><span class="n">precision</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | Recall: </span><span class="si">{</span><span class="n">recall</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | F1-Score: </span><span class="si">{</span><span class="n">f1</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Torna su
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Piede" >
+        
+          
+          <a href="../D08-ml-classico/" class="md-footer__link md-footer__link--prev" aria-label="Precedente: D08 — ML Classico">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Precedente
+              </span>
+              <div class="md-ellipsis">
+                D08 — ML Classico
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../D10-deep-learning-pytorch/" class="md-footer__link md-footer__link--next" aria-label="Successivo: D10 — Deep Learning e PyTorch">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Successivo
+              </span>
+              <div class="md-ellipsis">
+                D10 — Deep Learning e PyTorch
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/Bebbolus/stazione-knowledge" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.footer", "navigation.indexes", "toc.follow", "toc.integrate", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiato", "clipboard.copy": "Copia", "search.result.more.one": "1 altro in questa pagina", "search.result.more.other": "# altri in questa pagina", "search.result.none": "Nessun documento trovato", "search.result.one": "1 documento trovato", "search.result.other": "# documenti trovati", "search.result.placeholder": "Scrivi per iniziare a cercare", "search.result.term.missing": "Non presente", "select.version": "Seleziona la versione"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
