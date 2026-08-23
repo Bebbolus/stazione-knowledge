@@ -70,6 +70,7 @@ extra:
 nav:
   - Home: index.md
   - Fondamenti:
+      - D00 - Prologo: D00-prologo.md
       - D01 — Workspace local-first, Git, Obsidian, LLM wiki: D01-workspace-llm-wiki.md
       - D02 — Python refresher e software engineering essentials: D02-python-refresher.md
       - D02b — Virtualizzazione e Container: D02b-virtualizzazione-e-container.md
