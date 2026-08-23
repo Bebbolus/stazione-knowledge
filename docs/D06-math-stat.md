@@ -1,6 +1,6 @@
 ---
 aliases:
-- D04
+- D06
 - Matematica ML
 - Algebra Lineare
 - Statistica AI

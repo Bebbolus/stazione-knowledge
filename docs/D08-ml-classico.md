@@ -1,6 +1,6 @@
 ---
 aliases:
-- D06
+- D08
 - Alberi Decisionali
 - Random Forest
 - XGBoost

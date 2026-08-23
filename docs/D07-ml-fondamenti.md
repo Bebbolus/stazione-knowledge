@@ -1,6 +1,6 @@
 ---
 aliases:
-- D05
+- D07
 - ML Fondamenti
 - Machine Learning Classico
 - Scikit-Learn

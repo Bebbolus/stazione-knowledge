@@ -62,6 +62,9 @@ plugins:
   - search:
       lang: it
 
+extra_css:
+  - stylesheets/edtech.css
+
 extra:
   social:
     - icon: fontawesome/brands/github
@@ -69,39 +72,39 @@ extra:
 
 nav:
   - Home: index.md
-  - Fondamenti:
-      - D00 - Prologo: D00-prologo.md
-      - D01 — Workspace local-first, Git, Obsidian, LLM wiki: D01-workspace-llm-wiki.md
-      - D02 — Python refresher e software engineering essentials: D02-python-refresher.md
-      - D02b — Virtualizzazione e Container: D02b-virtualizzazione-e-container.md
-      - D02c — Gateway e Routing LLM (LiteLLM): D02c-gateway-e-routing-llm.md
-      - D03 — Data foundations (NumPy, Pandas, SQL): D03-data-foundations.md
-      - D04 — Matematica e statistica just-in-time: D04-math-stat.md
-  - Operativo:
-      - D05 — Fondamenti di Machine Learning: D05-ml-fondamenti.md
-      - "D06 — ML classico: alberi, ensemble, gradient boosting": D06-ml-classico.md
-      - D07 — Apprendimento non supervisionato: D07-unsupervised-learning.md
-  - Avanzato:
-      - D08 — Deep Learning e PyTorch: D08-deep-learning-pytorch.md
-      - D09 — Transformers, LLM e inference engineering: D09-transformers-llm.md
-      - D10 — RAG, knowledge base e grafi OSINT: D10-rag-knowledge-osint.md
-      - D11 — OSINT avanzato e discipline principali: D11-osint-avanzato.md
-      - "D11b — AI come arma e come bersaglio nell'OSINT": D11b-ai-arma-bersaglio-osint.md
-      - "D11c — Geopolitica e governance dell'AI per l'OSINT": D11c-geopolitica-ai-osint.md
-  - Specialistico:
-      - D12 — Agentic systems, MCP e automazione affidabile: D12-agentic-mcp.md
-      - D12b — AI Harness e Plugin per agenti OSINT portatili: D12b-ai-harness-plugin-osint.md
-      - D12c — Prompt engineering e context engineering avanzati: D12c-prompt-context-engineering.md
-      - D12d — Loop engineering e graph engineering per agenti: D12d-loop-graph-engineering.md
-      - D13 — RL, preference learning, alignment: D13-rl-alignment.md
-      - D14 — Responsible AI, cybersecurity e governance: D14-responsible-ai-cyber.md
-      - D14b — Guardrails Locali e Privacy: D14b-guardrails-e-privacy.md
-      - D15 — MLOps / LLMOps e deployment local-first: D15-mlops-llmops.md
-      - D16 — ICM, orchestrazione e comunicazione dei risultati: D16-icm-orchestrazione.md
-      - D16b — 12-Factor Agents: D16b-twelve-factor-agents.md
-      - D17 — Agent Context Platform e MCP: D17-agent-context-platform-mcp.md
-      - D17b — Standard Agent Plugins: D17b-standard-agent-plugins.md
-      - D18 — Ecosistema Interfacce e Client SPoG: D18-ecosistema-interfacce-client.md
-      - D19 — Ingegneria delle Identità ICM: D19-ingegneria-delle-identita.md
-      - D20 — Tech Radar e Scouting: D20-tech-radar-e-scouting.md
-      - D21 — Architettura SOTA Definitiva: D21-architettura-sota-definitiva.md
+  - Mondo 1 (L'Officina):
+      - D00 — Il Manifesto: D00-manifesto.md
+      - D01 — Workspace local-first e CLI: D01-workspace-llm-wiki.md
+      - D02 — Python Refresher: D02-python-refresher.md
+      - D03 — Virtualizzazione e Container (Docker): D03-virtualizzazione-e-container.md
+      - D04 — Il Progetto Stazione (Prologo): D04-progetto-stazione.md
+      - D04b — Gateway e Routing LLM: D04b-gateway-e-routing-llm.md
+  - Mondo 2 (Il Cervello):
+      - D05 — Data Foundations: D05-data-foundations.md
+      - D06 — Matematica e Statistica: D06-math-stat.md
+      - D07 — Fondamenti di ML: D07-ml-fondamenti.md
+      - D08 — ML Classico: D08-ml-classico.md
+      - D09 — Unsupervised Learning: D09-unsupervised-learning.md
+      - D10 — Deep Learning e PyTorch: D10-deep-learning-pytorch.md
+      - D11 — Transformers e LLMs: D11-transformers-llm.md
+  - Mondo 3 (Il Risveglio):
+      - D12 — RAG e OSINT: D12-rag-knowledge-osint.md
+      - D13 — OSINT Avanzato: D13-osint-avanzato.md
+      - D13b — AI come Arma e Bersaglio: D13b-ai-arma-bersaglio-osint.md
+      - D13c — Geopolitica e AI: D13c-geopolitica-ai-osint.md
+      - D14 — Agentic Systems e MCP: D14-agentic-mcp.md
+      - D14b — AI Harness e Plugin: D14b-ai-harness-plugin-osint.md
+      - D14c — Prompt & Context Engineering: D14c-prompt-context-engineering.md
+      - D14d — Loop & Graph Engineering: D14d-loop-graph-engineering.md
+      - D15 — RL e Alignment: D15-rl-alignment.md
+      - D16 — Responsible AI e Cyber: D16-responsible-ai-cyber.md
+      - D16b — Guardrails Locali e Privacy: D16b-guardrails-e-privacy.md
+      - D17 — MLOps e LLMOps: D17-mlops-llmops.md
+      - D18 — ICM e Orchestrazione: D18-icm-orchestrazione.md
+      - D18b — 12-Factor Agents: D18b-twelve-factor-agents.md
+      - D19 — Agent Context Platform (MCP): D19-agent-context-platform-mcp.md
+      - D19b — Standard Agent Plugins: D19b-standard-agent-plugins.md
+      - D20 — Ecosistema Client SPoG: D20-ecosistema-interfacce-client.md
+      - D21 — Ingegneria delle Identità ICM: D21-ingegneria-delle-identita.md
+      - D22 — Tech Radar e Scouting: D22-tech-radar-e-scouting.md
+      - D23 — Architettura SOTA Definitiva: D23-architettura-sota-definitiva.md

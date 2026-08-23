@@ -3,9 +3,71 @@ import re
 import yaml
 import json
 
+def fix_admonitions(content):
+    lines = content.split('\n')
+    out = []
+    in_block = False
+    block_type = None  # 'admonition' or 'tab'
+    
+    for line in lines:
+        # Match !!! type "Title" or ??? type "Title" or === "Title"
+        match = re.match(r'^(!!!|\?\?\?|===)\s+(?:(\w+)\s+)?(?:"(.*?)"|\'(.*?)\')?', line)
+        if match:
+            in_block = True
+            token = match.group(1)
+            
+            # title is in group 3 (if double quoted) or group 4 (if single quoted)
+            title = match.group(3) or match.group(4)
+            
+            # Ensure empty line before starting a block
+            if out and out[-1].strip() != '':
+                out.append('')
+                
+            if token == '===':
+                block_type = 'tab'
+                title = title if title else "Dettaglio"
+                out.append(f'#### 🔹 {title}')
+                out.append(f'')
+                continue
+                
+            block_type = 'admonition'
+            adm_type = match.group(2) if match.group(2) else "tip"
+            title = title if title else adm_type.capitalize()
+            
+            emoji = '💡' if adm_type in ['tip', 'hint'] else 'ℹ️' if adm_type in ['info', 'note'] else '⚠️'
+            out.append(f'> **{emoji} {title}**')
+            out.append(f'>')
+            continue
+            
+        if in_block:
+            if line.startswith('    '):
+                text = line[4:]
+                out.append(f'> {text}' if block_type == 'admonition' else text)
+            elif line.startswith('\t'):
+                text = line[1:]
+                out.append(f'> {text}' if block_type == 'admonition' else text)
+            elif line.strip() == '':
+                out.append(f'>' if block_type == 'admonition' else '')
+            else:
+                in_block = False
+                block_type = None
+                if out and out[-1].strip() != '':
+                    out.append('')
+                out.append(line)
+        else:
+            out.append(line)
+            
+    return '\n'.join(out)
+
 def parse_markdown_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as f:
         content = f.read()
+
+    # Rimuoviamo i placeholder delle icone MkDocs (:material-xxx:, :fontawesome-xxx:)
+    content = re.sub(r':(material|fontawesome)-[\w-]+:', '', content)
+    
+    # Convertiamo gli Admonition MkDocs in Blockquotes normali
+    content = fix_admonitions(content)
 
     # Parse Frontmatter
     frontmatter = {}

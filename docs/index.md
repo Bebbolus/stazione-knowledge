@@ -28,35 +28,35 @@ La tabella seguente elenca tutti i moduli formativi disponibili, specificando pe
 | :--- | :--- | :--- | :--- |
 | **D01** | Architettura Workspace Local-First (Git, Obsidian, LLM) | Fondamenti | [D01-workspace-llm-wiki.md](D01-workspace-llm-wiki.md) |
 | **D02** | Ingegneria del Software e Python Essentials per Pipeline AI | Fondamenti | [D02-python-refresher.md](D02-python-refresher.md) |
-| **D02b** | Virtualizzazione e Container: Isolamento dell'Infrastruttura AI | Fondamenti | [D02b-virtualizzazione-e-container.md](D02b-virtualizzazione-e-container.md) |
-| **D02c** | Gateway e Routing LLM: Il Controllo del Flusso API | Fondamenti | [D02c-gateway-e-routing-llm.md](D02c-gateway-e-routing-llm.md) |
-| **D03** | Data Foundations: NumPy, Pandas, SQL e Qualità del Dato | Fondamenti | [D03-data-foundations.md](D03-data-foundations.md) |
-| **D04** | Matematica e Statistica Just-in-Time per Machine Learning | Fondamenti | [D04-math-stat.md](D04-math-stat.md) |
-| **D05** | Fondamenti di Machine Learning e Metriche Diagnostiche | Operativo | [D05-ml-fondamenti.md](D05-ml-fondamenti.md) |
-| **D06** | Machine Learning Classico: Alberi Decisionali, Ensemble e Boosting | Operativo | [D06-ml-classico.md](D06-ml-classico.md) |
-| **D07** | Apprendimento Non Supervisionato: Clustering e Riduzione Dimensionale | Operativo | [D07-unsupervised-learning.md](D07-unsupervised-learning.md) |
-| **D08** | Deep Learning e Differenziazione Automatica con PyTorch | Avanzato | [D08-deep-learning-pytorch.md](D08-deep-learning-pytorch.md) |
-| **D09** | Architetture Transformer, Large Language Models e Inference Engineering | Avanzato | [D09-transformers-llm.md](D09-transformers-llm.md) |
-| **D10** | Retrieval-Augmented Generation (RAG), Vector Database e Grafi OSINT | Avanzato | [D10-rag-knowledge-osint.md](D10-rag-knowledge-osint.md) |
-| **D11** | Metodologie Investigative OSINT e Discipline di Intelligence | Avanzato | [D11-osint-avanzato.md](D11-osint-avanzato.md) |
-| **D11b** | Intelligenza Artificiale come Vettore Offensivo e Bersaglio OSINT | Avanzato | [D11b-ai-arma-bersaglio-osint.md](D11b-ai-arma-bersaglio-osint.md) |
-| **D11c** | Geopolitica dei Semiconduttori, Supply Chain e Governance dell'AI | Avanzato | [D11c-geopolitica-ai-osint.md](D11c-geopolitica-ai-osint.md) |
-| **D12** | Sistemi Agentici Autonomi, Model Context Protocol e Tool Calling | Specialistico | [D12-agentic-mcp.md](D12-agentic-mcp.md) |
-| **D12b** | Sandboxing di AI Harness e Architetture Plugin per Agenti OSINT | Specialistico | [D12b-ai-harness-plugin-osint.md](D12b-ai-harness-plugin-osint.md) |
-| **D12c** | Ingegneria Avanzata dei Prompt e Gestione Contestuale per LLM | Specialistico | [D12c-prompt-context-engineering.md](D12c-prompt-context-engineering.md) |
-| **D12d** | Loop Engineering, Grafi di Stato Ciclici e Flussi Multi-Agente | Specialistico | [D12d-loop-graph-engineering.md](D12d-loop-graph-engineering.md) |
-| **D13** | Reinforcement Learning, Allineamento di Modelli e Ottimizzazione DPO | Specialistico | [D13-rl-alignment.md](D13-rl-alignment.md) |
-| **D14** | Sicurezza Informatica dei Sistemi LLM, Difesa OWASP e Responsible AI | Specialistico | [D14-responsible-ai-cyber.md](D14-responsible-ai-cyber.md) |
-| **D14b** | Guardrails Locali e Privacy: LLM Guard e Rizzo-PII | Specialistico | [D14b-guardrails-e-privacy.md](D14b-guardrails-e-privacy.md) |
-| **D15** | MLOps, LLMOps e Pipeline di Deployment Local-First | Specialistico | [D15-mlops-llmops.md](D15-mlops-llmops.md) |
-| **D16** | Metodologia ICM, Orchestrazione Strategica e Comunicazione Esecutiva | Specialistico | [D16-icm-orchestrazione.md](D16-icm-orchestrazione.md) |
-| **D16b** | 12-Factor Agents: Progettazione di Agenti Deterministici | Specialistico | [D16b-twelve-factor-agents.md](D16b-twelve-factor-agents.md) |
-| **D17** | Agent Context Platform e Model Context Protocol (MCP) | Specialistico | [D17-agent-context-platform-mcp.md](D17-agent-context-platform-mcp.md) |
-| **D17b** | Standard Agent Plugins: Pacchettizzazione e Distribuzione Universale | Specialistico | [D17b-standard-agent-plugins.md](D17b-standard-agent-plugins.md) |
-| **D18** | Ecosistema Interfacce e Client: Il Single Pane of Glass | Specialistico | [D18-ecosistema-interfacce-client.md](D18-ecosistema-interfacce-client.md) |
-| **D19** | Ingegneria delle Identità: Contratti Comportamentali ICM | Specialistico | [D19-ingegneria-delle-identita.md](D19-ingegneria-delle-identita.md) |
-| **D20** | Tech Radar e Tool Scouting: Ingegneria della Valutazione | Specialistico | [D20-tech-radar-e-scouting.md](D20-tech-radar-e-scouting.md) |
-| **D21** | Architettura SOTA Definitiva: Sintesi del Sistema | Specialistico | [D21-architettura-sota-definitiva.md](D21-architettura-sota-definitiva.md) |
+| **D02b** | Virtualizzazione e Container: Isolamento dell'Infrastruttura AI | Fondamenti | [D03-virtualizzazione-e-container.md](D03-virtualizzazione-e-container.md) |
+| **D02c** | Gateway e Routing LLM: Il Controllo del Flusso API | Fondamenti | [D04b-gateway-e-routing-llm.md](D04b-gateway-e-routing-llm.md) |
+| **D03** | Data Foundations: NumPy, Pandas, SQL e Qualità del Dato | Fondamenti | [D05-data-foundations.md](D05-data-foundations.md) |
+| **D04** | Matematica e Statistica Just-in-Time per Machine Learning | Fondamenti | [D06-math-stat.md](D06-math-stat.md) |
+| **D05** | Fondamenti di Machine Learning e Metriche Diagnostiche | Operativo | [D07-ml-fondamenti.md](D07-ml-fondamenti.md) |
+| **D06** | Machine Learning Classico: Alberi Decisionali, Ensemble e Boosting | Operativo | [D08-ml-classico.md](D08-ml-classico.md) |
+| **D07** | Apprendimento Non Supervisionato: Clustering e Riduzione Dimensionale | Operativo | [D09-unsupervised-learning.md](D09-unsupervised-learning.md) |
+| **D08** | Deep Learning e Differenziazione Automatica con PyTorch | Avanzato | [D10-deep-learning-pytorch.md](D10-deep-learning-pytorch.md) |
+| **D09** | Architetture Transformer, Large Language Models e Inference Engineering | Avanzato | [D11-transformers-llm.md](D11-transformers-llm.md) |
+| **D10** | Retrieval-Augmented Generation (RAG), Vector Database e Grafi OSINT | Avanzato | [D12-rag-knowledge-osint.md](D12-rag-knowledge-osint.md) |
+| **D11** | Metodologie Investigative OSINT e Discipline di Intelligence | Avanzato | [D13-osint-avanzato.md](D13-osint-avanzato.md) |
+| **D11b** | Intelligenza Artificiale come Vettore Offensivo e Bersaglio OSINT | Avanzato | [D13b-ai-arma-bersaglio-osint.md](D13b-ai-arma-bersaglio-osint.md) |
+| **D11c** | Geopolitica dei Semiconduttori, Supply Chain e Governance dell'AI | Avanzato | [D13c-geopolitica-ai-osint.md](D13c-geopolitica-ai-osint.md) |
+| **D12** | Sistemi Agentici Autonomi, Model Context Protocol e Tool Calling | Specialistico | [D14-agentic-mcp.md](D14-agentic-mcp.md) |
+| **D12b** | Sandboxing di AI Harness e Architetture Plugin per Agenti OSINT | Specialistico | [D14b-ai-harness-plugin-osint.md](D14b-ai-harness-plugin-osint.md) |
+| **D12c** | Ingegneria Avanzata dei Prompt e Gestione Contestuale per LLM | Specialistico | [D14c-prompt-context-engineering.md](D14c-prompt-context-engineering.md) |
+| **D12d** | Loop Engineering, Grafi di Stato Ciclici e Flussi Multi-Agente | Specialistico | [D14d-loop-graph-engineering.md](D14d-loop-graph-engineering.md) |
+| **D13** | Reinforcement Learning, Allineamento di Modelli e Ottimizzazione DPO | Specialistico | [D15-rl-alignment.md](D15-rl-alignment.md) |
+| **D14** | Sicurezza Informatica dei Sistemi LLM, Difesa OWASP e Responsible AI | Specialistico | [D16-responsible-ai-cyber.md](D16-responsible-ai-cyber.md) |
+| **D14b** | Guardrails Locali e Privacy: LLM Guard e Rizzo-PII | Specialistico | [D16b-guardrails-e-privacy.md](D16b-guardrails-e-privacy.md) |
+| **D15** | MLOps, LLMOps e Pipeline di Deployment Local-First | Specialistico | [D17-mlops-llmops.md](D17-mlops-llmops.md) |
+| **D16** | Metodologia ICM, Orchestrazione Strategica e Comunicazione Esecutiva | Specialistico | [D18-icm-orchestrazione.md](D18-icm-orchestrazione.md) |
+| **D16b** | 12-Factor Agents: Progettazione di Agenti Deterministici | Specialistico | [D18b-twelve-factor-agents.md](D18b-twelve-factor-agents.md) |
+| **D17** | Agent Context Platform e Model Context Protocol (MCP) | Specialistico | [D19-agent-context-platform-mcp.md](D19-agent-context-platform-mcp.md) |
+| **D17b** | Standard Agent Plugins: Pacchettizzazione e Distribuzione Universale | Specialistico | [D19b-standard-agent-plugins.md](D19b-standard-agent-plugins.md) |
+| **D18** | Ecosistema Interfacce e Client: Il Single Pane of Glass | Specialistico | [D20-ecosistema-interfacce-client.md](D20-ecosistema-interfacce-client.md) |
+| **D19** | Ingegneria delle Identità: Contratti Comportamentali ICM | Specialistico | [D21-ingegneria-delle-identita.md](D21-ingegneria-delle-identita.md) |
+| **D20** | Tech Radar e Tool Scouting: Ingegneria della Valutazione | Specialistico | [D22-tech-radar-e-scouting.md](D22-tech-radar-e-scouting.md) |
+| **D21** | Architettura SOTA Definitiva: Sintesi del Sistema | Specialistico | [D23-architettura-sota-definitiva.md](D23-architettura-sota-definitiva.md) |
 
 ## Standard Metodologico e Norme Redazionali
 

@@ -1,6 +1,6 @@
 ---
 aliases:
-- D12c
+- D14c
 - Prompt Engineering
 - Context Engineering
 - Chain-of-Thought
@@ -17,7 +17,7 @@ resources:
 
 Quando chiediamo a un Large Language Model di risolvere un problema o completare un incarico in autonomia, il **problema** principale è la sua natura intrinsecamente caotica e probabilistica. Un LLM è, fondamentalmente, un "oracolo" che cerca solo di indovinare la parola successiva più probabile: basta un'istruzione ambigua, un contesto troppo lungo o una minima variazione nelle parole usate per farlo deragliare in allucinazioni fattuali, fargli dimenticare le regole del compito o fargli produrre un output formattato male. 
 
-La **soluzione** a questa fragilità sono il **prompt engineering** e il **context engineering**: l'insieme di tecniche, architetture di memoria e pattern linguistici progettati per ingabbiare la stocasticità del modello e costringerlo su binari deterministici. Queste metodologie trasformano un puro predittore di testo in un motore di ragionamento logico, fondamentale per costruire agenti autonomi per l'intelligence delle fonti aperte ([D11](D11-osint-avanzato.md)) o per interfacciarlo in sicurezza ai nostri database tramite il [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) (lo standard aperto ideato da Anthropic per la connessione sicura tra modelli linguistici e sorgenti dati).
+La **soluzione** a questa fragilità sono il **prompt engineering** e il **context engineering**: l'insieme di tecniche, architetture di memoria e pattern linguistici progettati per ingabbiare la stocasticità del modello e costringerlo su binari deterministici. Queste metodologie trasformano un puro predittore di testo in un motore di ragionamento logico, fondamentale per costruire agenti autonomi per l'intelligence delle fonti aperte ([D11](D13-osint-avanzato.md)) o per interfacciarlo in sicurezza ai nostri database tramite il [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) (lo standard aperto ideato da Anthropic per la connessione sicura tra modelli linguistici e sorgenti dati).
 
 ```
 +-----------------------------------------------------------------------------------------+
@@ -54,7 +54,7 @@ Per trasformare questa funzione probabilistica in una componente computazionale 
 
 Il **prompt engineering** opera a livello micro-architetturale sulla singola invocazione di inferenza. Esso definisce la formulazione semantica delle istruzioni, il condizionamento epistemico del ruolo, la distribuzione degli esempi dimostrativi (*few-shot exemplars*) e la struttura dello scratchpad di calcolo, ottimizzando la probabilità che il modello generi token allineati all'obiettivo.
 
-Il **context engineering** agisce invece a livello macro-architetturale sulla gestione dinamica dello stato e della memoria di lavoro dell'agente nel corso del tempo. Esso governa l'allocazione del budget dei token, la selezione e il filtraggio delle informazioni recuperate da basi di dati o knowledge graph ([D10](D10-rag-knowledge-osint.md)), la compattazione gerarchica della cronologia e la sincronizzazione con lo stato persistente dell'ambiente. In sintesi, il prompt engineering indirizza il vettore probabilistico del singolo passo decisionale, mentre il context engineering garantisce che l'input di condizionamento contenga esattamente le informazioni pertinenti, non corrotte da rumore o allucinazioni pregresse.
+Il **context engineering** agisce invece a livello macro-architetturale sulla gestione dinamica dello stato e della memoria di lavoro dell'agente nel corso del tempo. Esso governa l'allocazione del budget dei token, la selezione e il filtraggio delle informazioni recuperate da basi di dati o knowledge graph ([D10](D12-rag-knowledge-osint.md)), la compattazione gerarchica della cronologia e la sincronizzazione con lo stato persistente dell'ambiente. In sintesi, il prompt engineering indirizza il vettore probabilistico del singolo passo decisionale, mentre il context engineering garantisce che l'input di condizionamento contenga esattamente le informazioni pertinenti, non corrotte da rumore o allucinazioni pregresse.
 
 ## Architetture di Ragionamento: Chain-of-Thought, ReAct e Tree of Thoughts
 
@@ -166,7 +166,7 @@ Sulle architetture di ragionamento e deduzione, lo studio [Chain-of-Thought Prom
 
 Sulla dinamica dell'attenzione nei contesti estesi e sull'ottimizzazione dichiarativa, la ricerca [Lost in the Middle: How Language Models Use Long Contexts (Liu et al., 2023)](https://arxiv.org/abs/2307.03172) analizza i limiti di recupero nelle finestre di grandi dimensioni. La compilazione automatica e ottimizzazione algoritmica dei prompt è introdotta in [DSPy: Compiling Declarative Language Model Calls (Khattab et al., 2023)](https://arxiv.org/abs/2310.03714) presso la [Stanford University](https://www.stanford.edu/).
 
-Sugli strumenti operativi per la tokenizzazione, generazione vincolata e validazione, si rimanda alla documentazione ufficiale di [Tokenizers](https://huggingface.co/docs/tokenizers), [tiktoken](https://github.com/openai/tiktoken), [Outlines](https://github.com/dottxt-ai/outlines), [Guidance](https://github.com/guidance-ai/guidance) e [Pydantic](https://docs.pydantic.dev/). Per l'integrazione di questi pattern in framework a grafo e sistemi multi-agente si vedano [LangChain](https://www.langchain.com/), [LangGraph](https://github.com/langchain-ai/langgraph) e il modulo specialistico [D12d](D12d-loop-graph-engineering.md).
+Sugli strumenti operativi per la tokenizzazione, generazione vincolata e validazione, si rimanda alla documentazione ufficiale di [Tokenizers](https://huggingface.co/docs/tokenizers), [tiktoken](https://github.com/openai/tiktoken), [Outlines](https://github.com/dottxt-ai/outlines), [Guidance](https://github.com/guidance-ai/guidance) e [Pydantic](https://docs.pydantic.dev/). Per l'integrazione di questi pattern in framework a grafo e sistemi multi-agente si vedano [LangChain](https://www.langchain.com/), [LangGraph](https://github.com/langchain-ai/langgraph) e il modulo specialistico [D12d](D14d-loop-graph-engineering.md).
 
 ## Appendice Operativa: Laboratori Pratici
 

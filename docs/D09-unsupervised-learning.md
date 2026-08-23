@@ -1,6 +1,6 @@
 ---
 aliases:
-- D07
+- D09
 - Apprendimento Non Supervisionato
 - Clustering
 - Riduzione Dimensionale

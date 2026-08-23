@@ -1,6 +1,6 @@
 ---
 aliases:
-- D15
+- D17
 - MLOps
 - LLMOps
 - Model Serving
@@ -39,7 +39,7 @@ A differenza del software deterministico tradizionale, in cui il comportamento d
 
 I [Jupyter Notebook](https://jupyter.org/), strumenti eccellenti per la prototipazione rapida e l'esplorazione visiva, manifestano gravi limiti architetturali se impiegati come unità di produzione. Lo stato mutabile e non lineare delle celle, l'assenza di type checking statico, l'impossibilità di eseguire test automatizzati e l'accoppiamento opaco con l'ambiente locale dell'utente impediscono la riproducibilità deterministica degli artefatti. L'ingegneria MLOps trasforma l'approccio artigianale in una pipeline software modulare, separando nettamente i carichi di elaborazione dati, l'addestramento distribuito e i microservizi di inferenza stateless.
 
-Nell'ambito dei moderni modelli linguistici di grandi dimensioni, la disciplina si specializza in **LLMOps**. Mentre l'MLOps classico si concentra sull'addestramento periodico o incrementale di modelli tabellari, di regressione o di classificazione su larga scala con metriche di loss deterministiche, l'LLMOps affronta la gestione operativa di modelli fondazionali composti da miliardi di parametri già pre-addestrati. Le sfide dominanti dell'LLMOps riguardano l'ottimizzazione del recupero contestuale ([D10](D10-rag-knowledge-osint.md)), l'ingegneria dei prompt ([D12c](D12c-prompt-context-engineering.md)), la gestione della memoria della GPU (KV-cache) e la valutazione qualitativa delle risposte generate per mitigare allucinazioni e vulnerabilità di sicurezza ([D14](D14-responsible-ai-cyber.md)).
+Nell'ambito dei moderni modelli linguistici di grandi dimensioni, la disciplina si specializza in **LLMOps**. Mentre l'MLOps classico si concentra sull'addestramento periodico o incrementale di modelli tabellari, di regressione o di classificazione su larga scala con metriche di loss deterministiche, l'LLMOps affronta la gestione operativa di modelli fondazionali composti da miliardi di parametri già pre-addestrati. Le sfide dominanti dell'LLMOps riguardano l'ottimizzazione del recupero contestuale ([D10](D12-rag-knowledge-osint.md)), l'ingegneria dei prompt ([D12c](D14c-prompt-context-engineering.md)), la gestione della memoria della GPU (KV-cache) e la valutazione qualitativa delle risposte generate per mitigare allucinazioni e vulnerabilità di sicurezza ([D14](D16-responsible-ai-cyber.md)).
 
 ```text
 +-----------------------------------------------------------------------------------------+

@@ -1,6 +1,6 @@
 ---
 aliases:
-- D10
+- D12
 - RAG
 - Retrieval Augmented Generation
 - Knowledge Base
@@ -18,7 +18,7 @@ resources:
 ---
 # Retrieval-Augmented Generation, Database Vettoriali e Knowledge Graph per l'Intelligence OSINT
 
-Il pattern architetturale di **Retrieval-Augmented Generation (RAG)** integra modelli generativi basati su Transformer con sistemi di recupero informativo esterni, arricchendo dinamicamente il contesto d'inferenza con porzioni documentali pertinenti estratte da basi di conoscenza eterogenee. Questa tecnologia trova impiego primario nell'analisi di intelligence su fonti aperte ([D11](D11-osint-avanzato.md)), nell'investigazione forense su corpus non strutturati e nei sistemi aziendali di question answering ad alta precisione dove i modelli linguistici pre-addestrati soffrono di obsolescenza conoscitiva o allucinazioni fattuali. Il RAG esiste per disaccoppiare la capacità di ragionamento logico-linguistico dell'LLM dalla memorizzazione statica dei parametri sinaptici, consentendo aggiornamenti tempestivi dei dati, verificabilità delle fonti tramite citazioni puntuali e pieno controllo sulla sovranità informativa.
+Il pattern architetturale di **Retrieval-Augmented Generation (RAG)** integra modelli generativi basati su Transformer con sistemi di recupero informativo esterni, arricchendo dinamicamente il contesto d'inferenza con porzioni documentali pertinenti estratte da basi di conoscenza eterogenee. Questa tecnologia trova impiego primario nell'analisi di intelligence su fonti aperte ([D11](D13-osint-avanzato.md)), nell'investigazione forense su corpus non strutturati e nei sistemi aziendali di question answering ad alta precisione dove i modelli linguistici pre-addestrati soffrono di obsolescenza conoscitiva o allucinazioni fattuali. Il RAG esiste per disaccoppiare la capacità di ragionamento logico-linguistico dell'LLM dalla memorizzazione statica dei parametri sinaptici, consentendo aggiornamenti tempestivi dei dati, verificabilità delle fonti tramite citazioni puntuali e pieno controllo sulla sovranità informativa.
 
 ## Il Limite Strutturale dei Pesi Parametrici e la Genesi del RAG
 
@@ -30,7 +30,7 @@ Costringerlo a ristudiare da capo l'intera enciclopedia medica ogni singola nott
 La soluzione più intelligente è trasformare l'esame in una prova a "libro aperto": invece di fargli memorizzare trilioni di fatti, gli affianchiamo un **archivista iper-veloce** (il *Retriever*). Quando l'analista pone una domanda, l'archivista corre nella biblioteca esterna, seleziona i 3 o 4 fascicoli rilevanti e li mette aperti sul tavolo del nostro studente. A quel punto lo studente (il Large Language Model) deve soltanto leggere quei fogli, estrarre le evidenze e sintetizzare la risposta citando il numero esatto della pagina.
 
 ### Fondamenti Teorici e Disaccoppiamento
-I Large Language Model descritti nel modulo [D09](D09-transformers-llm.md) codificano la propria conoscenza all'interno di matrici di pesi sinaptici calcolate durante fasi di pre-addestramento statico. Questa memoria parametrica presenta tre vulnerabilità sistemiche insormontabili nelle investigazioni su dati dinamici:
+I Large Language Model descritti nel modulo [D09](D11-transformers-llm.md) codificano la propria conoscenza all'interno di matrici di pesi sinaptici calcolate durante fasi di pre-addestramento statico. Questa memoria parametrica presenta tre vulnerabilità sistemiche insormontabili nelle investigazioni su dati dinamici:
 1. **Knowledge Cutoff**: la conoscenza si arresta alla data di chiusura del dataset di addestramento.
 2. **Allucinazioni Fattuali**: il modello colma le lacune informative generando sequenze statisticamente probabili ma prive di riscontro oggettivo.
 3. **Mancanza di Tracciabilità e Accesso a Dati Riservati**: l'accesso a note investigative o feed OSINT in tempo reale risulta strutturalmente impossibile senza un meccanismo di iniezione contestuale.
@@ -178,7 +178,7 @@ INDICI VETTORIALI:
 
 Quando il corpus scala a milioni di frammenti, la scansione sequenziale esatta $O(N \cdot d)$ diventa incompatibile con i tempi di risposta interattivi. Gli algoritmi ANN (*Approximate Nearest Neighbors*) scambiano una quota controllata di accuratezza statistica (*recall*) con una drastica accelerazione computazionale.
 
-L'indice ad albero e partizionamento cellulare **IVF-Flat (Inverted File Flat)** raggruppa lo spazio vettoriale in $K$ celle di Voronoi attorno a centroidi calcolati durante una fase preliminare di addestramento tramite clustering K-Means ([D07](D07-unsupervised-learning.md)). In fase di query, il sistema calcola la distanza soltanto verso i centroidi, esplorando esclusivamente i vettori contenuti nelle $nprobe$ celle più vicine.
+L'indice ad albero e partizionamento cellulare **IVF-Flat (Inverted File Flat)** raggruppa lo spazio vettoriale in $K$ celle di Voronoi attorno a centroidi calcolati durante una fase preliminare di addestramento tramite clustering K-Means ([D07](D09-unsupervised-learning.md)). In fase di query, il sistema calcola la distanza soltanto verso i centroidi, esplorando esclusivamente i vettori contenuti nelle $nprobe$ celle più vicine.
 
 La tecnica di **Product Quantization (PQ)** comprime l'occupazione in memoria dividendo ogni vettore $d$-dimensionale in $m$ sottovettori a bassa dimensione e associando a ciascuno il codice identificativo del centroide più vicino all'interno di un codebook discretizzato. Le distanze asimmetriche vengono calcolate ad altissima velocità interrogando tabelle pre-calcolate memorizzate direttamente nella cache della CPU.
 
@@ -267,7 +267,7 @@ L'approccio **GraphRAG** fonde la potenza dei grafi con il recupero vettoriale a
 3. **Community Detection e Sintesi Gerarchica**: algoritmi di clustering su grafi identificano comunità densamente connesse, generando riassunti tematici ad alto livello per ciascun cluster di nodi.
 4. **Recupero Contestuale Ibrido**: di fronte a una query complessa, il sistema estrae il sottografo di vicinato (*ego-network*) relativo alle entità identificate e lo serializza in formato testuale strutturato, affiancandolo ai chunk vettoriali estratti tramite [LangChain](https://www.langchain.com/) o [LlamaIndex](https://www.llamaindex.ai/).
 
-Nelle operazioni di intelligence su fonti aperte ([D11](D11-osint-avanzato.md)), il GraphRAG permette di tracciare catene societarie opache, individuare nodi cardine di disinformazione tramite metriche di centralità (*betweenness centrality*) e correlare minacce cyber identificando infrastrutture condivise ([D11b](D11b-ai-arma-bersaglio-osint.md)).
+Nelle operazioni di intelligence su fonti aperte ([D11](D13-osint-avanzato.md)), il GraphRAG permette di tracciare catene societarie opache, individuare nodi cardine di disinformazione tramite metriche di centralità (*betweenness centrality*) e correlare minacce cyber identificando infrastrutture condivise ([D11b](D13b-ai-arma-bersaglio-osint.md)).
 
 > [!INTERACTIVE] WIDGET: Bacheca Investigativa a Grafo (Multi-Hop Graph Explorer)
 > Una mappa nodale dinamica interattiva raffigurante un'indagine OSINT: nodi colorati (Persone in blu, Società in verde, Server in rosso, Conti bancari in giallo) connessi da frecce direzionate. Cliccando sul pulsante "Trova Catena di Controllo", l'algoritmo calcola ed evidenzia in giallo pulsante il percorso minimo tra l'entità bersaglio e l'infrastruttura sospetta, generando istantaneamente la corrispondente clausola Cypher (`MATCH ... RETURN`) e il blocco di contesto per il prompt LLM.
@@ -344,7 +344,7 @@ Tra gli anti-pattern più frequenti nell'implementazione di sistemi RAG spiccano
 - **Chunking privo di semantica**: tagli arbitrari a dimensione fissa che spezzano tabelle o codici, rendendo il dato incomprensibile all'encoder vettoriale.
 - **Assenza di filtri sui metadati**: recupero indiscriminato su tutto il corpus senza segregazione per livello di confidenzialità o data di validità, consentendo a report obsoleti di inquinare l'analisi corrente.
 - **Sovra-ingegnerizzazione tramite GraphRAG su vault curati**: strumenti accademici complessi come HippoRAG o LightRAG sono progettati per estrarre relazioni da *dump* massivi di documenti grezzi e disorganizzati (es. diecimila pagine di atti parlamentari). Applicare l'astrazione e l'estrazione LLM-based dei nodi su un repository di Knowledge Management (come un vault Obsidian locale) in cui l'analista ha *già* curato manualmente i collegamenti ipertestuali esatti, disperde un'enorme quantità di token e calcolo producendo risultati inferiori e allucinati. Per le basi di conoscenza strutturate, la [Ricerca Ibrida tramite Qdrant](https://qdrant.tech/) (Vettori densi + BM25 sparsi) accelerata da Reranker locali (es. `bge-reranker`) si attesta saldamente come l'architettura State Of The Art per rapidità, economia e precisione chirurgica.
-- **Mancata sanitizzazione degli input**: iniezione diretta di frammenti non validati all'interno del prompt senza opportune gabbie di isolamento, esponendo il sistema a vulnerabilità di indirect prompt injection (trattate in [D11b](D11b-ai-arma-bersaglio-osint.md) e [D14](D14-responsible-ai-cyber.md)).
+- **Mancata sanitizzazione degli input**: iniezione diretta di frammenti non validati all'interno del prompt senza opportune gabbie di isolamento, esponendo il sistema a vulnerabilità di indirect prompt injection (trattate in [D11b](D13b-ai-arma-bersaglio-osint.md) e [D14](D16-responsible-ai-cyber.md)).
 
 ## Riferimenti Bibliografici e Risorse Tecniche
 
@@ -355,7 +355,7 @@ La letteratura fondamentale per l'approfondimento delle architetture RAG include
 Le guide operative dei database vettoriali specializzati [Qdrant](https://qdrant.tech/documentation/), [ChromaDB](https://docs.trychroma.com/), [Weaviate](https://weaviate.io/) e [LanceDB](https://lancedb.com/) illustrano le modalità di configurazione di indici HNSW e filtri sui metadati. Per la modellazione di grafi di proprietà e l'esecuzione di interrogazioni relazionali dichiarative con linguaggio Cypher, il portale documentale di [Neo4j](https://neo4j.com/docs/) e il [Cypher Cheat Sheet](https://neo4j.com/docs/cypher-cheat-sheet/current/) costituiscono i riferimenti pratici standard, affiancati dalla libreria [NetworkX](https://networkx.org/) per algoritmi su reti complesse. La valutazione quantitativa è descritta nella documentazione del framework [RAGAS](https://github.com/explodinggradients/ragas).
 
 ### Moduli Correlati del Percorso Didattico
-La comprensione integrale del sistema RAG si ricollega ai moduli complementari del curriculum: [D08](D08-deep-learning-pytorch.md) per i tensori di base con PyTorch, [D09](D09-transformers-llm.md) per l'architettura dei Transformer e l'inferenza linguistica, [D11](D11-osint-avanzato.md) per le metodologie investigative OSINT, [D12](D12-agentic-mcp.md) per i sistemi agentici e il [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) (lo standard aperto creato da [Anthropic](https://www.anthropic.com/) per la connessione sicura tra modelli linguistici e strumenti esterni), e [D15](D15-mlops-llmops.md) per il deployment e l'orchestrazione locale con [Ollama](https://ollama.com/).
+La comprensione integrale del sistema RAG si ricollega ai moduli complementari del curriculum: [D08](D10-deep-learning-pytorch.md) per i tensori di base con PyTorch, [D09](D11-transformers-llm.md) per l'architettura dei Transformer e l'inferenza linguistica, [D11](D13-osint-avanzato.md) per le metodologie investigative OSINT, [D12](D14-agentic-mcp.md) per i sistemi agentici e il [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) (lo standard aperto creato da [Anthropic](https://www.anthropic.com/) per la connessione sicura tra modelli linguistici e strumenti esterni), e [D15](D17-mlops-llmops.md) per il deployment e l'orchestrazione locale con [Ollama](https://ollama.com/).
 
 ## Appendice Operativa: Laboratori Pratici
 

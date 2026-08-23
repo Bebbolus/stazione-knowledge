@@ -1,6 +1,6 @@
 ---
 aliases:
-- D08
+- D10
 - Deep Learning e PyTorch
 - Reti Neurali Profonde
 - Autograd
@@ -20,7 +20,7 @@ Il **deep learning e il framework PyTorch** costituiscono il paradigma computazi
 
 ## Il Limite dei Modelli Lineari e la Necessità di Rappresentazioni Profonde
 
-Nei moduli dedicati all'apprendimento supervisionato classico come [D05](D05-ml-fondamenti.md) e agli algoritmi basati su alberi decisionali come [D06](D06-ml-classico.md), i modelli estraggono pattern predittivi operando su insiemi di feature tabellari preventivamente ingegnerizzate da esperti di dominio. Sebbene questo paradigma risulti altamente efficace su dati strutturati e matrici a bassa dimensionalità, collassa sistematicamente di fronte a dati non strutturati ad altissima dimensionalità, quali matrici di pixel per immagini, campioni audio continui o sequenze di testo naturale.
+Nei moduli dedicati all'apprendimento supervisionato classico come [D05](D07-ml-fondamenti.md) e agli algoritmi basati su alberi decisionali come [D06](D08-ml-classico.md), i modelli estraggono pattern predittivi operando su insiemi di feature tabellari preventivamente ingegnerizzate da esperti di dominio. Sebbene questo paradigma risulti altamente efficace su dati strutturati e matrici a bassa dimensionalità, collassa sistematicamente di fronte a dati non strutturati ad altissima dimensionalità, quali matrici di pixel per immagini, campioni audio continui o sequenze di testo naturale.
 
 La limitazione intrinseca dell'ingegneria manuale delle feature risiede nella maledizione della dimensionalità (*Curse of Dimensionality*) e nell'incapacità di catturare invarianze geometriche non lineari complesse. Un modello lineare o un albero di decisione tratta ciascun pixel di un'immagine come una variabile indipendente, ignorando la coerenza spaziale locale, la gerarchia semantica e le trasformazioni affini come traslazioni o rotazioni. Di conseguenza, per riconoscere un oggetto in posizioni differenti dello spazio, i modelli classici richiederebbero un volume esponenziale di combinazioni di training, saturando la memoria e generando overfitting severo.
 
@@ -65,7 +65,7 @@ PyTorch risolve questo problema implementando un motore di **differenziazione au
   <iframe src="../widgets/discesa_gradiente.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
 </div>
 
-Quando viene invocato il metodo `loss.backward()`, il motore Autograd esegue un attraversamento topologico inverso del grafo computazionale. Applicando la regola della catena multivariata formalizzata in [D04](D04-math-stat.md), il motore calcola i prodotti Vettore-Jacobiano (*Vector-Jacobian Products*, VJP):
+Quando viene invocato il metodo `loss.backward()`, il motore Autograd esegue un attraversamento topologico inverso del grafo computazionale. Applicando la regola della catena multivariata formalizzata in [D04](D06-math-stat.md), il motore calcola i prodotti Vettore-Jacobiano (*Vector-Jacobian Products*, VJP):
 
 $$\mathbf{v}^T \mathbf{J} = \frac{\partial \mathcal{L}}{\partial \mathbf{y}} \cdot \frac{\partial \mathbf{y}}{\partial \mathbf{x}}$$
 
@@ -246,7 +246,7 @@ Al termine della cascata di convoluzioni ed estrazioni, le mappe di feature bidi
 
 ### Reti Ricorrenti e Meccanismi a Gate per Sequenze
 
-Quando i dati presentano dipendenze temporali o sequenziali (serie temporali, log di eventi, testo prima dell'avvento dei modelli basati su attenzione trattati in [D09](D09-transformers-llm.md)), le architetture feedforward classiche risultano inadeguate perché non mantengono memoria degli input passati.
+Quando i dati presentano dipendenze temporali o sequenziali (serie temporali, log di eventi, testo prima dell'avvento dei modelli basati su attenzione trattati in [D09](D11-transformers-llm.md)), le architetture feedforward classiche risultano inadeguate perché non mantengono memoria degli input passati.
 
 Le reti ricorrenti standard (*Recurrent Neural Networks*, RNN) mantengono uno stato nascosto $\mathbf{h}_t = \tanh(\mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{W}_{xh}\mathbf{x}_t + \mathbf{b})$, ma soffrono del collasso esponenziale dei gradienti (*vanishing gradient problem*) su sequenze estese. I modelli **Long Short-Term Memory (LSTM)** e **Gated Recurrent Unit (GRU)** superano questa patologia introducendo porte di regolazione differenziabili: la **porta di oblio** (*forget gate*) $\mathbf{f}_t = \sigma(\mathbf{W}_f [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_f)$, che determina quanta informazione pregressa cancellare dallo stato di cella $\mathbf{C}_{t-1}$; la **porta di ingresso** (*input gate*) $\mathbf{i}_t = \sigma(\mathbf{W}_i [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_i)$, che seleziona quali nuove informazioni candidati $\tilde{\mathbf{C}}_t$ aggiungere alla memoria persistente; lo **stato di cella** (*cell state*) $\mathbf{C}_t = \mathbf{f}_t \odot \mathbf{C}_{t-1} + \mathbf{i}_t \odot \tilde{\mathbf{C}}_t$, che funge da canale di memoria a lungo termine a gradiente costante; la **porta di uscita** (*output gate*) $\mathbf{o}_t = \sigma(\mathbf{W}_o [\mathbf{h}_{t-1}, \mathbf{x}_t] + \mathbf{b}_o)$, che filtra lo stato di cella per produrre il nuovo stato nascosto $\mathbf{h}_t = \mathbf{o}_t \odot \tanh(\mathbf{C}_t)$.
 
@@ -398,7 +398,7 @@ for X_batch, y_batch in train_loader:
 
 ### Persistenza del Modello: Serializzazione e Deserializzazione dello State Dict
 
-Nel ciclo di vita del machine learning formalizzato in [D15](D15-mlops-llmops.md), i modelli addestrati devono essere salvati su storage persistente per l'erogazione di servizi di inferenza. In PyTorch, l'approccio ingegneristico corretto e sicuro consiste nel salvare esclusivamente il dizionario dei parametri pesati (`state_dict`), evitando la serializzazione diretta dell'intero oggetto Python tramite modulo pickle, la quale genera vulnerabilità di sicurezza e fragilità di accoppiamento al codice sorgente:
+Nel ciclo di vita del machine learning formalizzato in [D15](D17-mlops-llmops.md), i modelli addestrati devono essere salvati su storage persistente per l'erogazione di servizi di inferenza. In PyTorch, l'approccio ingegneristico corretto e sicuro consiste nel salvare esclusivamente il dizionario dei parametri pesati (`state_dict`), evitando la serializzazione diretta dell'intero oggetto Python tramite modulo pickle, la quale genera vulnerabilità di sicurezza e fragilità di accoppiamento al codice sorgente:
 
 ```python
 from pathlib import Path
@@ -450,7 +450,7 @@ Il paradigma dinamico *define-by-run* di PyTorch ricostruisce il grafo computazi
 
 ### Deep Learning vs Gradient Boosted Trees su Dati Tabellari
 
-Un grave errore architetturale consiste nell'impiegare indiscriminatamente reti neurali profonde per qualunque problema predittivo. Su dataset tabellari strutturati a bassa e media scala, gli algoritmi di Gradient Boosted Decision Trees trattati in [D06](D06-ml-classico.md) (quali [XGBoost](https://xgboost.readthedocs.io/) (la libreria open-source per gradient boosting scalabile), [LightGBM](https://lightgbm.readthedocs.io/) (il framework di gradient boosting sviluppato da [Microsoft](https://www.microsoft.com/)) e [CatBoost](https://catboost.ai/) (la libreria per alberi decisionali ottimizzata per variabili categoriche da Yandex)) superano costantemente le reti neurali in termini di accuratezza, velocità di addestramento, robustezza a valori nulli e interpretabilità diagnostica, richiedendo frazioni marginali dell'energia e dell'hardware necessari per addestrare un MLP. Il deep learning diventa conveniente unicamente in presenza di relazioni gerarchiche complesse, segnali multimodali combinati (testo e immagini simultanee) o volumi di dati dell'ordine dei milioni di istanze.
+Un grave errore architetturale consiste nell'impiegare indiscriminatamente reti neurali profonde per qualunque problema predittivo. Su dataset tabellari strutturati a bassa e media scala, gli algoritmi di Gradient Boosted Decision Trees trattati in [D06](D08-ml-classico.md) (quali [XGBoost](https://xgboost.readthedocs.io/) (la libreria open-source per gradient boosting scalabile), [LightGBM](https://lightgbm.readthedocs.io/) (il framework di gradient boosting sviluppato da [Microsoft](https://www.microsoft.com/)) e [CatBoost](https://catboost.ai/) (la libreria per alberi decisionali ottimizzata per variabili categoriche da Yandex)) superano costantemente le reti neurali in termini di accuratezza, velocità di addestramento, robustezza a valori nulli e interpretabilità diagnostica, richiedendo frazioni marginali dell'energia e dell'hardware necessari per addestrare un MLP. Il deep learning diventa conveniente unicamente in presenza di relazioni gerarchiche complesse, segnali multimodali combinati (testo e immagini simultanee) o volumi di dati dell'ordine dei milioni di istanze.
 
 ## Riferimenti Bibliografici e Risorse Tecniche
 

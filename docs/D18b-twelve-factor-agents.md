@@ -223,8 +223,8 @@ def search_kb(query: str, max_results: int = 5) -> dict:
     """Simula una ricerca nella Knowledge Base locale."""
     return {
         "results": [
-            {"file": "D10-rag-knowledge-osint.md", "score": 0.92},
-            {"file": "D12-agentic-mcp.md", "score": 0.87}
+            {"file": "D12-rag-knowledge-osint.md", "score": 0.92},
+            {"file": "D14-agentic-mcp.md", "score": 0.87}
         ],
         "total": 2
     }
