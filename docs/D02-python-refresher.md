@@ -69,28 +69,35 @@ La directory `src/` racchiude esclusivamente i moduli sorgente del pacchetto app
 
 L'installazione globale di pacchetti [Python](https://www.python.org/) (il linguaggio di programmazione di riferimento per l'AI) sul sistema operativo genera conflitti di versione insanabili (*dependency hell*) tra librerie condivise da progetti differenti. L'isolamento mediante ambienti virtuali assicura l'indipendenza e la perfetta riproducibilità di ciascun ambiente di esecuzione.
 
-### Creazione e Attivazione dell'Ambiente Virtuale
+### Il Nuovo Standard: uv di Astral
 
-Il modulo standard `venv` consente di creare una sandbox isolata contenente una copia dedicata dell'interprete Python e dell'albero dei pacchetti `site-packages`.
+Mentre storicamente si utilizzavano strumenti come `venv` e `pip`, l'ecosistema moderno si è spostato su **[uv](https://github.com/astral-sh/uv)**, un gestore di pacchetti scritto in Rust dall'azienda Astral. Rispetto a pip, `uv` è dalle 10 alle 100 volte più veloce, gestisce automaticamente la risoluzione dei conflitti (lockfile) e permette di installare le dipendenze in un battito di ciglia.
 
+Per installare `uv` globalmente sul sistema (solo la prima volta):
 ```bash
-# Creazione dell'ambiente virtuale dedicato
-python -m venv .venv
+# Su macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Attivazione dell'ambiente su sistemi macOS e Linux
-source .venv/bin/activate
-
-# Attivazione dell'ambiente su sistemi Windows PowerShell
-.\.venv\Scripts\Activate.ps1
-
-# Aggiornamento del package manager e installazione delle dipendenze essenziali
-pip install -U pip
-pip install requests pytest httpx pyyaml
+# Su Windows PowerShell
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### Congelamento e Dichiarazione delle Dipendenze
+### Inizializzazione del Progetto con uv
 
-Le dipendenze del progetto vengono tracciate in modo deterministico all'interno di `requirements.txt`. Questo file garantisce che altri sviluppatori, runner di Continuous Integration o agenti automatici possano riprodurre fedelmente l'esatto ambiente software con un unico comando di ripristino (`pip install -r requirements.txt`).
+Con `uv`, la creazione dell'ambiente virtuale e la gestione delle dipendenze diventano un'operazione unica e trasparente. 
+
+```bash
+# Inizializza un nuovo progetto (crea automaticamente i file di configurazione)
+uv init
+
+# Aggiunge librerie al progetto e crea/aggiorna l'ambiente virtuale .venv
+uv add requests pytest httpx pyyaml
+
+# Esegue uno script utilizzando automaticamente l'ambiente virtuale isolato (senza 'attivarlo' manualmente)
+uv run main.py
+```
+
+Questo approccio elimina la necessità di attivare e disattivare manualmente gli ambienti virtuali o di mantenere scomodi file `requirements.txt`, centralizzando tutto nel moderno standard `pyproject.toml`.
 
 ## Manipolazione del File System e Flussi Dati (JSON vs JSONL)
 
@@ -366,7 +373,16 @@ La specifica della sintassi di base e dei tipi di dato nativi è documentata nel
 
 Per approfondire l'architettura dei test con fixture e mocking, la documentazione ufficiale di [pytest](https://docs.pytest.org/) fornisce linee guida complete per suite di collaudo industriali. La piattaforma indipendente [Real Python](https://realpython.com/) (il portale di formazione tecnica per programmatori Python) offre percorsi tematici dedicati all'ingegneria del software, alla concorrenza asincrona e alla costruzione di strumenti CLI nei suoi [Learning Paths](https://realpython.com/learning-paths/).
 
-## Appendice Operativa: Laboratori Pratici
+## Appendice A: Prerequisiti di Sistema
+
+Prima di poter operare attivamente nello sviluppo di pipeline e agenti AI sul proprio sistema, è fondamentale preparare il terreno installando gli strumenti di base. 
+
+- **Python**: È il linguaggio di programmazione dominante nell'ecosistema dell'intelligenza artificiale, fungendo da "motore" che esegue i nostri script e orchestra i modelli. Senza l'interprete Python, il computer non sa come leggere ed eseguire le istruzioni.
+  - *Guida Ufficiale e Installazione*: [python.org/about/gettingstarted/](https://www.python.org/about/gettingstarted/)
+- **uv**: È il gestore di pacchetti e progetti Python di nuova generazione (scritto in Rust). Sostituisce strumenti vecchi e lenti come `pip` e `venv`. Lo utilizziamo per installare librerie esterne in frazioni di secondo e per isolare le dipendenze di ogni progetto, evitando che i moduli si "pestino i piedi" a vicenda.
+  - *Guida Ufficiale e Installazione*: [docs.astral.sh/uv/](https://docs.astral.sh/uv/getting-started/installation/)
+
+## Appendice B: Laboratori Pratici
 
 > [!TIP]
 > **Zero-Draft Offloading (Delega dell'Inizio)**
@@ -374,7 +390,7 @@ Per approfondire l'architettura dei test con fixture e mocking, la documentazion
 
 
 
-- [ ] Configurazione dell'ambiente e logging strutturato: Creare la cartella di lavoro `stazione-python-lab/`, inizializzare l'ambiente virtuale con `python -m venv .venv`, attivarlo e configurare `main.py` per registrare messaggi informativi e di errore sia su standard output sia su file persistente `logs/app.log`.
+- [ ] Configurazione dell'ambiente e logging strutturato: Creare la cartella di lavoro `stazione-python-lab/` e inizializzare il progetto con `uv init`. Aggiungere le dipendenze con `uv add`, quindi configurare `main.py` per registrare messaggi informativi e di errore sia su standard output sia su file persistente `logs/app.log`.
 - [ ] Elaborazione di dataset in formato JSONL: Scrivere uno script che genera dieci dizionari di test e li scrive in modalità append all'interno di `logs/events.jsonl`. Realizzare una seconda funzione che esegue lo streaming del file riga per riga, deserializza gli oggetti con `json.loads()` e calcola il conteggio aggregato degli eventi per tipologia.
 - [ ] Client API resiliente con variabili d'ambiente: Implementare il modulo `src/my_project/api_client.py` con una funzione che acquisisce l'endpoint da configurazione YAML e la chiave di autorizzazione dalla variabile d'ambiente `SERVICE_API_KEY`, eseguendo una richiesta GET con timeout e gestione delle eccezioni di rete.
 - [ ] Costruzione di interfaccia CLI e suite di test: Esporre i comandi di ispezione ed elaborazione tramite `argparse` all'interno di `main.py`. Creare la cartella `tests/`, implementare il test unitario per una funzione di utilità matematica e validare l'intera suite eseguendo `pytest -q`.

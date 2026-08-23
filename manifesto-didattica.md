@@ -37,3 +37,10 @@ Questo manifesto definisce le regole architetturali, narrative e stilistiche per
 *   **Invarianza del Carico Informativo:** Durante la riscrittura o il refactoring di documenti preesistenti, è severamente vietato omettere o scartare porzioni di conoscenza (risorse esterne, bibliografia, link di approfondimento, log operativi o laboratori pratici) già presenti nell'originale.
 *   **Divieto di Astrazione e Concretezza Operativa:** La "Neutralità Operativa" (NPOV) e il rigore enciclopedico non devono mai tradursi nella cancellazione di percorsi fisici specifici (path), nomi di directory locali, comandi da terminale, flussi operativi passo-passo o porzioni di codice presenti nell'originale. Il documento, pur diventando una monografia teoricamente rigorosa, deve sempre conservare intatta la sua funzione di "manuale pratico di implementazione" (how-to), descrivendo operativamente e in modo esplicito come mettere in opera i concetti sulla macchina dell'utente.
 *   **Adattamento Strutturale:** Il materiale di approfondimento e i link testuali preesistenti devono essere preservati e ri-formattati per aderire alle regole del manifesto (ad esempio trasformando lunghe liste di link in paragrafi di prosa densa e narrativamente coesa, nel rigoroso rispetto della soglia del 10% per gli elenchi puntati).
+
+
+### Regola sui Prerequisiti
+Se un argomento pratico, tutorial o laboratorio richiede l'utilizzo di uno strumento o software esterno non ancora affrontato (es. Python, uv, Git), deve valere per ogni prerequisito:
+1. **Spiegazione Inclusiva**: Spiegare brevemente cos'è lo strumento e perché serve (es. "Python: Il motore base per eseguire il codice").
+2. **Rimando Ufficiale**: Fornire sempre il link diretto alla guida ufficiale di installazione o documentazione del progetto.
+*Questo assicura che il lettore non venga mai bloccato da presupposti impliciti.*
