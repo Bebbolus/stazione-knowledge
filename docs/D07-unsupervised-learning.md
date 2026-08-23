@@ -19,9 +19,20 @@ L'apprendimento non supervisionato (Unsupervised Learning) è il paradigma del m
 
 ## Il Paradosso dell'Assenza di Ground Truth
 
-Nei modelli supervisionati, l'ottimizzazione dei parametri è guidata da una funzione di perdita che calcola l'errore esatto rispetto a una verità fondamentale (*ground truth*). Nell'apprendimento non supervisionato, il sistema riceve esclusivamente una matrice di osservazioni $X \in \mathbb{R}^{n \times d}$, dove $n$ indica il numero di campioni e $d$ la dimensionalità dello spazio delle feature. Senza un vettore target $y$, non esiste un segnale d'errore deterministico, trasformando la valutazione in una stima della compattezza geometrica, della separabilità probabilistica o della conservazione della varianza.
+Immagina di entrare in una stanza piena di migliaia di mattoncini Lego sparsi alla rinfusa sul pavimento, senza la scatola originale, senza il libretto di istruzioni e senza nessuno che ti dica cosa devi costruire. 
+Nel **Machine Learning Supervisionato**, hai un maestro al tuo fianco che ti dice subito: *"Questo pezzo è una finestra, quello è un tetto"*. Nell'**Apprendimento Non Supervisionato (Unsupervised Learning)**, sei completamente da solo: devi osservare la forma, i colori e le dimensioni dei mattoncini e trovare un senso da te, raggruppando quelli simili o scartando i pezzi rotti.
 
-Questa assenza di vincoli esterni costringe gli algoritmi non supervisionati a formulare precise ipotesi a priori sulla natura dei dati. La scelta del modello definisce implicitamente cosa costituisce un "gruppo coerente" o una "deviazione anomala": K-Means assume che i cluster siano sfere convesse equi-estese nello spazio euclideo, DBSCAN cerca regioni continue ad alta densità separate da vuoti, mentre la PCA assume che l'informazione di maggior valore coincida con le direzioni di massima varianza lineare. Comprendere queste assunzioni geometriche è il prerequisito indispensabile per evitare di scambiare artefatti algoritmici per autentiche strutture dei dati.
+Matematicamente, il sistema riceve una matrice di osservazioni senza etichette predefinite:
+
+$$X \in \mathbb{R}^{n \times d}$$
+
+Spiegata a parole:
+- $n$: è il numero totale di mattoncini Lego sparsi sul pavimento (i campioni o osservazioni).
+- $d$: è il numero di caratteristiche misurate per ogni mattoncino (es. lunghezza, larghezza, peso, colore).
+- L'assenza di un vettore target $y$ (il libretto delle risposte) significa che non esiste un errore esatto da correggere: il modello deve scommettere su un'ipotesi geometrica (es. raggruppare per vicinanza, per densità di folla o per allineamento visivo).
+
+> [!INTERACTIVE] WIDGET: Lo Smistatore di Mattoncini Lego (Ground Truth vs Unsupervised)
+> *Visualizzazione Dinamica:* Un'arena interattiva dove l'utente può attivare la modalità "Con Maestro" (Supervisionato: i punti si colorano subito con la loro etichetta $y$) o "Senza Maestro" (Non Supervisionato: i punti sono grigi e l'utente sperimenta come raggrupparli variando criteri di forma e colore, osservando l'assenza di un punteggio d'errore assoluto).
 
 ```
 ========================================================================================
@@ -51,20 +62,36 @@ Il clustering organizza un insieme di punti non etichettati in sottoinsiemi omog
 
 ### K-Means e la Partizione dello Spazio di Voronoi
 
-L'algoritmo **K-Means** (implementato nella classe `KMeans` della libreria [Scikit-learn](https://scikit-learn.org/)) modella la struttura dei dati individuando $K$ punti rappresentativi detti **centroidi** $\mu_1, \dots, \mu_K \in \mathbb{R}^d$. Lo spazio multidimensionale viene così partizionato in celle di Voronoi convesse, in cui ogni punto $x_i$ appartiene al cluster del centroide più vicino.
+Immagina di essere il manager di una catena di pizzerie da asporto e di dover aprire $K$ nuovi locali in una grande città per consegnare le pizze il più in fretta possibile a tutte le case.
+All'inizio pianti $K$ bandierine a caso sulla mappa della città. L'algoritmo **K-Means** procede con due mosse a ripetizione come una danza:
+1. **Assegnazione (I clienti scelgono la pizzeria):** Ogni famiglia della città ordina dalla pizzeria più vicina a casa sua, tracciando i confini dei quartieri di consegna (le celle di Voronoi).
+2. **Aggiornamento (I locali si spostano al centro):** Ciascun pizzaiolo guarda la mappa di tutte le famiglie che hanno ordinato da lui e sposta fisicamente il suo locale esattamente al baricentro (il centro geometrico) dei suoi clienti per far fare meno strada ai fattorini.
+I clienti si riassegnano alle nuove posizioni, i locali si rispostano, e il ciclo si ripete finché le pizzerie trovano la posizione perfetta e smettono di muoversi.
 
-L'algoritmo classico di Stuart Lloyd ottimizza in modo iterativo la somma delle distanze quadratiche intra-cluster, alternando due fasi deterministiche:
-Nella fase di assegnazione, ogni campione viene associato al centroide più vicino: $c^{(i)} = \arg\min_{k} ||x_i - \mu_k||^2$. Nella fase di aggiornamento, ciascun centroide viene ricalcolato come la media aritmetica di tutte le osservazioni assegnate a quel gruppo: $\mu_k = \frac{1}{|S_k|} \sum_{x_i \in S_k} x_i$.
+Le formule matematiche formalizzano queste due fasi:
 
-La funzione obiettivo globale minimizzata da K-Means è l'**Inerzia** (detta anche *Within-Cluster Sum of Squares*, WCSS):
+1. **Fase di Assegnazione:**
+   $$c^{(i)} = \arg\min_{k} ||x_i - \mu_k||^2$$
+   - $x_i$: la posizione della casa dell'utente $i$.
+   - $\mu_k$: la posizione della pizzeria (centroide) $k$.
+   - $c^{(i)}$: l'etichetta della pizzeria più vicina assegnata al cliente $i$.
 
-$$\text{WCSS} = \sum_{k=1}^K \sum_{x_i \in S_k} ||x_i - \mu_k||^2$$
+2. **Fase di Aggiornamento (Media del quartiere):**
+   $$\mu_k = \frac{1}{|S_k|} \sum_{x_i \in S_k} x_i$$
+   - $|S_k|$: il numero totale di clienti nel quartiere della pizzeria $k$.
+   - $\sum x_i$: la somma delle posizioni di tutti i clienti del gruppo, divisa per il loro numero (la media aritmetica delle coordinate).
 
-L'algoritmo di Lloyd garantisce la convergenza a un minimo locale, ma è estremamente sensibile all'inizializzazione casuale dei centroidi, rischiando di convergere verso partizioni sub-ottimali. Per neutralizzare questo difetto, lo schema di inizializzazione **K-Means++** (proposto da David Arthur e Sergei Vassilvitskii) seleziona il primo centroide uniformemente a caso e i successivi con una probabilità proporzionale al quadrato della distanza euclidea $D(x)$ dal centroide più vicino già scelto:
+3. **La fatica totale di consegna (Inerzia o WCSS):**
+   $$\text{WCSS} = \sum_{k=1}^K \sum_{x_i \in S_k} ||x_i - \mu_k||^2$$
+   - $\text{WCSS}$ (*Within-Cluster Sum of Squares*): la somma della "strada al quadrato" percorsa da tutti i fattorini per servire tutti i rispettivi clienti. L'obiettivo dell'algoritmo è minimizzare questa fatica complessiva.
 
-$$P(x) = \frac{D(x)^2}{\sum_{x' \in X} D(x')^2}$$
+4. **Inizializzazione furba (K-Means++):**
+   Per evitare che le $K$ pizzerie partano tutte nello stesso isolato per pura sfortuna iniziale, **K-Means++** piazza la prima pizzeria a caso e le successive con una probabilità proporzionale al quadrato della distanza $D(x)$ dalla pizzeria più vicina già esistente:
+   $$P(x) = \frac{D(x)^2}{\sum_{x' \in X} D(x')^2}$$
+   In questo modo, le nuove pizzerie vengono "sparate" fin dall'inizio nei quartieri più sguarniti e lontani.
 
-Questo campionamento probabilistico distanzia preventivamente i centroidi iniziali nello spazio vettoriale, garantendo un'approssimazione attesa teoricamente limitata a $\mathcal{O}(\log K)$ rispetto alla soluzione ottimale.
+> [!INTERACTIVE] WIDGET: La Battaglia delle Pizzerie (K-Means & Voronoi Simulator)
+> *Visualizzazione Dinamica:* Una mappa 2D dove l'utente posiziona $K$ pizzerie cliccando sullo schermo. Premendo "Step", i confini colorati dei quartieri (Voronoi) si ridisegnano in tempo reale e i centroidi scivolano dolcemente verso il baricentro dei punti. Include un cursore per testare l'avvio casuale vs K-Means++ e vedere come cambia l'inerzia finale WCSS.
 
 <div class="admonition abstract">
   <p class="admonition-title">Animazione Interattiva: K-Means Clustering</p>
@@ -72,43 +99,77 @@ Questo campionamento probabilistico distanzia preventivamente i centroidi inizia
   <iframe src="../widgets/kmeans.html" style="width: 100%; height: 680px; border: none; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05);"></iframe>
 </div>
 
-Poiché l'inerzia decresce monotonicamente all'aumentare di $K$, la scelta del numero ottimale di cluster richiede l'analisi del grafico WCSS tramite il **Metodo a Gomito** (*Elbow Method*), individuando il punto di flesso in cui il guadagno marginale collassa. Per una validazione analitica più rigorosa, si impiega il **Silhouette Score** ($s(i)$), che confronta la distanza media intra-cluster $a(i)$ con la distanza media dal cluster più vicino $b(i)$:
+#### Quante pizzerie aprire? Il Metodo a Gomito e il Silhouette Score
 
-$$s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}, \quad s(i) \in [-1, 1]$$
-
-Un coefficiente prossimo a $+1$ indica che il punto è perfettamente integrato nel proprio cluster e distante dai gruppi adiacenti; valori vicini a $0$ denotano sovrapposizione tra cluster, mentre valori negativi indicano errori di assegnazione.
+Più pizzerie apri, meno strada fanno i fattorini; ma aprire 100 pizzerie per 100 clienti non ha senso (la fatica WCSS sarebbe zero, ma il costo assurdo).
+- **Metodo a Gomito (Elbow Method):** Tracciando la fatica WCSS al variare di $K$, si cerca il punto in cui la curva "fa un gomito": aggiungere un'altra pizzeria dopo quel punto riduce la fatica in modo trascurabile.
+- **Silhouette Score ($s(i)$):** Misura quanto è soddisfatto il singolo cliente della sua pizzeria:
+  $$s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}, \quad s(i) \in [-1, 1]$$
+  - $a(i)$: distanza media del cliente $i$ dai vicini del suo stesso quartiere (quanto si trova bene nel suo gruppo).
+  - $b(i)$: distanza media del cliente $i$ dai clienti della pizzeria rivale più vicina (quanto è distante dal gruppo concorrente).
+  - Se $s(i) \approx +1$: il cliente è felicissimo, vicinissimo alla sua pizzeria e lontano dai rivali.
+  - Se $s(i) \approx 0$: il cliente è sul confine esatto tra due quartieri.
+  - Se $s(i) < 0$: il cliente è stato assegnato alla pizzeria sbagliata ed è più vicino a quella rivale!
 
 ### Clustering Gerarchico: Agglomerazione Bottom-Up e Dendrogrammi
 
-Mentre K-Means impone una partizione piatta e disgiunta dello spazio, molti domini complessi (come le tassonomie documentali nell'intelligence o la filogenesi biologica) presentano strutture nidificate a più livelli. Il **Clustering Gerarchico Agglomerativo** (`AgglomerativeClustering` in [Scikit-learn](https://scikit-learn.org/) e `scipy.cluster.hierarchy` in [SciPy](https://scipy.org/)) costruisce una gerarchia continua partendo dal basso: ogni singolo punto inizia come un cluster indipendente di dimensione unitaria e, a ogni iterazione successiva, i due cluster più vicini vengono fusi insieme fino a formare un unico macro-cluster radice.
+Pensa a come si formano i gruppi di amici durante il primo mese di scuola superiore.
+Il primo giorno, ogni singolo studente è un'isola a sé (un gruppo da una sola persona). Dopo pochi giorni, i due compagni di banco più affini si uniscono in una coppietta inseparabile. Poi, due coppiette che amano gli stessi videogiochi o sport si fondono in una comitiva da 4. Man mano che passano le settimane, le comitive continuano a fondersi tra loro fino a formare un unico grande pullman di classe. Questo approccio "dal basso verso l'alto" è il **Clustering Gerarchico Agglomerativo**.
 
-La metrica che calcola la prossimità tra due insiemi di punti è definita **criterio di linkage**:
-Il **Linkage di Ward** minimizza l'incremento della varianza intra-cluster complessiva derivante dalla fusione dei due gruppi $A$ e $B$, calcolato come:
+Come decidono due gruppi $A$ e $B$ se vale la pena fondersi? Ci sono diverse regole matematiche (**Criteri di Linkage**):
+1. **Ward Linkage (Minima confusione):**
+   $$\Delta \text{ESS}_{AB} = \frac{|A||B|}{|A| + |B|} ||\mu_A - \mu_B||^2$$
+   - $|A|$ e $|B|$: il numero di studenti nei due gruppi.
+   - $||\mu_A - \mu_B||^2$: la distanza tra i "centri di interesse" (baricentri) dei due gruppi.
+   - Traduzione: unisce i due gruppi che fanno aumentare il meno possibile il disordine (varianza) complessivo.
+2. **Complete Linkage (Regola dei più distanti):** $d(A, B) = \max_{x \in A, y \in B} ||x - y||$. Due gruppi si fondono solo se anche i due membri più antipatici o distanti tra loro sono comunque vicini. Crea gruppi compatti ma è sensibile a persone isolate.
+3. **Single Linkage (Regola del singolo contatto):** $d(A, B) = \min_{x \in A, y \in B} ||x - y||$. Basta che due persone dei rispettivi gruppi siano vicine per unire tutti (rischia l'effetto "trenino infinito" o *chaining*).
+4. **Average Linkage (Armonia media):** $d(A, B) = \frac{1}{|A||B|} \sum_{x \in A} \sum_{y \in B} ||x - y||$. Misura la media di simpatia tra tutte le coppie possibili tra i due gruppi.
 
-$$\Delta \text{ESS}_{AB} = \frac{|A||B|}{|A| + |B|} ||\mu_A - \mu_B||^2$$
+#### L'Albero Genealogico (Dendrogramma) e la Fedeltà Cofenofenetica
 
-Il **Complete Linkage** (distanza massima) valuta la distanza tra i punti più lontani dei due cluster: $d_{\text{complete}}(A, B) = \max_{x \in A, y \in B} ||x - y||$, producendo gruppi compatti ma sensibili agli outlier. L'**Average Linkage** calcola la media di tutte le distanze a coppie: $d_{\text{average}}(A, B) = \frac{1}{|A||B|} \sum_{x \in A} \sum_{y \in B} ||x - y||$. Infine, il **Single Linkage** (distanza minima: $d_{\text{single}}(A, B) = \min_{x \in A, y \in B} ||x - y||$) individua strutture filiformi ma è vulnerabile al fenomeno del *chaining*, in cui singoli punti di rumore uniscono indebitamente cluster distinti.
+L'intera sequenza di unioni viene disegnata in un **Dendrogramma**, un albero genealogico rovesciato la cui altezza verticale indica la distanza a cui è avvenuta la fusione. Tagliando l'albero con una linea orizzontale a una determinata quota, scegli esattamente quanti gruppi ottenere.
 
-L'intera sequenza di fusioni viene rappresentata graficamente da un **dendrogramma**, un albero binario la cui altezza sull'asse verticale misura la distanza matematica a cui è avvenuta ciascuna unione. Tagliando il dendrogramma a un'altezza specifica si ottiene una partizione con un numero esatto di cluster. La fedeltà con cui il dendrogramma preserva le distanze pairwise originali viene misurata dal **Coefficiente di Correlazione Cofenofenetica** ($c$):
+La fedeltà con cui l'albero rispetta le distanze reali senza distorcerle si misura con il **Coefficiente di Correlazione Cofenofenetica** ($c$):
 
 $$c = \frac{\sum_{i < j} (d_{ij} - \bar{d})(t_{ij} - \bar{t})}{\sqrt{\sum_{i < j} (d_{ij} - \bar{d})^2 \sum_{i < j} (t_{ij} - \bar{t})^2}}$$
 
-dove $d_{ij}$ è la distanza euclidea originale tra i campioni $i$ e $j$, mentre $t_{ij}$ è la distanza cofenofenetica (l'altezza del nodo in cui $i$ e $j$ si fondono per la prima volta). Valori di $c > 0.8$ indicano una fedele rappresentazione gerarchica della geometria originale.
+- $d_{ij}$: la distanza reale tra gli studenti $i$ e $j$ nello spazio originale.
+- $t_{ij}$: l'altezza del ramo nel dendrogramma in cui $i$ e $j$ si sono uniti per la prima volta.
+- Se $c > 0.8$, l'albero rappresenta fedelmente le distanze originali senza imbrogliare.
+
+> [!INTERACTIVE] WIDGET: L'Albero delle Amicizie (Dendrogram Builder)
+> *Visualizzazione Dinamica:* Un pannello sdoppiato: a sinistra i punti nello spazio 2D, a destra il dendrogramma che cresce passo dopo passo. L'utente muove un cursore a ghigliottina orizzontale (livello di taglio dell'albero) per vedere istantaneamente come i cluster si colorano e si separano nello spazio a sinistra in tempo reale.
 
 ### Clustering Basato su Densità: DBSCAN e HDBSCAN
 
-Sia K-Means che il clustering gerarchico basato su distanze euclidee falliscono quando i cluster presentano geometrie concave, anelli concentrici o densità eterogenee immerse in rumore di fondo. L'algoritmo **DBSCAN** (*Density-Based Spatial Clustering of Applications with Noise*, implementato da [Scikit-learn](https://scikit-learn.org/)) supera questa barriera modellando i cluster come componenti connesse di regioni ad alta densità spaziale.
+Immagina un concerto rock o una festa in discoteca all'aperto.
+Ci sono capannelli densi di centinaia di persone che ballano pigiate al centro della pista, persone ai margini che chiacchierano a contatto con il gruppo, e tizi solitari dispersi nell'oscurità del parcheggio o vicino alle transenne.
+Algoritmi come K-Means cercano solo cerchi o sfere perfette e fallirebbero se la pista da ballo avesse la forma di una mezzaluna o di una spirale. **DBSCAN** invece segue semplicemente la folla: dove c'è tanta gente ammassata, c'è un gruppo; chi è solo nel buio viene scartato come "rumore".
 
-DBSCAN richiede due iperparametri fondamentali: il raggio di scansione locale $\epsilon$ (*epsilon*) e il numero minimo di punti $min\_samples$. L'algoritmo classifica ogni punto $p \in X$ analizzando il suo intorno sferico $N_\epsilon(p) = \{q \in X \mid ||p - q|| \le \epsilon\}$:
-Se $|N_\epsilon(p)| \ge min\_samples$, il punto viene classificato come **Core Point** (nodo denso generatore di cluster). Se $|N_\epsilon(p)| < min\_samples$, ma $p$ appartiene all'intorno di un Core Point, viene etichettato come **Border Point** (punto di confine). Se un punto non è né Core né Border, viene classificato come **Noise Point** (rumore statistico o anomalia, contrassegnato dall'etichetta $-1$).
+DBSCAN usa due parametri chiave: $\epsilon$ (*epsilon*, il raggio delle braccia aperte) e $min\_samples$ (il numero minimo di persone per formare un capannello).
+Ogni punto $p$ analizza il suo intorno sferico di raggio $\epsilon$:
 
-Un cluster si forma aggregando tutti i punti mutualmente **density-connected**: una catena continua di Core Point distanti meno di $\epsilon$ l'uno dall'altro. La taratura ottimale di $\epsilon$ si effettua analizzando il grafico delle distanze del $k$-esimo vicino (*k-distance graph*, con $k = min\_samples$): ordinando le distanze in ordine crescente, il valore ideale di $\epsilon$ corrisponde al punto di massima curvatura (*knee*).
+$$N_\epsilon(p) = \{q \in X \mid ||p - q|| \le \epsilon\}$$
 
-Il limite principale di DBSCAN consiste nell'incapacità di gestire dataset con densità variabili tra gruppi diversi (un $\epsilon$ globale frammenta i cluster rarefatti o fonde quelli densi). L'algoritmo **HDBSCAN** (*Hierarchical DBSCAN*, ideato da Ricardo Campello, Davoud Moulavi e Jörg Sander) supera questo collo di bottiglia convertendo DBSCAN in una gerarchia su tutti i possibili valori di $\epsilon$. HDBSCAN trasforma lo spazio tramite la **Distanza di Raggiungibilità Mutua** ($d_{\text{mreach-}k}$):
+L'algoritmo classifica ogni persona in tre categorie:
+- **Core Point (Cuore della pista):** Se nel raggio $\epsilon$ ci sono almeno $min\_samples$ persone ($|N_\epsilon(p)| \ge min\_samples$). È il motore che genera il gruppo.
+- **Border Point (Bordo pista):** Ha meno di $min\_samples$ amici attorno a sé, ma tocca almeno un Core Point. Viene aggregato al gruppo.
+- **Noise Point (Intruso isolato / Rumore):** Non tocca nessun Core Point ed è isolato nel buio. Viene contrassegnato con l'etichetta $-1$ (anomalia o rumore).
+
+Un cluster nasce collegando tutti i punti uniti da una catena continua di Core Point a distanza inferiore a $\epsilon$ (*density-connected*).
+
+#### L'Evoluzione con HDBSCAN (Piste a densità variabile)
+
+Se in un festival hai sia un tendone techno stipato come una scatola di sardine sia un'area relax rilassata con persone più distanziate, un unico raggio $\epsilon$ globale fallirà. **HDBSCAN** supera questo limite esplorando tutti i possibili valori di $\epsilon$ e trasformando lo spazio tramite la **Distanza di Raggiungibilità Mutua**:
 
 $$d_{\text{mreach-}k}(a, b) = \max(\{ \text{core}_k(a), \text{core}_k(b), d(a, b) \})$$
 
-dove $\text{core}_k(a)$ è la distanza di $a$ dal suo $k$-esimo vicino. Costruendo un albero di espansione minima (*Minimum Spanning Tree*) su questa metrica ed estraendo i cluster stabili tramite la metrica di persistenza della massa ($\lambda = 1/\epsilon$), HDBSCAN isola automaticamente cluster a densità variabile senza richiedere la specificazione manuale di $\epsilon$.
+- $\text{core}_k(a)$: lo spazio che serve al punto $a$ per trovare i suoi $k$ vicini più stretti.
+- Se uno dei due punti si trova in una zona isolata, la distanza mutua "si allarga" artificialmente, impedendo al rumore di fondere per errore cluster a densità diverse.
+
+> [!INTERACTIVE] WIDGET: Il Radar della Discoteca (DBSCAN & HDBSCAN Density Playground)
+> *Visualizzazione Dinamica:* Un generatore di forme complesse (cluster a mezzaluna intrecciate, spirali e ciambelle con rumore casuale). L'utente muove gli slider $\epsilon$ e $min\_samples$ vedendo i punti illuminarsi in tempo reale di verde (Core), giallo (Border) o grigio fumo (Noise/Outlier).
 
 
 > [!NOTE]
@@ -124,21 +185,26 @@ La riduzione della dimensionalità trasforma la matrice originale $X \in \mathbb
 
 ### La Maledizione della Dimensionalità e la Proiezione Lineare (PCA)
 
-L'analisi delle componenti principali (**PCA**, *Principal Component Analysis*, disponibile in `sklearn.decomposition.PCA`) è la tecnica fondamentale di riduzione dimensionale lineare. L'algoritmo cerca una sequenza di assi ortogonali ordinati, detti **Componenti Principali**, che massimizzano progressivamente la varianza dei dati proiettati.
+Immagina di dover fotografare una scultura 3D complessa (ad esempio una bicicletta da corsa o una teiera con manico e beccuccio) per proiettarla su un foglio di carta piatto 2D (come un'ombra cinese su una parete).
+Se punti la torcia da un'angolazione sfortunata (es. dall'alto), l'ombra sembrerà solo una sagoma confusa e perderai sia le ruote che il manubrio.
+La **PCA** (*Principal Component Analysis*) è come un fotografo professionista che gira attorno alla scultura e cerca l'inquadratura perfetta da cui l'ombra risulta il più larga, estesa e dettagliata possibile (massima varianza), catturando quasi tutta l'informazione 3D su un piano 2D.
 
-La formulazione algebrica opera sulla matrice centrata $\tilde{X} = X - \mu_X \in \mathbb{R}^{n \times d}$ (in cui ogni feature ha media campionaria nulla). La matrice di covarianza empirica dei dati è:
+La matematica della PCA si sviluppa in passaggi lineari precisi:
 
-$$\Sigma = \frac{1}{n-1} \tilde{X}^T \tilde{X} \in \mathbb{R}^{d \times d}$$
+1. **Centrare i dati:** Si porta il baricentro della scultura al centro degli assi: $\tilde{X} = X - \mu_X \in \mathbb{R}^{n \times d}$.
+2. **Matrice di Covarianza (Come variano insieme le coordinate):**
+   $$\Sigma = \frac{1}{n-1} \tilde{X}^T \tilde{X} \in \mathbb{R}^{d \times d}$$
+   Misura se al crescere di una caratteristica (es. altezza) cresce anche un'altra (es. peso).
+3. **Autovettori e Autovalori (Direzione dello scatto e Nitidezza):**
+   $$\Sigma v_k = \lambda_k v_k$$
+   - $v_k$ (**Autovettore / Componente Principale**): è l'asse della fotocamera (la direzione di massima estensione dell'ombra).
+   - $\lambda_k$ (**Autovalore**): misura quanti dettagli e quanta varianza vengono catturati lungo quella direzione.
+4. **Varianza Spiegata ($\text{EVR}_k$):**
+   $$\text{EVR}_k = \frac{\lambda_k}{\sum_{j=1}^d \lambda_j}$$
+   Indica la percentuale esatta di dettagli della scultura 3D conservata dalla $k$-esima foto.
 
-I componenti principali corrispondono agli autovettori $v_1, \dots, v_d$ ottenuti dalla decomposizione spettrale di $\Sigma$:
-
-$$\Sigma v_k = \lambda_k v_k$$
-
-dove l'autovalore $\lambda_k \ge 0$ quantifica esattamente la quantità di varianza spiegata lungo la direzione dell'autovettore $v_k$. Nelle implementazioni moderne ad alte prestazioni, il calcolo evita la matrice di covarianza esplicita e sfrutta la decomposizione ai valori singolari (**SVD**, *Singular Value Decomposition*) della matrice dei dati: $\tilde{X} = U S V^T$, in cui le colonne di $V$ sono i componenti principali e i valori singolari $s_k$ sono legati agli autovalori dalla relazione $\lambda_k = \frac{s_k^2}{n-1}$.
-
-La frazione di informazione preservata da ciascuna componente è formalizzata dall'**Explained Variance Ratio** ($\text{EVR}_k$):
-
-$$\text{EVR}_k = \frac{\lambda_k}{\sum_{j=1}^d \lambda_j}$$
+> [!INTERACTIVE] WIDGET: Il Gioco delle Ombre Cinesi (PCA 3D to 2D Projector)
+> *Visualizzazione Dinamica:* Una nuvola di punti 3D a forma di ellissoide allungato inclinata nello spazio. L'utente ruota una linea (asse di proiezione) tramite un controller interattivo e osserva l'ombra proiettata: quando l'asse si allinea con l'autovettore principale $v_1$, l'ombra si espande al massimo e il contatore della varianza spiegata raggiunge il 100%.
 
 <div class="admonition abstract">
   <p class="admonition-title">Animazione Interattiva: PCA e Varianza Catturata</p>
@@ -150,29 +216,36 @@ Tracciando la varianza spiegata cumulativa in funzione del numero di componenti 
 
 ### Manifold Learning Non Lineare: t-SNE e UMAP
 
-La PCA opera proiezioni rigorosamente lineari (rotazioni e traslazioni di iperpiani). Se le osservazioni giacciono su varietà topologiche non lineari (*manifold*, come la superficie arrotolata di uno *Swiss Roll* o raggruppamenti semantici complessi di embedding testuali), una proiezione lineare sovrappone regioni tra loro distanti, distruggendo le relazioni di prossimità locale.
+Immagina di avere una sciarpa di lana arrotolata stretta a spirale su se stessa (come un dolce *Swiss Roll* o una girella), con disegnati sopra dei piccoli simboli.
+Se provi a usare la PCA, è come schiacciare la girella con un ferro da stiro: i lembi di stoffa che si trovano su strati diversi della spirale vengono premuti l'uno contro l'altro, facendo sembrare vicini dei disegni che in realtà erano lontanissimi!
+**t-SNE** e **UMAP** sono invece come srotolare delicatamente la sciarpa su un grande tavolo elastico fatto di molle: collegano ogni punto ai suoi vicini più stretti. Se due punti erano vicini sulla stoffa, le molle li tengono vicini anche sul tavolo 2D; se erano lontani, li lasciano allontanare liberamente senza schiacciarli.
 
-L'algoritmo **t-SNE** (*t-Distributed Stochastic Neighbor Embedding*, introdotto da [Laurens van der Maaten](https://lvdmaaten.github.io/) e [Geoffrey Hinton](https://www.cs.toronto.edu/~hinton/) nel 2008) risolve questo problema convertendo le distanze euclidee in probabilità condizionali di vicinato. Nello spazio ad alta dimensione, la probabilità che il punto $x_i$ scelga $x_j$ come proprio vicino segue una distribuzione Gaussiana centrata su $x_i$:
+#### L'Algoritmo t-SNE (Molle e Probabilità)
 
-$$p_{j|i} = \frac{\exp\left(-\frac{||x_i - x_j||^2}{2\sigma_i^2}\right)}{\sum_{k \neq i} \exp\left(-\frac{||x_i - x_k||^2}{2\sigma_i^2}\right)}, \quad p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}$$
+1. **Nel mondo ad alta dimensione (Gaussiana dei vicini):**
+   La probabilità che il punto $x_i$ scelga $x_j$ come amico vicino segue una campana Gaussiana:
+   $$p_{j|i} = \frac{\exp\left(-\frac{||x_i - x_j||^2}{2\sigma_i^2}\right)}{\sum_{k \neq i} \exp\left(-\frac{||x_i - x_k||^2}{2\sigma_i^2}\right)}, \quad p_{ij} = \frac{p_{j|i} + p_{i|j}}{2n}$$
+   - $p_{ij}$: quanto è forte l'amicizia tra $i$ e $j$ nello spazio complesso.
+   - $\sigma_i$: l'ampiezza della campana (regolata dalla **Perplexity**, ossia quanti vicini considerare).
+2. **Sulla mappa 2D piatta (La t di Student contro l'ammassamento):**
+   $$q_{ij} = \frac{(1 + ||y_i - y_j||^2)^{-1}}{\sum_{k} \sum_{l \neq k} (1 + ||y_k - y_l||^2)^{-1}}$$
+   - $q_{ij}$: la probabilità di vicinanza tra i punti proiettati $y_i$ e $y_j$ sul foglio 2D.
+   - La distribuzione **t di Student con 1 grado di libertà** (Cauchy) ha code larghe e risolve il **Crowding Problem**: consente ai gruppi moderatamente lontani di allontanarsi sui bordi della mappa senza schiacciarsi tutti al centro.
+3. **Ottimizzazione (Rilassare le molle con Divergenza KL):**
+   $$KL(P \parallel Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}$$
+   Misura la tensione totale delle molle: il computer sposta i punti sul foglio finché la mappa $Q$ rispecchia al meglio le amicizie $P$.
 
-La varianza $\sigma_i^2$ viene determinata per ogni punto mediante una ricerca binaria che soddisfa un valore di **Perplexity** fissato dall'utente, interpretabile come il numero effettivo di vicini considerati. Nello spazio a bassa dimensione di destinazione ($y_i \in \mathbb{R}^2$), le probabilità congiunte $q_{ij}$ vengono modellate utilizzando una distribuzione **t di Student con 1 grado di libertà** (distribuzione di Cauchy):
+#### L'Evoluzione con UMAP (Topologia e Velocità)
 
-$$q_{ij} = \frac{(1 + ||y_i - y_j||^2)^{-1}}{\sum_{k} \sum_{l \neq k} (1 + ||y_k - y_l||^2)^{-1}}$$
-
-Le posizioni ottimali $y_i$ vengono trovate minimizzando la **Divergenza di Kullback-Leibler** ($KL$) tra le due distribuzioni di probabilità tramite discesa del gradiente:
-
-$$KL(P \parallel Q) = \sum_{i \neq j} p_{ij} \log \frac{p_{ij}}{q_{ij}}$$
-
-L'impiego della distribuzione t di Student risolve il celebre **Crowding Problem**: poiché il volume disponibile in 2D è infinitamente inferiore rispetto a quello in alta dimensione, le code pesanti della distribuzione Cauchy consentono ai punti moderatamente distanti nello spazio originale di essere spinti a distanze considerevoli nello spazio di proiezione, prevenendo il collasso dei cluster al centro della mappa.
-
-L'algoritmo **UMAP** (*Uniform Manifold Approximation and Projection*, ideato dal matematico [Leland McInnes](https://github.com/lmcinnes) nel 2018) estende il manifold learning fondandolo sulla geometria Riemanniana e la topologia algebrica. Assumendo che i dati siano uniformemente distribuiti su una varietà Riemanniana locale, UMAP modella la topologia dei vicinati mediante complessi simpliciali sfumati (*fuzzy simplicial sets*).
-
-La funzione di costo minimizzata da UMAP è la **Cross-Entropia per Insiemi Fuzzy** tra la matrice delle relazioni ad alta dimensione $\mu_{ij}$ e quella proiettata $\nu_{ij}$:
+Mentre t-SNE pensa quasi solo ai vicini microscopici, **UMAP** modella la geometria globale tramite la topologia (insiemi simpliciali sfumati) e minimizza la Cross-Entropia per Insiemi Fuzzy:
 
 $$L_{\text{UMAP}} = \sum_{i \neq j} \left( \mu_{ij} \log \frac{\mu_{ij}}{\nu_{ij}} + (1 - \mu_{ij}) \log \frac{1 - \mu_{ij}}{1 - \nu_{ij}} \right)$$
 
-A differenza di t-SNE (che focalizza il gradiente quasi esclusivamente sulla conservazione dei vicinati microscopici), UMAP preserva contemporaneamente sia la micro-struttura locale sia le distanze globali tra macro-cluster, garantendo al contempo un'efficienza computazionale superiore ($\mathcal{O}(n^{1.14})$ contro $\mathcal{O}(n^2)$ di t-SNE) grazie all'ottimizzazione stocastica del gradiente (SGD) e agli algoritmi di Nearest Neighbor Descent.
+- $\mu_{ij}$ e $\nu_{ij}$: le probabilità fuzzy di connessione nello spazio originale e proiettato.
+- Il primo termine attrae gli amici vicini; il secondo $(1 - \mu_{ij})$ respinge i gruppi lontani, preservando sia i piccoli dettagli locali sia le distanze globali tra macro-cluster, con una velocità computazionale nettamente superiore ($\mathcal{O}(n^{1.14})$ contro $\mathcal{O}(n^2)$ di t-SNE).
+
+> [!INTERACTIVE] WIDGET: Lo Srotolatore Elastico di Swiss Roll (t-SNE vs UMAP Simulator)
+> *Visualizzazione Dinamica:* Un modello 3D interattivo dello Swiss Roll che viene proiettato in tempo reale in 2D. L'utente sceglie l'algoritmo (PCA vs t-SNE vs UMAP) e regola lo slider di "Perplexity/N-Neighbors", vedendo la spirale 3D srotolarsi dolcemente in una striscia piana senza sovrapposizioni.
 
 ## Anomaly Detection e Rilevamento di Outlier
 
@@ -180,43 +253,71 @@ L'Anomaly Detection (o Outlier Detection) si occupa di identificare osservazioni
 
 ### Isolamento Spaziale e Lunghezza del Cammino (Isolation Forest)
 
-L'algoritmo **Isolation Forest** (sviluppato da [Fei Tony Liu](https://scholar.google.com/), Kai Ming Ting e Zhi-Hua Zhou nel 2008, disponibile come `IsolationForest` in [Scikit-learn](https://scikit-learn.org/)) ribalta l'approccio classico: invece di modellare faticosamente il profilo dei punti normali per poi cercare ciò che devia, isola direttamente le anomalie sfruttando la loro intrinseca rarità topologica.
+Immagina una piazza affollatissima durante una festa di paese: centinaia di persone sono tutte ammassate davanti al palco a ballare, mentre un singolo tizio solitario se ne sta sperduto in cima a una collina a 500 metri di distanza.
+Se inizi a tirare delle linee rette a caso con una corda per dividere la mappa in due parti (come un colpo di spada laser):
+- Per isolare il tizio solitario sulla collina basterà **un solo taglio casuale** ben piazzato.
+- Per isolare una persona specifica stipata in mezzo alla calca davanti al palco, dovrai tirare **decine e decine di tagli millimetrici**!
+Questo è il principio di **Isolation Forest**: le anomalie sono rare e diverse dalla massa, quindi si isolano con pochissimi tagli casuali.
 
-L'algoritmo costruisce una foresta di alberi binari di isolamento (*iTree*). In ogni nodo dell'albero, una feature $q$ viene selezionata a caso e tagliata con una soglia casuale $p$ compresa tra il valore minimo e massimo della variabile. Poiché i punti normali risiedono in regioni dense, richiedono decine di partizionamenti casuali prima di essere isolati in una foglia singola. Al contrario, i punti anomali risiedono in regioni remote e rarefatte dello spazio, venendo isolati nei primissimi livelli dell'albero.
+L'algoritmo costruisce una foresta di alberi binari di isolamento (*iTree*), scegliendo a ogni nodo una caratteristica a caso $q$ e tagliandola con una soglia casuale $p$.
 
-La lunghezza del cammino $h(x)$ misura il numero di archi attraversati dalla radice alla foglia terminale per isolare l'osservazione $x$. L'**Anomaly Score** normalizzato $s(x, n)$ è formulato come:
+Le formule quantificano la rarità del punto:
 
-$$s(x, n) = 2^{-\frac{E(h(x))}{c(n)}}$$
+1. **Lunghezza del cammino $h(x)$:** il numero di tagli (archi dell'albero) necessari a isolare il punto $x$ in una foglia singola.
+2. **Profondità media attesa di un albero $c(n)$:**
+   $$c(n) = 2 \left( \ln(n - 1) + 0.5772156649 \right) - \frac{2(n - 1)}{n}$$
+   È il numero "normale" di tagli previsti per isolare un elemento generico in mezzo a una folla di $n$ campioni.
+3. **Punteggio di Anomalia ($s(x, n)$):**
+   $$s(x, n) = 2^{-\frac{E(h(x))}{c(n)}}$$
+   - $E(h(x))$: la media dei tagli necessari per isolare $x$ in tutta la foresta di alberi.
+   - Se $E(h(x)) \ll c(n)$ (bastano pochissimi tagli): l'esponente si avvicina a 0 e $s(x, n) \to 2^0 = 1 \implies$ **Anomalia accertata!**
+   - Se $E(h(x)) \approx c(n)$ (servono tagli nella media): $s(x, n) \approx 0.5 \implies$ **Punto normale.**
+   - Se $E(h(x)) \gg c(n)$ (servono tantissimi tagli): $s(x, n) \to 0 \implies$ **Inlier nel cuore della folla.**
 
-dove $E(h(x))$ è la lunghezza media del cammino su tutti gli alberi della foresta e $c(n)$ rappresenta la profondità media attesa di una ricerca infruttuosa in un albero binario di ricerca con $n$ nodi:
-
-$$c(n) = 2 \left( \ln(n - 1) + 0.5772156649 \right) - \frac{2(n - 1)}{n}$$
-
-Se $s(x, n) \to 1$, la lunghezza del cammino è estremamente breve, indicando con certezza un'anomalia. Se $s(x, n) < 0.5$, l'osservazione esibisce un cammino lungo, appartenendo alla distribuzione di normalità standard. Isolation Forest offre una complessità computazionale quasi-lineare $\mathcal{O}(n \log n)$ a bassissimo consumo di memoria, rendendolo l'algoritmo di riferimento per stream di dati ad altissima velocità.
+> [!INTERACTIVE] WIDGET: Il Tagliatore di Spazio (Isolation Forest 2D Slicer)
+> *Visualizzazione Dinamica:* Uno spazio 2D con un gruppo denso di punti al centro e 3 punti anomali isolati. L'utente preme "Taglia Casuale": compaiono linee di partizionamento. Un contatore mostra come i punti isolati vengano recintati in appena 1-2 tagli, mentre i punti al centro rimangono raggruppati anche dopo decine di divisioni.
 
 ### Iperpiani di Supporto Non Lineari (One-Class SVM)
 
-L'algoritmo **One-Class SVM** (proposto da Bernhard Schölkopf et al. nel 2001, implementato in `sklearn.svm.OneClassSVM`) adatta i principi delle Support Vector Machine all'apprendimento non supervisionato. L'algoritmo proietta i dati di addestramento in uno spazio di Hilbert a kernel riproducente (*RKHS*) ad altissima dimensione tramite una funzione kernel non lineare (tipicamente Radial Basis Function, RBF: $K(x, y) = \exp(-\gamma ||x - y||^2)$).
+Immagina un recinto di sicurezza con un campo di forza invisibile costruito attorno a un gregge di pecore in una vallata.
+Il guardiano non ha mai visto cosa sia un lupo, una volpe o un ladro; conosce solo l'aspetto e la posizione abituale delle sue pecore.
+La **One-Class SVM** prende la mappa del prato e, tramite una formula speciale (il Kernel), la solleva verso l'alto nello spazio 3D come un telo elastico. Lì costruisce una cupola protettiva aderente attorno a tutte le pecore, lasciando fuori l'origine del mondo. Se un nuovo animale atterra al di fuori della cupola, scatta subito l'allarme!
 
-Nello spazio trasformato, One-Class SVM calcola l'iperpiano ottimo che separa la quasi totalità delle osservazioni dall'origine delle coordinate con il massimo margine possibile. Il compromesso tra la frazione di punti tollerati all'esterno del confine e la complessità geometrica della frontiera è regolato dall'iperparametro $\nu \in (0, 1]$, che funge simultaneamente da limite superiore alla frazione di outlier di addestramento e da limite inferiore alla frazione di vettori di supporto generati.
+Le formule matematiche definiscono la forma della cupola:
+
+1. **Kernel RBF (Il sollevatore di dimensioni):**
+   $$K(x, y) = \exp(-\gamma ||x - y||^2)$$
+   - Proietta i dati in uno spazio a dimensioni infinite dove è facile avvolgere i punti normali.
+   - $\gamma$ (*gamma*): regola quanto la cupola deve essere aderente e attillata attorno ai punti normali.
+2. **Il parametro di tolleranza $\nu$ ($\nu \in (0, 1]$):**
+   - Regola la percentuale di pecore un po' distratte che accettiamo di lasciare fuori dalla cupola durante l'addestramento (la quota massima di falsi allarmi / outlier ammessi).
+
+> [!INTERACTIVE] WIDGET: La Cupola Protettiva (One-Class SVM Frontier Tuning)
+> *Visualizzazione Dinamica:* Un piano 2D con punti normali e outlier sparsi. L'utente muove gli slider $\gamma$ e $\nu$ osservando la frontiera di decisione colorarsi in tempo reale: con $\gamma$ basso la frontiera è morbida e circolare, con $\gamma$ alto si trasforma in isole sagomate strettamente attorno a ogni singolo gruppo di punti.
 
 ### Deviazione della Densità Locale (Local Outlier Factor - LOF)
 
-Quando un dataset presenta cluster multipli con densità locali marcatamente eterogenee, una soglia di distanza globale o una frontiera uniforme falliscono: un punto situato a distanza moderata da un cluster ad altissima densità è un'autentica anomalia locale, mentre la medesima distanza euclidea all'interno di un cluster rarefatto è perfettamente fisiologica.
+Immagina di confrontare lo stile di vita di due persone:
+- **Marco** vive in un grattacielo nel centro di New York: sul suo pianerottolo ci sono 10 appartamenti in 20 metri. Se una persona si piazza da sola in un corridoio vuoto a 30 metri da tutti, a New York è una cosa insolita e sospetta!
+- **Sara** vive in una fattoria isolata nella campagna toscana: la casa del suo vicino più prossimo è a 300 metri. Per lei, avere un vicino a 300 metri è la perfetta e tranquilla normalità.
+Un algoritmo rigido guarderebbe solo la distanza in metri e direbbe che Sara è un'anomalia perché è lontana da tutti. **LOF** (*Local Outlier Factor*) invece valuta il contesto locale: confronta la densità di una persona con la densità tipica dei suoi vicini diretti!
 
-L'algoritmo **Local Outlier Factor** (**LOF**, formulato da Markus Breunig et al. nel 2000, implementato in `sklearn.neighbors.LocalOutlierFactor`) risolve questo dilemma confrontando la densità locale di un punto con la densità locale del suo vicinato di $k$ elementi. L'algoritmo definisce prima la **Distanza di Raggiungibilità** (*reachability distance*) del punto $p$ rispetto al vicino $o$:
+Le formule calcolano la densità relativa:
 
-$$\text{reach-dist}_k(p, o) = \max(\{ k\text{-distance}(o), d(p, o) \})$$
+1. **Distanza di Raggiungibilità ($\text{reach-dist}_k(p, o)$):**
+   $$\text{reach-dist}_k(p, o) = \max(\{ k\text{-distance}(o), d(p, o) \})$$
+   - La distanza tra te ($p$) e il tuo vicino ($o$), che non può mai essere inferiore al raggio abituale del suo quartiere ($k\text{-distance}$).
+2. **Densità di Raggiungibilità Locale ($\text{lrd}_k(p)$):**
+   $$\text{lrd}_k(p) = \left[ \frac{\sum_{o \in N_k(p)} \text{reach-dist}_k(p, o)}{|N_k(p)|} \right]^{-1}$$
+   - Misura quanto sei pigiato rispetto ai tuoi $k$ vicini (l'inverso dello spazio vitale medio).
+3. **Punteggio LOF Finale (Il confronto con il vicinato):**
+   $$\text{LOF}_k(p) = \frac{\sum_{o \in N_k(p)} \frac{\text{lrd}_k(o)}{\text{lrd}_k(p)}}{|N_k(p)|}$$
+   - È la media del rapporto tra la densità dei tuoi vicini e la tua densità.
+   - Se $\text{LOF} \approx 1$: la tua densità è identica a quella dei tuoi vicini (sia che siate tutti stipati a New York, sia che siate tutti sparsi in campagna). Sei un **normale inlier**.
+   - Se $\text{LOF} \gg 1$: i tuoi vicini sono pigiatissimi in un grattacielo ma tu sei isolato lontano da loro. Sei un **outlier locale!**
 
-La **Local Reachability Density** ($\text{lrd}_k(p)$) è l'inverso della distanza media di raggiungibilità di $p$ rispetto ai suoi $k$ vicini più prossimi:
-
-$$\text{lrd}_k(p) = \left[ \frac{\sum_{o \in N_k(p)} \text{reach-dist}_k(p, o)}{|N_k(p)|} \right]^{-1}$$
-
-Il punteggio finale **LOF** è il rapporto medio tra la densità dei vicini e la densità del punto $p$:
-
-$$\text{LOF}_k(p) = \frac{\sum_{o \in N_k(p)} \frac{\text{lrd}_k(o)}{\text{lrd}_k(p)}}{|N_k(p)|}$$
-
-Un valore di $\text{LOF} \approx 1$ indica che il punto possiede una densità analoga a quella dei suoi vicini (inlier omogeneo). Un valore di $\text{LOF} \gg 1$ segnala che la densità locale del punto è nettamente inferiore a quella dei suoi vicini, rivelando un'anomalia locale isolata.
+> [!INTERACTIVE] WIDGET: Il Radar Metropolitano vs Campagna (LOF Density Inspector)
+> *Visualizzazione Dinamica:* Un piano con due gruppi: un cluster ultra-denso (New York) e un cluster rado e allargato (Campagna). Cliccando su qualsiasi punto, compare un radar che disegna le distanze dai $k$ vicini e calcola all'istante il punteggio $\text{LOF}$, mostrando visivamente perché un punto a distanza $D$ è un'anomalia a New York ma normale in Campagna.
 
 
 > [!NOTE]
