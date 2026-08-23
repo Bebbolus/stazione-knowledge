@@ -22,7 +22,8 @@ L'**ingegneria del software in Python per l'intelligenza artificiale** è la dis
 
 > [!TIP] Spiegato Semplice: Perché usare "Python" e i "Moduli"?
 > Immagina Python come una gigantesca scatola di costruzioni LEGO. Invece di dover creare ogni singolo mattoncino da zero, puoi scaricare scatole piene di pezzi speciali già fatti da altri (i famosi "Pacchetti"). 
-> 
+
+> [!NOTE] L'Analogia in Pratica
 > "Ingegneria del Software" significa semplicemente costruire astronavi LEGO usando tanti moduli separati. Se si rompe l'ala (uno script), sostituisci solo quell'ala, senza dover buttare via l'intera astronave (il codice monolitico)! E i "Test" sono come un collaudo di sicurezza: prima di far volare la navicella, un mini-robot controlla in automatico che tutti i pezzi siano attaccati bene.
 
 ## Il Problema dello Script Monolitico e dei Notebook Sperimentali

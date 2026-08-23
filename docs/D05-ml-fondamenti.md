@@ -19,7 +19,6 @@ L'**apprendimento automatico classico** è la disciplina computazionale che otti
 > Il giocatore "tasta" il terreno col piede per capire dove c'è la discesa (*calcolo del gradiente*). Poi deve decidere con quanta forza colpire la pallina (*Learning Rate*). 
 > - Se colpisce piano: ci mette mille anni ad arrivare in buca.
 > - Se colpisce troppo forte: la pallina schizza sulla montagna opposta e vola via (*Gradient Explosion*).
->
 > 🕹️ **Mettiti alla Prova!** Nelle prossime slide, affronterai questo esatto concetto nel mini-gioco "Descent Minigolf"!
 
 ## Il Paradosso della Memorizzazione e il Rischio di Overfitting

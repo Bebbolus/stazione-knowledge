@@ -24,7 +24,7 @@ La **soluzione** a questo problema è l'**architettura workspace local-first**: 
 > [!TIP] Spiegato Semplice: Cos'è davvero "Git"?
 > Hai presente quando, in un videogioco, affronti un boss difficilissimo e salvi la partita un secondo prima di entrare nella stanza? Se muori, non devi ricominciare da capo, ma "ricarichi" il salvataggio. **Git** è esattamente questo, ma per i tuoi file. Ti permette di "salvare la partita" del tuo lavoro. Se per sbaglio cancelli tutto, puoi tornare indietro nel tempo! Incredibile, vero?
 
-> [!TIP]
+> [!NOTE]
 > **💡 Curiosità: Sapevi che Git è nato per disperazione in soli 10 giorni?**
 > Nel 2005, la comunità che sviluppava Linux perse improvvisamente l'accesso gratuito al sistema che usava per salvare il codice. Disperato e arrabbiato, Linus Torvalds si chiuse in casa e scrisse la prima versione di Git in appena 10 giorni. Oggi è il motore di tutto il codice del pianeta terra!
 
