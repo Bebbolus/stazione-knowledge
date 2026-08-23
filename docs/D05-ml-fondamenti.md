@@ -6,9 +6,6 @@ aliases:
 - Scikit-Learn
 - Workflow ML
 resources:
-- title: Teachable Machine (Google)
-  url: https://teachablemachine.withgoogle.com/
-  type: lab
 - title: 'Stanford CS229: Machine Learning'
   url: https://cs229.stanford.edu/
   type: video
